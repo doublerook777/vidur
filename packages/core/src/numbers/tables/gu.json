@@ -1,0 +1,797 @@
+{
+  "lang": "gu",
+  "status": "draft",
+  "source": "https://www.shalusharma.com/2025/09/gujarati-numbers-1-to-100-with-english.html ; https://en.wikipedia.org/wiki/Gujarati_numerals (digits via search snippet)",
+  "units": {
+    "0": {
+      "native": [
+        "શૂન્ય"
+      ],
+      "roman": [
+        "shunya"
+      ]
+    },
+    "1": {
+      "native": [
+        "એક"
+      ],
+      "roman": [
+        "ek"
+      ]
+    },
+    "2": {
+      "native": [
+        "બે"
+      ],
+      "roman": [
+        "be"
+      ]
+    },
+    "3": {
+      "native": [
+        "ત્રણ"
+      ],
+      "roman": [
+        "tran"
+      ]
+    },
+    "4": {
+      "native": [
+        "ચાર"
+      ],
+      "roman": [
+        "chaar"
+      ]
+    },
+    "5": {
+      "native": [
+        "પાંચ"
+      ],
+      "roman": [
+        "paanch"
+      ]
+    },
+    "6": {
+      "native": [
+        "છ"
+      ],
+      "roman": [
+        "chhah"
+      ]
+    },
+    "7": {
+      "native": [
+        "સાત"
+      ],
+      "roman": [
+        "saat"
+      ]
+    },
+    "8": {
+      "native": [
+        "આઠ"
+      ],
+      "roman": [
+        "aath"
+      ]
+    },
+    "9": {
+      "native": [
+        "નવ"
+      ],
+      "roman": [
+        "nau"
+      ]
+    },
+    "10": {
+      "native": [
+        "દસ"
+      ],
+      "roman": [
+        "dus"
+      ]
+    },
+    "11": {
+      "native": [
+        "અગિયાર"
+      ],
+      "roman": [
+        "agiyar"
+      ]
+    },
+    "12": {
+      "native": [
+        "બાર"
+      ],
+      "roman": [
+        "baar"
+      ]
+    },
+    "13": {
+      "native": [
+        "તેર"
+      ],
+      "roman": [
+        "ter"
+      ]
+    },
+    "14": {
+      "native": [
+        "ચૌદ"
+      ],
+      "roman": [
+        "chaud"
+      ]
+    },
+    "15": {
+      "native": [
+        "પંદર"
+      ],
+      "roman": [
+        "pandar"
+      ]
+    },
+    "16": {
+      "native": [
+        "સોળ"
+      ],
+      "roman": [
+        "sola"
+      ]
+    },
+    "17": {
+      "native": [
+        "સત્તર"
+      ],
+      "roman": [
+        "sattar"
+      ]
+    },
+    "18": {
+      "native": [
+        "અઢાર"
+      ],
+      "roman": [
+        "athaar"
+      ]
+    },
+    "19": {
+      "native": [
+        "ઓગણીસ"
+      ],
+      "roman": [
+        "oganees"
+      ]
+    },
+    "20": {
+      "native": [
+        "વીસ"
+      ],
+      "roman": [
+        "vees"
+      ]
+    },
+    "21": {
+      "native": [
+        "એકવીસ"
+      ],
+      "roman": [
+        "ekvees"
+      ]
+    },
+    "22": {
+      "native": [
+        "બાવીસ"
+      ],
+      "roman": [
+        "baavees"
+      ]
+    },
+    "23": {
+      "native": [
+        "ત્રેવીસ"
+      ],
+      "roman": [
+        "trevees"
+      ]
+    },
+    "24": {
+      "native": [
+        "ચોવીસ"
+      ],
+      "roman": [
+        "chauvees"
+      ]
+    },
+    "25": {
+      "native": [
+        "પચ્ચીસ"
+      ],
+      "roman": [
+        "pachchees"
+      ]
+    },
+    "26": {
+      "native": [
+        "છવીસ"
+      ],
+      "roman": [
+        "chhavees"
+      ]
+    },
+    "27": {
+      "native": [
+        "સત્તાવીસ"
+      ],
+      "roman": [
+        "sattavees"
+      ]
+    },
+    "28": {
+      "native": [
+        "અઠ્ઠાવીસ"
+      ],
+      "roman": [
+        "aththavees"
+      ]
+    },
+    "29": {
+      "native": [
+        "ઓગણત્રીસ"
+      ],
+      "roman": [
+        "ogntrees",
+        "ogntris"
+      ]
+    },
+    "30": {
+      "native": [
+        "ત્રીસ"
+      ],
+      "roman": [
+        "trees"
+      ]
+    },
+    "31": {
+      "native": [],
+      "roman": [
+        "ekatris"
+      ]
+    },
+    "32": {
+      "native": [],
+      "roman": [
+        "batris"
+      ]
+    },
+    "33": {
+      "native": [],
+      "roman": [
+        "tetris"
+      ]
+    },
+    "34": {
+      "native": [],
+      "roman": [
+        "chautris"
+      ]
+    },
+    "35": {
+      "native": [],
+      "roman": [
+        "pantetris"
+      ]
+    },
+    "36": {
+      "native": [],
+      "roman": [
+        "chhatris"
+      ]
+    },
+    "37": {
+      "native": [],
+      "roman": [
+        "sadtaris",
+        "satatris"
+      ]
+    },
+    "38": {
+      "native": [],
+      "roman": [
+        "adtaris",
+        "adhatris"
+      ]
+    },
+    "39": {
+      "native": [],
+      "roman": [
+        "ognchalis",
+        "ognchalees"
+      ]
+    },
+    "40": {
+      "native": [
+        "ચાળીસ"
+      ],
+      "roman": [
+        "chalees"
+      ]
+    },
+    "41": {
+      "native": [],
+      "roman": [
+        "ektalis"
+      ]
+    },
+    "42": {
+      "native": [],
+      "roman": [
+        "bialis"
+      ]
+    },
+    "43": {
+      "native": [],
+      "roman": [
+        "tetalis"
+      ]
+    },
+    "44": {
+      "native": [],
+      "roman": [
+        "chaudalis",
+        "chauatalees"
+      ]
+    },
+    "45": {
+      "native": [],
+      "roman": [
+        "pantalees"
+      ]
+    },
+    "46": {
+      "native": [],
+      "roman": [
+        "chhialis"
+      ]
+    },
+    "47": {
+      "native": [],
+      "roman": [
+        "sadtalis"
+      ]
+    },
+    "48": {
+      "native": [],
+      "roman": [
+        "adtalis"
+      ]
+    },
+    "49": {
+      "native": [],
+      "roman": [
+        "ognpachas"
+      ]
+    },
+    "50": {
+      "native": [
+        "પચાસ"
+      ],
+      "roman": [
+        "pachas"
+      ]
+    },
+    "51": {
+      "native": [],
+      "roman": [
+        "ekaavan"
+      ]
+    },
+    "52": {
+      "native": [],
+      "roman": [
+        "bavan"
+      ]
+    },
+    "53": {
+      "native": [],
+      "roman": [
+        "trepan"
+      ]
+    },
+    "54": {
+      "native": [],
+      "roman": [
+        "chauvan"
+      ]
+    },
+    "55": {
+      "native": [],
+      "roman": [
+        "panchavan"
+      ]
+    },
+    "56": {
+      "native": [],
+      "roman": [
+        "chhavan"
+      ]
+    },
+    "57": {
+      "native": [],
+      "roman": [
+        "sattavan"
+      ]
+    },
+    "58": {
+      "native": [],
+      "roman": [
+        "aththavan"
+      ]
+    },
+    "59": {
+      "native": [],
+      "roman": [
+        "ognsaath"
+      ]
+    },
+    "60": {
+      "native": [
+        "સાઠ"
+      ],
+      "roman": [
+        "saath"
+      ]
+    },
+    "61": {
+      "native": [],
+      "roman": [
+        "eksaath"
+      ]
+    },
+    "62": {
+      "native": [],
+      "roman": [
+        "basaath"
+      ]
+    },
+    "63": {
+      "native": [],
+      "roman": [
+        "tresaath"
+      ]
+    },
+    "64": {
+      "native": [],
+      "roman": [
+        "chausaath",
+        "chauaasath"
+      ]
+    },
+    "65": {
+      "native": [],
+      "roman": [
+        "painsath"
+      ]
+    },
+    "66": {
+      "native": [],
+      "roman": [
+        "chhiyasath"
+      ]
+    },
+    "67": {
+      "native": [],
+      "roman": [
+        "sadsath"
+      ]
+    },
+    "68": {
+      "native": [],
+      "roman": [
+        "adasath"
+      ]
+    },
+    "69": {
+      "native": [],
+      "roman": [
+        "ognsitther"
+      ]
+    },
+    "70": {
+      "native": [
+        "સિત્તેર"
+      ],
+      "roman": [
+        "sitther"
+      ]
+    },
+    "71": {
+      "native": [],
+      "roman": [
+        "ekoter"
+      ]
+    },
+    "72": {
+      "native": [],
+      "roman": [
+        "botter"
+      ]
+    },
+    "73": {
+      "native": [],
+      "roman": [
+        "tretter"
+      ]
+    },
+    "74": {
+      "native": [],
+      "roman": [
+        "chautter",
+        "chauatter"
+      ]
+    },
+    "75": {
+      "native": [],
+      "roman": [
+        "pachoter"
+      ]
+    },
+    "76": {
+      "native": [],
+      "roman": [
+        "chhoter"
+      ]
+    },
+    "77": {
+      "native": [],
+      "roman": [
+        "sattoter"
+      ]
+    },
+    "78": {
+      "native": [],
+      "roman": [
+        "athoter"
+      ]
+    },
+    "79": {
+      "native": [],
+      "roman": [
+        "ognasi"
+      ]
+    },
+    "80": {
+      "native": [
+        "એંસી"
+      ],
+      "roman": [
+        "asi"
+      ]
+    },
+    "81": {
+      "native": [],
+      "roman": [
+        "eksi"
+      ]
+    },
+    "82": {
+      "native": [],
+      "roman": [
+        "biasi"
+      ]
+    },
+    "83": {
+      "native": [],
+      "roman": [
+        "treasi"
+      ]
+    },
+    "84": {
+      "native": [],
+      "roman": [
+        "chaurasi"
+      ]
+    },
+    "85": {
+      "native": [],
+      "roman": [
+        "panchasi"
+      ]
+    },
+    "86": {
+      "native": [],
+      "roman": [
+        "chhiyasi"
+      ]
+    },
+    "87": {
+      "native": [],
+      "roman": [
+        "sattasi"
+      ]
+    },
+    "88": {
+      "native": [],
+      "roman": [
+        "athasi"
+      ]
+    },
+    "89": {
+      "native": [],
+      "roman": [
+        "ognnavvu"
+      ]
+    },
+    "90": {
+      "native": [
+        "નેવું"
+      ],
+      "roman": [
+        "navvu"
+      ]
+    },
+    "91": {
+      "native": [],
+      "roman": [
+        "eknavvu"
+      ]
+    },
+    "92": {
+      "native": [],
+      "roman": [
+        "banavvu"
+      ]
+    },
+    "93": {
+      "native": [],
+      "roman": [
+        "trenavvu"
+      ]
+    },
+    "94": {
+      "native": [],
+      "roman": [
+        "chaunavvu"
+      ]
+    },
+    "95": {
+      "native": [],
+      "roman": [
+        "panchnavvu"
+      ]
+    },
+    "96": {
+      "native": [],
+      "roman": [
+        "chhyanavvu"
+      ]
+    },
+    "97": {
+      "native": [],
+      "roman": [
+        "sattnavvu"
+      ]
+    },
+    "98": {
+      "native": [],
+      "roman": [
+        "athnavvu"
+      ]
+    },
+    "99": {
+      "native": [],
+      "roman": [
+        "navvanogu"
+      ]
+    },
+    "100": {
+      "native": [
+        "સો"
+      ],
+      "roman": [
+        "sau"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "સો"
+      ],
+      "roman": [
+        "so",
+        "sau"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "હજાર"
+      ],
+      "roman": [
+        "hajaar"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "લાખ"
+      ],
+      "roman": [
+        "laakh",
+        "lakh"
+      ]
+    },
+    "crore": {
+      "native": [
+        "કરોડ"
+      ],
+      "roman": [
+        "karod",
+        "crore"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "દોઢ"
+      ],
+      "roman": [
+        "dodh",
+        "dedh"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "અઢી"
+      ],
+      "roman": [
+        "adhee"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "સવા"
+      ],
+      "roman": [
+        "savaa",
+        "sawa"
+      ],
+      "value": 1.25
+    },
+    "paune": {
+      "native": [
+        "પોણા"
+      ],
+      "roman": [
+        "pona",
+        "pauna"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "સાડા"
+      ],
+      "roman": [
+        "saada",
+        "saade"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "૦": "0",
+    "૧": "1",
+    "૨": "2",
+    "૩": "3",
+    "૪": "4",
+    "૫": "5",
+    "૬": "6",
+    "૭": "7",
+    "૮": "8",
+    "૯": "9"
+  },
+  "notes": "Native script supplied only 0-30 and round tens + 100 (સો); compound native spellings (31-99) are OMITTED pending verification rather than guessed — romanized forms (source-verified) cover the full 0-100. Roman normalized to ASCII. Fractions are cognate with Hindi usage (dodh=1.5, adhee=2.5, savaa=1.25 e.g. સવા સો = 125, pona=3/4 of next unit e.g. પોણા બેસો = 175, saada=+1/2 e.g. સાડા ત્રણસો = 350). Verify with a native speaker. Indian numbering uses lakh/karod."
+}

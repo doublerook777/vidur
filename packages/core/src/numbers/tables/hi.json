@@ -1,0 +1,933 @@
+{
+  "lang": "hi",
+  "status": "complete",
+  "source": "https://beelinguapp.com/fr/blog/how-to-count-from-1-to-100-in-hindi ; https://en.wikipedia.org/wiki/Hindustani_numerals",
+  "units": {
+    "0": {
+      "native": [
+        "शून्य",
+        "शून"
+      ],
+      "roman": [
+        "shunya",
+        "shoonya",
+        "sunya"
+      ]
+    },
+    "1": {
+      "native": [
+        "एक"
+      ],
+      "roman": [
+        "ek"
+      ]
+    },
+    "2": {
+      "native": [
+        "दो"
+      ],
+      "roman": [
+        "do"
+      ]
+    },
+    "3": {
+      "native": [
+        "तीन"
+      ],
+      "roman": [
+        "teen",
+        "chaar"
+      ]
+    },
+    "4": {
+      "native": [
+        "चार"
+      ],
+      "roman": [
+        "char",
+        "panch"
+      ]
+    },
+    "5": {
+      "native": [
+        "पांच"
+      ],
+      "roman": [
+        "paanch",
+        "chah",
+        "chhe"
+      ]
+    },
+    "6": {
+      "native": [
+        "छह"
+      ],
+      "roman": [
+        "chhah"
+      ]
+    },
+    "7": {
+      "native": [
+        "सात"
+      ],
+      "roman": [
+        "saat"
+      ]
+    },
+    "8": {
+      "native": [
+        "आठ"
+      ],
+      "roman": [
+        "aath"
+      ]
+    },
+    "9": {
+      "native": [
+        "नौ"
+      ],
+      "roman": [
+        "nau",
+        "nao"
+      ]
+    },
+    "10": {
+      "native": [
+        "दस"
+      ],
+      "roman": [
+        "das"
+      ]
+    },
+    "11": {
+      "native": [
+        "ग्यारह"
+      ],
+      "roman": [
+        "gyarah"
+      ]
+    },
+    "12": {
+      "native": [
+        "बारह"
+      ],
+      "roman": [
+        "barah"
+      ]
+    },
+    "13": {
+      "native": [
+        "तेरह"
+      ],
+      "roman": [
+        "terah"
+      ]
+    },
+    "14": {
+      "native": [
+        "चौदह"
+      ],
+      "roman": [
+        "chaudah"
+      ]
+    },
+    "15": {
+      "native": [
+        "पंद्रह"
+      ],
+      "roman": [
+        "pandrah",
+        "pandra"
+      ]
+    },
+    "16": {
+      "native": [
+        "सोलह"
+      ],
+      "roman": [
+        "solah"
+      ]
+    },
+    "17": {
+      "native": [
+        "सत्रह"
+      ],
+      "roman": [
+        "satrah"
+      ]
+    },
+    "18": {
+      "native": [
+        "अठारह"
+      ],
+      "roman": [
+        "attharah"
+      ]
+    },
+    "19": {
+      "native": [
+        "उन्नीस"
+      ],
+      "roman": [
+        "unnees"
+      ]
+    },
+    "20": {
+      "native": [
+        "बीस"
+      ],
+      "roman": [
+        "bees"
+      ]
+    },
+    "21": {
+      "native": [
+        "इक्कीस"
+      ],
+      "roman": [
+        "ikkees"
+      ]
+    },
+    "22": {
+      "native": [
+        "बाईस"
+      ],
+      "roman": [
+        "baees"
+      ]
+    },
+    "23": {
+      "native": [
+        "तेईस"
+      ],
+      "roman": [
+        "teis"
+      ]
+    },
+    "24": {
+      "native": [
+        "चौबीस"
+      ],
+      "roman": [
+        "chaubees",
+        "pachchees",
+        "pachees"
+      ]
+    },
+    "25": {
+      "native": [
+        "पच्चीस"
+      ],
+      "roman": [
+        "pachis"
+      ]
+    },
+    "26": {
+      "native": [
+        "छब्बीस"
+      ],
+      "roman": [
+        "chhabbis"
+      ]
+    },
+    "27": {
+      "native": [
+        "सत्ताईस"
+      ],
+      "roman": [
+        "satais"
+      ]
+    },
+    "28": {
+      "native": [
+        "अट्ठाईस"
+      ],
+      "roman": [
+        "atthais"
+      ]
+    },
+    "29": {
+      "native": [
+        "उन्तीस"
+      ],
+      "roman": [
+        "untees"
+      ]
+    },
+    "30": {
+      "native": [
+        "तीस"
+      ],
+      "roman": [
+        "tees"
+      ]
+    },
+    "31": {
+      "native": [
+        "इकतीस"
+      ],
+      "roman": [
+        "iktees"
+      ]
+    },
+    "32": {
+      "native": [
+        "बत्तीस"
+      ],
+      "roman": [
+        "battis"
+      ]
+    },
+    "33": {
+      "native": [
+        "तैंतीस"
+      ],
+      "roman": [
+        "taintees"
+      ]
+    },
+    "34": {
+      "native": [
+        "चौंतीस"
+      ],
+      "roman": [
+        "chauntees"
+      ]
+    },
+    "35": {
+      "native": [
+        "पैंतीस"
+      ],
+      "roman": [
+        "paintees"
+      ]
+    },
+    "36": {
+      "native": [
+        "छत्तीस"
+      ],
+      "roman": [
+        "chhattees"
+      ]
+    },
+    "37": {
+      "native": [
+        "सैंतीस"
+      ],
+      "roman": [
+        "saintees"
+      ]
+    },
+    "38": {
+      "native": [
+        "अड़तीस"
+      ],
+      "roman": [
+        "adtees"
+      ]
+    },
+    "39": {
+      "native": [
+        "उनतालीस"
+      ],
+      "roman": [
+        "untalis",
+        "unataalees"
+      ]
+    },
+    "40": {
+      "native": [
+        "चालीस"
+      ],
+      "roman": [
+        "chalis"
+      ]
+    },
+    "41": {
+      "native": [
+        "इकतालीस"
+      ],
+      "roman": [
+        "iktalis"
+      ]
+    },
+    "42": {
+      "native": [
+        "बयालीस"
+      ],
+      "roman": [
+        "bayalis"
+      ]
+    },
+    "43": {
+      "native": [
+        "तैंतालीस"
+      ],
+      "roman": [
+        "taintalis",
+        "taintaalees"
+      ]
+    },
+    "44": {
+      "native": [
+        "चवालीस"
+      ],
+      "roman": [
+        "chavalis"
+      ]
+    },
+    "45": {
+      "native": [
+        "पैंतालीस"
+      ],
+      "roman": [
+        "paintalis"
+      ]
+    },
+    "46": {
+      "native": [
+        "छियालीस"
+      ],
+      "roman": [
+        "chhiyalis"
+      ]
+    },
+    "47": {
+      "native": [
+        "सैंतालीस"
+      ],
+      "roman": [
+        "saintalis"
+      ]
+    },
+    "48": {
+      "native": [
+        "अड़तालीस"
+      ],
+      "roman": [
+        "adtalis"
+      ]
+    },
+    "49": {
+      "native": [
+        "उनचास"
+      ],
+      "roman": [
+        "unchas",
+        "unachaas"
+      ]
+    },
+    "50": {
+      "native": [
+        "पचास"
+      ],
+      "roman": [
+        "pachas"
+      ]
+    },
+    "51": {
+      "native": [
+        "इक्यावन"
+      ],
+      "roman": [
+        "ikyaavan"
+      ]
+    },
+    "52": {
+      "native": [
+        "बावन"
+      ],
+      "roman": [
+        "bavan"
+      ]
+    },
+    "53": {
+      "native": [
+        "तिरपन"
+      ],
+      "roman": [
+        "tirpan"
+      ]
+    },
+    "54": {
+      "native": [
+        "चौवन"
+      ],
+      "roman": [
+        "chauvan"
+      ]
+    },
+    "55": {
+      "native": [
+        "पचपन"
+      ],
+      "roman": [
+        "pachpan"
+      ]
+    },
+    "56": {
+      "native": [
+        "छप्पन"
+      ],
+      "roman": [
+        "chappan"
+      ]
+    },
+    "57": {
+      "native": [
+        "सत्तावन"
+      ],
+      "roman": [
+        "sataavan"
+      ]
+    },
+    "58": {
+      "native": [
+        "अट्ठावन"
+      ],
+      "roman": [
+        "atthavan"
+      ]
+    },
+    "59": {
+      "native": [
+        "उनसठ"
+      ],
+      "roman": [
+        "unsath"
+      ]
+    },
+    "60": {
+      "native": [
+        "साठ"
+      ],
+      "roman": [
+        "sath"
+      ]
+    },
+    "61": {
+      "native": [
+        "इकसठ"
+      ],
+      "roman": [
+        "iksath"
+      ]
+    },
+    "62": {
+      "native": [
+        "बासठ"
+      ],
+      "roman": [
+        "basath"
+      ]
+    },
+    "63": {
+      "native": [
+        "तिरसठ"
+      ],
+      "roman": [
+        "tirsath"
+      ]
+    },
+    "64": {
+      "native": [
+        "चौंसठ"
+      ],
+      "roman": [
+        "chaunsath"
+      ]
+    },
+    "65": {
+      "native": [
+        "पैंसठ"
+      ],
+      "roman": [
+        "painsath"
+      ]
+    },
+    "66": {
+      "native": [
+        "छियासठ"
+      ],
+      "roman": [
+        "chhiyasath"
+      ]
+    },
+    "67": {
+      "native": [
+        "सड़सठ"
+      ],
+      "roman": [
+        "sarsath"
+      ]
+    },
+    "68": {
+      "native": [
+        "अड़सठ"
+      ],
+      "roman": [
+        "adsath"
+      ]
+    },
+    "69": {
+      "native": [
+        "उनहत्तर"
+      ],
+      "roman": [
+        "unhattar"
+      ]
+    },
+    "70": {
+      "native": [
+        "सत्तर"
+      ],
+      "roman": [
+        "sattar"
+      ]
+    },
+    "71": {
+      "native": [
+        "इकहत्तर"
+      ],
+      "roman": [
+        "ikahattar"
+      ]
+    },
+    "72": {
+      "native": [
+        "बहत्तर"
+      ],
+      "roman": [
+        "bahattar"
+      ]
+    },
+    "73": {
+      "native": [
+        "तिहत्तर"
+      ],
+      "roman": [
+        "tihattar"
+      ]
+    },
+    "74": {
+      "native": [
+        "चौहत्तर"
+      ],
+      "roman": [
+        "chauhattar"
+      ]
+    },
+    "75": {
+      "native": [
+        "पचहत्तर"
+      ],
+      "roman": [
+        "pachahatar",
+        "pachattar",
+        "pachhatar"
+      ]
+    },
+    "76": {
+      "native": [
+        "छिहत्तर"
+      ],
+      "roman": [
+        "chhihattar"
+      ]
+    },
+    "77": {
+      "native": [
+        "सतहत्तर"
+      ],
+      "roman": [
+        "satahattar"
+      ]
+    },
+    "78": {
+      "native": [
+        "अठहत्तर"
+      ],
+      "roman": [
+        "athhattar"
+      ]
+    },
+    "79": {
+      "native": [
+        "उन्यासी"
+      ],
+      "roman": [
+        "unyasi"
+      ]
+    },
+    "80": {
+      "native": [
+        "अस्सी"
+      ],
+      "roman": [
+        "assi"
+      ]
+    },
+    "81": {
+      "native": [
+        "इक्यासी"
+      ],
+      "roman": [
+        "ikyasi"
+      ]
+    },
+    "82": {
+      "native": [
+        "बयासी"
+      ],
+      "roman": [
+        "bayasi"
+      ]
+    },
+    "83": {
+      "native": [
+        "तिरासी"
+      ],
+      "roman": [
+        "tirasi"
+      ]
+    },
+    "84": {
+      "native": [
+        "चौरासी"
+      ],
+      "roman": [
+        "chaurasi"
+      ]
+    },
+    "85": {
+      "native": [
+        "पचासी"
+      ],
+      "roman": [
+        "pachasi"
+      ]
+    },
+    "86": {
+      "native": [
+        "छियासी"
+      ],
+      "roman": [
+        "chhiyasi"
+      ]
+    },
+    "87": {
+      "native": [
+        "सत्तासी"
+      ],
+      "roman": [
+        "satasi"
+      ]
+    },
+    "88": {
+      "native": [
+        "अट्ठासी"
+      ],
+      "roman": [
+        "atthasi"
+      ]
+    },
+    "89": {
+      "native": [
+        "नवासी"
+      ],
+      "roman": [
+        "navasi"
+      ]
+    },
+    "90": {
+      "native": [
+        "नब्बे"
+      ],
+      "roman": [
+        "nabbe"
+      ]
+    },
+    "91": {
+      "native": [
+        "इक्यानवे"
+      ],
+      "roman": [
+        "ikyanave"
+      ]
+    },
+    "92": {
+      "native": [
+        "बानवे"
+      ],
+      "roman": [
+        "banave"
+      ]
+    },
+    "93": {
+      "native": [
+        "तिरानवे"
+      ],
+      "roman": [
+        "tiranave"
+      ]
+    },
+    "94": {
+      "native": [
+        "चौरानवे"
+      ],
+      "roman": [
+        "chauranave"
+      ]
+    },
+    "95": {
+      "native": [
+        "पंचानवे"
+      ],
+      "roman": [
+        "panchanave"
+      ]
+    },
+    "96": {
+      "native": [
+        "छियानवे"
+      ],
+      "roman": [
+        "chhiyanave"
+      ]
+    },
+    "97": {
+      "native": [
+        "सत्तानवे"
+      ],
+      "roman": [
+        "sattanave"
+      ]
+    },
+    "98": {
+      "native": [
+        "अट्ठानवे"
+      ],
+      "roman": [
+        "atthanave"
+      ]
+    },
+    "99": {
+      "native": [
+        "निन्यानवे"
+      ],
+      "roman": [
+        "ninyanave"
+      ]
+    },
+    "100": {
+      "native": [
+        "एक सौ",
+        "सौ"
+      ],
+      "roman": [
+        "ek sau",
+        "sau"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "सौ"
+      ],
+      "roman": [
+        "sau"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "हज़ार",
+        "हजार"
+      ],
+      "roman": [
+        "hazaar",
+        "hazar"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "लाख"
+      ],
+      "roman": [
+        "lakh",
+        "laakh"
+      ]
+    },
+    "crore": {
+      "native": [
+        "करोड़"
+      ],
+      "roman": [
+        "crore",
+        "karod"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "डेढ़"
+      ],
+      "roman": [
+        "dedh"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "ढाई"
+      ],
+      "roman": [
+        "dhai"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "सवा"
+      ],
+      "roman": [
+        "sawa"
+      ],
+      "value": 1.25
+    },
+    "paune": {
+      "native": [
+        "पौने",
+        "पौना"
+      ],
+      "roman": [
+        "paune",
+        "pauna"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "साढ़े"
+      ],
+      "roman": [
+        "saade"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "०": "0",
+    "१": "1",
+    "२": "2",
+    "३": "3",
+    "४": "4",
+    "५": "5",
+    "६": "6",
+    "७": "7",
+    "८": "8",
+    "९": "9"
+  },
+  "notes": "Complete 0-100 per sources. Roman spellings are common ASCII transliterations; variants listed. Fractions: paune = 3/4 of the NEXT named unit (e.g. paune do sau = 175), sawa = 1 and 1/4, saade = unit + 1/2 for units >= 3 (e.g. saade teen sau = 350), dedh = 1.5, dhai = 2.5. 'do' (2) collides with English 'do' — parser must use language context. Lakh-scale grouping (5,20,000) documented in PLAN 6.1."
+}

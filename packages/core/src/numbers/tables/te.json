@@ -1,0 +1,924 @@
+{
+  "lang": "te",
+  "status": "draft",
+  "source": "https://preply.com/en/blog/numbers-in-telugu/ ; https://www.omniglot.com/language/numbers/telugu.htm (bot-blocked at fetch time; search snippet used for digits/100); compounds per source-attested two-word pattern (ఇరవై ఏడు, యాభై రెండు, ఎనభై ఎనిమిది)",
+  "units": {
+    "0": {
+      "native": [
+        "సున్నా",
+        "సూన్యం"
+      ],
+      "roman": [
+        "sunna",
+        "suunyam"
+      ]
+    },
+    "1": {
+      "native": [
+        "ఒకటి"
+      ],
+      "roman": [
+        "okati"
+      ]
+    },
+    "2": {
+      "native": [
+        "రెండు"
+      ],
+      "roman": [
+        "rendu"
+      ]
+    },
+    "3": {
+      "native": [
+        "మూడు"
+      ],
+      "roman": [
+        "mudu"
+      ]
+    },
+    "4": {
+      "native": [
+        "నాలుగు"
+      ],
+      "roman": [
+        "naalugu"
+      ]
+    },
+    "5": {
+      "native": [
+        "ఐదు"
+      ],
+      "roman": [
+        "aidu"
+      ]
+    },
+    "6": {
+      "native": [
+        "ఆరు"
+      ],
+      "roman": [
+        "aaru"
+      ]
+    },
+    "7": {
+      "native": [
+        "ఏడు"
+      ],
+      "roman": [
+        "edu"
+      ]
+    },
+    "8": {
+      "native": [
+        "ఎనిమిది"
+      ],
+      "roman": [
+        "enimidi"
+      ]
+    },
+    "9": {
+      "native": [
+        "తొమ్మిది"
+      ],
+      "roman": [
+        "tommidi"
+      ]
+    },
+    "10": {
+      "native": [
+        "పది"
+      ],
+      "roman": [
+        "padi"
+      ]
+    },
+    "11": {
+      "native": [
+        "పదకొండు"
+      ],
+      "roman": [
+        "padakondu"
+      ]
+    },
+    "12": {
+      "native": [
+        "పన్నెండు"
+      ],
+      "roman": [
+        "pannedu"
+      ]
+    },
+    "13": {
+      "native": [
+        "పదమూడు"
+      ],
+      "roman": [
+        "padamudu"
+      ]
+    },
+    "14": {
+      "native": [
+        "పద్నాలుగు"
+      ],
+      "roman": [
+        "padnaalugu",
+        "pudnaalugu"
+      ]
+    },
+    "15": {
+      "native": [
+        "పదిహేను"
+      ],
+      "roman": [
+        "padihenu",
+        "padihayidu"
+      ]
+    },
+    "16": {
+      "native": [
+        "పదహారు"
+      ],
+      "roman": [
+        "padaharu"
+      ]
+    },
+    "17": {
+      "native": [
+        "పదిహేడు"
+      ],
+      "roman": [
+        "padihedhu"
+      ]
+    },
+    "18": {
+      "native": [
+        "పద్దెనిమిది"
+      ],
+      "roman": [
+        "paddenimidi"
+      ]
+    },
+    "19": {
+      "native": [
+        "పందొమ్మిది"
+      ],
+      "roman": [
+        "pandommidi"
+      ]
+    },
+    "20": {
+      "native": [
+        "ఇరవై"
+      ],
+      "roman": [
+        "iravai"
+      ]
+    },
+    "21": {
+      "native": [
+        "ఇరవై ఒకటి"
+      ],
+      "roman": [
+        "iravai okati"
+      ]
+    },
+    "22": {
+      "native": [
+        "ఇరవై రెండు"
+      ],
+      "roman": [
+        "iravai rendu"
+      ]
+    },
+    "23": {
+      "native": [
+        "ఇరవై మూడు"
+      ],
+      "roman": [
+        "iravai mudu"
+      ]
+    },
+    "24": {
+      "native": [
+        "ఇరవై నాలుగు"
+      ],
+      "roman": [
+        "iravai naalugu"
+      ]
+    },
+    "25": {
+      "native": [
+        "ఇరవై ఐదు"
+      ],
+      "roman": [
+        "iravai aidu"
+      ]
+    },
+    "26": {
+      "native": [
+        "ఇరవై ఆరు"
+      ],
+      "roman": [
+        "iravai aaru"
+      ]
+    },
+    "27": {
+      "native": [
+        "ఇరవై ఏడు"
+      ],
+      "roman": [
+        "iravai edu"
+      ]
+    },
+    "28": {
+      "native": [
+        "ఇరవై ఎనిమిది"
+      ],
+      "roman": [
+        "iravai enimidi"
+      ]
+    },
+    "29": {
+      "native": [
+        "ఇరవై తొమ్మిది"
+      ],
+      "roman": [
+        "iravai tommidi"
+      ]
+    },
+    "30": {
+      "native": [
+        "ముప్పై"
+      ],
+      "roman": [
+        "muppai"
+      ]
+    },
+    "31": {
+      "native": [
+        "ముప్పై ఒకటి"
+      ],
+      "roman": [
+        "muppai okati"
+      ]
+    },
+    "32": {
+      "native": [
+        "ముప్పై రెండు"
+      ],
+      "roman": [
+        "muppai rendu"
+      ]
+    },
+    "33": {
+      "native": [
+        "ముప్పై మూడు"
+      ],
+      "roman": [
+        "muppai mudu"
+      ]
+    },
+    "34": {
+      "native": [
+        "ముప్పై నాలుగు"
+      ],
+      "roman": [
+        "muppai naalugu"
+      ]
+    },
+    "35": {
+      "native": [
+        "ముప్పై ఐదు"
+      ],
+      "roman": [
+        "muppai aidu"
+      ]
+    },
+    "36": {
+      "native": [
+        "ముప్పై ఆరు"
+      ],
+      "roman": [
+        "muppai aaru"
+      ]
+    },
+    "37": {
+      "native": [
+        "ముప్పై ఏడు"
+      ],
+      "roman": [
+        "muppai edu"
+      ]
+    },
+    "38": {
+      "native": [
+        "ముప్పై ఎనిమిది"
+      ],
+      "roman": [
+        "muppai enimidi"
+      ]
+    },
+    "39": {
+      "native": [
+        "ముప్పై తొమ్మిది"
+      ],
+      "roman": [
+        "muppai tommidi"
+      ]
+    },
+    "40": {
+      "native": [
+        "నలభై"
+      ],
+      "roman": [
+        "nalabhai"
+      ]
+    },
+    "41": {
+      "native": [
+        "నలభై ఒకటి"
+      ],
+      "roman": [
+        "nalabhai okati"
+      ]
+    },
+    "42": {
+      "native": [
+        "నలభై రెండు"
+      ],
+      "roman": [
+        "nalabhai rendu"
+      ]
+    },
+    "43": {
+      "native": [
+        "నలభై మూడు"
+      ],
+      "roman": [
+        "nalabhai mudu"
+      ]
+    },
+    "44": {
+      "native": [
+        "నలభై నాలుగు"
+      ],
+      "roman": [
+        "nalabhai naalugu"
+      ]
+    },
+    "45": {
+      "native": [
+        "నలభై ఐదు"
+      ],
+      "roman": [
+        "nalabhai aidu"
+      ]
+    },
+    "46": {
+      "native": [
+        "నలభై ఆరు"
+      ],
+      "roman": [
+        "nalabhai aaru"
+      ]
+    },
+    "47": {
+      "native": [
+        "నలభై ఏడు"
+      ],
+      "roman": [
+        "nalabhai edu"
+      ]
+    },
+    "48": {
+      "native": [
+        "నలభై ఎనిమిది"
+      ],
+      "roman": [
+        "nalabhai enimidi"
+      ]
+    },
+    "49": {
+      "native": [
+        "నలభై తొమ్మిది"
+      ],
+      "roman": [
+        "nalabhai tommidi"
+      ]
+    },
+    "50": {
+      "native": [
+        "యాభై"
+      ],
+      "roman": [
+        "yaabhai",
+        "yabhai"
+      ]
+    },
+    "51": {
+      "native": [
+        "యాభై ఒకటి"
+      ],
+      "roman": [
+        "yaabhai okati"
+      ]
+    },
+    "52": {
+      "native": [
+        "యాభై రెండు"
+      ],
+      "roman": [
+        "yaabhai rendu"
+      ]
+    },
+    "53": {
+      "native": [
+        "యాభై మూడు"
+      ],
+      "roman": [
+        "yaabhai mudu"
+      ]
+    },
+    "54": {
+      "native": [
+        "యాభై నాలుగు"
+      ],
+      "roman": [
+        "yaabhai naalugu"
+      ]
+    },
+    "55": {
+      "native": [
+        "యాభై ఐదు"
+      ],
+      "roman": [
+        "yaabhai aidu"
+      ]
+    },
+    "56": {
+      "native": [
+        "యాభై ఆరు"
+      ],
+      "roman": [
+        "yaabhai aaru"
+      ]
+    },
+    "57": {
+      "native": [
+        "యాభై ఏడు"
+      ],
+      "roman": [
+        "yaabhai edu"
+      ]
+    },
+    "58": {
+      "native": [
+        "యాభై ఎనిమిది"
+      ],
+      "roman": [
+        "yaabhai enimidi"
+      ]
+    },
+    "59": {
+      "native": [
+        "యాభై తొమ్మిది"
+      ],
+      "roman": [
+        "yaabhai tommidi"
+      ]
+    },
+    "60": {
+      "native": [
+        "అరవై"
+      ],
+      "roman": [
+        "aravai"
+      ]
+    },
+    "61": {
+      "native": [
+        "అరవై ఒకటి"
+      ],
+      "roman": [
+        "aravai okati"
+      ]
+    },
+    "62": {
+      "native": [
+        "అరవై రెండు"
+      ],
+      "roman": [
+        "aravai rendu"
+      ]
+    },
+    "63": {
+      "native": [
+        "అరవై మూడు"
+      ],
+      "roman": [
+        "aravai mudu"
+      ]
+    },
+    "64": {
+      "native": [
+        "అరవై నాలుగు"
+      ],
+      "roman": [
+        "aravai naalugu"
+      ]
+    },
+    "65": {
+      "native": [
+        "అరవై ఐదు"
+      ],
+      "roman": [
+        "aravai aidu"
+      ]
+    },
+    "66": {
+      "native": [
+        "అరవై ఆరు"
+      ],
+      "roman": [
+        "aravai aaru"
+      ]
+    },
+    "67": {
+      "native": [
+        "అరవై ఏడు"
+      ],
+      "roman": [
+        "aravai edu"
+      ]
+    },
+    "68": {
+      "native": [
+        "అరవై ఎనిమిది"
+      ],
+      "roman": [
+        "aravai enimidi"
+      ]
+    },
+    "69": {
+      "native": [
+        "అరవై తొమ్మిది"
+      ],
+      "roman": [
+        "aravai tommidi"
+      ]
+    },
+    "70": {
+      "native": [
+        "డెబ్బై"
+      ],
+      "roman": [
+        "debbai",
+        "debbhai"
+      ]
+    },
+    "71": {
+      "native": [
+        "డెబ్బై ఒకటి"
+      ],
+      "roman": [
+        "debbai okati"
+      ]
+    },
+    "72": {
+      "native": [
+        "డెబ్బై రెండు"
+      ],
+      "roman": [
+        "debbai rendu"
+      ]
+    },
+    "73": {
+      "native": [
+        "డెబ్బై మూడు"
+      ],
+      "roman": [
+        "debbai mudu"
+      ]
+    },
+    "74": {
+      "native": [
+        "డెబ్బై నాలుగు"
+      ],
+      "roman": [
+        "debbai naalugu"
+      ]
+    },
+    "75": {
+      "native": [
+        "డెబ్బై ఐదు"
+      ],
+      "roman": [
+        "debbai aidu"
+      ]
+    },
+    "76": {
+      "native": [
+        "డెబ్బై ఆరు"
+      ],
+      "roman": [
+        "debbai aaru"
+      ]
+    },
+    "77": {
+      "native": [
+        "డెబ్బై ఏడు"
+      ],
+      "roman": [
+        "debbai edu"
+      ]
+    },
+    "78": {
+      "native": [
+        "డెబ్బై ఎనిమిది"
+      ],
+      "roman": [
+        "debbai enimidi"
+      ]
+    },
+    "79": {
+      "native": [
+        "డెబ్బై తొమ్మిది"
+      ],
+      "roman": [
+        "debbai tommidi"
+      ]
+    },
+    "80": {
+      "native": [
+        "ఎనభై"
+      ],
+      "roman": [
+        "enabhai"
+      ]
+    },
+    "81": {
+      "native": [
+        "ఎనభై ఒకటి"
+      ],
+      "roman": [
+        "enabhai okati"
+      ]
+    },
+    "82": {
+      "native": [
+        "ఎనభై రెండు"
+      ],
+      "roman": [
+        "enabhai rendu"
+      ]
+    },
+    "83": {
+      "native": [
+        "ఎనభై మూడు"
+      ],
+      "roman": [
+        "enabhai mudu"
+      ]
+    },
+    "84": {
+      "native": [
+        "ఎనభై నాలుగు"
+      ],
+      "roman": [
+        "enabhai naalugu"
+      ]
+    },
+    "85": {
+      "native": [
+        "ఎనభై ఐదు"
+      ],
+      "roman": [
+        "enabhai aidu"
+      ]
+    },
+    "86": {
+      "native": [
+        "ఎనభై ఆరు"
+      ],
+      "roman": [
+        "enabhai aaru"
+      ]
+    },
+    "87": {
+      "native": [
+        "ఎనభై ఏడు"
+      ],
+      "roman": [
+        "enabhai edu"
+      ]
+    },
+    "88": {
+      "native": [
+        "ఎనభై ఎనిమిది"
+      ],
+      "roman": [
+        "enabhai enimidi"
+      ]
+    },
+    "89": {
+      "native": [
+        "ఎనభై తొమ్మిది"
+      ],
+      "roman": [
+        "enabhai tommidi"
+      ]
+    },
+    "90": {
+      "native": [
+        "తొంభై"
+      ],
+      "roman": [
+        "tombhai"
+      ]
+    },
+    "91": {
+      "native": [
+        "తొంభై ఒకటి"
+      ],
+      "roman": [
+        "tombhai okati"
+      ]
+    },
+    "92": {
+      "native": [
+        "తొంభై రెండు"
+      ],
+      "roman": [
+        "tombhai rendu"
+      ]
+    },
+    "93": {
+      "native": [
+        "తొంభై మూడు"
+      ],
+      "roman": [
+        "tombhai mudu"
+      ]
+    },
+    "94": {
+      "native": [
+        "తొంభై నాలుగు"
+      ],
+      "roman": [
+        "tombhai naalugu"
+      ]
+    },
+    "95": {
+      "native": [
+        "తొంభై ఐదు"
+      ],
+      "roman": [
+        "tombhai aidu"
+      ]
+    },
+    "96": {
+      "native": [
+        "తొంభై ఆరు"
+      ],
+      "roman": [
+        "tombhai aaru"
+      ]
+    },
+    "97": {
+      "native": [
+        "తొంభై ఏడు"
+      ],
+      "roman": [
+        "tombhai edu"
+      ]
+    },
+    "98": {
+      "native": [
+        "తొంభై ఎనిమిది"
+      ],
+      "roman": [
+        "tombhai enimidi"
+      ]
+    },
+    "99": {
+      "native": [
+        "తొంభై తొమ్మిది"
+      ],
+      "roman": [
+        "tombhai tommidi"
+      ]
+    },
+    "100": {
+      "native": [
+        "వంద",
+        "నూరు"
+      ],
+      "roman": [
+        "vanda",
+        "nuuru"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "వంద"
+      ],
+      "roman": [
+        "vanda",
+        "vantalu"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "వెయ్యి",
+        "వేయి"
+      ],
+      "roman": [
+        "veyyi",
+        "veyi",
+        "vela"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "లక్ష"
+      ],
+      "roman": [
+        "laksha"
+      ]
+    },
+    "crore": {
+      "native": [
+        "కోటి"
+      ],
+      "roman": [
+        "kodi",
+        "koti"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "ఒకటిన్నర"
+      ],
+      "roman": [
+        "okatinnaara",
+        "okatinara"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "రెండన్నర"
+      ],
+      "roman": [
+        "rendannara"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "పావు"
+      ],
+      "roman": [
+        "paavu",
+        "pawu"
+      ],
+      "value": 0.25
+    },
+    "paune": {
+      "native": [
+        "ముప్పావు"
+      ],
+      "roman": [
+        "muppaavu"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "మూడున్నర"
+      ],
+      "roman": [
+        "mudunnara"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "౦": "0",
+    "౧": "1",
+    "౨": "2",
+    "౩": "3",
+    "౪": "4",
+    "౫": "5",
+    "౬": "6",
+    "౭": "7",
+    "౮": "8",
+    "౯": "9"
+  },
+  "notes": "Base 0-10, teens, and tens per source. 11 పదకొండు, 14 పద్నాలుగు (source exercise), 15 పదిహేను and 19 పందొమ్మిది are attested variants; 12, 13, 16-18 are pattern forms (పది+unit, పన్నెండు/పద్నాలుగు style) not individually source-verified. Compounds 21-99 are two words (tens first, then unit) per source-attested examples. Fractions: naa -nnaara fused forms for x.5 (ఒకటిన్నర = 1.5, రెండన్నర = 2.5, మూడున్నర = 3.5 — last constructed); sagam (సగం, half) is the unmarked word for half and is not included here as it maps to no Hindi fraction key; paavu = quarter, muppaavu = 3/4. Verify with a native speaker. Indian numbering uses lakh/crore; 'వంద' hundred, 'వేలు' thousands (plural, used after numerals)."
+}
