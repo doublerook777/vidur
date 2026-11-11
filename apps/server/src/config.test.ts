@@ -20,6 +20,11 @@ describe('loadConfig', () => {
     }
   });
 
+  it('HOST overrides the bind address (containers need 0.0.0.0, tunnels keep 127.0.0.1)', () => {
+    expect(loadConfig({ MODE: 'local', GNANI_API_KEY: 'k', HOST: '0.0.0.0' }).host).toBe('0.0.0.0');
+    expect(loadConfig({ MODE: 'hosted', GNANI_API_KEY: 'k', ACCESS_CODE: 'c', HOST: '127.0.0.1' }).host).toBe('127.0.0.1');
+  });
+
   it('mock mode needs no keys', () => {
     expect(loadConfig({ MODE: 'mock' }).gnaniApiKey).toBeNull();
   });

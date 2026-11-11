@@ -22,7 +22,10 @@
     "test:live": "node e2e/live.mjs",
     "setup": "node scripts/setup.mjs",
     "start": "node scripts/start.mjs",
-    "demo:mock": "node scripts/start.mjs --mock"
+    "demo:mock": "node scripts/start.mjs --mock",
+    "doctor": "node scripts/doctor.mjs",
+    "keepwarm": "node scripts/keepwarm.mjs",
+    "tunnel": "node scripts/tunnel.mjs"
   },
   "devDependencies": {
     "eslint": "10.13.0",

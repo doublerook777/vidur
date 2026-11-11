@@ -84,7 +84,8 @@ export function loadConfig(env: Record<string, string | undefined>): Config {
       sessionAudioCapSec: int('SESSION_AUDIO_CAP_MIN', hosted ? 8 : 600) * 60,
       dailyAudioCapSec: int('DAILY_AUDIO_CAP_MIN', hosted ? 90 : 100_000) * 60,
     },
-    host: mode === 'local' || mode === 'mock' ? '127.0.0.1' : '0.0.0.0',
+    // Local and mock bind to this machine only. A container (or a tunnel) may set HOST to say otherwise.
+    host: get('HOST') ?? (mode === 'local' || mode === 'mock' ? '127.0.0.1' : '0.0.0.0'),
     gnaniApiKey: mode === 'mock' ? null : gnaniApiKey,
     llm,
     accessCode,

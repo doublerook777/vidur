@@ -17,7 +17,7 @@ if (!existsSync('node_modules')) {
   console.error('Run "npm install" first, then "npm run setup".');
   process.exit(1);
 }
-if (!mock && !existsSync('.env')) {
+if (!mock && !existsSync('.env') && !process.env.GNANI_API_KEY) {
   console.error('There is no .env file. Run "npm run setup" to create one, or "npm run demo:mock" to try the app with no keys.');
   process.exit(1);
 }
