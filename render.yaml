@@ -1,0 +1,22 @@
+# Render blueprint for Vidur: one free web service that serves the phone app, the showcase page and the speech gateway.
+# It builds the Dockerfile in this repo. No key is stored here: the three marked sync: false are typed into Render's dashboard.
+# autoDeploy is off, so a push never deploys by itself.
+services:
+  - type: web
+    name: vidur
+    runtime: docker
+    plan: free
+    region: singapore
+    healthCheckPath: /healthz
+    autoDeploy: false
+    envVars:
+      - key: MODE
+        value: hosted
+      - key: LLM_MODEL
+        value: openai/gpt-oss-20b
+      - key: GNANI_API_KEY
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
+      - key: ACCESS_CODE
+        sync: false
