@@ -54,7 +54,7 @@ interface Work {
   asked: number;
 }
 
-type PendingKind = 'direction' | 'amount' | 'confirm_amount' | 'which' | 'near' | 'customer' | 'consent' | 'new_customer';
+export type PendingKind = 'direction' | 'amount' | 'confirm_amount' | 'which' | 'near' | 'customer' | 'consent' | 'new_customer';
 interface Pending {
   kind: PendingKind;
   expiresAt: number;
@@ -79,6 +79,10 @@ export class Dialogue {
   }
   hasPending(): boolean {
     return this.pending !== null;
+  }
+  /** What the open question is about, so a screen can offer Yes and No buttons for the yes/no kinds. */
+  pendingKind(): PendingKind | null {
+    return this.pending?.kind ?? null;
   }
 
   /** The first thing the agent says in a session. */

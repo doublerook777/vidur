@@ -2,6 +2,7 @@
  * Playback of the gateway's 16 kHz PCM16 chunks through an AudioWorklet ring buffer.
  * `flush()` empties the buffer inside the next render quantum (about 3 ms), which is what makes barge-in feel instant.
  */
+import { noteSpeaker } from './levels.js';
 import { pcm16ToFloat } from './pcm.js';
 
 const WORKLET = `
@@ -50,6 +51,7 @@ export class Playback {
   }
 
   push(pcm: Int16Array): void {
+    noteSpeaker(pcm);
     const f = pcm16ToFloat(pcm);
     this.node?.port.postMessage(f, [f.buffer]);
   }

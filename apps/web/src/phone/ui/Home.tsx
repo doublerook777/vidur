@@ -1,13 +1,14 @@
 import type { FeedItem, HomeVM } from '../contract.js';
-import { formatRupees } from './format.js';
+import { formatDayLong, formatRupees } from './format.js';
 import { LABELS } from './labels.js';
-import { IconArrowDown, IconArrowUp, IconMic } from './icons.js';
+import { IconArrowDown, IconChevron, IconCustomers, IconPlus } from './icons.js';
 import type { ScreenProps } from './types.js';
 import { AiBadge } from './AiBadge.js';
 import { StateIndicator } from './StateIndicator.js';
 import { EntryCard } from './EntryCard.js';
 import { Feed } from './Feed.js';
 import { BottomNav } from './BottomNav.js';
+import { VoiceOrb } from './VoiceOrb.js';
 
 function newestUndoableId(items: FeedItem[], now: number): string | null {
   let best: FeedItem | null = null;
@@ -20,9 +21,10 @@ function newestUndoableId(items: FeedItem[], now: number): string | null {
 
 export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
   const t = LABELS[lang];
-  const now = Date.now();
+  const now = vm.now;
   const undoId = newestUndoableId(vm.feed, now);
   const offline = !vm.online || vm.phase === 'offline';
+  const recent = vm.feed.slice(0, 6);
 
   return (
     <main class="screen screen-home">
@@ -30,6 +32,14 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
         <StateIndicator vm={{ phase: vm.phase }} actions={actions} lang={lang} />
         <AiBadge vm={{}} actions={actions} lang={lang} />
       </header>
+
+      <div class="greeting">
+        <h1 class="greeting-title">
+          {t.greeting}
+          {vm.shopName ? `, ${vm.shopName}` : ''}
+        </h1>
+        <p class="greeting-sub">{formatDayLong(now, lang)}</p>
+      </div>
 
       {offline && (
         <div class="offline-banner" data-feature="offline-banner" role="status">
@@ -48,55 +58,43 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
       )}
 
       <section class="totals" data-feature="totals" aria-label="today">
-        <div class="totals-item totals-credit">
-          <span class="totals-icon" aria-hidden="true"><IconArrowUp size={26} /></span>
-          <span class="totals-label">{t.todayCredit}</span>
-          <span class="totals-value totals-value-credit">{formatRupees(vm.creditTodayPaise)}</span>
+        <div class="totals-peek" aria-hidden="true">
+          <span>{t.todayWord}</span>
+          <span>{formatDayLong(now, lang)}</span>
         </div>
-        <div class="totals-item totals-payment">
-          <span class="totals-icon" aria-hidden="true"><IconArrowDown size={26} /></span>
-          <span class="totals-label">{t.todayPayment}</span>
-          <span class="totals-value totals-value-payment">{formatRupees(vm.paymentTodayPaise)}</span>
-        </div>
-        <div class="totals-people">
-          <span class="totals-label">{t.peopleToday}</span>
-          <span class="totals-people-value">{vm.peopleToday}</span>
+        <div class="totals-card">
+          <div class="totals-item totals-credit">
+            <span class="totals-label">{t.todayCredit}</span>
+            <span class="totals-value totals-value-credit">{formatRupees(vm.creditTodayPaise)}</span>
+          </div>
+          <div class="totals-item totals-payment">
+            <span class="totals-icon" aria-hidden="true"><IconArrowDown size={18} /></span>
+            <span class="totals-label">{t.todayPayment}</span>
+            <span class="totals-value totals-value-payment">{formatRupees(vm.paymentTodayPaise)}</span>
+          </div>
+          <div class="totals-people">
+            <span class="totals-people-icon" aria-hidden="true"><IconCustomers size={18} /></span>
+            <span class="totals-label">{t.peopleToday}</span>
+            <span class="totals-people-value">{vm.peopleToday}</span>
+          </div>
+          <button type="button" class="notch-btn" data-feature="add-entry" onClick={() => actions.openAddEntry()}>
+            <IconPlus size={20} />
+            <span>{t.addEntry}</span>
+          </button>
         </div>
       </section>
 
       {vm.card && <EntryCard vm={vm.card} actions={actions} lang={lang} />}
 
-      <Feed vm={{ items: vm.feed, showUndoForId: undoId }} actions={actions} lang={lang} />
-
-      <div class="mic-zone">
-        <button
-          type="button"
-          class="mic"
-          data-feature="mic-button"
-          aria-label={t.holdToTalk}
-          onPointerDown={() => actions.micDown()}
-          onPointerUp={() => actions.micUp()}
-          onPointerCancel={() => actions.micUp()}
-          onPointerLeave={() => actions.micUp()}
-          onKeyDown={(e) => {
-            if (e.key === ' ' && !e.repeat) {
-              e.preventDefault();
-              actions.micDown();
-            }
-          }}
-          onKeyUp={(e) => {
-            if (e.key === ' ') {
-              e.preventDefault();
-              actions.micUp();
-            }
-          }}
-        >
-          <IconMic size={44} />
-          <span class="mic-label">{t.holdToTalk}</span>
+      <Feed vm={{ items: recent, showUndoForId: undoId, now }} actions={actions} lang={lang} />
+      {vm.feed.length > 0 && (
+        <button type="button" class="see-all" data-feature="history" onClick={() => actions.navigate('history')}>
+          <span>{t.seeAll}</span>
+          <IconChevron size={18} />
         </button>
-      </div>
+      )}
 
-      <BottomNav vm={{ current: 'home' }} actions={actions} lang={lang} />
+      <BottomNav vm={{ current: 'home' }} actions={actions} lang={lang} orb={<VoiceOrb vm={{ phase: vm.phase }} actions={actions} lang={lang} />} />
     </main>
   );
 }

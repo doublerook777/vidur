@@ -1,9 +1,10 @@
 import type { EntryCardVM } from '../contract.js';
 import { formatRupees } from './format.js';
 import { LABELS } from './labels.js';
+import { IconCheck, IconX } from './icons.js';
 import type { ScreenProps } from './types.js';
 
-export function EntryCard({ vm, lang }: ScreenProps<EntryCardVM>) {
+export function EntryCard({ vm, actions, lang }: ScreenProps<EntryCardVM>) {
   const t = LABELS[lang];
   return (
     <section class={`entry-card entry-card-${vm.state}`} data-feature="entry-card" aria-live="polite">
@@ -24,13 +25,25 @@ export function EntryCard({ vm, lang }: ScreenProps<EntryCardVM>) {
           <span class="entry-amount-value">{formatRupees(vm.paise)}</span>
         </p>
       )}
-      {vm.state === 'needs_answer' && (
+      {vm.state === 'needs_answer' && vm.answers !== 'yes_no' && (
         <div class="entry-disambiguation" data-feature="disambiguation">
           <p class="entry-question-title">{t.disambiguation}</p>
           {vm.customerName ? <p class="entry-question-name">{vm.customerName}</p> : null}
         </div>
       )}
-      {(vm.state === 'heard' || vm.state === 'needs_answer') && (
+      {vm.state === 'needs_answer' && vm.answers === 'yes_no' && (
+        <div class="answer-row" data-feature="answer-buttons" role="group" aria-label={t.aiQuestion}>
+          <button type="button" class="btn answer-btn answer-yes" onClick={() => actions.answer('yes')}>
+            <IconCheck size={20} />
+            <span>{t.answerYes}</span>
+          </button>
+          <button type="button" class="btn answer-btn answer-no" onClick={() => actions.answer('no')}>
+            <IconX size={20} />
+            <span>{t.answerNo}</span>
+          </button>
+        </div>
+      )}
+      {vm.heard && (vm.state === 'heard' || vm.state === 'needs_answer') && !(vm.state === 'needs_answer' && vm.answers === 'yes_no') && (
         <p class="entry-is-this-right">{t.isThisRight}</p>
       )}
     </section>

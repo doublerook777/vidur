@@ -16,6 +16,16 @@ export const KN_REVIEW: readonly string[] = [
   'onboardingDisclosure',
   'emptyFeed',
   'noNotes',
+  'greeting',
+  'removeAsk',
+  'removeYes',
+  'removed',
+  'manage',
+  'whenPick',
+  'recordedAt',
+  'voiceHint',
+  'aiVoice',
+  'addForCustomer',
 ];
 
 export type LabelKey =
@@ -80,7 +90,35 @@ export type LabelKey =
   | 'confirmAmount'
   | 'isThisRight'
   | 'disambiguation'
-  | 'retry';
+  | 'retry'
+  | 'greeting'
+  | 'addEntry'
+  | 'seeAll'
+  | 'historyTitle'
+  | 'manage'
+  | 'remove'
+  | 'removeAsk'
+  | 'removeYes'
+  | 'keep'
+  | 'removed'
+  | 'answerYes'
+  | 'answerNo'
+  | 'whenTitle'
+  | 'whenNow'
+  | 'whenYesterday'
+  | 'whenPick'
+  | 'recordedAt'
+  | 'todayWord'
+  | 'yesterdayWord'
+  | 'back'
+  | 'kindTitle'
+  | 'paidToday'
+  | 'creditGiven'
+  | 'voiceHint'
+  | 'aiVoice'
+  | 'entryAdded'
+  | 'noEntriesDay'
+  | 'addForCustomer';
 
 export const LABELS: Record<Lang, Record<LabelKey, string>> = {
   en: {
@@ -147,6 +185,34 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     isThisRight: 'Is this right?',
     disambiguation: 'Which one?',
     retry: 'Try again',
+    greeting: 'Hello',
+    addEntry: 'Add entry',
+    seeAll: 'See all',
+    historyTitle: 'All entries',
+    manage: 'Manage entry',
+    remove: 'Remove',
+    removeAsk: 'Remove this entry?',
+    removeYes: 'Yes, remove',
+    keep: 'Keep',
+    removed: 'Entry removed',
+    answerYes: 'Yes',
+    answerNo: 'No',
+    whenTitle: 'When',
+    whenNow: 'Now',
+    whenYesterday: 'Yesterday',
+    whenPick: 'Pick date and time',
+    recordedAt: 'Recorded',
+    todayWord: 'Today',
+    yesterdayWord: 'Yesterday',
+    back: 'Back',
+    kindTitle: 'Type',
+    paidToday: 'Paid today',
+    creditGiven: 'Credit today',
+    voiceHint: 'Hold the circle and speak',
+    aiVoice: 'Vidur voice',
+    entryAdded: 'Entry added',
+    noEntriesDay: 'Nothing here',
+    addForCustomer: 'Add entry',
   },
   hi: {
     aiBadge: 'AI',
@@ -212,6 +278,34 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     isThisRight: 'क्या यह सही है?',
     disambiguation: 'कौन सा?',
     retry: 'फिर से कोशिश करें',
+    greeting: 'नमस्ते',
+    addEntry: 'एंट्री जोड़ें',
+    seeAll: 'सब देखें',
+    historyTitle: 'सभी एंट्री',
+    manage: 'एंट्री बदलें',
+    remove: 'हटाएँ',
+    removeAsk: 'यह एंट्री हटाएँ?',
+    removeYes: 'हाँ, हटाएँ',
+    keep: 'रहने दें',
+    removed: 'एंट्री हटा दी',
+    answerYes: 'हाँ',
+    answerNo: 'नहीं',
+    whenTitle: 'कब',
+    whenNow: 'अभी',
+    whenYesterday: 'कल',
+    whenPick: 'तारीख़ और समय चुनें',
+    recordedAt: 'दर्ज किया',
+    todayWord: 'आज',
+    yesterdayWord: 'कल',
+    back: 'वापस',
+    kindTitle: 'किस्म',
+    paidToday: 'आज जमा',
+    creditGiven: 'आज उधार',
+    voiceHint: 'गोले को दबाकर बोलिए',
+    aiVoice: 'विदुर की आवाज़',
+    entryAdded: 'एंट्री जुड़ गई',
+    noEntriesDay: 'यहाँ कुछ नहीं',
+    addForCustomer: 'एंट्री जोड़ें',
   },
   kn: {
     aiBadge: 'AI',
@@ -277,6 +371,34 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     isThisRight: 'ಸರಿಯೇ?',
     disambiguation: 'ಯಾವುದು?',
     retry: 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ',
+    greeting: 'ನಮಸ್ಕಾರ',
+    addEntry: 'ನಮೂದು ಸೇರಿಸಿ',
+    seeAll: 'ಎಲ್ಲಾ ನೋಡಿ',
+    historyTitle: 'ಎಲ್ಲಾ ನಮೂದುಗಳು',
+    manage: 'ನಮೂದು ನಿರ್ವಹಿಸಿ',
+    remove: 'ತೆಗೆಯಿರಿ',
+    removeAsk: 'ಈ ನಮೂದು ತೆಗೆಯಬೇಕೆ?',
+    removeYes: 'ಹೌದು, ತೆಗೆಯಿರಿ',
+    keep: 'ಇರಲಿ',
+    removed: 'ನಮೂದು ತೆಗೆದಿದೆ',
+    answerYes: 'ಹೌದು',
+    answerNo: 'ಇಲ್ಲ',
+    whenTitle: 'ಯಾವಾಗ',
+    whenNow: 'ಈಗ',
+    whenYesterday: 'ನಿನ್ನೆ',
+    whenPick: 'ದಿನಾಂಕ ಮತ್ತು ಸಮಯ ಆರಿಸಿ',
+    recordedAt: 'ದಾಖಲಿಸಿದ್ದು',
+    todayWord: 'ಇಂದು',
+    yesterdayWord: 'ನಿನ್ನೆ',
+    back: 'ಹಿಂದೆ',
+    kindTitle: 'ವಿಧ',
+    paidToday: 'ಇಂದು ಪಾವತಿ',
+    creditGiven: 'ಇಂದು ಸಾಲ',
+    voiceHint: 'ವೃತ್ತವನ್ನು ಒತ್ತಿಹಿಡಿದು ಮಾತನಾಡಿ',
+    aiVoice: 'ವಿದುರ್ ಧ್ವನಿ',
+    entryAdded: 'ನಮೂದು ಸೇರಿದೆ',
+    noEntriesDay: 'ಇಲ್ಲಿ ಏನೂ ಇಲ್ಲ',
+    addForCustomer: 'ನಮೂದು ಸೇರಿಸಿ',
   },
 };
 

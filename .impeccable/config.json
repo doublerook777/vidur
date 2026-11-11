@@ -1,0 +1,33 @@
+{
+  "hook": {
+    "enabled": true,
+    "limits": {
+      "maxFindings": 5,
+      "maxChars": 8000
+    }
+  },
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "apps/web/index.html"
+        ],
+        "createdAt": "2026-11-11T14:02:17.707Z",
+        "reason": "Agent: the user pinned ref-1.jpg, whose whole grammar is frosted panes seated in notches of deep slabs; the pane IS the notch of its slab, not a card on a card"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "apps/web/index.html"
+        ],
+        "createdAt": "2026-11-11T14:02:17.715Z",
+        "reason": "Agent: the page is a pale ground; the shadows are offset, blurred depth shadows on teal slabs, not a zero-offset glow"
+      }
+    ]
+  }
+}

@@ -236,3 +236,19 @@ describe('Ledger', () => {
     expect(top[0]?.balancePaise).toBe(900);
   });
 });
+
+describe('reversing returns an id that can itself be reversed (a removal can be taken back)', () => {
+  it('reverse then reverse-the-reversal restores the entry and the balance', async () => {
+    let t = 1_000;
+    let n = 0;
+    const l = await Ledger.load(new MemoryStore(), () => (t += 10), () => `e${++n}`);
+    const c = await l.createCustomer('Mohan');
+    const e = await l.postEntry({ customerId: c.id, kind: 'credit', paise: 34000 });
+    const removal = await l.reverse(e.id);
+    expect(typeof removal).toBe('string');
+    expect(l.balance(c.id)).toBe(0);
+    await l.reverse(removal);
+    expect(l.balance(c.id)).toBe(34000);
+    expect(l.activeEntries(c.id).map((x) => x.id)).toEqual([e.id]);
+  });
+});

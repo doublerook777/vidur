@@ -3,6 +3,7 @@
  * an AudioWorklet that resamples to 16 kHz PCM16 and cuts exact 512-sample frames, and a 300 ms pre-roll ring.
  * The worklet's source is built from the same `Capturer` class the unit tests cover.
  */
+import { noteMic } from './levels.js';
 import { Capturer, PreRoll, pcm16ToBytes } from './pcm.js';
 
 const WORKLET = `
@@ -58,6 +59,7 @@ export class MicCapture {
   private onFrame(frame: Int16Array): void {
     if (MicCapture.testClip()) return; // test mode: the microphone is ignored
     if (this.sink) {
+      noteMic(frame);
       this.recording?.push(frame);
       this.sink(pcm16ToBytes(frame));
     } else this.pre.push(frame);
@@ -80,6 +82,7 @@ export class MicCapture {
         const f = new Int16Array(512);
         f.set(clip.subarray(i, i + 512));
         i += 512;
+        noteMic(f);
         this.recording?.push(f);
         sink(pcm16ToBytes(f));
       }, 32);

@@ -30,6 +30,11 @@ export const mockActions: Actions = {
   prepareReminder: noop,
   deleteAll: noop,
   saveKeypadEntry: noop,
+  openAddEntry: noop,
+  removeEntry: noop,
+  restoreEntry: noop,
+  dismissToast: noop,
+  answer: noop,
   retry: noop,
   finishOnboarding: noop,
 };
@@ -44,14 +49,16 @@ export const mockCustomers: CustomerRow[] = [
 ];
 
 export const mockFeed: FeedItem[] = [
-  { id: 'f1', customerName: 'Ramesh', kind: 'credit', paise: 34000, at: now - 60_000, undoableUntil: now + 9_000, heard: 'Ramesh ka 340 udhaar' },
-  { id: 'f2', customerName: 'Sunita', kind: 'payment', paise: 20000, at: now - 900_000, undoableUntil: null },
-  { id: 'f3', customerName: 'Kavya', kind: 'note', paise: null, at: now - 1_800_000, undoableUntil: null, heard: 'Kavya kal degi' },
-  { id: 'f4', customerName: 'Mohan', kind: 'credit', paise: 125000, at: now - 3_600_000, undoableUntil: null },
+  { id: 'f1', customerName: 'Ramesh', kind: 'credit', paise: 34000, at: now - 60_000, recordedAt: now - 60_000, undoableUntil: now + 9_000, heard: 'Ramesh ka 340 udhaar' },
+  { id: 'f2', customerName: 'Sunita', kind: 'payment', paise: 20000, at: now - 900_000, recordedAt: now - 900_000, undoableUntil: null },
+  { id: 'f3', customerName: 'Kavya', kind: 'note', paise: null, at: now - 1_800_000, recordedAt: now - 1_800_000, undoableUntil: null, heard: 'Kavya kal degi' },
+  { id: 'f4', customerName: 'Mohan', kind: 'credit', paise: 125000, at: now - 3_600_000, recordedAt: now - 3_600_000, undoableUntil: null },
 ];
 
 export const mockHomeVM: HomeVM = {
   phase: 'idle',
+  shopName: 'Laxmi General Store',
+  now,
   online: true,
   mockMode: true,
   card: {
@@ -69,6 +76,13 @@ export const mockHomeVM: HomeVM = {
   error: { text: 'Internet slow hai. Entry phone par save hui.', actionLabel: 'Theek hai' },
 };
 
+/** The card for a spoken name that is not in the khata yet: two big buttons. */
+export const mockYesNoHomeVM: HomeVM = {
+  ...mockHomeVM,
+  error: null,
+  card: { state: 'needs_answer', heard: 'Kiran ka 100 udhaar', agentLine: 'Kiran khate mein nahi hai. Naya khata banaun?', answers: 'yes_no' },
+};
+
 export const mockOfflineHomeVM: HomeVM = { ...mockHomeVM, phase: 'offline', online: false, card: null, error: null };
 
 export const mockCustomersVM: CustomersVM = { customers: mockCustomers };
@@ -76,9 +90,9 @@ export const mockCustomersVM: CustomersVM = { customers: mockCustomers };
 export const mockCustomerDetailVM: CustomerDetailVM = {
   customer: mockCustomers[0]!,
   entries: [
-    { id: 'e1', kind: 'credit', paise: 34000, at: now - 60_000, undoableUntil: null },
-    { id: 'e2', kind: 'payment', paise: 10000, at: now - 86_400_000, undoableUntil: null },
-    { id: 'e3', kind: 'credit', paise: 11000, at: now - 172_800_000, undoableUntil: null },
+    { id: 'e1', kind: 'credit', paise: 34000, at: now - 60_000, recordedAt: now - 60_000, undoableUntil: null },
+    { id: 'e2', kind: 'payment', paise: 10000, at: now - 86_400_000, recordedAt: now - 86_400_000, undoableUntil: null },
+    { id: 'e3', kind: 'credit', paise: 11000, at: now - 172_800_000, recordedAt: now - 60_000, undoableUntil: null },
   ],
   notes: [
     { id: 'n1', text: 'Kal 500 dega', dueAt: now + 86_400_000 },

@@ -18,11 +18,12 @@ export function todayTotals(ledger: Ledger, now: number): { credit: number; paym
   return { credit: t.creditPaise, payment: t.paymentPaise, people: t.customerCount };
 }
 
+/** Newest first by when the entry was recorded. `limit` caps how many; the history screen asks for many. */
 export function feed(ledger: Ledger, now: number, limit = 20): FeedItem[] {
   const names = new Map(ledger.customers().map((c) => [c.id, c.name]));
   const entries = [...ledger.activeEntries()].sort((a, b) => b.recordedAt - a.recordedAt || (a.id < b.id ? 1 : -1)).slice(0, limit);
   return entries.map((e, i) => ({
-    id: e.id, customerName: names.get(e.customerId) ?? '', kind: e.kind, paise: e.paise, at: e.at,
+    id: e.id, customerName: names.get(e.customerId) ?? '', kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt,
     undoableUntil: i === 0 && now - e.recordedAt < UNDO_MS ? e.recordedAt + UNDO_MS : null,
   }));
 }
@@ -35,7 +36,7 @@ export function customerDetail(ledger: Ledger, id: string, now: number): Custome
   return {
     customer: row,
     entries: ledger.activeEntries(id).sort((a, b) => b.at - a.at).map((e) => ({
-      id: e.id, kind: e.kind, paise: e.paise, at: e.at, undoableUntil: newest?.id === e.id && now - e.recordedAt < UNDO_MS ? e.recordedAt + UNDO_MS : null,
+      id: e.id, kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt, undoableUntil: newest?.id === e.id && now - e.recordedAt < UNDO_MS ? e.recordedAt + UNDO_MS : null,
     })),
     notes: ledger.notes(id).map((n) => ({ id: n.id, text: n.text, dueAt: n.dueAt ?? null })),
     canRemind: gate.ok,

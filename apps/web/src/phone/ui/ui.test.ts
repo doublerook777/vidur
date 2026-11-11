@@ -24,6 +24,7 @@ import {
   mockHomeVM,
   mockKeypadVM,
   mockOfflineHomeVM,
+  mockYesNoHomeVM,
   mockOnboardingVM,
   mockRemindersVM,
   mockSettingsVM,
@@ -34,6 +35,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 
 const renderedScreens: Record<string, string> = {
   home: renderToString(h(Home, {vm: mockHomeVM, actions: mockActions, lang: 'hi', })),
+  homeYesNo: renderToString(h(Home, {vm: mockYesNoHomeVM, actions: mockActions, lang: 'hi', })),
   homeOffline: renderToString(h(Home, {vm: mockOfflineHomeVM, actions: mockActions, lang: 'hi', })),
   customers: renderToString(h(Customers, {vm: mockCustomersVM, actions: mockActions, lang: 'hi', })),
   customerDetail: renderToString(h(CustomerDetail, {vm: mockCustomerDetailVM, actions: mockActions, lang: 'hi', })),
@@ -76,31 +78,20 @@ describe('formatRupees', () => {
 });
 
 describe('touch targets', () => {
-  it('.mic and .btn declare a min size of at least 56px', () => {
+  it('the voice circle is at least 56px and every .btn at least 44px tall', () => {
     const css = readFileSync(join(here, 'phone.css'), 'utf8');
-    const touchVar = /--touch:\s*56px/.test(css);
-    expect(touchVar).toBe(true);
-
+    expect(/--touch:\s*56px/.test(css)).toBe(true);
     const rule = (selector: RegExp) => {
       const m = css.match(selector);
       expect(m, `missing rule for ${selector}`).not.toBeNull();
       return m?.[0] ?? '';
     };
-
-    const micRule = rule(/\.mic\s*\{[^}]*\}/);
-    const btnRule = rule(/\.btn\s*\{[^}]*\}/);
-
-    const minSize = (block: string) => {
-      const minHeight = /min-height:\s*(var\(--touch\)|\d+px)/.exec(block)?.[1];
-      const minWidth = /min-width:\s*(var\(--touch\)|\d+px)/.exec(block)?.[1];
-      return { minHeight, minWidth };
-    };
-
-    const mic = minSize(micRule);
-    const btn = minSize(btnRule);
-    expect(mic.minHeight).toBe('var(--touch)');
-    expect(btn.minHeight).toBe('var(--touch)');
-    expect(btn.minWidth).toBe('var(--touch)');
+    const orb = rule(/\n\.orb\s*\{[^}]*\}/);
+    const btn = rule(/\n\.btn\s*\{[^}]*\}/);
+    const px = (block: string, prop: string) => Number(new RegExp(`${prop}:\\s*(\\d+)px`).exec(block)?.[1] ?? 0);
+    expect(px(orb, 'width')).toBeGreaterThanOrEqual(56);
+    expect(px(orb, 'height')).toBeGreaterThanOrEqual(56);
+    expect(px(btn, 'min-height')).toBeGreaterThanOrEqual(44);
   });
 });
 

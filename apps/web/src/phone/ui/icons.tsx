@@ -112,3 +112,72 @@ export function IconBack({ size = 24 }: IconProps) {
     </svg>
   );
 }
+
+export function IconPlus({ size = 22 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+export function IconMore({ size = 22 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <circle cx="5" cy="12" r="1.4" />
+      <circle cx="12" cy="12" r="1.4" />
+      <circle cx="19" cy="12" r="1.4" />
+    </svg>
+  );
+}
+
+export function IconTrash({ size = 20 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M4 7h16M10 7V4h4v3M6 7l1 13h10l1-13M10 11v6M14 11v6" />
+    </svg>
+  );
+}
+
+export function IconX({ size = 20 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+export function IconHistory({ size = 22 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M4 12a8 8 0 1 0 2.6-5.9L4 8.5" />
+      <path d="M4 4v4.5h4.5M12 8v4l3 2" />
+    </svg>
+  );
+}
+
+export function IconChevron({ size = 18 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M9 5l7 7-7 7" />
+    </svg>
+  );
+}
+
+/** One drawn mark per phase, so the state never depends on colour or a text glyph. */
+export function IconPhase({ phase, size = 18 }: { phase: 'idle' | 'listening' | 'thinking' | 'speaking' | 'needs_answer' | 'offline'; size?: number }) {
+  switch (phase) {
+    case 'idle':
+      return <svg {...base(size)}><circle cx="12" cy="12" r="5" /></svg>;
+    case 'listening':
+      return <svg {...base(size)}><circle cx="12" cy="12" r="3" fill="currentColor" /><circle cx="12" cy="12" r="7" /><path d="M12 1.5v0" /></svg>;
+    case 'thinking':
+      return <svg {...base(size)}><circle cx="5" cy="12" r="1.6" fill="currentColor" /><circle cx="12" cy="12" r="1.6" fill="currentColor" /><circle cx="19" cy="12" r="1.6" fill="currentColor" /></svg>;
+    case 'speaking':
+      return <svg {...base(size)}><path d="M5 10v4M9 7v10M13 4v16M17 8v8M21 11v2" /></svg>;
+    case 'needs_answer':
+      return <svg {...base(size)}><path d="M9 9a3 3 0 1 1 4.4 2.6c-1 .6-1.4 1.1-1.4 2.4" /><circle cx="12" cy="18" r=".6" fill="currentColor" /></svg>;
+    case 'offline':
+      return <svg {...base(size)}><path d="M3 3l18 18M8.5 8.5A8 8 0 0 0 4 12m4 3a5 5 0 0 1 3.6-2.9M14 6.2A8 8 0 0 1 20 12m-4 3a5 5 0 0 0-1-1" /><circle cx="12" cy="19" r=".6" fill="currentColor" /></svg>;
+  }
+}

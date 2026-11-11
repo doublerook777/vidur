@@ -129,3 +129,62 @@ window.addEventListener('message', (event: MessageEvent) => {
 // Push initial state once the iframe has loaded (and on load, for good measure).
 iframe?.addEventListener('load', sendState);
 sendState();
+
+// ---------------------------------------------------------------- the pinned stage
+// On a wide screen the phone stays in view while the page scrolls, and the sections on both sides
+// crossfade from one chapter to the next. On anything narrower they simply stack and nothing is pinned.
+
+const track = document.getElementById('stage');
+const wrap = document.getElementById('phoneWrap');
+const CHAPTERS = 4;
+const wide = window.matchMedia('(min-width: 1100px) and (min-height: 620px)');
+let scrubbing = false;
+let queued = false;
+
+const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
+
+/** Scales the phone so the whole frame fits the screen (pinned) or the column (stacked). */
+function fitPhone(): void {
+  if (!wrap) return;
+  if (window.innerWidth <= 700) {
+    wrap.style.removeProperty('--s');
+    return;
+  }
+  const bySpace = scrubbing ? (window.innerHeight - 104) / 880 : (window.innerWidth - 56) / 436;
+  wrap.style.setProperty('--s', clamp(bySpace, 0.45, 1).toFixed(3));
+}
+
+/** Where we are in the pinned section, 0 to 1, turned into how visible each chapter is. */
+function scrub(): void {
+  queued = false;
+  if (!track || !scrubbing) return;
+  const box = track.getBoundingClientRect();
+  const travel = box.height - window.innerHeight;
+  const p = travel > 0 ? clamp(-box.top / travel, 0, 1) : 0;
+  const x = p * (CHAPTERS - 1);
+  for (let i = 0; i < CHAPTERS; i++) {
+    // Fully visible near its own position, gone by two thirds of the way to the next one.
+    track.style.setProperty(`--o${i}`, clamp(1.6 - Math.abs(x - i) * 2.6, 0, 1).toFixed(3));
+  }
+}
+
+function queueScrub(): void {
+  if (queued) return;
+  queued = true;
+  requestAnimationFrame(scrub);
+}
+
+function configureStage(): void {
+  scrubbing = wide.matches;
+  track?.classList.toggle('scrub', scrubbing);
+  if (!scrubbing && track) for (let i = 0; i < CHAPTERS; i++) track.style.removeProperty(`--o${i}`);
+  fitPhone();
+  scrub();
+}
+
+window.addEventListener('scroll', queueScrub, { passive: true });
+window.addEventListener('resize', () => {
+  configureStage();
+});
+wide.addEventListener('change', configureStage);
+configureStage();

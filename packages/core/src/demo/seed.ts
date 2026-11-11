@@ -3,6 +3,7 @@
  * numbers. Money is integer paise. Deterministic: no Math.random, no Date.now;
  * everything derives from the injected `nowMs`.
  */
+import { startOfDayIst } from '../dates/index.js';
 import type { Ledger } from '../ledger/index.js';
 
 const DAY_MS = 86_400_000;
@@ -157,12 +158,14 @@ export async function seedDemoLedger(
 ): Promise<{ customerIds: Record<string, string> }> {
   const customerIds: Record<string, string> = {};
 
-  for (const spec of SPECS) {
+  for (const [si, spec] of SPECS.entries()) {
     const customer = await ledger.createCustomer(spec.name, spec.aliases);
     customerIds[spec.key] = customer.id;
 
-    for (const e of spec.entries) {
-      const at = nowMs - e.daysAgo * DAY_MS;
+    for (const [ei, e] of spec.entries.entries()) {
+      // A believable shop day: each entry lands somewhere between 9:00 and 20:30, never in the future.
+      const minutes = 9 * 60 + ((si * 97 + ei * 53 + e.daysAgo * 31) % 690);
+      const at = Math.min(startOfDayIst(nowMs - e.daysAgo * DAY_MS) + minutes * 60_000, nowMs - (si + ei + 1) * 7 * 60_000);
       await ledger.postEntry({
         customerId: customer.id,
         kind: e.kind,

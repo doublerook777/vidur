@@ -1,4 +1,5 @@
 import { render } from 'preact';
+import type * as preact from 'preact';
 import { useEffect, useReducer, useState } from 'preact/hooks';
 
 import './phone/ui/phone.css';
@@ -10,6 +11,8 @@ import { PhoneSession, type SessionState, type Telemetry } from './phone/session
 import { Vault } from './phone/storage/vault.js';
 import { CustomerDetail } from './phone/ui/CustomerDetail.js';
 import { Customers } from './phone/ui/Customers.js';
+import { History } from './phone/ui/History.js';
+import { Toast } from './phone/ui/Toast.js';
 import { Home } from './phone/ui/Home.js';
 import { Keypad } from './phone/ui/Keypad.js';
 import { Onboarding } from './phone/ui/Onboarding.js';
@@ -39,7 +42,7 @@ function useStore(session: PhoneSession): SessionState {
 
 function homeVM(s: SessionState): HomeVM {
   return {
-    phase: s.phase, online: s.online, mockMode: s.mockMode, card: s.card, creditTodayPaise: s.credit, paymentTodayPaise: s.payment,
+    phase: s.phase, shopName: s.shopName, now: Date.now(), online: s.online, mockMode: s.mockMode, card: s.card, creditTodayPaise: s.credit, paymentTodayPaise: s.payment,
     peopleToday: s.people, feed: s.feed, error: s.error,
   };
 }
@@ -63,6 +66,7 @@ function App({ session }: { session: PhoneSession }) {
   }, [s.shareReminder, session]);
 
   const settings: SettingsVM = { lang: s.lang, theme: s.theme, shopName: s.shopName, encrypted: true, retentionHours: 24 };
+  const screen = ((): preact.JSX.Element => {
   switch (s.screen) {
     case 'onboarding':
       return <Onboarding vm={{ lang: s.lang }} actions={a} lang={s.lang} />;
@@ -75,10 +79,19 @@ function App({ session }: { session: PhoneSession }) {
     case 'settings':
       return <Settings vm={settings} actions={a} lang={s.lang} />;
     case 'keypad':
-      return <Keypad vm={{ customers: s.customers }} actions={a} lang={s.lang} />;
+      return <Keypad vm={{ customers: s.customers, preset: s.addPreset }} actions={a} lang={s.lang} />;
+    case 'history':
+      return <History vm={{ items: s.history }} actions={a} lang={s.lang} />;
     default:
       return <Home vm={homeVM(s)} actions={a} lang={s.lang} />;
   }
+  })();
+  return (
+    <>
+      {screen}
+      {s.toast && <Toast vm={s.toast} actions={a} lang={s.lang} />}
+    </>
+  );
 }
 
 function AccessGate({ onCode }: { onCode: (c: string) => void }) {

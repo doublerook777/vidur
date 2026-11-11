@@ -1,4 +1,4 @@
-import type { ComponentType } from 'preact';
+import type { ComponentChildren, ComponentType } from 'preact';
 
 import type { Screen } from '../contract.js';
 import type { ScreenProps } from './types.js';
@@ -16,22 +16,31 @@ const TABS: { screen: Screen; key: LabelKey; Icon: ComponentType<{ size?: number
   { screen: 'settings', key: 'navSettings', Icon: IconSettings },
 ];
 
-export function BottomNav({ vm, actions, lang }: ScreenProps<BottomNavVM>) {
+/**
+ * The floating pill. On Home a voice circle (`orb`) sits in the middle and rises out of the top of the pill.
+ * The active tab opens into a pill with its name; the others are just icons with a hidden name.
+ */
+export function BottomNav({ vm, actions, lang, orb }: ScreenProps<BottomNavVM> & { orb?: ComponentChildren }) {
   const t = LABELS[lang];
+  const current = vm.current === 'history' || vm.current === 'keypad' ? 'home' : vm.current === 'customer' ? 'customers' : vm.current;
+  const tabs = TABS.map(({ screen, key, Icon }) => (
+    <button
+      key={screen}
+      type="button"
+      class={`bottom-nav-btn${current === screen ? ' bottom-nav-btn-active' : ''}`}
+      aria-current={current === screen ? 'page' : undefined}
+      aria-label={t[key]}
+      onClick={() => actions.navigate(screen)}
+    >
+      <Icon size={22} />
+      <span class="bottom-nav-label">{t[key]}</span>
+    </button>
+  ));
   return (
-    <nav class="bottom-nav" aria-label="Screens">
-      {TABS.map(({ screen, key, Icon }) => (
-        <button
-          key={screen}
-          type="button"
-          class={`bottom-nav-btn${vm.current === screen ? ' bottom-nav-btn-active' : ''}`}
-          aria-current={vm.current === screen ? 'page' : undefined}
-          onClick={() => actions.navigate(screen)}
-        >
-          <Icon size={24} />
-          <span class="bottom-nav-label">{t[key]}</span>
-        </button>
-      ))}
+    <nav class={`bottom-nav${orb ? ' bottom-nav-with-orb' : ''}`} aria-label="Screens">
+      <div class="bottom-nav-side">{tabs.slice(0, 2)}</div>
+      {orb ? <div class="bottom-nav-orb">{orb}</div> : null}
+      <div class="bottom-nav-side">{tabs.slice(2)}</div>
     </nav>
   );
 }

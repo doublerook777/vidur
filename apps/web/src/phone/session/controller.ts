@@ -1,9 +1,10 @@
 import { Dialogue, Ledger, amountToSpoken, canRemind, groundLlmOutput, say, seedDemoLedger, type LlmParser, type Reply } from '@vidur/core';
 
 import { bytesToPcm16 } from '../audio/pcm.js';
-import type { Actions, CustomerDetailVM, CustomerRow, EntryCardVM, ErrorVM, FeedItem, Lang, Phase, Screen, Theme } from '../contract.js';
+import type { Actions, AddPreset, CustomerDetailVM, CustomerRow, EntryCardVM, ErrorVM, FeedItem, Lang, Phase, Screen, Theme, ToastVM } from '../contract.js';
 import { GatewayClient, type GatewayError, type Transcript } from '../net/gateway.js';
 import { Vault } from '../storage/vault.js';
+import { LABELS } from '../ui/labels.js';
 import { errorMessage } from './messages.js';
 import { Store } from './store.js';
 import { UNDO_MS, customerDetail, customerRows, feed, todayTotals } from './viewmodels.js';
@@ -48,6 +49,10 @@ export interface SessionState {
   payment: number;
   people: number;
   feed: FeedItem[];
+  /** Every entry, newest first, for the All entries screen. */
+  history: FeedItem[];
+  addPreset: AddPreset | null;
+  toast: ToastVM | null;
   customers: CustomerRow[];
   detail: CustomerDetailVM | null;
   shareReminder: { customerId: string; text: string } | null;
@@ -69,7 +74,7 @@ export interface SessionOptions {
 
 const initial = (): SessionState => ({
   loaded: false, onboarded: false, screen: 'onboarding', openCustomerId: null, lang: 'hi', theme: 'light', shopName: '', phase: 'idle', online: false, mockMode: false,
-  card: null, error: null, credit: 0, payment: 0, people: 0, feed: [], customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
+  card: null, error: null, credit: 0, payment: 0, people: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
 });
 
 export class PhoneSession {
@@ -211,7 +216,7 @@ export class PhoneSession {
     const now = this.now();
     const t = todayTotals(this.ledger, now);
     const open = this.state.openCustomerId;
-    this.store.update({ credit: t.credit, payment: t.payment, people: t.people, feed: feed(this.ledger, now), customers: customerRows(this.ledger), detail: open ? customerDetail(this.ledger, open, now) : null });
+    this.store.update({ credit: t.credit, payment: t.payment, people: t.people, feed: feed(this.ledger, now), history: feed(this.ledger, now, 500), customers: customerRows(this.ledger), detail: open ? customerDetail(this.ledger, open, now) : null });
     if (this.undoTimer) clearTimeout(this.undoTimer);
     if (this.state.feed[0]?.undoableUntil) this.undoTimer = setTimeout(() => this.refresh(), UNDO_MS + 50); // the undo button disappears on its own
   }
@@ -240,6 +245,7 @@ export class PhoneSession {
     this.store.update({
       card: {
         state: this.dialogue.hasPending() ? 'needs_answer' : saved ? 'saved' : 'heard',
+        ...(this.isYesNo() ? { answers: 'yes_no' as const } : {}),
         ...(heard ? { heard } : {}),
         agentLine: lines.join(' '),
         ...(saved ? { paise: saved.paise, kind: saved.kind } : {}),
@@ -300,6 +306,13 @@ export class PhoneSession {
     prepareReminder: (id) => void this.prepareReminder(id),
     deleteAll: () => void this.deleteAll(),
     saveKeypadEntry: (i) => void this.saveKeypad(i),
+    openAddEntry: (preset) => {
+      this.store.update({ addPreset: preset ?? null, screen: 'keypad' });
+    },
+    removeEntry: (id) => void this.removeEntry(id),
+    restoreEntry: (token) => void this.restoreEntry(token),
+    dismissToast: () => this.dismissToast(),
+    answer: (a) => void this.answer(a),
     retry: () => {
       this.store.update({ error: null });
       this.gateway.close();
@@ -349,6 +362,55 @@ export class PhoneSession {
     setTimeout(() => this.gateway.pttUp(), 45); // lets the last audio frame go out first
   }
 
+  /** True when the open question is a yes or no, so the screen can show two buttons. */
+  private isYesNo(): boolean {
+    const k = this.dialogue.pendingKind();
+    return k === 'new_customer' || k === 'confirm_amount' || k === 'near' || k === 'consent';
+  }
+
+  /** Tapping Yes or No does exactly what saying it does: the words go through the same dialogue. */
+  private async answer(a: 'yes' | 'no'): Promise<void> {
+    if (!this.isYesNo()) return;
+    const words: Record<Lang, [string, string]> = { hi: ['हाँ', 'नहीं'], en: ['yes', 'no'], kn: ['ಹೌದು', 'ಇಲ್ಲ'] };
+    const text = words[this.state.lang][a === 'yes' ? 0 : 1];
+    this.bargeIn();
+    await this.onTranscript({ text, lang: this.state.lang, sttMs: 0, audioMs: 0 });
+  }
+
+  private toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private dismissToast(): void {
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = null;
+    this.store.update({ toast: null });
+  }
+
+  /** Removing is a reversal in the event log: the entry stays on record as removed and can be brought back for a while. */
+  private async removeEntry(entryId: string): Promise<void> {
+    let token: string;
+    try {
+      token = await this.ledger.reverse(entryId);
+    } catch {
+      return;
+    }
+    this.store.update({ card: null });
+    const t = LABELS[this.state.lang];
+    this.store.update({ toast: { text: t.removed, actionLabel: t.undo, restoreToken: token } });
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => this.dismissToast(), 8000);
+    this.refresh();
+  }
+
+  private async restoreEntry(token: string): Promise<void> {
+    try {
+      await this.ledger.reverse(token);
+    } catch {
+      /* already restored */
+    }
+    this.dismissToast();
+    this.refresh();
+  }
+
   private async undo(entryId: string): Promise<void> {
     await this.ledger.reverse(entryId);
     this.store.update({ card: null });
@@ -379,13 +441,16 @@ export class PhoneSession {
     this.refresh();
   }
 
-  private async saveKeypad(i: { customerId: string | null; newName: string | null; kind: 'credit' | 'payment'; paise: number }): Promise<void> {
+  private async saveKeypad(i: { customerId: string | null; newName: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): Promise<void> {
     let id = i.customerId;
+    // The shopkeeper typed the name themselves, so that is the "yes" a spoken new name has to ask for.
     if (!id && i.newName?.trim()) id = (await this.ledger.createCustomer(i.newName.trim())).id;
     if (!id || !Number.isInteger(i.paise) || i.paise <= 0) return;
-    await this.ledger.postEntry({ customerId: id, kind: i.kind, paise: i.paise });
+    const now = this.now();
+    const at = i.at !== undefined && Number.isFinite(i.at) ? Math.min(i.at, now) : now;
+    await this.ledger.postEntry({ customerId: id, kind: i.kind, paise: i.paise, at });
     const name = this.ledger.customer(id)?.name ?? '';
-    this.store.update({ card: { state: 'saved', paise: i.paise, kind: i.kind, customerName: name }, screen: 'home' });
+    this.store.update({ card: { state: 'saved', paise: i.paise, kind: i.kind, customerName: name }, screen: this.state.openCustomerId ? 'customer' : 'home', addPreset: null });
     this.refresh();
   }
 

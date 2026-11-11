@@ -1,12 +1,13 @@
 import type { CustomerDetailVM } from '../contract.js';
 import { formatRupees } from './format.js';
 import { LABELS } from './labels.js';
-import { IconArrowDown, IconArrowUp, IconBack, IconReminders } from './icons.js';
+import { IconArrowDown, IconArrowUp, IconBack, IconPlus, IconReminders } from './icons.js';
+import { EntryRow } from './Feed.js';
 import type { ScreenProps } from './types.js';
 import { AiBadge } from './AiBadge.js';
 import { BottomNav } from './BottomNav.js';
 
-export function CustomerDetail({ vm, actions, lang }: ScreenProps<CustomerDetailVM>) {
+export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenProps<CustomerDetailVM> & { now?: number }) {
   const t = LABELS[lang];
   const owed = vm.customer.balancePaise >= 0;
   const DirectionIcon = owed ? IconArrowUp : IconArrowDown;
@@ -43,24 +44,27 @@ export function CustomerDetail({ vm, actions, lang }: ScreenProps<CustomerDetail
       </section>
 
       <section class="detail-entries" aria-label={t.entriesTitle}>
-        <h2 class="detail-section-title">{t.entriesTitle}</h2>
+        <div class="detail-section-head">
+          <h2 class="detail-section-title">{t.entriesTitle}</h2>
+          <button type="button" class="btn btn-small" data-feature="add-entry" onClick={() => actions.openAddEntry({ customerId: vm.customer.id })}>
+            <IconPlus size={18} />
+            <span>{t.addForCustomer}</span>
+          </button>
+        </div>
         {vm.entries.length === 0 ? (
           <p class="detail-empty">{t.entriesEmpty}</p>
         ) : (
-          <ul class="detail-entry-list">
-            {vm.entries.map((e) => {
-              const EntryIcon = e.kind === 'credit' ? IconArrowUp : IconArrowDown;
-              const word = e.kind === 'credit' ? t.credit : t.payment;
-              return (
-                <li key={e.id} class={`detail-entry detail-entry-${e.kind}`}>
-                  <span class="detail-entry-icon" aria-hidden="true">
-                    <EntryIcon size={20} />
-                  </span>
-                  <span class="detail-entry-word">{word}</span>
-                  <span class="detail-entry-amount">{formatRupees(e.paise)}</span>
-                </li>
-              );
-            })}
+          <ul class="detail-entry-list feed-list">
+            {vm.entries.map((e) => (
+              <EntryRow
+                key={e.id}
+                item={{ id: e.id, customerName: vm.customer.name, kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt, undoableUntil: e.undoableUntil }}
+                undoable={e.undoableUntil !== null && e.undoableUntil > now}
+                now={now}
+                lang={lang}
+                actions={actions}
+              />
+            ))}
           </ul>
         )}
       </section>

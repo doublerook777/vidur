@@ -129,6 +129,75 @@ try {
   const small = await page.evaluate(() => [...document.querySelectorAll('button, [role=button]')].map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0 && (r.height < 44 || r.width < 44)).length);
   check('every visible button is at least 44 px in both directions', small === 0, `${small} too small`);
 
+
+  // ---------------------------------------------------------------- timestamps, add and remove by hand, tap answers, the voice circle
+  await page.evaluate(() => window.__vidur.actions.navigate('home'));
+  await sleep(200);
+  const whenText = await page.locator('.feed-item-when time').first().innerText();
+  check('every entry shows the time it happened', /\d{1,2}:\d{2}/.test(whenText), whenText);
+  const iso = await page.locator('.feed-item-when time').first().getAttribute('datetime');
+  check('the time is machine-readable', !Number.isNaN(Date.parse(iso ?? '')), String(iso));
+
+  await page.evaluate(() => window.__vidur.actions.openAddEntry());
+  await page.waitForSelector('.keypad-grid');
+  for (const k of ['1', '2', '0']) await page.locator('.keypad-key', { hasText: new RegExp(`^${k}$`) }).click();
+  check('the Add entry screen shows the amount typed', (await page.locator('.keypad-display').innerText()).includes('120'));
+  await page.locator('.keypad-customer-btn', { hasText: 'Kavita' }).click();
+  await page.locator('.when-btn').nth(1).click(); // yesterday
+  await page.locator('.btn-save').click();
+  await waitState(page, "s.screen === 'home'", 4000);
+  const added = await state(page, "s.history.find((f) => f.paise === 12000 && f.customerName === 'Kavita')");
+  check('an entry added by hand lands on the chosen customer', !!added, JSON.stringify(added)?.slice(0, 90));
+  check('a "yesterday" entry is dated yesterday but recorded now', !!added && Date.now() - added.at > 20 * 3600e3 && Date.now() - added.recordedAt < 60e3, added ? `${Math.round((Date.now() - added.at) / 3600e3)} h ago` : '');
+
+  await page.evaluate(() => window.__vidur.actions.navigate('history'));
+  await sleep(200);
+  check('All entries groups by day with a heading', (await page.locator('.feed-day').count()) >= 2);
+  await page.evaluate(() => window.__vidur.actions.navigate('home'));
+  await sleep(200);
+  const idToRemove = await state(page, 's.feed[0].id');
+  const removable = await page.locator('.feed-item-more').first();
+  await removable.click();
+  await page.locator('.feed-remove').first().click();
+  check('removing asks first and names the entry', /Kavita|Mohan|Dinesh|Neha|Vijay|Ramesh|Geeta|Anil|Sunita|Suresh|Pooja/.test(await page.locator('.feed-remove-ask').first().innerText()));
+  const histBefore = await state(page, 's.history.length');
+  await page.locator('.btn-danger-confirm').first().click();
+  await waitState(page, `s.history.length === ${histBefore - 1}`, 3000);
+  check('a removed entry leaves the list', !(await state(page, `s.history.some((f) => f.id === '${idToRemove}')`)));
+  check('a toast offers to take the removal back', (await page.locator('.toast-action').count()) === 1);
+  await page.locator('.toast-action').click();
+  await waitState(page, `s.history.length === ${histBefore}`, 3000);
+  check('undoing a removal brings the entry back', await state(page, `s.history.some((f) => f.id === '${idToRemove}')`));
+
+  // a new name asks first, and tapping Yes or No answers it
+  const customersBefore = await state(page, 's.customers.length');
+  await page.evaluate(() => window.__vidur.onTranscript({ text: 'Kiran ka 100 udhaar', lang: 'hi', sttMs: 0, audioMs: 0 }));
+  await waitState(page, "s.card?.state === 'needs_answer'", 4000);
+  check('a new name shows Yes and No buttons', (await page.locator('.answer-btn').count()) === 2);
+  await page.locator('.answer-no').click();
+  await waitState(page, "s.card?.state === 'needs_answer' && !s.card.answers", 4000);
+  check('tapping No creates nobody', (await state(page, 's.customers.length')) === customersBefore);
+  await page.evaluate(() => window.__vidur.onTranscript({ text: 'Kiran ka 100 udhaar', lang: 'hi', sttMs: 0, audioMs: 0 }));
+  await waitState(page, "s.card?.answers === 'yes_no'", 4000);
+  await page.locator('.answer-yes').click();
+  await waitState(page, `s.customers.length === ${customersBefore + 1}`, 4000);
+  check('tapping Yes creates the customer and saves the entry', await state(page, "s.customers.some((c) => c.name === 'Kiran') && s.history.some((f) => f.customerName === 'Kiran' && f.paise === 10000)"));
+
+  // the voice circle has a shape for every state
+  await waitState(page, "s.phase === 'idle'", 15000); // let the spoken replies from the steps above finish
+  await sleep(1200);
+  const orbStates = [];
+  for (const ph of ['listening', 'thinking', 'speaking', 'needs_answer', 'offline', 'idle']) {
+    orbStates.push(await page.evaluate(async (p) => {
+      window.__vidur.store.update({ phase: p });
+      await new Promise((r) => requestAnimationFrame(() => r(undefined)));
+      return document.querySelector('.orb')?.classList.contains(`orb-${p}`);
+    }, ph));
+  }
+  check('the voice circle changes with every phase', orbStates.every(Boolean), orbStates.join(','));
+  const bars = await page.evaluate(() => { document.querySelector('.orb').style.setProperty('--lvl', '0.8'); return document.querySelectorAll('.orb-bar').length; });
+  check('the voice circle has its ring of bars', bars >= 24, String(bars));
+
   // 6x CPU throttle: a turn still completes
   const cdp = await ctx.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 6 });
@@ -145,6 +214,7 @@ try {
   await show.setViewportSize({ width: 1280, height: 800 });
   await show.goto(`${BASE}/`);
   await show.waitForSelector('#phoneApp');
+  await show.locator('#phoneApp').scrollIntoViewIfNeeded();
   const frame = show.frameLocator('#phoneApp');
   await frame.locator('[data-feature="mic-button"], [data-feature="onboarding-disclosure"]').first().waitFor({ timeout: 8000 });
   await show.locator('button[data-theme="dark"]').click();
@@ -167,6 +237,8 @@ try {
   check('no horizontal scroll at 1280 px', wide);
   await show.setViewportSize({ width: 1920, height: 1080 });
   check('no horizontal scroll at 1920 px', await show.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+  await show.locator('#phoneApp').scrollIntoViewIfNeeded();
+  await sleep(300);
   // mic inside the iframe
   await frame.locator('[data-feature="mic-button"]').waitFor({ timeout: 8000 }).catch(() => undefined);
   const micInFrame = await frame.locator('[data-feature="mic-button"]').count();
@@ -181,6 +253,23 @@ try {
     const tel = await show.locator('#tTranscript').innerText();
     check('a turn inside the iframe fills the live telemetry panel', tel !== '—' && tel.length > 0, tel);
   }
+  // the sections around the phone crossfade as the page scrolls
+  await show.setViewportSize({ width: 1440, height: 900 });
+  await sleep(300);
+  const fade = async (p) => show.evaluate((p) => {
+    const t = document.getElementById('stage');
+    const top = t.getBoundingClientRect().top + scrollY;
+    window.scrollTo({ top: top + (t.offsetHeight - innerHeight) * p, behavior: 'instant' });
+    return new Promise((res) => setTimeout(() => res([...t.querySelectorAll('.side-left .chapter')].map((c) => Number(getComputedStyle(c).opacity).toFixed(2))), 250));
+  }, p);
+  const f0 = await fade(0); const f1 = await fade(1);
+  check('the chapters around the phone are pinned and the first shows at the start', (await show.evaluate(() => document.getElementById('stage').classList.contains('scrub'))) && Number(f0[0]) > 0.95 && Number(f0[3]) < 0.05, f0.join(' '));
+  check('the last chapter shows at the end and the first is gone', Number(f1[3]) > 0.95 && Number(f1[0]) < 0.05, f1.join(' '));
+  const fm = await fade(0.5);
+  check('in between, one chapter fades out as the next fades in', Number(fm[1]) > 0.1 && Number(fm[2]) > 0.1 && Number(fm[1]) < 0.9, fm.join(' '));
+  const phoneBox = await show.locator('#phoneFrame').boundingBox();
+  check('the whole phone stays in view while it is pinned', phoneBox.y >= 0 && phoneBox.y + phoneBox.height <= 900, `${Math.round(phoneBox.y)}-${Math.round(phoneBox.y + phoneBox.height)}`);
+
   const mobile = await ctx.newPage();
   await mobile.setViewportSize({ width: 360, height: 740 });
   await mobile.goto(`${BASE}/`);

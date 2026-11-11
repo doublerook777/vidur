@@ -138,7 +138,8 @@ export class Ledger {
     return toActiveEntry(event);
   }
 
-  async reverse(eventId: string): Promise<void> {
+  /** Returns the id of the reversal, so a removal can itself be undone by reversing that id. */
+  async reverse(eventId: string): Promise<string> {
     const target = this.events.find((e) => e.id === eventId);
     if (!target) {
       throw new Error(`reverse: no event with id ${eventId}`);
@@ -146,12 +147,14 @@ export class Ledger {
     if (target.type !== 'entry_posted' && target.type !== 'entry_reversed') {
       throw new Error(`reverse: event ${eventId} of type ${target.type} cannot be reversed`);
     }
+    const id = this.newId();
     await this.append({
       type: 'entry_reversed',
-      id: this.newId(),
+      id,
       targetId: eventId,
       recordedAt: this.clock(),
     });
+    return id;
   }
 
   /** Most recent ACTIVE posted entry (by recordedAt; ties broken by log order). */

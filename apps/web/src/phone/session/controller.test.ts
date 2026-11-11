@@ -183,3 +183,73 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     expect(session!.state.error).toBeNull();
   });
 });
+
+describe('adding and removing entries by hand, and tapping answers', () => {
+  it('removes any entry, offers to take it back, and the restore puts it back', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, true);
+    const first = session!.state.history[0]!;
+    const before = session!.state.history.length;
+    session!.actions.removeEntry(first.id);
+    await until(() => session!.state.history.length === before - 1);
+    expect(session!.state.history.some((h) => h.id === first.id)).toBe(false);
+    expect(session!.state.toast?.restoreToken).toBeTruthy();
+    session!.actions.restoreEntry(session!.state.toast!.restoreToken);
+    await until(() => session!.state.history.length === before);
+    expect(session!.state.history.some((h) => h.id === first.id)).toBe(true);
+    expect(session!.state.toast).toBeNull();
+  });
+
+  it('a hand-added entry keeps the date it was given and never a future one', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, true);
+    const c = session!.state.customers[0]!;
+    const twoDaysAgo = Date.now() - 2 * 86_400_000;
+    session!.actions.saveKeypadEntry({ customerId: c.id, newName: null, kind: 'credit', paise: 77_00, at: twoDaysAgo });
+    await until(() => session!.state.history.some((h) => h.paise === 77_00));
+    const dated = session!.state.history.find((h) => h.paise === 77_00)!;
+    expect(dated.at).toBe(twoDaysAgo);
+    expect(dated.recordedAt).toBeGreaterThan(dated.at + 86_400_000);
+    session!.actions.saveKeypadEntry({ customerId: c.id, newName: null, kind: 'payment', paise: 88_00, at: Date.now() + 5 * 86_400_000 });
+    await until(() => session!.state.history.some((h) => h.paise === 88_00));
+    expect(session!.state.history.find((h) => h.paise === 88_00)!.at).toBeLessThanOrEqual(Date.now());
+  });
+
+  it('a name typed on the Add entry screen creates that customer, with no question', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, false);
+    session!.actions.saveKeypadEntry({ customerId: null, newName: 'Laxmi', kind: 'credit', paise: 50_00 });
+    await until(() => session!.state.customers.some((c) => c.name === 'Laxmi'));
+    expect(session!.state.history[0]).toMatchObject({ customerName: 'Laxmi', paise: 50_00 });
+  });
+
+  it('a new spoken name offers Yes and No, and tapping Yes answers like saying it', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, false);
+    await turn('Kiran ka 100 udhaar');
+    expect(session!.state.card).toMatchObject({ state: 'needs_answer', answers: 'yes_no' });
+    expect(session!.state.customers).toHaveLength(0);
+    session!.actions.answer('yes');
+    await until(() => session!.state.customers.some((c) => c.name === 'Kiran'));
+    expect(session!.state.history[0]).toMatchObject({ customerName: 'Kiran', paise: 100_00 });
+  });
+
+  it('tapping No creates nobody and asks whose account', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, false);
+    await turn('Kiran ka 100 udhaar');
+    session!.actions.answer('no');
+    await until(() => session!.state.card?.agentLine?.includes('खाते') === true && session!.state.card?.answers === undefined);
+    expect(session!.state.customers).toHaveLength(0);
+    expect(session!.state.history).toHaveLength(0);
+  });
+
+  it('tapping Yes with no question open does nothing', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, true);
+    const before = session!.state.history.length;
+    session!.actions.answer('yes');
+    await new Promise((r) => setTimeout(r, 150));
+    expect(session!.state.history.length).toBe(before);
+  });
+});

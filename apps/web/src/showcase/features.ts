@@ -14,9 +14,9 @@ export interface FeatureExplanation {
 
 export const FEATURES: Record<FeatureId, FeatureExplanation> = {
   'mic-button': {
-    title: 'Hold-to-talk mic',
-    what: 'Hold the button, speak the entry, and release — the phone listens only while you hold it.',
-    why: 'A mid-sale shopkeeper has both hands full, so talking is faster and safer than typing.',
+    title: 'Voice circle',
+    what: 'Hold the circle and speak the entry; it moves with your voice while you talk and with Vidur’s voice while it answers, and it only listens while you hold it.',
+    why: 'A mid-sale shopkeeper has both hands full, and a circle that moves is the proof that someone is listening.',
   },
   'ai-badge': {
     title: 'AI disclosure badge',
@@ -30,7 +30,7 @@ export const FEATURES: Record<FeatureId, FeatureExplanation> = {
   },
   'feed': {
     title: 'Entry feed',
-    what: 'Lists recent entries — credit, payment, or note — newest first, with amounts and times.',
+    what: 'Lists recent entries — credit, payment, or note — newest first, each with its amount and the date and time it happened.',
     why: 'You can check what was just saved without opening any customer, which catches mistakes early.',
   },
   'entry-card': {
@@ -85,8 +85,8 @@ export const FEATURES: Record<FeatureId, FeatureExplanation> = {
   },
   'keypad': {
     title: 'Keypad entry',
-    what: 'Lets you punch in an entry by hand when the mic or the network fails.',
-    why: 'The khata never stops working just because the network or the microphone does.',
+    what: 'Lets you add an entry by hand: choose credit or payment, the customer, the amount, and when it happened.',
+    why: 'The khata never stops working just because the network or the microphone does, and you can put in something from yesterday.',
   },
   'offline-banner': {
     title: 'Offline banner',
@@ -117,5 +117,30 @@ export const FEATURES: Record<FeatureId, FeatureExplanation> = {
     title: 'State indicator',
     what: 'Shows whether Vidur is idle, listening, thinking, speaking, waiting for your answer, or offline.',
     why: 'You always know whether it heard you — no talking into a dead microphone.',
+  },
+  'timestamp': {
+    title: 'Date and time',
+    what: 'Every entry shows when the money moved, and says when it was recorded if that was on a different day.',
+    why: 'You can settle a “maine kal diya tha” argument by looking at the entry, not by trusting memory.',
+  },
+  'add-entry': {
+    title: 'Add entry by hand',
+    what: 'Opens a form to add an entry without speaking: type, customer, amount and when.',
+    why: 'Some entries are easier to type, and some places are too loud for the mic.',
+  },
+  'remove-entry': {
+    title: 'Remove an entry',
+    what: 'The three dots on an entry let you remove it after asking once, and a removal can be taken back for a few seconds.',
+    why: 'A wrong entry should be easy to take out, but never by accident.',
+  },
+  'answer-buttons': {
+    title: 'Yes and No buttons',
+    what: 'When Vidur asks a yes-or-no question, such as whether to create a new khata for a new name, you can tap the answer instead of saying it.',
+    why: 'A new name is never created until you say yes, and in a noisy shop tapping is surer than speaking.',
+  },
+  'history': {
+    title: 'All entries',
+    what: 'Opens every entry, grouped by day, newest first, with the same remove option.',
+    why: 'You can look back at last week without opening each customer.',
   },
 };

@@ -24,7 +24,10 @@ export interface FeedItem {
   customerName: string;
   kind: 'credit' | 'payment' | 'note';
   paise: number | null;
+  /** When the money moved (can be backdated), epoch ms. */
   at: number;
+  /** When the entry was written down, epoch ms. */
+  recordedAt: number;
   /** An entry can be undone for 10 seconds after it is saved. */
   undoableUntil: number | null;
   /** Said by the shopkeeper, only kept in memory and purged after 24 hours. Optional. */
@@ -39,6 +42,8 @@ export interface EntryCardVM {
   paise?: number;
   customerName?: string;
   kind?: 'credit' | 'payment' | 'note';
+  /** Set when the open question is a yes or no, so the card can show two big buttons. */
+  answers?: 'yes_no';
 }
 
 export interface ErrorVM {
@@ -49,6 +54,9 @@ export interface ErrorVM {
 
 export interface HomeVM {
   phase: Phase;
+  shopName: string;
+  /** Epoch ms, for the date under the greeting. */
+  now: number;
   online: boolean;
   mockMode: boolean;
   card: EntryCardVM | null;
@@ -61,7 +69,7 @@ export interface HomeVM {
 
 export interface CustomerDetailVM {
   customer: CustomerRow;
-  entries: { id: string; kind: 'credit' | 'payment'; paise: number; at: number; undoableUntil: number | null }[];
+  entries: { id: string; kind: 'credit' | 'payment'; paise: number; at: number; recordedAt: number; undoableUntil: number | null }[];
   notes: { id: string; text: string; dueAt: number | null }[];
   canRemind: boolean;
   reminderBlockedReason: 'no_consent' | 'too_soon' | 'nothing_due' | null;
@@ -75,7 +83,24 @@ export interface SettingsVM {
   retentionHours: number;
 }
 
-export type Screen = 'home' | 'customers' | 'customer' | 'reminders' | 'settings' | 'onboarding' | 'keypad';
+export type Screen = 'home' | 'customers' | 'customer' | 'reminders' | 'settings' | 'onboarding' | 'keypad' | 'history';
+
+export interface HistoryVM {
+  items: FeedItem[];
+}
+
+/** Shown for a few seconds after an entry is removed, so the removal can be taken back. */
+export interface ToastVM {
+  text: string;
+  actionLabel: string;
+  restoreToken: string;
+}
+
+/** Where the Add entry screen starts: a customer and a direction already chosen. */
+export interface AddPreset {
+  customerId?: string;
+  kind?: 'credit' | 'payment';
+}
 
 /** Callbacks the screens may call. */
 export interface Actions {
@@ -89,7 +114,15 @@ export interface Actions {
   setConsent(customerId: string, optIn: boolean): void;
   prepareReminder(customerId: string): void;
   deleteAll(): void;
-  saveKeypadEntry(input: { customerId: string | null; newName: string | null; kind: 'credit' | 'payment'; paise: number }): void;
+  saveKeypadEntry(input: { customerId: string | null; newName: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): void;
+  /** Opens the Add entry screen. */
+  openAddEntry(preset?: AddPreset): void;
+  /** Removes one entry by hand. It is reversed, not erased, so `restoreEntry` can bring it back. */
+  removeEntry(entryId: string): void;
+  restoreEntry(restoreToken: string): void;
+  dismissToast(): void;
+  /** Taps Yes or No for the open question. Same as saying it. */
+  answer(a: 'yes' | 'no'): void;
   retry(): void;
   finishOnboarding(opts: { lang: Lang; demoData: boolean }): void;
 }
@@ -98,6 +131,7 @@ export interface Actions {
 export const FEATURE_IDS = [
   'mic-button', 'ai-badge', 'totals', 'feed', 'entry-card', 'undo', 'customer-list', 'customer-detail', 'balance', 'reminder-gate', 'consent-toggle',
   'language-switch', 'theme-switch', 'delete-all', 'keypad', 'offline-banner', 'onboarding-disclosure', 'encrypted-badge', 'disambiguation', 'confirm-amount', 'state-indicator',
+  'timestamp', 'add-entry', 'remove-entry', 'answer-buttons', 'history',
 ] as const;
 export type FeatureId = (typeof FEATURE_IDS)[number];
 
