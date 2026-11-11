@@ -16,7 +16,8 @@ const PATTERNS = [
   ['private-key', /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
   [
     'assigned-secret',
-    /\b[A-Z0-9_]*(API_?KEY|SECRET|TOKEN|PASSWORD)[A-Z0-9_]*\s*[=:]\s*["']?[A-Za-z0-9_\-./+]{20,}/i,
+    // The value must mix letters and digits, so plain words like 'day_before_yesterday' do not trip it.
+    /\b[A-Z0-9_]*(API_?KEY|SECRET|TOKEN|PASSWORD)[A-Z0-9_]*["']?\s*[=:]\s*["']?(?=[A-Za-z0-9_\-./+]*\d)(?=[A-Za-z0-9_\-./+]*[A-Za-z])[A-Za-z0-9_\-./+]{20,}/i,
   ],
 ];
 const PLACEHOLDER = /(your|example|changeme|placeholder|xxxx|<.*>|\.\.\.)/i;
