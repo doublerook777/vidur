@@ -252,6 +252,11 @@ export function interpret(text: string, ctx: InterpretContext = {}): Interpretat
       prior.amountConfidence = ev.amountConfidence;
       prior.selfCorrected = true;
       prior.needs = prior.needs.filter((n) => n !== 'amount' && n !== 'amount_confirm');
+      // The direction word may come in the correcting clause ("340, nahi nahi 430 udhaar").
+      if (prior.needs.includes('direction') && !ev.needs.includes('direction') && (ev.intent === 'credit_entry' || ev.intent === 'payment')) {
+        prior.intent = ev.intent;
+        prior.needs = prior.needs.filter((n) => n !== 'direction');
+      }
       if ((ev.amountConfidence ?? 1) < CONFIRM_BELOW) prior.needs.push('amount_confirm');
       continue;
     }
@@ -286,6 +291,37 @@ function guessNameForRefusal(text: string, ctx: InterpretContext): string | unde
     }
   }
   return guessName(toks);
+}
+
+/** The direction a short answer like "udhaar" or "jama" gives, or undefined. */
+export function detectDirection(text: string): 'credit' | 'payment' | undefined {
+  const ns = tokensWithSpans(text).map((t) => t.n);
+  if (ns.some((n) => PAYMENT.has(n))) return 'payment';
+  if (ns.some((n) => CREDIT.has(n) || TOOK.has(n))) return 'credit';
+  return undefined;
+}
+
+export function guessCustomerName(text: string): string | undefined {
+  return guessName(tokensWithSpans(text));
+}
+
+const YES = W('haan han ha haanji ji yes yeah yep yup sahi theek thik ok okay correct right sure हाँ हां हा जी सही ठीक ಹೌದು ಸರಿ');
+const NO = W('nahi nahin na no nope galat wrong cancel नहीं नही ग़लत गलत ಇಲ್ಲ ಬೇಡ');
+/** "yes" or "no" from a short reply, or undefined. The first one said wins. */
+export function yesNo(text: string): 'yes' | 'no' | undefined {
+  for (const t of tokensWithSpans(text)) {
+    if (YES.has(t.n)) return 'yes';
+    if (NO.has(t.n)) return 'no';
+  }
+  return undefined;
+}
+
+/** How many words of `text` are left once the amount, currency and filler words are taken out. */
+export function residualWords(text: string): number {
+  const amounts = parseAmount(text);
+  let rest = text;
+  for (const a of [...amounts].reverse()) rest = rest.slice(0, a.span[0]) + ' ' + rest.slice(a.span[1]);
+  return tokensWithSpans(rest).filter((t) => !STOP.has(t.n) && !YES.has(t.n) && !NO.has(t.n)).length;
 }
 
 export type { Intent };

@@ -138,7 +138,7 @@ export function lexiconSize(): number {
 }
 
 /** Words that look like numbers but must not count on their own. */
-export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath']);
+export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath', 'दो', 'एक', 'ಒಂದು'].map(norm));
 
 export const CURRENCY = new Set(
   ['rupaye', 'rupaya', 'rupiya', 'rupiye', 'rupees', 'rupee', 'rs', 'inr', '₹', 'रुपये', 'रुपया', 'रुपए', 'रुपैया', 'रू', 'ರೂಪಾಯಿ', 'ರೂ'].map(norm),

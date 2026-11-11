@@ -21,7 +21,8 @@ function expectRoundTrips(rupees: number): void {
   for (const lang of ['hi', 'en'] as const) {
     for (const style of ['digits', 'words'] as const) {
       const text = amountToSpoken(paise, lang, style);
-      const matches = parseAmount(text, lang);
+      // A lone "one" or "एक" is ordinary speech, so the parser only counts it next to a currency word.
+      const matches = parseAmount(style === 'words' ? `${text} ${lang === 'en' ? 'rupees' : 'रुपये'}` : text, lang);
       expect(matches, `${lang}/${style}: ${JSON.stringify(text)}`).toHaveLength(1);
       expect(matches[0]?.paise).toBe(paise);
     }

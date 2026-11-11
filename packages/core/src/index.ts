@@ -10,3 +10,6 @@ export * from './dates/index.js';
 export * from './names/index.js';
 export * from './speak/index.js';
 export * from './intent/index.js';
+export * from './i18n/index.js';
+export * from './reminders/index.js';
+export * from './dialogue/index.js';
