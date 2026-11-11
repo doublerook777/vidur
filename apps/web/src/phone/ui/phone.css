@@ -566,9 +566,9 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: -3px; /* runs a hair past the edge so scaling never leaves a sliver of list showing under it */
   z-index: 20;
-  padding: 10px var(--space-4) calc(var(--safe-bottom) + 10px);
+  padding: 10px var(--space-4) calc(var(--safe-bottom) + 13px);
   background: var(--color-bg);
   box-shadow: 0 -1px 0 var(--color-border);
 }

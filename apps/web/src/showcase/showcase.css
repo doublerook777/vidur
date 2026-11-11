@@ -420,20 +420,21 @@ main { display: flex; flex-direction: column; gap: 40px; }
 
 /* ---------- the phone ---------- */
 
-.phone-wrap { position: relative; width: calc(414px * var(--s, 1)); height: calc(868px * var(--s, 1)); justify-self: center; }
+.phone-wrap { position: relative; width: calc(418px * var(--s, 1)); height: calc(872px * var(--s, 1)); justify-self: center; }
 .phone-frame {
+  /* the original frame: a neutral black bezel with a 2px edge. 390x844 screen + 12px bezel + 2px edge each side */
   --safe-top: 59px;
   --safe-bottom: 34px;
   position: absolute;
   top: 0;
   left: 0;
-  width: 414px;
-  height: 868px;
+  width: 418px;
+  height: 872px;
   padding: 12px;
   border-radius: 56px;
-  background: #031a19;
-  border: 0;
-  box-shadow: inset 0 0 0 2px #1d5a57, 0 0 0 10px var(--ground), 0 40px 60px -26px rgb(4 50 48 / 70%), 0 6px 14px rgb(4 50 48 / 30%);
+  background: #11141a;
+  border: 2px solid #2a2f3a;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 18%);
   transform: scale(var(--s, 1));
   transform-origin: top left;
 }
@@ -444,9 +445,9 @@ main { display: flex; flex-direction: column; gap: 40px; }
 .phone-screen { position: absolute; inset: 12px; border-radius: 44px; overflow: hidden; background: #000; }
 .phone-screen iframe { width: 390px; height: 844px; border: 0; display: block; }
 .frame-notch, .frame-punchhole { display: none; }
-.phone-frame[data-frame='notch'] .frame-notch { display: block; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 180px; height: 30px; background: #031a19; border-radius: 0 0 18px 18px; z-index: 2; }
-.phone-frame[data-frame='punch-hole'] .frame-punchhole { display: block; position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 14px; height: 14px; background: #1d5a57; border-radius: 50%; z-index: 2; }
-.frame-homebar { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 120px; height: 5px; border-radius: 3px; background: #1d5a57; z-index: 2; }
+.phone-frame[data-frame='notch'] .frame-notch { display: block; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 180px; height: 30px; background: #11141a; border-radius: 0 0 18px 18px; z-index: 2; }
+.phone-frame[data-frame='punch-hole'] .frame-punchhole { display: block; position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 14px; height: 14px; background: #2a2f3a; border-radius: 50%; z-index: 2; }
+.frame-homebar { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 120px; height: 5px; border-radius: 3px; background: #2a2f3a; z-index: 2; }
 
 /* ---------- below the stage ---------- */
 
