@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-11T16:00:00.000Z",
+  "title": "Design System: Vidur",
+  "extensions": {
+    "colorMeta": {
+      "slab": { "role": "primary", "displayName": "Deep Teal Slab", "canonical": "#0b4a48", "tonalRamp": ["#031a19", "#072f2e", "#0b4a48", "#14625f", "#2f857f", "#6fb0aa", "#b9d6d3", "#eaf4f3"] },
+      "amber": { "role": "secondary", "displayName": "Counter Amber", "canonical": "#f4c542", "tonalRamp": ["#3b2b00", "#7a5600", "#b58300", "#e2a91c", "#f4c542", "#f8d77a", "#fbe7a8", "#fff3d1"] },
+      "ground": { "role": "neutral", "displayName": "Mineral Ground", "canonical": "#d9e1e0", "tonalRamp": ["#0a2f2e", "#3d5f5e", "#6a8583", "#97aba9", "#bccdca", "#d9e1e0", "#e7eeee", "#f4f8f8"] },
+      "ink": { "role": "neutral", "displayName": "Teal Ink", "canonical": "#0a2f2e", "tonalRamp": ["#041514", "#0a2f2e", "#1d4a49", "#3d5f5e", "#46605f", "#6a8583", "#97aba9", "#d3dedc"] },
+      "credit": { "role": "tertiary", "displayName": "Udhaar Brown", "canonical": "#8a4a00", "tonalRamp": ["#2b1700", "#5a3000", "#8a4a00", "#b86a10", "#d98f3a", "#ecb877", "#fae9c5", "#fff6e6"] },
+      "payment": { "role": "tertiary", "displayName": "Jama Green", "canonical": "#0a6a50", "tonalRamp": ["#032a20", "#064836", "#0a6a50", "#1c8a6d", "#4eab91", "#8ccdb9", "#d2ede2", "#eaf7f1"] },
+      "note": { "role": "tertiary", "displayName": "Promise Violet", "canonical": "#4d3a99", "tonalRamp": ["#1d1442", "#33256e", "#4d3a99", "#6b3fc4", "#8f78d6", "#b8a8ea", "#e6e0fa", "#f3f0fd"] },
+      "danger": { "role": "tertiary", "displayName": "Alarm Red", "canonical": "#a02424", "tonalRamp": ["#331414", "#661616", "#a02424", "#c24a4a", "#de7878", "#ff9c9c", "#fbe3e3", "#fdf1f1"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The VIDUR wordmark only, uppercase, with the lower 44% sliced and slid." },
+      "slab-title": { "displayName": "Slab title", "purpose": "Section titles on slabs and large language and figure type." },
+      "numeral-hero": { "displayName": "Numeral hero", "purpose": "Today's credit, balances and keypad display; every amount uses this face with tabular lining figures." },
+      "numeral-row": { "displayName": "Numeral row", "purpose": "Row amounts, keypad keys." },
+      "headline": { "displayName": "Headline", "purpose": "Phone greeting." },
+      "title": { "displayName": "Title", "purpose": "Screen titles and pane headings." },
+      "body": { "displayName": "Body", "purpose": "Running text, 62ch cap on panes." },
+      "label": { "displayName": "Label", "purpose": "Captions, state pills, feed meta at 13px minimum." }
+    },
+    "shadows": [
+      { "name": "slab", "value": "0 34px 50px -30px rgb(4 50 48 / 60%), 0 4px 10px rgb(4 50 48 / 18%)", "purpose": "Slabs, top bar, footer bar." },
+      { "name": "pane", "value": "0 0 0 14px var(--ground), 0 26px 40px -20px rgb(4 50 48 / 55%), 0 3px 8px rgb(4 50 48 / 14%)", "purpose": "Ground-colour halo that cuts the notch, plus the pane's drop." },
+      { "name": "card", "value": "0 14px 26px -16px rgb(6 50 48 / 55%), 0 2px 4px rgb(6 50 48 / 10%)", "purpose": "Phone cards, icon buttons, keypad keys." },
+      { "name": "nav", "value": "0 16px 28px -10px rgb(4 38 36 / 55%), 0 2px 6px rgb(4 38 36 / 25%)", "purpose": "Floating pill nav and toast." },
+      { "name": "inset", "value": "inset 0 2px 8px rgb(0 0 0 / 35%)", "purpose": "The say strip pressed into the slab." },
+      { "name": "notch-halo", "value": "0 0 0 10px var(--color-bg)", "purpose": "Phone notch button halo; the ring colour must equal the ground." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Hover lifts, toast entry, toggle knob, orb scale." },
+      { "name": "state-color", "value": "0.2s to 0.25s ease", "purpose": "Colour and background transitions on pills, controls, orb rings." },
+      { "name": "press", "value": "scale(0.97) in 0.12s", "purpose": "Phone button press feedback." },
+      { "name": "crossfade-plateau", "value": "opacity = clamp((0.5 - |x - i|) * 8, 0, 1); rise 16px; blur 2px; track 420vh", "purpose": "Pinned chapters are sharp for the middle 75% of their span and never overlap." },
+      { "name": "orb-breathe", "value": "4.2s ease-in-out infinite, scale 1 to 1.045", "purpose": "Idle voice circle." },
+      { "name": "orb-spin", "value": "1.1s linear infinite", "purpose": "Thinking arc." },
+      { "name": "orb-bar", "value": "0.62s ease-in-out infinite alternate, delay -53ms per bar", "purpose": "Speaking bars." },
+      { "name": "orb-pulse", "value": "1.6s ease-out infinite, scale 1.05 to 1.7, second ring delayed 0.5s", "purpose": "Needs-answer rings." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: orb animation and transitions off with static state forms; toast and scroll arrow off; smooth scroll off; chapters fade without rise or blur", "purpose": "Every animation has a reduced-motion branch." }
+    ],
+    "breakpoints": [
+      { "name": "stage-pinned", "value": "min-width 1100px and min-height 620px" },
+      { "name": "tablet-single-column", "value": "max-width 1099px" },
+      { "name": "phone-fullscreen", "value": "max-width 700px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Deep teal pill for the main action on a phone screen.",
+      "html": "<button class=\"ds-btn-primary\">Save</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 24px; border: 2px solid #0b4a48; border-radius: 999px; background: #0b4a48; color: #eaf4f3; font: 700 19px Figtree, system-ui, sans-serif; cursor: pointer; transition: transform 0.12s ease; } .ds-btn-primary:active { transform: scale(0.97); } .ds-btn-primary:focus-visible { outline: 3px solid #0b4a48; outline-offset: 3px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Outlined pill for the quiet choice, such as No.",
+      "html": "<button class=\"ds-btn-secondary\">No</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 24px; border: 2px solid #0b4a48; border-radius: 999px; background: transparent; color: #0a2f2e; font: 700 19px Figtree, system-ui, sans-serif; cursor: pointer; } .ds-btn-secondary:focus-visible { outline: 3px solid #0b4a48; outline-offset: 3px; }"
+    },
+    {
+      "name": "Hero Card With Notch",
+      "kind": "card",
+      "refersTo": "hero-card",
+      "description": "Today's total on a deep teal slab, an amber card peeking behind, an Add entry pill in the notch.",
+      "html": "<div class=\"ds-hero\"><div class=\"ds-peek\">Today</div><div class=\"ds-card\"><span class=\"ds-label\">Udhaar given</span><span class=\"ds-num\">1,240</span><button class=\"ds-notch\">Add entry</button></div></div>",
+      "css": ".ds-hero { position: relative; padding-top: 34px; width: 330px; background: #e3eae9; } .ds-peek { position: absolute; inset: 0 0 auto 0; height: 76px; padding: 9px 20px; border-radius: 26px; background: #f4c542; color: #3b2b00; font: 800 13px Figtree, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; } .ds-card { position: relative; display: flex; flex-direction: column; min-height: 188px; padding: 16px 24px; border-radius: 26px; background: #0b4a48; color: #eaf4f3; box-shadow: 0 14px 26px -16px rgb(6 50 48 / 55%), 0 2px 4px rgb(6 50 48 / 10%); } .ds-label { color: #b9d6d3; font: 700 13px Figtree, sans-serif; } .ds-num { font: 800 56px/1 'Big Shoulders Display', Figtree, sans-serif; letter-spacing: 0.01em; font-variant-numeric: tabular-nums lining-nums; } .ds-notch { position: absolute; right: -1px; bottom: -1px; min-height: 52px; padding: 0 16px 0 12px; border: 0; border-radius: 999px; background: #0a2f2e; color: #e3eae9; font: 800 16px Figtree, sans-serif; cursor: pointer; box-shadow: 0 0 0 10px #e3eae9; } .ds-notch:focus-visible { outline: 3px solid #0b4a48; outline-offset: 3px; }"
+    },
+    {
+      "name": "Entry Row",
+      "kind": "card",
+      "refersTo": "entry-card",
+      "description": "Feed row: kind icon, name with time under it, amount in condensed numerals.",
+      "html": "<div class=\"ds-row\"><span class=\"ds-ico\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\"><path d=\"M7 17 17 7M9 7h8v8\"/></svg></span><span class=\"ds-body\"><b>Mohan</b><small>Udhaar, 4:12 pm</small></span><span class=\"ds-amt\">340</span></div>",
+      "css": ".ds-row { display: flex; align-items: center; gap: 12px; min-height: 68px; padding: 12px 16px; border-radius: 26px; background: #f9fbfb; color: #0a2f2e; font-family: Figtree, sans-serif; box-shadow: 0 14px 26px -16px rgb(6 50 48 / 55%), 0 2px 4px rgb(6 50 48 / 10%); } .ds-ico { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #fae9c5; color: #8a4a00; } .ds-ico svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; } .ds-body { display: flex; flex-direction: column; flex: 1; } .ds-body b { font-weight: 800; } .ds-body small { color: #46605f; font-size: 13px; font-weight: 600; } .ds-amt { color: #8a4a00; font: 800 26px 'Big Shoulders Display', Figtree, sans-serif; letter-spacing: 0.01em; font-variant-numeric: tabular-nums lining-nums; }"
+    },
+    {
+      "name": "Floating Nav With Voice Circle",
+      "kind": "nav",
+      "refersTo": "bottom-nav",
+      "description": "Teal capsule with a gap that the voice circle rises out of; the active item is a pale pill.",
+      "html": "<nav class=\"ds-nav\"><button class=\"ds-nav-btn ds-active\">Home</button><button class=\"ds-nav-btn\">Khata</button><span class=\"ds-gap\"><span class=\"ds-orb\"></span></span><button class=\"ds-nav-btn\">Remind</button><button class=\"ds-nav-btn\">Settings</button></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; width: 360px; height: 66px; margin-top: 40px; padding: 0 8px; border-radius: 999px; background: #0a3a39; box-shadow: 0 16px 28px -10px rgb(4 38 36 / 55%), 0 2px 6px rgb(4 38 36 / 25%); } .ds-nav-btn { flex: 1; height: 54px; border: 0; border-radius: 999px; background: transparent; color: #cfe3e1; font: 700 12px Figtree, sans-serif; cursor: pointer; } .ds-nav-btn.ds-active { background: #eaf4f3; color: #0a2f2e; } .ds-nav-btn:focus-visible { outline: 3px solid #8ee8da; outline-offset: 3px; } .ds-gap { position: relative; flex: none; width: 124px; height: 66px; } .ds-orb { position: absolute; left: 50%; top: -34px; width: 92px; height: 92px; margin-left: -46px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #8ee8da, #1c9c92 55%, #0a4a48); box-shadow: 0 8px 10px rgb(4 38 36 / 45%); animation: ds-breathe 4.2s ease-in-out infinite; } @keyframes ds-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.045); } } @media (prefers-reduced-motion: reduce) { .ds-orb { animation: none; } }"
+    },
+    {
+      "name": "State Pill",
+      "kind": "chip",
+      "refersTo": "voice circle states",
+      "description": "Names the voice circle's state in words, coloured to match: listening red, thinking amber, speaking teal, needs answer violet.",
+      "html": "<span class=\"ds-pill ds-listening\">Listening</span> <span class=\"ds-pill ds-thinking\">Thinking</span> <span class=\"ds-pill ds-speaking\">Speaking</span> <span class=\"ds-pill ds-ask\">Needs answer</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 999px; font: 700 13px Figtree, sans-serif; } .ds-listening { background: #a02424; color: #fff; } .ds-thinking { background: #f4c542; color: #3b2b00; } .ds-speaking { background: #0b4a48; color: #eaf4f3; } .ds-ask { background: #6b3fc4; color: #fff; }"
+    },
+    {
+      "name": "Slab With Pane",
+      "kind": "custom",
+      "refersTo": "slab",
+      "description": "Showcase signature: a deep teal slab with a frost pane seated in a notch; the ground-colour halo cuts the notch.",
+      "html": "<div class=\"ds-stage\"><section class=\"ds-slab\"><h3>Hold and speak</h3><p>It asks instead of guessing.</p></section><aside class=\"ds-pane\"><h3>Stays on the phone</h3><p>Encrypted, nothing on the server.</p></aside></div>",
+      "css": ".ds-stage { padding: 20px; background: #d9e1e0; font-family: Figtree, sans-serif; } .ds-slab { padding: 32px 32px 56px; border-radius: 44px; background: #0b4a48; color: #e9f1f0; box-shadow: 0 34px 50px -30px rgb(4 50 48 / 60%), 0 4px 10px rgb(4 50 48 / 18%); } .ds-slab h3 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.01em; } .ds-slab p { margin: 0; } .ds-pane { position: relative; margin: -28px 20px 0; padding: 28px 30px; border-radius: 30px; background: linear-gradient(158deg, #f4f8f8, #e7eeee 70%); color: #083a39; box-shadow: 0 0 0 14px #d9e1e0, 0 26px 40px -20px rgb(4 50 48 / 55%), 0 3px 8px rgb(4 50 48 / 14%); } .ds-pane h3 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 800; } .ds-pane p { margin: 0; color: #3d5f5e; font-weight: 500; }"
+    },
+    {
+      "name": "Tag Chip",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Frost capsule with an inset hairline ring; names the four languages.",
+      "html": "<span class=\"ds-tag\">Hinglish</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; padding: 12px 30px; border-radius: 999px; background: #e7eeee; color: #083a39; font: 800 0.8rem Figtree, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; outline: 1.5px solid rgb(8 58 57 / 40%); outline-offset: -6px; box-shadow: 0 12px 20px -12px rgb(0 0 0 / 60%); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Cut Teal Object",
+    "overview": "Everything is made of one physical material: a pale mineral ground, deep teal slabs cut to interlock, and frosted panes seated in notches that the slabs leave open. A pane's halo, drawn in the ground colour, is what carves the notch. The system serves two surfaces. The showcase page (Experience mode, judges and demo viewers) is the object at full scale: a wordmark slab, a pinned live phone, panes tucked at asymmetric corners. The phone app (Operate mode, a kirana owner at the counter, one-handed, noisy) borrows the same grammar in finance-app form: a hero card with a notch, round icon buttons, rows with the time under the name, a floating pill nav with a voice circle that rises out of it.\n\nDensity is low and numbers are large. The user may not read comfortably, so rupee amounts in condensed teal-black numerals and short labels in the shopkeeper's language carry the screen. Depth is dimensional and soft-lit rather than flat: long, blurred, teal-tinted drop shadows under slabs and cards. Amber is the single attention colour and appears as an object, never as a wash.",
+    "keyCharacteristics": [
+      "One material: ground, slab, pane. Surfaces are cut and nested, not stacked as equal cards.",
+      "Condensed Big Shoulders numerals and wordmark against calm Figtree text.",
+      "Pills and capsules for every control; large radii on every container.",
+      "Credit is amber-brown, payment is green-teal, notes are violet, and each is always paired with an arrow icon and a word.",
+      "The phone ships a light and a dark theme; the showcase is light only.",
+      "Motion explains state: the voice circle changes with the voice, the chapters crossfade with scroll. Nothing else moves for show."
+    ],
+    "rules": [
+      { "name": "The One Hue Rule", "body": "Teal is the only chromatic family in the chrome. Amber, brown, green, violet and red appear only as a named object or a money/state meaning, never as decoration.", "section": "colors" },
+      { "name": "The Word And Arrow Rule", "body": "Credit and payment are never told apart by colour alone: each carries an arrow icon and its word (udhaar, jama).", "section": "colors" },
+      { "name": "The Ground Halo Rule", "body": "A notch is made by a box-shadow ring in the exact ground colour (14px on the showcase, 10px on the phone). The ring colour must match the ground it sits on, in both themes.", "section": "colors" },
+      { "name": "The Numerals Are Display Rule", "body": "Every money amount and count uses Big Shoulders with tabular lining figures; running text never does.", "section": "typography" },
+      { "name": "The Native Script Rule", "body": "Devanagari and Kannada render in their Noto faces through the font stack; never size or weight-substitute them with a Latin-only face.", "section": "typography" },
+      { "name": "The Seated Shadow Rule", "body": "Shadows are always offset downward with negative spread and a teal tint, never zero-offset glow and never a hard offset block.", "section": "elevation" },
+      { "name": "The Crossfade Plateau Rule", "body": "Each chapter is fully sharp for the middle 75% of its scroll span and fully hidden before the next begins; no two chapters are ever readable at once.", "section": "components" },
+      { "name": "The Reduced Motion Rule", "body": "With prefers-reduced-motion, the orb stops all animation and shows a static form for each state; the toast and scroll arrow stop; smooth scrolling is off; chapters still crossfade by opacity without rise or blur.", "section": "components" }
+    ],
+    "dos": [
+      "Do build every new container as a slab, pane or raised card in the existing radii, with the Ground Halo wherever a piece sits in a notch.",
+      "Do set every amount in Big Shoulders 800 with tabular lining figures, and keep text in Figtree.",
+      "Do pair credit and payment colour with an arrow and a word, and give each state a text label as well as a colour.",
+      "Do keep every touch target at 44px or more and primary actions at 56px, and keep text at 13px or more.",
+      "Do define colours as variables on :root with a full [data-theme='dark'] override on the phone.",
+      "Do keep amber for attention objects only (peek card, demo chip, toast action, thinking state, toggle knob)."
+    ],
+    "donts": [
+      "Don't use a hard offset shadow, a zero-offset glow or a gradient on text.",
+      "Don't stack equal, same-size cards in a row; vary size and corner so slabs and panes interlock.",
+      "Don't add another accent hue or use red or violet decoratively.",
+      "Don't rely on colour alone, and don't use Big Shoulders for running text or Latin-only fonts for Hindi or Kannada.",
+      "Don't add a motion that is not tied to a state or to scroll position, and don't skip the reduced-motion branch for a new animation.",
+      "Don't copy the direction contract text into any browser-delivered file."
+    ]
+  }
+}
