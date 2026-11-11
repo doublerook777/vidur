@@ -19,7 +19,10 @@
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "typecheck": "npm run build -w @vidur/core --silent && tsc -p packages/core/tsconfig.json --noEmit && tsc -p apps/server/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit",
     "test:e2e": "npm run build && node e2e/browser.mjs",
-    "test:live": "node e2e/live.mjs"
+    "test:live": "node e2e/live.mjs",
+    "setup": "node scripts/setup.mjs",
+    "start": "node scripts/start.mjs",
+    "demo:mock": "node scripts/start.mjs --mock"
   },
   "devDependencies": {
     "eslint": "10.13.0",

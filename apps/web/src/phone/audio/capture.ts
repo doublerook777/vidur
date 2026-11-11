@@ -48,7 +48,15 @@ export class MicCapture {
     this.node = node;
   }
 
+  private feed: ReturnType<typeof setInterval> | null = null;
+
+  /** Test hook: when `window.__vidurTestClip` is set, a press sends that clip at real-time pace instead of the microphone. */
+  private static testClip(): Int16Array | null {
+    return (globalThis as { __vidurTestClip?: Int16Array }).__vidurTestClip ?? null;
+  }
+
   private onFrame(frame: Int16Array): void {
+    if (MicCapture.testClip()) return; // test mode: the microphone is ignored
     if (this.sink) {
       this.recording?.push(frame);
       this.sink(pcm16ToBytes(frame));
@@ -64,10 +72,24 @@ export class MicCapture {
       sink(pcm16ToBytes(f));
     }
     this.sink = sink;
+    const clip = MicCapture.testClip();
+    if (clip) {
+      let i = 0;
+      this.feed = setInterval(() => {
+        if (i >= clip.length) return void (this.feed && clearInterval(this.feed));
+        const f = new Int16Array(512);
+        f.set(clip.subarray(i, i + 512));
+        i += 512;
+        this.recording?.push(f);
+        sink(pcm16ToBytes(f));
+      }, 32);
+    }
   }
 
   /** Stop sending. Returns after the last partial frame has been delivered. */
   end(): void {
+    if (this.feed) clearInterval(this.feed);
+    this.feed = null;
     this.node?.port.postMessage('flush');
     setTimeout(() => (this.sink = null), 30);
   }

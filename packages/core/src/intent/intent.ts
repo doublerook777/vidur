@@ -296,6 +296,9 @@ export function interpret(text: string, ctx: InterpretContext = {}): Interpretat
   for (const e of events) {
     if (e.amountPaise === undefined || (e.intent !== 'credit_entry' && e.intent !== 'payment')) continue;
     if (unresolved && !e.needs.includes('amount_confirm')) e.needs.push('amount_confirm');
+    // An entry that already needs a name or a direction, with a four-digit amount: read it back too. A garbled
+    // "sawa sau" can turn into 1,225, and the shopkeeper is being asked something anyway.
+    if ((e.needs.includes('customer') || e.needs.includes('direction')) && e.amountPaise >= 1000 * 100 && !e.needs.includes('amount_confirm')) e.needs.push('amount_confirm');
     // Large amounts are always read back: a slip of one zero costs a lot.
     if (e.amountPaise >= LARGE_PAISE && !e.needs.includes('amount_confirm')) e.needs.push('amount_confirm');
   }

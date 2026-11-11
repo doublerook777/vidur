@@ -52,7 +52,8 @@ async function main(): Promise<void> {
   const gw = await createGateway({
     config,
     log,
-    ...(config.llm ? { llm: createLlmParser(config.llm, log) } : {}),
+    // Mock mode makes no outside calls at all, so the LLM is never used there.
+    ...(config.llm && config.mode !== 'mock' ? { llm: createLlmParser(config.llm, log) } : {}),
     ...(existsSync(staticDir) ? { staticDir } : {}),
     ...(process.env['ADMIN_KEY'] ? { adminKey: process.env['ADMIN_KEY'] } : {}),
   });

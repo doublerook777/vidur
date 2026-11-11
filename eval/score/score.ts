@@ -41,6 +41,8 @@ export interface CellMetrics {
   directionTotal: number;
   amountTotal: number;
   amountExact: number;
+  /** The right amount, but the app read it back first (large or doubtful amounts). The shopkeeper confirms, so it is not a miss. */
+  amountReadBack: number;
   amountAsked: number;
   silentWrong: number;
   noResult: number;
@@ -96,6 +98,7 @@ function emptyCell(): CellMetrics {
     directionTotal: 0,
     amountTotal: 0,
     amountExact: 0,
+    amountReadBack: 0,
     amountAsked: 0,
     silentWrong: 0,
     noResult: 0,
@@ -138,6 +141,8 @@ function addRecord(acc: Accum, rec: ScoreRecord, silentWrong: SilentWrongRecord[
       const gotPaise = got.amountPaise;
       if (gotPaise === expectedPaise && !amountNeed) {
         m.amountExact += 1;
+      } else if (gotPaise === expectedPaise && amountNeed) {
+        m.amountReadBack += 1;
       } else if ((gotPaise === undefined || gotPaise !== expectedPaise) && amountNeed) {
         m.amountAsked += 1;
       } else if (gotPaise !== undefined && gotPaise !== expectedPaise && !amountNeed) {
@@ -246,6 +251,8 @@ export function toMarkdown(report: Report, title: string): string {
   lines.push(`| Intent right | ${o.intentRight}/${o.n} (${pct(o.intentRight, o.n)}) |`);
   lines.push(`| Direction right (credit/payment) | ${o.directionRight}/${o.directionTotal} (${pct(o.directionRight, o.directionTotal)}) |`);
   lines.push(`| Amount exact | ${o.amountExact}/${o.amountTotal} (${pct(o.amountExact, o.amountTotal)}) |`);
+  lines.push(`| Amount right after a read-back | ${o.amountReadBack}/${o.amountTotal} (${pct(o.amountReadBack, o.amountTotal)}) |`);
+  lines.push(`| **Amount right (exact or after a read-back)** | ${o.amountExact + o.amountReadBack}/${o.amountTotal} (${pct(o.amountExact + o.amountReadBack, o.amountTotal)}) |`);
   lines.push(`| Amount asked (instead of guessing) | ${o.amountAsked}/${o.amountTotal} (${pct(o.amountAsked, o.amountTotal)}) |`);
   lines.push(`| Silent wrong amount | ${o.silentWrong}/${o.amountTotal} (${pct(o.silentWrong, o.amountTotal)}) |`);
   lines.push(`| No result (got null) | ${o.noResult}/${o.n} (${pct(o.noResult, o.n)}) |`);
