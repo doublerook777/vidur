@@ -10,7 +10,7 @@ let failed = 0;
 const line = (ok, msg, fix) => { if (!ok) failed++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${msg}${!ok && fix ? `\n     -> ${fix}` : ''}`); };
 
 line(Number(process.versions.node.split('.')[0]) >= 22, `Node ${process.version} (need 22 or newer)`, 'Install Node 22+ from https://nodejs.org');
-line(existsSync('.env'), '.env file present', 'Run: npm run setup');
+line(existsSync('.env') || Boolean(process.env.GNANI_API_KEY), existsSync('.env') ? '.env file present' : 'no .env file, but the key comes from the environment', 'Run: npm run setup');
 if (existsSync('.env')) {
   const mode = (statSync('.env').mode & 0o777).toString(8);
   line(process.platform === 'win32' || (statSync('.env').mode & 0o077) === 0, `.env permissions are private (${mode})`, 'Run: chmod 600 .env');

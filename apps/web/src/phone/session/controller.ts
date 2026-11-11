@@ -151,7 +151,9 @@ export class PhoneSession {
         onReady: (info) => {
           this.llmAvailable = info.llm;
           this.buildDialogueKeepingState();
-          this.store.update({ mockMode: info.mode === 'mock', error: info.degraded ? errorMessage('network', this.state.lang) : null });
+          // A degraded hello already came with its own, more specific error (out of credit, bad key). Keep that one.
+          this.store.update({ mockMode: info.mode === 'mock', error: info.degraded ? this.state.error ?? errorMessage('network', this.state.lang) : null });
+          if (info.degraded) this.setPhase('offline'); // the speech service is unusable right now; the keypad still works
           this.sendContext();
         },
         onTranscript: (t) => void this.onTranscript(t),

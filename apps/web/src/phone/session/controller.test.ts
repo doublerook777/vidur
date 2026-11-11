@@ -160,6 +160,18 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     expect(session!.state.onboarded).toBe(false);
   });
 
+  it('out of credit: the app says so in the shopkeeper\'s language and points to running it with their own key', async () => {
+    mock = await startMockGnani({ ttfbMs: 5, chunkIntervalMs: 15 });
+    const config = { ...loadConfig({ MODE: 'local', GNANI_API_KEY: 'nocredit', PORT: '0' }), gnaniBaseUrl: mock.url.replace('http', 'ws') };
+    gw = await createGateway({ config, log: createLogger(() => undefined, { strict: true }) });
+    const vault = await Vault.open('t' + Math.random(), new IDBFactory());
+    session = await PhoneSession.create({ gatewayUrl: gw.url.replace('http', 'ws') + '/ws', WebSocketImpl: NodeWebSocket as unknown as typeof WebSocket, vault, capture: new FakeMic(), playback: new FakeSpeaker(), backoffMs: [50] });
+    await until(() => session!.state.error !== null);
+    expect(session!.state.error!.text).toContain('कीपैड');
+    expect(session!.state.error!.text).toContain('अपनी चाबी');
+    expect(session!.state.phase).toBe('offline');
+  });
+
   it('a recoverable gateway error shows what to do, a fatal one stops retrying', async () => {
     await boot();
     session!.actions.finishOnboarding({ lang: 'hi', demoData: false });
