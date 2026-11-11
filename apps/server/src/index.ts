@@ -1,13 +1,55 @@
-import { pathToFileURL } from 'node:url';
+import { existsSync } from 'node:fs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { coreBanner } from '@vidur/core';
 
+import { ConfigError, loadConfig } from './config.js';
+import { createLlmParser } from './llm.js';
+import { createLogger } from './logger.js';
+import { startMockGnani } from './mock-gnani/index.js';
+import { createGateway } from './server.js';
+
 export function serverBanner(): string {
-  return `vidur gateway — ${coreBanner()}`;
+  return `vidur gateway - ${coreBanner()}`;
 }
 
-// Entry point is intentionally side-effect free for now; the WSS gateway lands in a later task.
-const invokedDirectly = process.argv[1] ? import.meta.url === pathToFileURL(process.argv[1]).href : false;
-if (invokedDirectly) {
-  console.log(serverBanner());
+const MOCK_SCRIPT = ['Ramesh ka 340 udhaar', 'Ramesh ka total?', 'Sunita ne 200 jama kiye', 'Aaj kitna udhaar gaya?', 'galat'];
+
+async function main(): Promise<void> {
+  try {
+    process.loadEnvFile?.(fileURLToPath(new URL('../../../.env', import.meta.url)));
+  } catch {
+    /* no .env: variables may come from the host */
+  }
+  const log = createLogger();
+  let config;
+  try {
+    config = loadConfig(process.env);
+  } catch (e) {
+    if (e instanceof ConfigError) {
+      console.error(`Cannot start: ${e.message}. Copy .env.example to .env and fill it in, or run "npm run demo:mock" with no keys.`);
+      process.exit(1);
+    }
+    throw e;
+  }
+  let mock: Awaited<ReturnType<typeof startMockGnani>> | null = null;
+  if (config.mode === 'mock') {
+    mock = await startMockGnani({});
+    config = { ...config, gnaniApiKey: 'mock', gnaniBaseUrl: mock.url.replace('http', 'ws') };
+    const refill = (): void => mock?.scriptTranscripts(MOCK_SCRIPT);
+    refill();
+    setInterval(refill, 20_000).unref();
+  }
+  const staticDir = fileURLToPath(new URL('../../web/dist', import.meta.url));
+  const gw = await createGateway({
+    config,
+    log,
+    ...(config.llm ? { llm: createLlmParser(config.llm, log) } : {}),
+    ...(existsSync(staticDir) ? { staticDir } : {}),
+    ...(process.env['ADMIN_KEY'] ? { adminKey: process.env['ADMIN_KEY'] } : {}),
+  });
+  console.log(`Vidur is running at ${gw.url}  (mode: ${config.mode}${config.mode === 'mock' ? ', NOT real speech' : ''})`);
 }
+
+const invokedDirectly = process.argv[1] ? import.meta.url === pathToFileURL(process.argv[1]).href : false;
+if (invokedDirectly) void main();
