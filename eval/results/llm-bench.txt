@@ -1,0 +1,3 @@
+openai/gpt-oss-120b effort=low n=30 ok=30 strict=true p50=578ms p95=1555ms intent=29/30 amount=17/20 customer=27/28 invalid=0 errs=0 avgTokens=725
+openai/gpt-oss-20b effort=low n=30 ok=30 strict=true p50=545ms p95=882ms intent=29/30 amount=18/20 customer=27/28 invalid=0 errs=0 avgTokens=659
+qwen/qwen3.8-27b effort=none n=30 ok=20 strict=true p50=281ms p95=966ms intent=19/30 amount=13/13 customer=18/18 invalid=0 errs=10 avgTokens=443
