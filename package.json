@@ -1,0 +1,29 @@
+{
+  "name": "vidur",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @vidur/server & npm run dev -w @vidur/web & wait",
+    "test": "vitest run",
+    "build": "npm run build -w @vidur/core && npm run build -w @vidur/server && npm run build -w @vidur/web",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,html,css}\"",
+    "scan:secrets": "node scripts/scan-secrets.mjs",
+    "typecheck": "tsc -p packages/core/tsconfig.json --noEmit && tsc -p apps/server/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "eslint": "10.13.0",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.0.0"
+  }
+}

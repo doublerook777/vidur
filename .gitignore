@@ -1,5 +1,12 @@
 references/
-
 .env
 .env.*
 !.env.example
+node_modules/
+dist/
+coverage/
+eval/audio/
+eval/results/raw/
+*.wav
+*.pcm
+*.tsbuildinfo
