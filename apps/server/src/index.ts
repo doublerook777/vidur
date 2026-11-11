@@ -13,7 +13,15 @@ export function serverBanner(): string {
   return `vidur gateway - ${coreBanner()}`;
 }
 
-const MOCK_SCRIPT = ['Ramesh ka 340 udhaar', 'Ramesh ka total?', 'Sunita ne 200 jama kiye', 'Aaj kitna udhaar gaya?', 'galat'];
+const DEFAULT_SCRIPT = ['Mohan ka 340 udhaar', 'Mohan ka total?', 'Sunita ne 200 jama kiye', 'Aaj kitna udhaar gaya?', 'galat'];
+const MOCK_SCRIPT: string[] = (() => {
+  try {
+    const j = JSON.parse(process.env['MOCK_SCRIPT'] ?? 'null') as unknown;
+    return Array.isArray(j) && j.every((x) => typeof x === 'string') ? (j as string[]) : DEFAULT_SCRIPT;
+  } catch {
+    return DEFAULT_SCRIPT;
+  }
+})();
 
 async function main(): Promise<void> {
   try {
@@ -44,7 +52,8 @@ async function main(): Promise<void> {
   const gw = await createGateway({
     config,
     log,
-    ...(config.llm ? { llm: createLlmParser(config.llm, log) } : {}),
+    // Mock mode makes no outside calls at all, so the LLM is never used there.
+    ...(config.llm && config.mode !== 'mock' ? { llm: createLlmParser(config.llm, log) } : {}),
     ...(existsSync(staticDir) ? { staticDir } : {}),
     ...(process.env['ADMIN_KEY'] ? { adminKey: process.env['ADMIN_KEY'] } : {}),
   });

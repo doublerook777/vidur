@@ -52,7 +52,11 @@ export class SttLink extends EventEmitter {
   private ws: WebSocket | null = null;
   private rest = Buffer.alloc(0);
   private connectedAt = 0;
-  private pendingCommit: { resolve: (t: Transcript) => void; reject: (e: Error) => void; startedAt: number; timer: NodeJS.Timeout } | null = null;
+  private pendingCommit: { resolve: (t: Transcript) => void; reject: (e: Error) => void; startedAt: number; timer: NodeJS.Timeout; grace?: NodeJS.Timeout } | null = null;
+  /** Segments the recognizer finished before `commit` (it splits at pauses longer than its silence setting). */
+  /** speech_start messages minus transcripts: segments the recognizer is still working on. */
+  private openSegments = 0;
+  private collected: { text: string; audioMs: number; lang: string; v3: boolean }[] = [];
   private frames = 0;
   private lang: Lang;
 
@@ -83,6 +87,8 @@ export class SttLink extends EventEmitter {
           format: 'codemix',
           'x-sample-rate': '16000',
           'x-idle-timeout-sec': '900',
+          // A press is one utterance. A pause of up to 1.5 s inside it should not cut it in two.
+          'x-min-silence-ms': '1500',
         },
       });
       this.ws = ws;
@@ -114,19 +120,21 @@ export class SttLink extends EventEmitter {
           settled = true;
           this.connectedAt = Date.now();
           resolve();
+        } else if (m['type'] === 'speech_start') {
+          this.openSegments++;
         } else if (m['type'] === 'transcript') {
-          const p = this.pendingCommit;
-          if (!p) return;
-          this.finishCommit();
+          this.openSegments = Math.max(0, this.openSegments - 1);
           const v3 = 'detected_language_code' in m && !('output' in m);
           if (!v3) this.o.log.warn('stt_not_v3');
-          p.resolve({
+          const seg = {
             text: typeof m['text'] === 'string' ? m['text'] : '',
+            audioMs: typeof m['audio_duration_ms'] === 'number' ? m['audio_duration_ms'] : 0,
             lang: typeof m['detected_language_code'] === 'string' ? m['detected_language_code'] : SPEECH_LANG[this.lang],
-            sttMs: Date.now() - p.startedAt,
-            audioMs: typeof m['audio_duration_ms'] === 'number' ? m['audio_duration_ms'] : this.frames * 32,
             v3,
-          });
+          };
+          if (seg.text.trim()) this.collected.push(seg);
+          // Resolve once nothing else is in flight. Otherwise wait for the rest of this press.
+          if (this.pendingCommit && this.openSegments === 0) this.resolveCommit();
         } else if (m['type'] === 'error') {
           this.o.log.warn('stt_error_frame');
           const p = this.pendingCommit;
@@ -140,8 +148,27 @@ export class SttLink extends EventEmitter {
   }
 
   private finishCommit(): void {
-    if (this.pendingCommit) clearTimeout(this.pendingCommit.timer);
+    if (this.pendingCommit) {
+      clearTimeout(this.pendingCommit.timer);
+      if (this.pendingCommit.grace) clearTimeout(this.pendingCommit.grace);
+    }
     this.pendingCommit = null;
+  }
+
+  /** Answers the waiting `commit` with everything heard in this press, in order. */
+  private resolveCommit(): void {
+    const p = this.pendingCommit;
+    if (!p) return;
+    this.finishCommit();
+    const segs = this.collected;
+    this.collected = [];
+    p.resolve({
+      text: segs.map((x) => x.text.trim()).join(' '),
+      lang: segs[0]?.lang ?? SPEECH_LANG[this.lang],
+      sttMs: Date.now() - p.startedAt,
+      audioMs: segs.reduce((n, x) => n + x.audioMs, 0) || this.frames * 32,
+      v3: segs.every((x) => x.v3),
+    });
   }
 
   /** Re-chunks arbitrary-sized PCM into exact 1,024-byte frames. The remainder waits for the next call. */
@@ -175,6 +202,8 @@ export class SttLink extends EventEmitter {
         reject(new GnaniError('timeout', true));
       }, timeoutMs);
       this.pendingCommit = { resolve, reject, startedAt: Date.now(), timer };
+      // If everything was already finalized before the commit, the server may have nothing more to say.
+      if (this.collected.length) this.pendingCommit.grace = setTimeout(() => this.resolveCommit(), 300);
       this.ws!.send(JSON.stringify({ type: 'commit' }));
     });
   }
@@ -183,6 +212,8 @@ export class SttLink extends EventEmitter {
   resetUtterance(): void {
     this.rest = Buffer.alloc(0);
     this.frames = 0;
+    this.collected = [];
+    this.openSegments = 0;
   }
 
   setLang(lang: Lang): void {
@@ -237,6 +268,7 @@ export class TtsLink {
   private queue: Job[] = [];
   private current: { job: Job; startedAt: number; first: number | null; bytes: number; timer: NodeJS.Timeout } | null = null;
   private opening: Promise<void> | null = null;
+  private pumping = false;
 
   constructor(private readonly o: LinkOptions) {}
 
@@ -287,15 +319,19 @@ export class TtsLink {
   }
 
   private async pump(): Promise<void> {
-    if (this.current || !this.queue.length) return;
+    // One request at a time, and only one caller may be past this point while the socket is warming.
+    if (this.current || this.pumping || !this.queue.length) return;
+    this.pumping = true;
     const job = this.queue.shift()!;
     try {
       await this.warm();
     } catch (e) {
+      this.pumping = false;
       job.reject(e as Error);
       void this.pump();
       return;
     }
+    this.pumping = false;
     const timer = setTimeout(() => this.failCurrent(new GnaniError('timeout', true)), this.o.firstChunkMs ?? 6_000);
     this.current = { job, startedAt: Date.now(), first: null, bytes: 0, timer };
     this.ws!.send(

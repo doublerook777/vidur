@@ -174,9 +174,16 @@ class ClientSession {
 
   start(): void {
     this.guards.admit(this.id);
+    this.deps.log.info('session_open', { sid: this.id.slice(0, 6) });
     this.ws.on('message', (data, isBinary) => void this.onMessage(data, isBinary));
-    this.ws.on('close', () => this.cleanup());
-    this.ws.on('error', () => this.cleanup());
+    this.ws.on('close', (code) => {
+      this.deps.log.info('client_socket_closed', { sid: this.id.slice(0, 6), code });
+      this.cleanup();
+    });
+    this.ws.on('error', (e: Error & { code?: string }) => {
+      this.deps.log.warn('client_socket_error', { sid: this.id.slice(0, 6), code: e.code ?? 'unknown' });
+      this.cleanup();
+    });
     this.idleTimer = setInterval(() => {
       if (this.stt?.isOld && !this.pttActive) void this.ensureStt(true);
     }, 30_000);
@@ -224,10 +231,14 @@ class ClientSession {
     const key = this.deps.config.gnaniApiKey ?? '';
     const p = (async () => {
       let delay = 400;
-      for (let attempt = 0; attempt < 4; attempt++) {
+      for (let attempt = 0; attempt < 4 && !this.closed; attempt++) {
         const link = new SttLink({ baseUrl: this.deps.config.gnaniBaseUrl, apiKey: key, log: this.deps.log }, this.lang);
         try {
           await link.connect();
+          if (this.closed) {
+            link.close(); // the phone left while we were connecting: do not leave a speech session open
+            return;
+          }
           this.stt?.close();
           this.stt = link;
           link.on('closed', () => {
@@ -235,6 +246,7 @@ class ClientSession {
           });
           return;
         } catch (e) {
+          this.deps.log.warn('stt_connect_failed', { code: e instanceof GnaniError ? e.code : 'unknown', attempt });
           if (!(e instanceof GnaniError) || !e.recoverable) throw e;
           await new Promise((r) => setTimeout(r, delay)); // backoff on 429 and network errors
           delay *= 2;
@@ -290,8 +302,14 @@ class ClientSession {
     this.tts = new TtsLink({ baseUrl: this.deps.config.gnaniBaseUrl, apiKey: key, log: this.deps.log });
     // Both sockets are opened now, so the first turn has nothing to wait for.
     const warm = await Promise.allSettled([this.ensureStt(), this.tts.warm()]);
+    if (this.closed) {
+      this.stt?.close();
+      this.tts?.close();
+      return;
+    }
     const bad = warm.find((r) => r.status === 'rejected');
     if (bad && bad.status === 'rejected') this.failFrom(bad.reason);
+    this.deps.log.info('session_ready', { sid: this.id.slice(0, 6), degraded: Boolean(bad) });
     this.json({ type: 'ready', token: verdict.token, mode: this.deps.config.mode, llm: Boolean(this.deps.llm), degraded: Boolean(bad) });
   }
 

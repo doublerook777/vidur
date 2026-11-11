@@ -130,6 +130,31 @@ describe('refusals come first', () => {
   });
 });
 
+describe('garbled transcripts are read back, not trusted', () => {
+  it('fragments with amounts and no direction make every amount in the utterance need a read-back', () => {
+    const evs = run('रमेश का तीन सौ चालीस उधार, तीन ढाई सौ चार सौ।');
+    expect(evs[0]!.intent).toBe('credit_entry');
+    expect(evs[0]!.needs).toContain('amount_confirm');
+  });
+  it('two amounts for one customer where one has no direction are not both trusted', () => {
+    const evs = run('Ramesh 5,000 is Hindu. In English, Ramesh 2,500 credits.');
+    expect(evs.every((e) => e.amountPaise === undefined || e.needs.includes('amount_confirm'))).toBe(true);
+  });
+  it('a clean multi-event utterance is not slowed down', () => {
+    const evs = run('Ramesh ka 340 udhaar, kal 200 diya tha');
+    expect(evs.every((e) => e.needs.length === 0)).toBe(true);
+  });
+  it('amounts from Rs 10,000 up are always read back', () => {
+    expect(first('Mohan ka 10000 udhaar').needs).toContain('amount_confirm');
+    expect(first('Mohan ka 9999 udhaar').needs).toEqual([]);
+    expect(first('mohan ka ek lakh udhaar').needs).toContain('amount_confirm');
+  });
+  it('refusal words as the recognizer writes them', () => {
+    expect(first('अजय पे eighteen percent इंटरेस्ट लगा दो').refusal).toBe('interest');
+    expect(first('Treaten Ramesh to pay up').refusal).toBe('threat');
+  });
+});
+
 describe('reminders and out of scope', () => {
   it('reminder request', () => {
     expect(first('Sunita ko reminder bhejo').intent).toBe('reminder_opt_in');

@@ -1,0 +1,13 @@
+# Run Vidur with your own keys:   cp .env.example .env   (fill in GNANI_API_KEY)   then   docker compose up --build
+# Open http://localhost:8080. The port is published to this machine only (127.0.0.1), never to your network.
+services:
+  vidur:
+    build: .
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      MODE: ${MODE:-local}
+    ports:
+      - "127.0.0.1:8080:8080"
+    restart: unless-stopped

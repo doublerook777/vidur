@@ -1,0 +1,16 @@
+node_modules
+**/node_modules
+**/dist
+.git
+.env
+.env.*
+!.env.example
+references
+eval/audio
+eval/results/raw
+spikes/runs.log
+coverage
+*.wav
+*.pcm
+docs
+e2e

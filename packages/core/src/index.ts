@@ -13,3 +13,4 @@ export * from './intent/index.js';
 export * from './i18n/index.js';
 export * from './reminders/index.js';
 export * from './dialogue/index.js';
+export * from './demo/index.js';

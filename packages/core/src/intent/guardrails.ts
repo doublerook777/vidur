@@ -5,11 +5,11 @@ const words = (s: string): string[] => s.split(/[^\p{L}\p{M}\p{N}]+/u).filter(Bo
 const set = (xs: string[]): Set<string> => new Set(xs.map(norm));
 
 const THREAT = set([
-  'dhamki', 'dhamkao', 'dhamkana', 'dhamka', 'darao', 'darwao', 'darvao', 'darana', 'dara', 'poster', 'chowk', 'chauraha', 'threat', 'threaten', 'sharam', 'sharminda', 'sharmind', 'threatening', 'badnam', 'bejjati', 'beizzati', 'shame', 'humiliate', 'harass', 'blackmail', 'gali', 'goonde', 'goondon',
+  'dhamki', 'dhamkao', 'dhamkana', 'dhamka', 'darao', 'darwao', 'darvao', 'darana', 'dara', 'poster', 'chowk', 'chauraha', 'threat', 'threaten', 'treaten', 'threating', 'threatning', 'sharam', 'sharminda', 'sharmind', 'threatening', 'badnam', 'bejjati', 'beizzati', 'shame', 'humiliate', 'harass', 'blackmail', 'gali', 'goonde', 'goondon',
   'डरवाओ', 'पोस्टर', 'चौक', 'चौराहा', 'शर्मिंदा', 'शर्म', 'धमकी', 'धमकाओ', 'धमकाना', 'डराओ', 'डराना', 'बदनाम', 'बेइज़्ज़ती', 'बेइज्जती', 'बेज्जती', 'गाली', 'गुंडे',
   'ಬೆದರಿಕೆ', 'ಬೆದರಿಸಿ', 'ಬೆದರಿಸು', 'ಬೆದರಿಸಿ', 'ಅವಮಾನ', 'ಬೈಯಿರಿ',
 ]);
-const INTEREST = set(['byaj', 'byaaj', 'vyaj', 'interest', 'sood', 'penalty', 'jurmana', 'latefee', 'surcharge', 'ब्याज', 'सूद', 'जुर्माना', 'ಬಡ್ಡಿ', 'ದಂಡ']);
+const INTEREST = set(['इंटरेस्ट', 'इंटरस्ट', 'byaj', 'byaaj', 'vyaj', 'interest', 'sood', 'penalty', 'jurmana', 'latefee', 'surcharge', 'ब्याज', 'सूद', 'जुर्माना', 'ಬಡ್ಡಿ', 'ದಂಡ']);
 const LENDING = set(['loan', 'karz', 'karja', 'lend', 'lending', 'borrow', 'कर्ज', 'कर्ज़', 'लोन', 'ಸಾಲ', 'ಲೋನ್']);
 const JUDGMENT = set([
   'bharosa', 'bharose', 'trust', 'trustworthy', 'safe', 'risky', 'defaulter', 'creditworthy', 'reliable', 'dhokha', 'fraud',

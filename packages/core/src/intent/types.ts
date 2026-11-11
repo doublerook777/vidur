@@ -23,6 +23,8 @@ export interface ParsedEvent {
   selfCorrected?: boolean;
   /** For intent 'correction': what the shopkeeper asked to change. */
   correction?: { kind: 'undo' } | { kind: 'amount' } | { kind: 'customer' };
+  /** For a correction that repeats the direction word ("nahi nahi 1500 udhaar hain"). */
+  directionHint?: 'credit' | 'payment';
   /** True when the customer is a person already named earlier in this utterance. */
   customerInherited?: boolean;
   text: string;

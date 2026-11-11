@@ -3,10 +3,275 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vidur — Showcase</title>
+    <meta name="theme-color" content="#0b4a48" />
+    <meta name="description" content="Vidur — a voice-first khata for Indian kirana shops. Speak an entry, see it with its time, fix it by voice or by hand. The ledger lives on the phone." />
+    <title>Vidur — Speak your khata</title>
+    <link rel="preload" href="/fonts/big-shoulders-display-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/src/showcase/showcase.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="shell">
+      <header class="topbar" aria-label="Site">
+        <a class="topbar-mark" href="#top">Vidur</a>
+        <nav class="topbar-nav" aria-label="Sections">
+          <a href="#stage">Demo</a>
+          <a href="#languages">Languages</a>
+          <a href="#measured">Measured</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#honest-limits">Honest limits</a>
+        </nav>
+        <a class="topbar-chip" href="#stage">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
+          <span>Try it</span>
+        </a>
+      </header>
+
+      <main id="top">
+        <section class="hero slab" aria-labelledby="wordmark">
+          <div class="hero-raised" aria-hidden="true"></div>
+
+          <p class="say">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
+            <span>“Mohan ka teen sau chalis rupaye udhaar”</span>
+          </p>
+
+          <div class="title">
+            <h1 id="wordmark" class="wordmark" aria-label="Vidur">
+              <span class="word word-en" aria-hidden="true">Vidur</span>
+              <span class="word word-hi" lang="hi" aria-hidden="true">विदुर</span>
+              <span class="word word-kn" lang="kn" aria-hidden="true">ವಿದುರ</span>
+            </h1>
+            <p class="tagline">Say it, don’t write it</p>
+          </div>
+
+          <div class="pane hero-pane">
+            <h2>What is Vidur?</h2>
+            <p>
+              A khata for kirana shops that you talk to. Mid-sale, hands full, say “Ramesh ka 340 udhaar”.
+              Vidur hears it, asks one short question if anything is unclear, and saves the entry with its
+              time. The ledger lives only on the phone, encrypted, and the server stores nothing.
+            </p>
+            <a class="arrow-btn" href="#stage" aria-label="Go to the live demo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+          </div>
+
+          <ul class="hero-tags" aria-label="Languages">
+            <li class="tag">Hindi</li>
+            <li class="tag">Hinglish</li>
+            <li class="tag">English</li>
+            <li class="tag">ಕನ್ನಡ</li>
+          </ul>
+          <div class="hero-round">
+            <a class="round-btn" href="#privacy" aria-label="Privacy">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+            </a>
+            <a class="round-btn" href="#stage" aria-label="Try the voice demo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
+            </a>
+          </div>
+
+          <a class="scroll-tab" href="#stage">
+            <span>Scroll</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" /></svg>
+          </a>
+        </section>
+
+        <section id="stage" class="track" aria-label="Interactive demo">
+          <h2 class="visually-hidden">Live demo: hold the circle and speak</h2>
+          <div class="sticky">
+            <div class="stage">
+              <div class="side side-left">
+                <div class="slab chapter-slab">
+                  <ol class="chapters" aria-label="What you do">
+                    <li class="chapter" style="--o: var(--o0)">
+                      <h3 class="chapter-title">Hold and speak</h3>
+                      <p>Press and hold the circle. Say it the way you would to a helper at the counter: “Mohan ka teen sau chalis rupaye udhaar.” Let go.</p>
+                    </li>
+                    <li class="chapter" style="--o: var(--o1)">
+                      <h3 class="chapter-title">It asks, it never guesses</h3>
+                      <p>Two Rameshes? A name it has never heard? A number it is not sure of? Vidur asks one short question, and saves nothing until you answer.</p>
+                    </li>
+                    <li class="chapter" style="--o: var(--o2)">
+                      <h3 class="chapter-title">Fix it, by voice or by hand</h3>
+                      <p>Say “nahi, 500” or “galat”. Or tap the three dots on any entry to remove it, or add one yourself with the date and time.</p>
+                    </li>
+                    <li class="chapter" style="--o: var(--o3)">
+                      <h3 class="chapter-title">Your khata, your phone</h3>
+                      <p>The ledger is encrypted on your phone. Transcripts are kept for 24 hours at most, and one control deletes everything.</p>
+                    </li>
+                  </ol>
+                </div>
+
+                <div class="pane controls" aria-label="Demo controls">
+                  <fieldset class="control-group">
+                    <legend>Frame</legend>
+                    <div class="control-row">
+                      <button type="button" class="control" data-frame="notch" aria-pressed="true">Notch</button>
+                      <button type="button" class="control" data-frame="no-notch" aria-pressed="false">No notch</button>
+                      <button type="button" class="control" data-frame="punch-hole" aria-pressed="false">Punch-hole</button>
+                    </div>
+                  </fieldset>
+                  <fieldset class="control-group">
+                    <legend>Theme</legend>
+                    <div class="control-row">
+                      <button type="button" class="control" data-theme="light" aria-pressed="true">Light</button>
+                      <button type="button" class="control" data-theme="dark" aria-pressed="false">Dark</button>
+                    </div>
+                  </fieldset>
+                  <fieldset class="control-group">
+                    <legend>Language</legend>
+                    <div class="control-row">
+                      <button type="button" class="control" data-lang="hi" aria-pressed="true">हिंदी</button>
+                      <button type="button" class="control" data-lang="en" aria-pressed="false">English</button>
+                      <button type="button" class="control" data-lang="kn" aria-pressed="false">ಕನ್ನಡ</button>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+
+              <div class="phone-wrap" id="phoneWrap">
+                <div class="phone-frame" data-frame="notch" id="phoneFrame">
+                  <div class="phone-screen">
+                    <iframe id="phoneApp" src="/app.html" allow="microphone" title="Vidur phone app"></iframe>
+                  </div>
+                  <div class="frame-notch" aria-hidden="true"></div>
+                  <div class="frame-punchhole" aria-hidden="true"></div>
+                  <div class="frame-homebar" aria-hidden="true"></div>
+                </div>
+              </div>
+              <a class="open-app" href="/app.html">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5" /><path d="M11 18.5h2" /></svg>
+                <span>Open the app full screen</span>
+              </a>
+
+              <aside class="side side-right" aria-label="Live explanation and telemetry">
+                <div class="slab chapter-slab">
+                  <ol class="chapters" aria-label="What Vidur does">
+                    <li class="chapter" style="--o: var(--o0)">
+                      <h3 class="chapter-title">While you talk</h3>
+                      <p>Your voice streams to Gnani’s speech recognition as you speak. Our own parser reads the amount and whether it is credit or payment, so no language model decides money.</p>
+                    </li>
+                    <li class="chapter" style="--o: var(--o1)">
+                      <h3 class="chapter-title">Nothing unclear is saved</h3>
+                      <p>A new name is only created after you say yes, and an unanswered question is dropped after 30 seconds. In our test of 240 noisy synthetic recordings, no amount was saved wrong without a question.</p>
+                    </li>
+                    <li class="chapter" style="--o: var(--o2)">
+                      <h3 class="chapter-title">Every entry has a time</h3>
+                      <p>Each entry shows when the money moved, and when it was written down if that was another day. Removing an entry can be taken back for a few seconds.</p>
+                    </li>
+                    <li class="chapter" style="--o: var(--o3)">
+                      <h3 class="chapter-title">The server keeps nothing</h3>
+                      <p>Reminders are opt-in per customer, polite, at most one a week, and Vidur only prepares the text. You share it yourself, and nothing is ever sent for you.</p>
+                    </li>
+                  </ol>
+                </div>
+
+                <div class="pane live">
+                  <h3 class="live-title">Live</h3>
+                  <div class="feature-card" id="featureCard" role="status" aria-live="polite">
+                    <h4 class="feature-title" id="featureTitle">Tap anything in the phone to see what it does</h4>
+                    <p class="feature-what" id="featureWhat"></p>
+                    <p class="feature-why" id="featureWhy"></p>
+                  </div>
+                  <dl class="telemetry" id="telemetry">
+                    <div class="telemetry-row"><dt>Transcript</dt><dd id="tTranscript">—</dd></div>
+                    <div class="telemetry-row"><dt>Parsed</dt><dd id="tParsed">—</dd></div>
+                    <div class="telemetry-row"><dt>Speech-to-text</dt><dd id="tStt">—</dd></div>
+                    <div class="telemetry-row"><dt>First audio</dt><dd id="tFirstAudio">—</dd></div>
+                    <div class="telemetry-row"><dt>State</dt><dd id="tState">—</dd></div>
+                  </dl>
+                  <p class="panel-note">Shown on this page only. Nothing is sent anywhere.</p>
+                </div>
+              </aside>
+            </div>
+            <ol class="steps" aria-hidden="true">
+              <li style="--o: var(--o0)"></li>
+              <li style="--o: var(--o1)"></li>
+              <li style="--o: var(--o2)"></li>
+              <li style="--o: var(--o3)"></li>
+            </ol>
+          </div>
+        </section>
+
+        <div class="more">
+          <section id="languages" class="slab langs" aria-labelledby="languages-h">
+            <p class="langs-type" aria-hidden="true">
+              <span>हिंदी</span>
+              <span>Hinglish</span>
+              <span>English</span>
+              <span>ಕನ್ನಡ</span>
+            </p>
+            <div class="pane langs-pane">
+              <h2 id="languages-h">Spoken the way people talk</h2>
+              <p>
+                Hindi, Hinglish, English and Kannada work at full quality. Speech is code-mixed by nature:
+                “Ramesh ka 340 credit” is a perfectly normal sentence, and Vidur reads amounts in spoken Indian
+                forms like “dedh sau” and “dhai hazaar”. Seven more languages (Tamil, Telugu, Malayalam,
+                Marathi, Bengali, Gujarati, Punjabi) are planned, not shipped.
+              </p>
+            </div>
+          </section>
+
+          <section id="measured" class="slab measured" aria-labelledby="measured-h">
+            <h2 id="measured-h" class="measured-type"><span>Measured,</span> <span>not promised.</span></h2>
+            <div class="pane measured-pane">
+              <dl class="figures">
+                <div class="figure"><dt>648 ms</dt><dd>from letting go of the circle to the first sound of the reply, typical (median) over 20 real turns in a browser</dd></div>
+                <div class="figure"><dt>1.8 s</dt><dd>the slowest of those turns, 95th percentile</dd></div>
+                <div class="figure"><dt>0 of 208</dt><dd>amounts saved wrong without a question, in 240 noisy synthetic recordings; 94.7% were right outright or after a read-back</dd></div>
+                <div class="figure"><dt>3 ms</dt><dd>to silence the reply when you press the circle while it is talking</dd></div>
+              </dl>
+              <p class="panel-note">Synthetic voices, not a shop. A live test with a real voice and room noise is still to come.</p>
+            </div>
+          </section>
+
+          <section id="privacy" class="slab privacy" aria-labelledby="privacy-h">
+            <h2 id="privacy-h" class="slab-title">Privacy</h2>
+            <div class="pane privacy-pane">
+              <ul>
+                <li>The ledger lives only on your phone, encrypted. The server stores nothing about your entries.</li>
+                <li>Transcripts are kept in memory only and purged after 24 hours. There is a delete-all control.</li>
+                <li>No phone numbers are stored. Reminders are polite, opt-in only, and capped at one per customer per 7 days.</li>
+                <li>Vidur does not rate customers, does not shame anyone, and does not advise on lending or interest.</li>
+              </ul>
+            </div>
+            <div class="pane arch-pane" id="architecture">
+              <h3>How it is built</h3>
+              <p>
+                A thin phone app (Preact) talks to a speech pipeline over WebSocket: streaming speech-to-text, a
+                small deterministic parser for amounts and direction, and a dialogue engine that holds anything
+                unclear as pending until you answer. An LLM fallback exists for hard cases, and every amount it
+                returns is re-derived from your transcript before anything is saved. Money is integer paise
+                everywhere. The ledger is event-sourced and encrypted on the device.
+              </p>
+            </div>
+          </section>
+
+          <section id="honest-limits" class="slab limits" aria-labelledby="limits-h">
+            <h2 id="limits-h" class="slab-title">Honest limits</h2>
+            <div class="pane limits-pane">
+              <ul>
+                <li>Speech recognition is not perfect. Vidur is built to <em>ask</em> when unsure rather than record a wrong amount, but mistakes still happen, so check the entry.</li>
+                <li>Hindi, Hinglish, English and Kannada only. Other languages are on the roadmap.</li>
+                <li>Reminders work only for customers who opted in, and nothing is sent automatically. You tap to share.</li>
+                <li>The browser build cannot hide its key from code running on the same page; entries never leave the device, but treat the demo as a demo.</li>
+                <li>Latency depends on the network. On a bad connection, add the entry by hand.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="footbar">
+        <span>Voice khata for kirana shops</span>
+        <a class="foot-home" href="#top" aria-label="Back to the top">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+        </a>
+        <span>Demo content is synthetic</span>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/showcase/showcase.ts"></script>
   </body>
 </html>
