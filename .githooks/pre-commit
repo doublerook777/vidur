@@ -1,0 +1,4 @@
+#!/bin/sh
+# Secret scan on staged files, then a type check if the project is installed.
+node scripts/scan-secrets.mjs --staged || exit 1
+if [ -d node_modules ] && [ -f package.json ]; then npm run --silent typecheck || exit 1; fi
