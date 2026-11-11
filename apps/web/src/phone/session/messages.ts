@@ -8,6 +8,11 @@ const M: Record<string, Record<Lang, Msg>> = {
     hi: { text: 'इंटरनेट नहीं है। आप कीपैड से एंट्री लिख सकते हैं।', action: 'फिर कोशिश करें' },
     kn: { text: 'ಇಂಟರ್ನೆಟ್ ಇಲ್ಲ. ಕೀಪ್ಯಾಡ್‌ನಿಂದ ದಾಖಲೆ ಬರೆಯಬಹುದು.', action: 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ' },
   },
+  speech_failed: {
+    en: { text: 'The voice service did not answer. Say it once more, or use the keypad.', action: 'Try again' },
+    hi: { text: 'आवाज़ सेवा ने जवाब नहीं दिया। एक बार फिर बोलिए, या कीपैड इस्तेमाल करें।', action: 'फिर कोशिश करें' },
+    kn: { text: 'ವಾಯ್ಸ್ ಸೇವೆ ಉತ್ತರಿಸಲಿಲ್ಲ. ಇನ್ನೊಮ್ಮೆ ಹೇಳಿ, ಅಥವಾ ಕೀಪ್ಯಾಡ್ ಬಳಸಿ.', action: 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ' },
+  },
   mic_denied: {
     en: { text: 'The microphone is off. Allow it in the browser settings, or use the keypad.', action: 'Try again' },
     hi: { text: 'माइक बंद है। ब्राउज़र की सेटिंग में चालू करें, या कीपैड इस्तेमाल करें।', action: 'फिर कोशिश करें' },
@@ -45,7 +50,7 @@ const M: Record<string, Record<Lang, Msg>> = {
   },
 };
 const ALIAS: Record<string, string> = {
-  speech_error: 'network', stt_timeout: 'network', killed: 'stopped', daily_cap: 'stopped', session_cap: 'stopped', ip_rate_limit: 'busy', bad_origin: 'service_misconfigured',
+  speech_error: 'speech_failed', stt_timeout: 'speech_failed', killed: 'stopped', daily_cap: 'stopped', session_cap: 'stopped', ip_rate_limit: 'busy', bad_origin: 'service_misconfigured',
 };
 
 export function errorMessage(code: string, lang: Lang): { text: string; actionLabel?: string } {

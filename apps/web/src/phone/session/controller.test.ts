@@ -190,6 +190,19 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     vi.unstubAllGlobals();
   });
 
+  it('a speech-service failure does not blame the internet, and does not leave the thinking pill stuck', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, false);
+    const s = session as unknown as { setPhase(p: string): void; onGatewayError(e: { code: string; recoverable: boolean }): void };
+    s.setPhase('thinking');
+    s.onGatewayError({ code: 'stt_timeout', recoverable: true });
+    expect(session!.state.phase).toBe('idle');
+    expect(session!.state.error!.text).toContain('आवाज़ सेवा');
+    expect(session!.state.error!.text).not.toContain('इंटरनेट');
+    s.onGatewayError({ code: 'speech_error', recoverable: true });
+    expect(session!.state.error!.actionLabel).toBe('फिर कोशिश करें');
+  });
+
   it('switching language rewrites the greeting on screen in the new language, and drops other stale agent lines', async () => {
     const { speaker } = await boot();
     await onboard(speaker, false); // finishes in Hindi

@@ -205,6 +205,8 @@ export class PhoneSession {
   private onGatewayError(e: GatewayError): void {
     this.store.update({ error: errorMessage(e.code, this.state.lang) });
     if (!e.recoverable) this.setPhase('offline');
+    // A failed turn must not leave the "thinking" or "speaking" pill on screen: the person can simply try again.
+    else if (this.state.phase === 'thinking' || this.state.phase === 'speaking') this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
   }
 
   private setPhase(phase: Phase): void {
