@@ -40,6 +40,8 @@ export interface LinkOptions {
   baseUrl: string;
   apiKey: string;
   log: Logger;
+  /** How long to wait for the first audio chunk before giving up (default 6 s). */
+  firstChunkMs?: number;
 }
 
 export const SPEECH_LANG = { hi: 'hi-IN', en: 'en-IN', kn: 'kn-IN' } as const;
@@ -294,7 +296,7 @@ export class TtsLink {
       void this.pump();
       return;
     }
-    const timer = setTimeout(() => this.failCurrent(new GnaniError('timeout', true)), 20_000);
+    const timer = setTimeout(() => this.failCurrent(new GnaniError('timeout', true)), this.o.firstChunkMs ?? 6_000);
     this.current = { job, startedAt: Date.now(), first: null, bytes: 0, timer };
     this.ws!.send(
       JSON.stringify({
@@ -322,6 +324,9 @@ export class TtsLink {
       if (!pcm.length) return;
       if (cur.first === null) {
         cur.first = Date.now() - cur.startedAt;
+        // Audio is flowing: allow the rest of the sentence up to 20 s.
+        clearTimeout(cur.timer);
+        cur.timer = setTimeout(() => this.failCurrent(new GnaniError('timeout', true)), 20_000);
         cur.job.onStart();
       }
       cur.bytes += pcm.length;

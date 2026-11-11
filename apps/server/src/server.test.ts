@@ -215,6 +215,19 @@ describe('errors and reconnects', () => {
   });
 });
 
+describe('a stalled speech service', () => {
+  it('the speech link gives up on a missing first chunk and the next sentence still works', async () => {
+    const stalled = await startMockGnani({ ttfbMs: 1500, chunkIntervalMs: 5 });
+    const { TtsLink } = await import('./gnani.js');
+    const link = new TtsLink({ baseUrl: stalled.url.replace('http', 'ws'), apiKey: 'good', log, firstChunkMs: 300 });
+    const t0 = Date.now();
+    await expect(link.speak({ id: 'a', text: 'hello', lang: 'en', onStart: () => undefined, onChunk: () => undefined })).rejects.toMatchObject({ code: 'timeout' });
+    expect(Date.now() - t0).toBeLessThan(1000);
+    link.close();
+    await stalled.close();
+  });
+});
+
 describe('optional LLM parse', () => {
   it('returns the model output unchanged for the phone to check', async () => {
     await boot({}, { llm: async () => ({ intent: 'balance_query', amount: null }) });
