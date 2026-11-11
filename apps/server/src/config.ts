@@ -8,6 +8,16 @@ export interface Config {
   gnaniApiKey: string | null;
   llm: { apiKey: string; baseUrl: string; model: string } | null;
   accessCode: string | null;
+  /** Where the Gnani sockets go. Overridden only by tests and mock mode. */
+  gnaniBaseUrl: string;
+  limits: {
+    /** Browser origins allowed to open a WebSocket. Empty in local mode means "this machine only". */
+    allowedOrigins: string[];
+    maxSessions: number;
+    perIpPerMinute: number;
+    sessionAudioCapSec: number;
+    dailyAudioCapSec: number;
+  };
 }
 
 export class ConfigError extends Error {}
@@ -39,8 +49,8 @@ export function loadConfig(env: Record<string, string | undefined>): Config {
 
   const portRaw = get('PORT') ?? '8080';
   const port = Number(portRaw);
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
-    throw new ConfigError('PORT must be an integer from 1 to 65535');
+  if (!Number.isInteger(port) || port < 0 || port > 65535) {
+    throw new ConfigError('PORT must be an integer from 0 to 65535 (0 picks a free port)');
   }
 
   // The LLM is optional. A key without a model (or the reverse) is a mistake worth failing on.
@@ -54,9 +64,26 @@ export function loadConfig(env: Record<string, string | undefined>): Config {
       ? { apiKey: llmKey, baseUrl: get('LLM_BASE_URL') ?? 'https://api.groq.com/openai/v1', model: llmModel }
       : null;
 
+  const int = (k: string, d: number): number => {
+    const v = get(k);
+    if (v === null) return d;
+    const n = Number(v);
+    if (!Number.isFinite(n) || n < 0) throw new ConfigError(`${k} must be a non-negative number`);
+    return n;
+  };
+  const hosted = mode === 'hosted';
+
   return {
     mode,
     port,
+    gnaniBaseUrl: get('GNANI_BASE_URL') ?? 'wss://api.vachana.ai',
+    limits: {
+      allowedOrigins: (get('ALLOWED_ORIGINS') ?? '').split(',').map((o) => o.trim()).filter(Boolean),
+      maxSessions: int('MAX_SESSIONS', hosted ? 10 : 50),
+      perIpPerMinute: int('PER_IP_PER_MINUTE', hosted ? 10 : 600),
+      sessionAudioCapSec: int('SESSION_AUDIO_CAP_MIN', hosted ? 8 : 600) * 60,
+      dailyAudioCapSec: int('DAILY_AUDIO_CAP_MIN', hosted ? 90 : 100_000) * 60,
+    },
     host: mode === 'local' || mode === 'mock' ? '127.0.0.1' : '0.0.0.0',
     gnaniApiKey: mode === 'mock' ? null : gnaniApiKey,
     llm,
