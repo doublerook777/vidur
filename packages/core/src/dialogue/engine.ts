@@ -49,10 +49,12 @@ interface Work {
   candidates?: string[];
   replaceEntryId?: string;
   amountOk?: boolean;
+  /** A correction that changed the direction too ("nahi, 500 jama"): speak the full result, not just "replaced". */
+  flipped?: boolean;
   asked: number;
 }
 
-type PendingKind = 'direction' | 'amount' | 'confirm_amount' | 'which' | 'near' | 'customer' | 'consent';
+type PendingKind = 'direction' | 'amount' | 'confirm_amount' | 'which' | 'near' | 'customer' | 'consent' | 'new_customer';
 interface Pending {
   kind: PendingKind;
   expiresAt: number;
@@ -275,10 +277,9 @@ export class Dialogue {
       const name = customers.find((c) => c.id === m.customerIds[0])?.name ?? spoken;
       return this.ask(w, 'near', this.r('confirm_near', { name }));
     }
-    // A new name
+    // A new name. Nothing is ever created without the shopkeeper saying yes: a misheard word must not become a khata.
     if (w.mode === 'query' || w.mode === 'reminder' || w.mode === 'consent') return [this.r('unknown_customer', { name: spoken })];
-    w.createName = spoken;
-    return undefined;
+    return this.ask(w, 'new_customer', this.r('confirm_new_customer', { name: spoken }));
   }
 
   // ---------------------------------------------------------------- actions
@@ -305,7 +306,7 @@ export class Dialogue {
     const when = ev.dateToken && ev.dateToken !== 'today' ? this.when(ev.dateToken) : undefined;
     const bal = L.balance(customerId);
     if (w.replaceEntryId && w.mode === 'move') out.push(this.r('moved', { name }));
-    else if (w.replaceEntryId) out.push(this.r('replaced', { amount }));
+    else if (w.replaceEntryId && !w.flipped) out.push(this.r('replaced', { amount }));
     else if (kind === 'credit') out.push(this.r(when ? 'credit_saved_dated' : 'credit_saved', { name, amount, balance: this.money(bal), when: when ?? '' }));
     else if (bal === 0) out.push(this.r('payment_cleared', { name, amount }));
     else if (bal < 0) out.push(this.r('payment_advance', { name, amount, advance: this.money(-bal) }));
@@ -379,9 +380,11 @@ export class Dialogue {
     }
     if (kind === 'amount') {
       if (ev.amountPaise === undefined) return this.ask({ ...w, mode: 'replace_amount' }, 'amount', this.r('ask_amount'));
+      const kindNow = ev.directionHint ?? last.kind;
       const nw: Work = {
         mode: 'replace_amount', rest: w.rest, asked: 0, replaceEntryId: last.id, customerId: last.customerId,
-        ev: { ...ev, intent: last.kind === 'payment' ? 'payment' : 'credit_entry', needs: [], dateToken: undefined },
+        ev: { ...ev, intent: kindNow === 'payment' ? 'payment' : 'credit_entry', needs: [], dateToken: undefined },
+        ...(kindNow !== last.kind ? { flipped: true } : {}),
       };
       if ((ev.amountConfidence ?? 1) < CONFIRM_BELOW) return this.ask(nw, 'confirm_amount', this.r('confirm_amount', { amount: this.money(ev.amountPaise) }));
       return this.commitEntry(nw);
@@ -416,7 +419,7 @@ export class Dialogue {
     if (peek) {
       const full = (peek.intent === 'credit_entry' || peek.intent === 'payment') && peek.customerSpoken && peek.amountPaise !== undefined && !peek.needs.includes('direction') && residualWords(text) >= 2;
       if (full) return undefined;
-      const yesNoKind = p.kind === 'confirm_amount' || p.kind === 'near' || p.kind === 'consent';
+      const yesNoKind = p.kind === 'confirm_amount' || p.kind === 'near' || p.kind === 'consent' || p.kind === 'new_customer';
       if (!yesNoKind && peek.intent === 'correction' && peek.correction?.kind === 'undo') {
         clear();
         return [this.r('dropped_pending')];
@@ -489,8 +492,27 @@ export class Dialogue {
           return proceed();
         }
         if (yn === 'no') {
+          // Not that one: it is a new name. Still asks before creating it.
+          return this.askCreate(w);
+        }
+        return undefined;
+      }
+      case 'new_customer': {
+        const yn = yesNo(text);
+        if (yn === 'yes') {
           w.createName = w.ev.customerSpoken;
           return proceed();
+        }
+        if (yn === 'no') {
+          // "No, Mohan": the shopkeeper named the right person. Otherwise ask whose account it is. Nothing is saved yet.
+          const name = guessCustomerName(text);
+          clear();
+          if (name && residualWords(text) <= 2) {
+            w.ev = { ...w.ev, customerSpoken: name, needs: w.ev.needs.filter((n) => n !== 'customer') };
+            return proceed();
+          }
+          w.ev = { ...w.ev, customerSpoken: undefined, needs: [...w.ev.needs.filter((n) => n !== 'customer'), 'customer'] };
+          return this.ask(w, 'customer', this.r('ask_customer'));
         }
         return undefined;
       }
@@ -513,6 +535,11 @@ export class Dialogue {
         return undefined;
       }
     }
+  }
+
+  private askCreate(w: Work): Reply[] {
+    this.pending = null;
+    return this.ask(w, 'new_customer', this.r('confirm_new_customer', { name: w.ev.customerSpoken ?? '' }));
   }
 
   private reask(p: Pending): Reply[] {

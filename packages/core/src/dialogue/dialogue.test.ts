@@ -111,10 +111,12 @@ describe('section 1.4, one scripted dialogue per row', () => {
     expect(ledger.balance(c.id)).toBe(0);
   });
 
-  it('"Mohan ka 50 udhaar": a new name creates the customer and saves', async () => {
+  it('"Mohan ka 50 udhaar": a new name asks first, and "haan" creates the customer and saves', async () => {
     const { ledger, d, say1 } = await setup();
     d.start();
-    const rs = await say1('Mohan ka 50 udhaar');
+    expect(keys(await say1('Mohan ka 50 udhaar'))).toEqual(['confirm_new_customer']);
+    expect(ledger.customers()).toHaveLength(0); // nothing exists until the shopkeeper says yes
+    const rs = await say1('haan');
     expect(keys(rs)).toEqual(['new_customer', 'credit_saved']);
     expect(ledger.customers().map((c) => c.name)).toEqual(['Mohan']);
     expect(ledger.balance(ledger.customers()[0]!.id)).toBe(paise(50));
@@ -123,6 +125,8 @@ describe('section 1.4, one scripted dialogue per row', () => {
   it('"Aaj kitna udhaar gaya?" is computed from the ledger', async () => {
     const { ledger, d, say1 } = await setup();
     d.start();
+    await ledger.createCustomer('Mohan');
+    await ledger.createCustomer('Sunita');
     await say1('Mohan ka 200 udhaar');
     await say1('Sunita ka 1040 udhaar');
     await say1('Sunita ne 40 jama kiye');
@@ -208,6 +212,7 @@ describe('questions, timeouts and interruptions', () => {
   it('an unanswered question expires and is never saved', async () => {
     const { ledger, d, say1, tick } = await setup();
     await ledger.createCustomer('Ramesh');
+    await ledger.createCustomer('Sunita');
     d.start();
     await say1('Ramesh ka 340');
     tick(31_000);
@@ -239,9 +244,9 @@ describe('questions, timeouts and interruptions', () => {
     const { ledger, d, say1 } = await setup();
     const c = await ledger.createCustomer('Suresh');
     d.start();
-    expect(keys(await say1('Suraj ka 50 udhaar'))).toContain('new_customer'); // different name: new
+    expect(keys(await say1('Suraj ka 50 udhaar'))).toContain('confirm_new_customer'); // different name: asks before creating
     const rs = await say1('Sureshi ka 70 udhaar');
-    expect(['confirm_near', 'credit_saved', 'new_customer']).toContain(rs[0]!.key);
+    expect(keys(rs).some((k) => k === 'confirm_near' || k === 'confirm_new_customer')).toBe(true); // the earlier open question is dropped first
     void c;
   });
 
@@ -405,5 +410,113 @@ describe('LLM fallback is optional and cannot bypass the engine', () => {
     const { d, say1 } = await setup('en', llm);
     d.start();
     expect(keys(await say1('tell me a joke'))).toEqual(['out_of_scope']);
+  });
+});
+
+
+describe('a new name is never created without a yes', () => {
+  it('"no" drops it and asks whose account; naming the right person saves there, nothing is created', async () => {
+    const { ledger, d, say1 } = await setup();
+    const m = await ledger.createCustomer('Mohan');
+    d.start();
+    expect(keys(await say1('Mohn ka 300 udhaar hai'))).toContain('confirm_new_customer');
+    expect(keys(await say1('nahi'))).toEqual(['ask_customer']);
+    expect(ledger.customers()).toHaveLength(1);
+    expect(ledger.activeEntries()).toHaveLength(0);
+    const rs = await say1('Mohan');
+    expect(keys(rs)).toEqual(['credit_saved']);
+    expect(ledger.balance(m.id)).toBe(paise(300));
+    expect(ledger.customers()).toHaveLength(1);
+  });
+
+  it('"nahi, Mohan" in one breath goes to Mohan', async () => {
+    const { ledger, d, say1 } = await setup();
+    const m = await ledger.createCustomer('Mohan');
+    d.start();
+    await say1('Kiran ka 300 udhaar');
+    const rs = await say1('nahi Mohan');
+    expect(keys(rs)).toEqual(['credit_saved']);
+    expect(ledger.balance(m.id)).toBe(paise(300));
+    expect(ledger.customers()).toHaveLength(1);
+  });
+
+  it('an unanswered "create a new khata?" expires and creates nothing', async () => {
+    const { ledger, d, say1, tick } = await setup();
+    d.start();
+    await say1('Kiran ka 300 udhaar');
+    tick(31_000);
+    const rs = await say1('Aaj kitna udhaar gaya?');
+    expect(keys(rs)).toContain('pending_expired');
+    expect(ledger.customers()).toHaveLength(0);
+    expect(ledger.activeEntries()).toHaveLength(0);
+  });
+
+  it('two new names in one sentence are asked about one at a time', async () => {
+    const { ledger, d, say1 } = await setup();
+    d.start();
+    expect(keys(await say1('Kiran ka 100 udhaar aur Lata ka 200 udhaar'))).toEqual(['confirm_new_customer']);
+    expect(keys(await say1('haan'))).toEqual(['new_customer', 'credit_saved', 'confirm_new_customer']);
+    expect(keys(await say1('haan'))).toEqual(['new_customer', 'credit_saved']);
+    expect(ledger.customers().map((c) => c.name)).toEqual(['Kiran', 'Lata']);
+  });
+
+  it('a question word like "kitna" is not a name to create (a query never creates)', async () => {
+    const { ledger, d, say1 } = await setup();
+    d.start();
+    expect(keys(await say1('Kiran ka total kitna hai?'))).toEqual(['unknown_customer']);
+    expect(ledger.customers()).toHaveLength(0);
+  });
+});
+
+describe('a spoken correction never becomes a customer (the first usability test)', () => {
+  // A friend said "mohan ke 3000 rupye udhar hain", then "nhi nhi 1500 rupye udhar hain".
+  const SECOND = [
+    'nhi nhi 1500 rupye udhar hain', 'nahi nahi 1500 rupaye udhaar hain', 'नहीं नहीं 1500 रुपये उधार हैं', 'nahi 1500 rupaye hain',
+    'galat hai, 1500 rupaye udhaar hain', 'nahi, 1500', 'nahin 1500 udhaar', 'नहीं पंद्रह सौ रुपये उधार हैं', 'nahi nahi dedh hazaar udhaar hai', 'sorry 1500 udhaar hai',
+  ];
+  for (const second of SECOND) {
+    it(`"${second}" replaces ₹3,000 with ₹1,500 on Mohan and creates nobody`, async () => {
+      const { ledger, d, say1, tick } = await setup();
+      const m = await ledger.createCustomer('Mohan');
+      d.start();
+      expect(keys(await say1('mohan ke 3000 rupye udhar hain'))).toEqual(['credit_saved']);
+      tick(20_000);
+      const rs = await say1(second);
+      expect(keys(rs)).toEqual(['replaced']);
+      expect(ledger.customers().map((c) => c.name)).toEqual(['Mohan']);
+      expect(ledger.activeEntries(m.id).map((e) => [e.kind, e.paise])).toEqual([['credit', paise(1500)]]);
+      expect(ledger.balance(m.id)).toBe(paise(1500));
+    });
+  }
+
+  it('a correction that says "jama" turns the entry into a payment, and says the full result', async () => {
+    const { ledger, d, say1 } = await setup();
+    const m = await ledger.createCustomer('Mohan');
+    d.start();
+    await say1('Mohan ka 500 udhaar');
+    await say1('Mohan ka 500 udhaar');
+    const rs = await say1('nahi 200 jama');
+    expect(keys(rs)).toEqual(['payment_saved']);
+    expect(ledger.activeEntries(m.id).map((e) => [e.kind, e.paise])).toEqual([['credit', paise(500)], ['payment', paise(200)]]);
+  });
+
+  it('with nothing to correct, "nahi nahi 1500 udhaar hain" saves nothing and creates nobody', async () => {
+    const { ledger, d, say1 } = await setup();
+    d.start();
+    const rs = await say1('nhi nhi 1500 rupye udhar hain');
+    expect(keys(rs)).toEqual(['nothing_to_undo']);
+    expect(ledger.customers()).toHaveLength(0);
+    expect(ledger.activeEntries()).toHaveLength(0);
+  });
+
+  it('a correction that names someone else is still a new entry for that person', async () => {
+    const { ledger, d, say1 } = await setup();
+    const m = await ledger.createCustomer('Mohan');
+    const s = await ledger.createCustomer('Sunita');
+    d.start();
+    await say1('Mohan ka 300 udhaar');
+    expect(keys(await say1('nahi Sunita ka 500 udhaar'))).toEqual(['credit_saved']);
+    expect(ledger.balance(m.id)).toBe(paise(300));
+    expect(ledger.balance(s.id)).toBe(paise(500));
   });
 });

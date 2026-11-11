@@ -35,7 +35,9 @@ const UNDO = W(
   'cancel undo delete hata hatao hataiye remove rad radd galat wrong mistake ruko ' +
     'रद्द हटा हटाओ हटाइए गलत ग़लत रुको ಗಲತ್ ತಪ್ಪು ತಪ್ಪಾಯ್ತು ರದ್ದು ತೆಗೆ ಅಳಿಸಿ',
 );
-const CORR_CUE = W('nahi nahin nai no nope sorry matlab i_mean actually नहीं नही मतलब ಇಲ್ಲ ಅಲ್ಲ');
+const CORR_CUE = W('nahi nahin nhi nhin nai no nope sorry matlab i_mean actually नहीं नही नाही मतलब ಇಲ್ಲ ಅಲ್ಲ');
+/** Words that open a correction when they start the sentence: the cues above, plus "galat" and friends. */
+const LEAD_CUE = W('nahi nahin nhi nhin nai no nope sorry matlab i_mean actually galat wrong mistake नहीं नही नाही मतलब गलत ग़लत ಇಲ್ಲ ಅಲ್ಲ ತಪ್ಪು ಗಲತ್');
 const MARK_KO = W('ko को ಗೆ');
 const MARK_NE = W('ne ने');
 const MARK_POSS = W('ka ki ke का की के ಅವರ ಅವರಿಗೆ ಅವರು');
@@ -45,10 +47,10 @@ const STOP = W(
   'ka ki ke ko ne se me mein pe par ko hai hain ho tha thi the to ye wo woh yeh vo bhi hi bas mera meri mere mujhe hum aap please pls kya kab kaun kuch sab aaj kal parso ' +
     'aaj_ka a an the is are was of on in for with from by and or but that this it he she his her their him them my me i we you ' +
     'likh likho likhna karo kar kardo karna do de dena dedo dijiye diya diye bhejo bhej bhijwa send note ' +
-    'rupaye rupaya rupees rupee rs inr paise paisa amount ' +
+    'rupaye rupaya rupees rupee rupye rupiye rupay rupai ruppee rupyee rs inr paise paisa amount ' +
     'today tomorrow yesterday last week weekend monday tuesday wednesday thursday friday saturday sunday somvar mangalvar budhvar guruvar shukravar shanivar ravivar ' +
     'ko_diya ne_diya pay back give ' +
-    'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपया पैसे पैसा ' +
+    'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपए रुपया पैसे पैसा ' +
     'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು',
 );
 const ALL_CUES = [CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP];
@@ -157,17 +159,20 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
 
   // customer
   let customer: string | undefined;
+  let customerKnown = false;
   const customers = ctx.customers ?? [];
   if (customers.length) {
     const byAlias = findByAlias(text, customers);
     for (const t of toks) {
       if (STOP.has(t.n) || isCue(t.n) || isNumberish(t.w)) continue;
       const m = matchName(t.w, customers, text);
-      if (m.kind === 'exact' || m.kind === 'ambiguous' || m.kind === 'near') { customer = t.w; break; }
+      if (m.kind === 'exact' || m.kind === 'ambiguous' || m.kind === 'near') { customer = t.w; customerKnown = true; break; }
     }
-    if (!customer && byAlias.length) customer = byAlias[0]!.name;
+    if (!customer && byAlias.length) { customer = byAlias[0]!.name; customerKnown = true; }
   }
   customer ??= guessName(toks);
+  // A name the shopkeeper clearly attached to the sentence ("Suresh ka ...") even though the ledger doesn't have it yet.
+  const guessedWithMarker = !customerKnown && customer !== undefined && toks.some((t, i) => i > 0 && toks[i - 1]!.w === customer && (MARK_POSS.has(t.n) || MARK_KO.has(t.n) || MARK_NE.has(t.n)));
   const customerInherited = !customer && inherited !== undefined;
   const who = customer ?? inherited;
 
@@ -214,6 +219,14 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
   // 3. future promises are notes
   if (future) return withAmount({ ...base, intent: 'note', needs: [] });
   // 4. corrections
+  // "Nahi nahi 1500 udhaar hain": a sentence that opens with "no" and carries an amount but no name of a person is a
+  // correction of the last entry, even when it repeats the direction word. It must never become a new customer.
+  const leadCue = toks.slice(0, 2).some((t) => LEAD_CUE.has(t.n));
+  if (leadCue && amount && !customerKnown && !guessedWithMarker) {
+    const ev = withAmount({ ...base, customerSpoken: inherited, customerInherited: inherited !== undefined || undefined, intent: 'correction', correction: { kind: 'amount' }, needs: amount.confidence < CONFIRM_BELOW ? ['amount_confirm'] : [] });
+    if (direction) ev.directionHint = direction;
+    return ev;
+  }
   // "Delete all ledger entries" is not an undo: a voice undo is short and about the last entry only.
   const undoAll = /\b(all|every|everything|entire|saare|saari|sab|sabhi|ledger|entries)\b|सब|सारे|सभी|ಎಲ್ಲ/i.test(text) || toks.length > 6;
   const undo = has(UNDO) && !direction && !undoAll;
@@ -261,7 +274,7 @@ export function interpret(text: string, ctx: InterpretContext = {}): Interpretat
     const ev = interpretClause(clause, amounts, ctx, inherited, nowMs);
     // "Ramesh ka 340 udhaar, nahi nahi 430 udhaar": a clause that opens with a correction cue and carries an amount,
     // with no new name, replaces the amount of the entry before it.
-    const lead = tokensWithSpans(clause.text).slice(0, 2).some((t) => CORR_CUE.has(t.n));
+    const lead = tokensWithSpans(clause.text).slice(0, 2).some((t) => LEAD_CUE.has(t.n));
     const prior = events[events.length - 1];
     if (lead && prior && (prior.intent === 'credit_entry' || prior.intent === 'payment') && ev.amountPaise !== undefined && (ev.customerInherited || !ev.customerSpoken || ev.customerSpoken === prior.customerSpoken)) {
       prior.amountPaise = ev.amountPaise;
@@ -269,8 +282,9 @@ export function interpret(text: string, ctx: InterpretContext = {}): Interpretat
       prior.selfCorrected = true;
       prior.needs = prior.needs.filter((n) => n !== 'amount' && n !== 'amount_confirm');
       // The direction word may come in the correcting clause ("340, nahi nahi 430 udhaar").
-      if (prior.needs.includes('direction') && !ev.needs.includes('direction') && (ev.intent === 'credit_entry' || ev.intent === 'payment')) {
-        prior.intent = ev.intent;
+      const evDir = ev.directionHint ?? (ev.intent === 'credit_entry' ? 'credit' : ev.intent === 'payment' ? 'payment' : undefined);
+      if (prior.needs.includes('direction') && evDir) {
+        prior.intent = evDir === 'payment' ? 'payment' : 'credit_entry';
         prior.needs = prior.needs.filter((n) => n !== 'direction');
       }
       if ((ev.amountConfidence ?? 1) < CONFIRM_BELOW) prior.needs.push('amount_confirm');
@@ -282,6 +296,10 @@ export function interpret(text: string, ctx: InterpretContext = {}): Interpretat
       prev.amountPaise = ev.amountPaise;
       prev.amountConfidence = ev.amountConfidence;
       prev.selfCorrected = true;
+      if (prev.needs.includes('direction') && ev.directionHint) {
+        prev.intent = ev.directionHint === 'payment' ? 'payment' : 'credit_entry';
+        prev.needs = prev.needs.filter((n) => n !== 'direction');
+      }
       prev.needs = prev.needs.filter((n) => n !== 'amount' && n !== 'amount_confirm');
       if ((ev.amountConfidence ?? 1) < CONFIRM_BELOW) prev.needs.push('amount_confirm');
       continue;

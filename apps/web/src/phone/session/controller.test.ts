@@ -81,6 +81,9 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     const { speaker } = await boot();
     await onboard(speaker, false);
     await turn('Mohan ka 50 udhaar');
+    expect(session!.state.card?.state).toBe('needs_answer'); // a new name: asks before creating a khata
+    expect(session!.debug.ledger.customers()).toHaveLength(0);
+    await turn('haan');
     const s = session!.state;
     expect(s.card).toMatchObject({ state: 'saved', customerName: 'Mohan', kind: 'credit', paise: 5000 });
     expect(s.credit).toBe(5000);
@@ -120,6 +123,7 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     const { speaker } = await boot();
     await onboard(speaker, false);
     await turn('Mohan ka 80 udhaar');
+    await turn('haan');
     const id = session!.state.feed[0]!.id;
     session!.actions.undo(id);
     await until(() => session!.state.feed.length === 0);
