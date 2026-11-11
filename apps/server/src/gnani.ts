@@ -237,6 +237,7 @@ export class TtsLink {
   private queue: Job[] = [];
   private current: { job: Job; startedAt: number; first: number | null; bytes: number; timer: NodeJS.Timeout } | null = null;
   private opening: Promise<void> | null = null;
+  private pumping = false;
 
   constructor(private readonly o: LinkOptions) {}
 
@@ -287,15 +288,19 @@ export class TtsLink {
   }
 
   private async pump(): Promise<void> {
-    if (this.current || !this.queue.length) return;
+    // One request at a time, and only one caller may be past this point while the socket is warming.
+    if (this.current || this.pumping || !this.queue.length) return;
+    this.pumping = true;
     const job = this.queue.shift()!;
     try {
       await this.warm();
     } catch (e) {
+      this.pumping = false;
       job.reject(e as Error);
       void this.pump();
       return;
     }
+    this.pumping = false;
     const timer = setTimeout(() => this.failCurrent(new GnaniError('timeout', true)), this.o.firstChunkMs ?? 6_000);
     this.current = { job, startedAt: Date.now(), first: null, bytes: 0, timer };
     this.ws!.send(

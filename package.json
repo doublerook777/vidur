@@ -17,7 +17,7 @@
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,html,css}\"",
     "scan:secrets": "node scripts/scan-secrets.mjs",
-    "typecheck": "tsc -p packages/core/tsconfig.json --noEmit && tsc -p apps/server/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit"
+    "typecheck": "npm run build -w @vidur/core --silent && tsc -p packages/core/tsconfig.json --noEmit && tsc -p apps/server/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit"
   },
   "devDependencies": {
     "eslint": "10.13.0",

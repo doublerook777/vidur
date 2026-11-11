@@ -215,6 +215,21 @@ describe('errors and reconnects', () => {
   });
 });
 
+describe('several sentences at once', () => {
+  it('speaks queued sentences one after another, each with its own start and end', async () => {
+    await boot();
+    const c = await connect();
+    c.send({ type: 'hello', lang: 'hi' });
+    await c.waitFor((m) => m.type === 'ready');
+    c.send({ type: 'speak', id: 'one', text: 'पहला वाक्य', lang: 'hi' });
+    c.send({ type: 'speak', id: 'two', text: 'दूसरा वाक्य', lang: 'hi' });
+    c.send({ type: 'speak', id: 'three', text: 'तीसरा', lang: 'hi' });
+    await c.waitFor((m) => m.type === 'tts_end' && m.id === 'three', 6000);
+    expect(c.of('tts_start').map((m) => m['id'])).toEqual(['one', 'two', 'three']);
+    expect(c.of('tts_end').map((m) => m['id'])).toEqual(['one', 'two', 'three']);
+  });
+});
+
 describe('a stalled speech service', () => {
   it('the speech link gives up on a missing first chunk and the next sentence still works', async () => {
     const stalled = await startMockGnani({ ttfbMs: 1500, chunkIntervalMs: 5 });
