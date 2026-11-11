@@ -1,6 +1,6 @@
 import { addDaysIst, resolveDate, startOfDayIst } from '../dates/index.js';
 import { say, type Key, type P, type SpeechLang } from '../i18n/index.js';
-import { detectDirection, guessCustomerName, interpret, isOptInStatement, residualWords, yesNo } from '../intent/index.js';
+import { detectDirection, directionByShape, guessCustomerName, interpret, isOptInStatement, residualWords, yesNo } from '../intent/index.js';
 import type { Interpretation, ParsedEvent } from '../intent/index.js';
 import type { Ledger } from '../ledger/index.js';
 import { aliasesFor, findByAlias, matchName } from '../names/index.js';
@@ -445,7 +445,7 @@ export class Dialogue {
 
     switch (p.kind) {
       case 'direction': {
-        const d = detectDirection(text);
+        const d = detectDirection(text) ?? directionByShape(text);
         if (!d) return undefined;
         w.ev = { ...w.ev, intent: d === 'payment' ? 'payment' : 'credit_entry', needs: w.ev.needs.filter((n) => n !== 'direction') };
         return proceed();

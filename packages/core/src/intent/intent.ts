@@ -1,5 +1,5 @@
 import { resolveDate, type Tense as DateTense } from '../dates/index.js';
-import { findByAlias, matchName } from '../names/index.js';
+import { findByAlias, matchName, toLatin } from '../names/index.js';
 import { CONFIRM_BELOW, parseAmount, type AmountMatch } from '../numbers/index.js';
 import { lookup, norm } from '../numbers/lexicon.js';
 import { unglue } from '../numbers/unglue.js';
@@ -11,11 +11,11 @@ const W = (xs: string): Set<string> => new Set(xs.split(/\s+/).filter(Boolean).m
 // ---- cue words (normalised by norm(), so spelling variants meet) ----
 const CREDIT = W(
   'udhaar udhar udhari uddhar baki baaki credit credited khata owes owe owed borrowed took taken balance_due ' +
-    'उधार उधारी बाकी बक़ाया उद्धार उद्धरण ಉಧಾರ ಉದಾರ ಉಧಾರ್ ಉದಾರ್ ಸಾಲ ಬಾಕಿ',
+    'उधार उधारी बाकी बक़ाया उद्धार उद्धरण ಉಧಾರ ಉದಾರ ಉಧಾರ್ ಉದಾರ್ ಉದಾಹರ್ ಉದಾಹರ ಉದ್ದಾರ್ ಉದ್ದಾರ ಉಧಾರಿ ಉದಾರಿ ಸಾಲ ಬಾಕಿ',
 );
 const PAYMENT = W(
   'jama jamaa wapas vapas wapis chukaya chukaye chukai chuka chukaayi paid repaid returned refund refunded settled deposit deposited lautaya lauta ' +
-    'वापसी जमा वापस वापिस चुकाया चुकाए चुकाई चुकता लौटाया लौटाए ಜಮಾ ವಾಪಸ್ ವಾಪಸಿ ಹಿಂತಿರುಗಿಸಿದರು ಕಟ್ಟಿದರು ಕಟ್ಟಿದ ಕಟ್ಟಿದಳು ಕಟ್ಟಿದನು',
+    'वापसी जमा वापस वापिस चुकाया चुकाए चुकाई चुकता लौटाया लौटाए ಜಮಾ ಜಮ ಜಮೆ ವಾಪಸ್ ವಾಪಸಿ ಹಿಂತಿರುಗಿಸಿದರು ಕಟ್ಟಿದರು ಕಟ್ಟಿದ ಕಟ್ಟಿದಳು ಕಟ್ಟಿದನು',
 );
 const GIVE = W('diya diye di dia dee gave give given gives दिया दिए दी दिये');
 const GIVE_KN_CUSTOMER = W('ಕೊಟ್ಲು ಕೊಟ್ರು ಕೊಟ್ಟಳು ಕೊಟ್ಟನು ಕೊಟ್ಟರು ಕೊಟ್ಟಿದ್ದಾಳೆ ಕೊಟ್ಟಿದ್ದಾರೆ ಕೊಟ್ಟಿದ್ದಾನೆ ಕೊಟ್ಟಳೆ');
@@ -356,6 +356,22 @@ export function detectDirection(text: string): 'credit' | 'payment' | undefined 
   const ns = tokensWithSpans(text).map((t) => t.n);
   if (ns.some((n) => PAYMENT.has(n))) return 'payment';
   if (ns.some((n) => CREDIT.has(n) || TOOK.has(n))) return 'credit';
+  return undefined;
+}
+
+/**
+ * For the answer to "credit or payment?": the speech service spells udhaar and jama in many ways ("udhaar", "udaahar", "uddar",
+ * "ಉದಾಹರ್"). A one or two word reply whose consonants are u-d-r means credit, and j-m means payment.
+ */
+export function directionByShape(text: string): 'credit' | 'payment' | undefined {
+  const toks = tokensWithSpans(text);
+  if (toks.length === 0 || toks.length > 2) return undefined;
+  for (const t of toks) {
+    const skeleton = toLatin(t.w).toLowerCase().replace(/[aeiouhyw]/g, '').replace(/(.)\1+/g, '$1');
+    const firstVowelU = /^[uo]/.test(toLatin(t.w).toLowerCase());
+    if (skeleton === 'dr' && firstVowelU) return 'credit'; // u-d(h)-a-r
+    if (skeleton === 'jm') return 'payment';
+  }
   return undefined;
 }
 

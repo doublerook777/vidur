@@ -113,3 +113,49 @@ describe('cancelling a question', () => {
     expect(next[0]!.key).toMatch(/^credit_saved/);
   });
 });
+
+describe('Kannada speech-to-text spellings of udhaar and jama', () => {
+  it.each(['ಉದಾಹರ್', 'ಉದಾಹರ', 'ಉದ್ದಾರ್', 'ಉಧಾರಿ', 'ಉಧಾರ್'])('"%s" is a credit', async (w) => {
+    const { ledger, d } = await setup('kn');
+    const sunita = ledger.customers().find((c) => c.name === 'Sunita')!;
+    const before = ledger.balance(sunita.id);
+    const rs = await d.handle(`ಸುನಿತಾ ಇನ್ನೂರು ${w}`);
+    expect(rs[0]!.key).toMatch(/^credit_saved/);
+    expect(ledger.balance(sunita.id)).toBe(before + 20000);
+  });
+  it.each(['ಜಮಾ', 'ಜಮ', 'ಜಮೆ'])('"%s" is a payment', async (w) => {
+    const { ledger, d } = await setup('kn');
+    const sunita = ledger.customers().find((c) => c.name === 'Sunita')!;
+    const before = ledger.balance(sunita.id);
+    await d.handle(`ಸುನಿತಾ ಇನ್ನೂರು ${w}`);
+    expect(ledger.balance(sunita.id)).toBe(before - 20000);
+  });
+  it('the exact case from the rehearsal: which Ramesh, answer, then the direction as the service wrote it', async () => {
+    const { ledger, d } = await setup('kn');
+    const first = await d.handle('ರಮೇಶ್ ಮುನ್ನೂರ ನಲವತ್ತು ಉದಾಹರ್'); // heard as "udaahar": the direction must not be lost
+    expect(first[0]!.key).toBe('ask_which');
+    const second = await d.handle('ಆಟೋದವರು');
+    expect(second[0]!.key).toMatch(/^credit_saved/);
+    const auto = ledger.customers().find((c) => c.aliases.includes('auto wale'))!;
+    expect(ledger.activeEntries(auto.id).some((e) => e.kind === 'credit' && e.paise === 34000)).toBe(true);
+  });
+});
+
+describe('the answer to "credit or payment?" survives odd spellings', () => {
+  it.each(['ಉದಾಹರ್.', 'udahar', 'uddar', 'udhaaar', 'उदहार', 'ಜಮಾ.', 'jam'])('"%s" answers the question', async (answer) => {
+    const { ledger, d } = await setup('kn');
+    const sunita = ledger.customers().find((c) => c.name === 'Sunita')!;
+    const before = ledger.balance(sunita.id);
+    const q = await d.handle('ಸುನಿತಾ ಇನ್ನೂರು');
+    expect(q[0]!.key).toBe('ask_direction');
+    const rs = await d.handle(answer);
+    expect(rs[0]!.key).toMatch(/_saved|payment_cleared|payment_advance/);
+    expect(Math.abs(ledger.balance(sunita.id) - before)).toBe(20000);
+  });
+  it('an unrelated word is still not an answer', async () => {
+    const { d } = await setup('en');
+    await d.handle('Sunita 200');
+    const rs = await d.handle('banana');
+    expect(rs.map((r) => r.key)).not.toContain('credit_saved');
+  });
+});
