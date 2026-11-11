@@ -122,6 +122,21 @@ for (const [w, n] of [['nuru', 1], ['innuru', 2], ['munnuru', 3], ['nanuru', 4],
   add(w, { kind: 'fusedHundred', value: n * 100 });
 }
 
+// How the recognizer spells English number words in Devanagari ("थ्री फ़ॉर्टी" for "three forty"). Seen in real output.
+const DEV_EN: [string[], number][] = [
+  [['वन'], 1], [['टू'], 2], [['थ्री'], 3], [['फोर', 'फ़ोर'], 4], [['फाइव', 'फ़ाइव'], 5], [['सिक्स'], 6], [['सेवन'], 7], [['एट'], 8], [['नाइन'], 9], [['टेन'], 10],
+  [['इलेवन'], 11], [['ट्वेल्व'], 12], [['थर्टीन'], 13], [['फोर्टीन', 'फॉर्टीन'], 14], [['फिफ्टीन'], 15], [['सिक्सटीन'], 16], [['सेवेंटीन'], 17], [['एटीन'], 18], [['नाइनटीन'], 19],
+  [['ट्वेंटी'], 20], [['थर्टी'], 30], [['फोर्टी', 'फॉर्टी', 'फ़ोर्टी'], 40], [['फिफ्टी'], 50], [['सिक्स्टी', 'सिक्सटी'], 60], [['सेवेंटी'], 70], [['एटी'], 80], [['नाइंटी'], 90],
+];
+for (const [words, v] of DEV_EN) for (const w of words) add(w, { kind: 'unit', value: v });
+add('हंड्रेड', { kind: 'mult', value: 100 });
+add('थाउजेंड', { kind: 'mult', value: 1000 });
+add('थाऊजेंड', { kind: 'mult', value: 1000 });
+// Spellings of the Hindi fractions that Prisma produces.
+add('सावा', { kind: 'frac', word: 'sawa' });
+add('साडे', { kind: 'frac', word: 'saade' });
+add('डेड', { kind: 'frac', word: 'dedh' });
+
 export function lookup(word: string): Entry | undefined {
   return lexicon.get(norm(word));
 }
@@ -138,7 +153,7 @@ export function lexiconSize(): number {
 }
 
 /** Words that look like numbers but must not count on their own. */
-export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath', 'दो', 'एक', 'ಒಂದು'].map(norm));
+export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath', 'दो', 'एक', 'ಒಂದು', 'वन', 'टू', 'एट'].map(norm));
 
 export const CURRENCY = new Set(
   ['rupaye', 'rupaya', 'rupiya', 'rupiye', 'rupees', 'rupee', 'rs', 'inr', '₹', 'रुपये', 'रुपया', 'रुपए', 'रुपैया', 'रू', 'ರೂಪಾಯಿ', 'ರೂ'].map(norm),

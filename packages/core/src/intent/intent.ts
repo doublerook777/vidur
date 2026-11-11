@@ -243,6 +243,9 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
  * Turns one transcript into events, deterministically. No network. Amounts come only from `parseAmount`.
  * `needsLlm` is true when nothing recognisable was found, so the caller can fall back.
  */
+/** From this amount up, the amount is always read back before saving. */
+export const LARGE_PAISE = 10_000 * 100;
+
 export function interpret(text: string, ctx: InterpretContext = {}): Interpretation {
   const nowMs = ctx.nowMs ?? Date.now();
   const refusal = detectRefusal(text);
@@ -287,7 +290,15 @@ export function interpret(text: string, ctx: InterpretContext = {}): Interpretat
     events.push(ev);
     if (ev.customerSpoken && !ev.customerInherited) inherited = ev.customerSpoken;
   }
-  // Same utterance: one clause with a self-correction cue and an entry in the clause before it.
+  // A garbled transcript often shows up as extra fragments with amounts and no direction or name. When one
+  // utterance has such unresolved pieces, read back every amount before anything is saved.
+  const unresolved = events.length > 1 && events.some((e) => (e.intent === 'credit_entry' || e.intent === 'payment') && (e.needs.includes('direction') || e.needs.includes('customer')));
+  for (const e of events) {
+    if (e.amountPaise === undefined || (e.intent !== 'credit_entry' && e.intent !== 'payment')) continue;
+    if (unresolved && !e.needs.includes('amount_confirm')) e.needs.push('amount_confirm');
+    // Large amounts are always read back: a slip of one zero costs a lot.
+    if (e.amountPaise >= LARGE_PAISE && !e.needs.includes('amount_confirm')) e.needs.push('amount_confirm');
+  }
   const first = events[0];
   const needsLlm = events.length === 0 || events.every((e) => e.intent === 'out_of_scope');
   void first;

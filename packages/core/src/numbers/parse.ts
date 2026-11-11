@@ -143,7 +143,7 @@ function feed(st: State, el: El): boolean {
           st.total += group * e.value; st.cur = 0; st.lastBig = e.value; st.last = 'mult'; st.lastMult = e.value; ok = true;
         }
       }
-      if (ok) st.conf = Math.min(st.conf, st.hasAny ? 0.95 : 0.7);
+      if (ok) st.conf = Math.min(st.conf, st.hasAny ? 0.95 : 0.8); // a lone "sau" or "hazaar" is a normal amount
     }
   }
   if (!ok) return false;
