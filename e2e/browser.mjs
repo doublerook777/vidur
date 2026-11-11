@@ -243,6 +243,10 @@ try {
   await frame.locator('[data-feature="mic-button"]').waitFor({ timeout: 8000 }).catch(() => undefined);
   const micInFrame = await frame.locator('[data-feature="mic-button"]').count();
   check('the microphone button is present inside the iframe', micInFrame > 0);
+  const dock = await show.frameLocator('#phoneApp').locator('.bottom-dock').evaluate((d) => { const r = d.getBoundingClientRect(); const root = d.ownerDocument.defaultView; const texts = [...d.querySelectorAll('.bottom-nav-btn')].map((b) => b.textContent.trim()); const names = [...d.querySelectorAll('.bottom-nav-btn')].map((b) => b.getAttribute('aria-label')); return { gap: Math.round(root.innerHeight - r.bottom), texts, named: names.every(Boolean), bg: getComputedStyle(d).backgroundColor }; });
+  check('the bottom menu is glued to the bottom edge of the phone', dock.gap <= 1, JSON.stringify(dock));
+  check('the bottom menu shows icons only, each with an accessible name', dock.texts.every((t) => t === '') && dock.named, JSON.stringify(dock));
+  check('the bottom menu sits on a solid strip, so nothing shows behind it', !/rgba\(0, 0, 0, 0\)|transparent/.test(dock.bg), dock.bg);
   if (micInFrame > 0) {
     const bb = await frame.locator('[data-feature="mic-button"]').boundingBox();
     await show.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2);
@@ -277,8 +281,13 @@ try {
   await mobile.goto(`${BASE}/`);
   await sleep(800);
   check('no horizontal scroll at 360 px on the showcase page', await mobile.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
-  const rect = await mobile.evaluate(() => { const f = document.getElementById('phoneApp'); const r = f.getBoundingClientRect(); return { w: Math.round(r.width), h: Math.round(r.height), x: Math.round(r.x), display: getComputedStyle(f).display }; });
-  check('on a narrow screen the phone app fills the page with no frame', rect.w >= 340 && rect.w <= 361 && rect.display !== 'none', JSON.stringify(rect));
+  const rect = await mobile.evaluate(() => { const f = document.getElementById('phoneFrame'); const r = f.getBoundingClientRect(); return { w: Math.round(r.width), x: Math.round(r.x), right: Math.round(r.right), vw: window.innerWidth }; });
+  check('on a narrow screen the framed phone is scaled to fit inside the page', rect.x >= 0 && rect.right <= rect.vw && rect.w >= 280, JSON.stringify(rect));
+  const open = await mobile.evaluate(() => { const a = document.querySelector('.open-app'); const r = a?.getBoundingClientRect(); return { shown: !!a && getComputedStyle(a).display !== 'none', h: Math.round(r?.height ?? 0), href: a?.getAttribute('href') }; });
+  check('on a narrow screen a full-screen link to the app is offered, with a big touch target', open.shown && open.h >= 44 && open.href === '/app.html', JSON.stringify(open));
+  check('the desktop page does not show the full-screen link', await show.evaluate(() => getComputedStyle(document.querySelector('.open-app')).display === 'none'));
+  check('the page has no visible scrollbar', await show.evaluate(() => getComputedStyle(document.documentElement).scrollbarWidth === 'none'));
+  check('the title cycles through three languages in one cell', await show.evaluate(() => { const w = [...document.querySelectorAll('.wordmark .word')]; return w.length === 3 && w.map((x) => x.textContent).join(',') === 'Vidur,विदुर,ವಿದುರ' && document.getElementById('wordmark').getAttribute('aria-label') === 'Vidur'; }));
 
   // ---------------------------------------------------------------- offline keypad
   server.kill();

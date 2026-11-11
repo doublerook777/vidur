@@ -219,8 +219,7 @@
   font-family: var(--font-body);
   font-size: var(--font-md);
   font-variant-numeric: lining-nums;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
+  scrollbar-width: none;
 }
 
 .screen-header {
@@ -559,13 +558,22 @@
 
 #root { display: flex; flex-direction: column; height: 100dvh; }
 #root > .screen { flex: 1 1 auto; height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.screen > :nth-last-child(3) { margin-bottom: var(--space-2); }
-.screen-home > :nth-last-child(3) { margin-bottom: 34px; }
+/* screens with the dock leave room for it at the end of their list */
+#root > .screen:has(> .bottom-dock) { padding-bottom: calc(var(--safe-bottom) + 112px); }
 
-.bottom-nav {
-  position: sticky;
-  bottom: calc(var(--safe-bottom) + 10px);
+/* the dock is a solid strip fixed to the bottom of the phone: the list scrolls above it, never behind it */
+.bottom-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 20;
+  padding: 10px var(--space-4) calc(var(--safe-bottom) + 10px);
+  background: var(--color-bg);
+  box-shadow: 0 -1px 0 var(--color-border);
+}
+.bottom-nav {
+  position: relative;
   display: flex;
   align-items: center;
   flex: none;
@@ -594,16 +602,12 @@
   font: inherit;
   cursor: pointer;
 }
-.bottom-nav-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 700; }
 .bottom-nav-btn-active { background: var(--color-nav-active); color: var(--color-nav-active-text); }
-/* a soft fade of the ground colour behind the pill, so rows dissolve instead of showing around it */
-.nav-scrim { position: sticky; bottom: 0; z-index: 19; flex: none; height: 0; margin-top: auto; margin-bottom: calc(var(--space-4) * -1); pointer-events: none; }
-.nav-scrim::before { content: ''; position: absolute; left: calc(var(--space-4) * -1); right: calc(var(--space-4) * -1); bottom: 0; height: calc(120px + var(--safe-bottom)); background: linear-gradient(to top, var(--color-bg) 40%, transparent); }
 
 .orb {
   position: absolute;
   left: 50%;
-  top: -34px;
+  top: -30px;
   width: 92px;
   height: 92px;
   margin-left: -46px;
@@ -675,7 +679,7 @@
   position: fixed;
   left: var(--space-4);
   right: var(--space-4);
-  bottom: calc(var(--safe-bottom) + 96px);
+  bottom: calc(var(--safe-bottom) + 98px);
   z-index: 40;
   display: flex;
   align-items: center;
@@ -870,3 +874,10 @@
 }
 .keypad-key:active { background: var(--color-bg-2); transform: scale(0.97); }
 .screen-keypad .btn-save { margin-top: auto; }
+
+/* no scrollbars: the page scrolls by touch, wheel and keys */
+* { scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+
+/* the screen inside the phone is the only thing that scrolls */
+html, body { height: 100%; overflow: hidden; }

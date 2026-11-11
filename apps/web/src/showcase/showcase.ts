@@ -115,7 +115,7 @@ window.addEventListener('message', (event: MessageEvent) => {
 
   if (data.type === 'vidur:ready') {
     sendState();
-    if (window.innerWidth > 700) postToPhone({ type: 'vidur:scene', scene: scene as 0 | 1 | 2 | 3 });
+    postToPhone({ type: 'vidur:scene', scene: scene as 0 | 1 | 2 | 3 });
     return;
   }
   if (data.type === 'vidur:feature' && isFeatureId((data as { id?: unknown }).id)) {
@@ -148,12 +148,8 @@ const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.m
 /** Scales the phone so the whole frame fits the screen (pinned) or the column (stacked). */
 function fitPhone(): void {
   if (!wrap) return;
-  if (window.innerWidth <= 700) {
-    wrap.style.removeProperty('--s');
-    return;
-  }
-  const bySpace = scrubbing ? (window.innerHeight - 104) / 880 : (window.innerWidth - 56) / 436;
-  wrap.style.setProperty('--s', clamp(bySpace, 0.45, 1).toFixed(3));
+  const bySpace = scrubbing ? (window.innerHeight - 104) / 880 : (window.innerWidth - (window.innerWidth <= 700 ? 48 : 56)) / 436;
+  wrap.style.setProperty('--s', clamp(bySpace, 0.5, 1).toFixed(3));
 }
 
 /** Where we are in the pinned section, 0 to 1, turned into how visible each chapter is. */

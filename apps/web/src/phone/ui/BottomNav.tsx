@@ -17,8 +17,9 @@ const TABS: { screen: Screen; key: LabelKey; Icon: ComponentType<{ size?: number
 ];
 
 /**
- * The floating pill. On Home a voice circle (`orb`) sits in the middle and rises out of the top of the pill.
- * The active tab opens into a pill with its name; the others are just icons with a hidden name.
+ * The dock: a pill of icons anchored to the bottom edge of the phone, on its own solid strip so nothing scrolls behind it.
+ * On Home a voice circle (`orb`) sits in the middle and rises out of the top of the pill. The icons carry no visible
+ * text; each has an accessible name, and the active one sits in a lighter pill.
  */
 export function BottomNav({ vm, actions, lang, orb }: ScreenProps<BottomNavVM> & { orb?: ComponentChildren }) {
   const t = LABELS[lang];
@@ -32,18 +33,16 @@ export function BottomNav({ vm, actions, lang, orb }: ScreenProps<BottomNavVM> &
       aria-label={t[key]}
       onClick={() => actions.navigate(screen)}
     >
-      <Icon size={22} />
-      <span class="bottom-nav-label">{t[key]}</span>
+      <Icon size={24} />
     </button>
   ));
   return (
-    <>
-      <div class="nav-scrim" aria-hidden="true" />
+    <div class="bottom-dock">
       <nav class={`bottom-nav${orb ? ' bottom-nav-with-orb' : ''}`} aria-label="Screens">
         <div class="bottom-nav-side">{tabs.slice(0, 2)}</div>
         {orb ? <div class="bottom-nav-orb">{orb}</div> : null}
         <div class="bottom-nav-side">{tabs.slice(2)}</div>
       </nav>
-    </>
+    </div>
   );
 }
