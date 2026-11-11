@@ -247,6 +247,8 @@ try {
   check('the bottom menu is glued to the bottom edge of the phone', dock.gap <= 1, JSON.stringify(dock));
   check('the bottom menu shows icons only, each with an accessible name', dock.texts.every((t) => t === '') && dock.named, JSON.stringify(dock));
   check('the bottom menu sits on a solid strip, so nothing shows behind it', !/rgba\(0, 0, 0, 0\)|transparent/.test(dock.bg), dock.bg);
+  const fit = await show.frameLocator('#phoneApp').locator('.screen').first().evaluate((el) => { const w = el.ownerDocument.defaultView; const b = el.getBoundingClientRect(); return { margin: getComputedStyle(el.ownerDocument.body).margin, left: Math.round(b.left), right: Math.round(w.innerWidth - b.right), top: Math.round(b.top), docH: el.ownerDocument.documentElement.scrollHeight, ih: w.innerHeight }; });
+  check('the app fills the phone screen edge to edge, with no black bars', fit.margin === '0px' && fit.left === 0 && fit.right === 0 && fit.top === 0 && fit.docH === fit.ih, JSON.stringify(fit));
   if (micInFrame > 0) {
     const bb = await frame.locator('[data-feature="mic-button"]').boundingBox();
     await show.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2);

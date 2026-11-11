@@ -880,4 +880,4 @@
 *::-webkit-scrollbar { display: none; }
 
 /* the screen inside the phone is the only thing that scrolls */
-html, body { height: 100%; overflow: hidden; }
+html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: var(--color-bg); }
