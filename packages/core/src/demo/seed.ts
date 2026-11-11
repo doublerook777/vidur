@@ -35,7 +35,7 @@ const SPECS: SeedSpec[] = [
   {
     key: 'ramesh_milk',
     name: 'Ramesh',
-    aliases: ['doodh wale'],
+    aliases: ['doodh wale', 'दूध वाले', 'ಹಾಲಿನವರು'],
     entries: [
       { kind: 'credit', rupees: 340, daysAgo: 1, item: 'doodh' },
       { kind: 'credit', rupees: 260, daysAgo: 4, item: 'doodh' },
@@ -46,7 +46,7 @@ const SPECS: SeedSpec[] = [
   {
     key: 'ramesh_auto',
     name: 'Ramesh',
-    aliases: ['auto wale'],
+    aliases: ['auto wale', 'ऑटो वाले', 'ಆಟೋದವರು'],
     entries: [
       { kind: 'credit', rupees: 200, daysAgo: 3, item: 'chai' },
       { kind: 'payment', rupees: 80, daysAgo: 1 },

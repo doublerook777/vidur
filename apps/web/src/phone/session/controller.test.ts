@@ -13,9 +13,9 @@ import { Vault } from '../storage/vault.js';
 import { PhoneSession, type AudioIn, type AudioOut, type Telemetry } from './controller.js';
 
 class FakeMic implements AudioIn {
-  opened = 0; sink: ((f: ArrayBuffer) => void) | null = null; timer: ReturnType<typeof setInterval> | null = null;
+  opened = 0; amp = 3000; sink: ((f: ArrayBuffer) => void) | null = null; timer: ReturnType<typeof setInterval> | null = null;
   async open() { this.opened++; }
-  begin(sink: (f: ArrayBuffer) => void) { this.sink = sink; this.timer = setInterval(() => sink(new Int16Array(512).fill(7).buffer), 32); }
+  begin(sink: (f: ArrayBuffer) => void) { this.sink = sink; this.timer = setInterval(() => sink(new Int16Array(512).fill(this.amp).buffer), 32); }
   end() { if (this.timer) clearInterval(this.timer); this.sink = null; }
   close() { this.end(); }
 }
@@ -201,6 +201,26 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     expect(session!.state.error!.text).not.toContain('इंटरनेट');
     s.onGatewayError({ code: 'speech_error', recoverable: true });
     expect(session!.state.error!.actionLabel).toBe('फिर कोशिश करें');
+  });
+
+  it('a press with nothing said says so at once, and the late speech-service reply is ignored', async () => {
+    const { mic, speaker } = await boot();
+    await onboard(speaker, false);
+    mic.amp = 0;
+    mock!.scriptTranscripts(['x']); // what the speech service would still send back for the silent recording
+    const heardBefore = telemetry.filter((t) => t.transcript !== undefined).length;
+    session!.actions.micDown();
+    await until(() => session!.state.phase === 'listening');
+    await new Promise((r) => setTimeout(r, 400));
+    session!.actions.micUp();
+    expect(session!.state.phase).toBe('idle');
+    expect(session!.state.error!.text).toContain('कुछ सुनाई नहीं दिया');
+    await new Promise((r) => setTimeout(r, 1500)); // the late reply arrives and is dropped
+    expect(telemetry.filter((t) => t.transcript !== undefined).length).toBe(heardBefore);
+    expect(session!.state.card).toBeNull();
+    expect(session!.state.error!.text).toContain('कुछ सुनाई नहीं दिया');
+    mic.amp = 3000;
+    await turn('Mohan ka 100 udhaar'); // the next real turn still works
   });
 
   it('switching language rewrites the greeting on screen in the new language, and drops other stale agent lines', async () => {

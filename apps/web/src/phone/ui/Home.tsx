@@ -52,9 +52,14 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
       {vm.error && (
         <div class="error-banner" role="alert">
           <span class="error-text">{vm.error.text}</span>
-          <button type="button" class="btn btn-error" onClick={() => actions.retry()}>
-            {vm.error.actionLabel ?? t.retry}
-          </button>
+          <span class="error-actions">
+            <button type="button" class="btn btn-error" onClick={() => actions.retry()}>
+              {vm.error.actionLabel ?? t.retry}
+            </button>
+            <button type="button" class="btn btn-error-alt" onClick={() => actions.openAddEntry()}>
+              {t.addEntry}
+            </button>
+          </span>
         </div>
       )}
 

@@ -36,6 +36,7 @@ export const mockActions: Actions = {
   dismissToast: noop,
   answer: noop,
   retry: noop,
+  cancelAnswer: noop,
   finishOnboarding: noop,
 };
 

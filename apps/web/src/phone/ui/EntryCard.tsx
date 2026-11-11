@@ -43,8 +43,19 @@ export function EntryCard({ vm, actions, lang }: ScreenProps<EntryCardVM>) {
           </button>
         </div>
       )}
-      {vm.heard && (vm.state === 'heard' || vm.state === 'needs_answer') && !(vm.state === 'needs_answer' && vm.answers === 'yes_no') && (
+      {vm.heard && vm.state === 'heard' && (
         <p class="entry-is-this-right">{t.isThisRight}</p>
+      )}
+      {vm.state === 'needs_answer' && (
+        <button type="button" class="btn btn-cancel-input" data-feature="cancel-input" onClick={() => actions.cancelAnswer()}>
+          <IconX size={18} />
+          <span>{t.cancelInput}</span>
+        </button>
+      )}
+      {vm.noteCustomerId && (
+        <button type="button" class="btn btn-view-notes" onClick={() => actions.openCustomer(vm.noteCustomerId!)}>
+          {t.viewNotes}
+        </button>
       )}
     </section>
   );

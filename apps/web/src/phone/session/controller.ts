@@ -85,6 +85,9 @@ const initial = (): SessionState => ({
   card: null, error: null, credit: 0, payment: 0, people: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
 });
 
+/** A recording whose loudest sample stays under this (of 32767) is silence: nothing was said. Speech peaks well above 1,000. */
+const SILENT_PEAK = 250;
+
 export class PhoneSession {
   readonly store = new Store<SessionState>(initial());
   private ledger!: Ledger;
@@ -203,6 +206,7 @@ export class PhoneSession {
   }
 
   private onGatewayError(e: GatewayError): void {
+    if (e.recoverable && (e.code === 'stt_timeout' || e.code === 'speech_error') && this.takeSilentReply()) return; // the reply to a silent recording
     this.store.update({ error: errorMessage(e.code, this.state.lang) });
     if (!e.recoverable) this.setPhase('offline');
     // A failed turn must not leave the "thinking" or "speaking" pill on screen: the person can simply try again.
@@ -234,6 +238,7 @@ export class PhoneSession {
   // ---------------------------------------------------------------- one turn
 
   private async onTranscript(t: Transcript): Promise<void> {
+    if (t.audioMs > 0 && this.takeSilentReply()) return; // the reply to a silent recording
     this.o.onTelemetry?.({ transcript: t.text, sttMs: t.sttMs });
     if (!t.text.trim()) {
       this.store.update({ card: null, error: errorMessage('didnt_hear', this.state.lang) });
@@ -262,6 +267,10 @@ export class PhoneSession {
         ...(customerName ? { customerName } : {}),
       },
     });
+    if (replies.some((r) => r.key === 'note_saved' || r.key === 'note_saved_plain')) {
+      const noteCustomerId = this.newestNoteCustomer();
+      if (noteCustomerId && this.state.card) this.store.update({ card: { ...this.state.card, noteCustomerId } });
+    }
     const share = replies.find((r) => r.action)?.action;
     if (share) this.store.update({ shareReminder: { customerId: share.customerId, text: share.text } });
     this.o.onTelemetry?.({ parsed: lines.join(' | ') });
@@ -327,6 +336,7 @@ export class PhoneSession {
     restoreEntry: (token) => void this.restoreEntry(token),
     dismissToast: () => this.dismissToast(),
     answer: (a) => void this.answer(a),
+    cancelAnswer: () => this.cancelAnswer(),
     retry: () => {
       this.store.update({ error: null });
       this.gateway.close();
@@ -362,8 +372,50 @@ export class PhoneSession {
     this.store.update({ error: null, card: { state: 'listening' } });
     this.setPhase('listening');
     this.gateway.pttDown();
-    this.o.capture.begin((f) => this.gateway.sendAudio(f));
+    this.peak = 0;
+    this.o.capture.begin((f) => {
+      this.trackPeak(f);
+      this.gateway.sendAudio(f);
+    });
     // The very first press of a session also plays the AI disclosure afterwards, via the dialogue engine.
+  }
+
+  /** The customer who got the most recent note: the card points the shopkeeper to it. */
+  private newestNoteCustomer(): string | null {
+    let best: { id: string; at: number } | null = null;
+    for (const c of this.ledger.customers()) {
+      for (const n of this.ledger.notes(c.id)) if (!best || n.recordedAt >= best.at) best = { id: c.id, at: n.recordedAt };
+    }
+    return best?.id ?? null;
+  }
+
+  private cancelAnswer(): void {
+    this.bargeIn();
+    const replies = this.dialogue.cancelPending();
+    this.store.update({ card: { state: 'heard', agentLine: replies.map((r) => r.text).join(' ') }, error: null });
+    this.setPhase('idle');
+    this.sendContext();
+  }
+
+  private peak = 0;
+  private silentUntil = 0;
+
+  private trackPeak(frame: ArrayBuffer): void {
+    const v = new Int16Array(frame);
+    for (let i = 0; i < v.length; i++) {
+      const a = Math.abs(v[i]!);
+      if (a > this.peak) this.peak = a;
+    }
+  }
+
+  /** True once, right after a silent recording: its late reply from the speech service is dropped. */
+  private takeSilentReply(): boolean {
+    if (this.silentUntil && Date.now() < this.silentUntil) {
+      this.silentUntil = 0;
+      return true;
+    }
+    this.silentUntil = 0;
+    return false;
   }
 
   micUp(): void {
@@ -372,8 +424,16 @@ export class PhoneSession {
     this.pttUpAt = performance.now();
     this.awaitingFirstAudio = true;
     this.o.capture.end();
-    this.setPhase('thinking');
     setTimeout(() => this.gateway.pttUp(), 45); // lets the last audio frame go out first
+    if (this.peak < SILENT_PEAK) {
+      // Nothing was said. Say so now, and ignore the one reply the speech service still sends for this recording.
+      this.silentUntil = Date.now() + 15_000;
+      this.store.update({ card: null, error: errorMessage('didnt_hear', this.state.lang) });
+      this.setPhase('idle');
+      return;
+    }
+    this.silentUntil = 0;
+    this.setPhase('thinking');
   }
 
   /** True when the open question is a yes or no, so the screen can show two buttons. */

@@ -56,6 +56,27 @@ export function matchName(spoken: string, customers: KnownCustomer[], context = 
 
 /** Finds a customer by an alias said in free text ("doodh wale ke 200"), when no name was said. */
 export function findByAlias(text: string, customers: KnownCustomer[]): KnownCustomer[] {
-  const ws = new Set(windows(tokensOf(text)).map(nameKey));
-  return customers.filter((c) => c.aliases.some((a) => ws.has(nameKey(a))));
+  const ws = windows(tokensOf(text));
+  const exact = new Set(ws.map(nameKey));
+  const hits = customers.filter((c) => c.aliases.some((a) => exact.has(nameKey(a))));
+  if (hits.length) return hits;
+  // Speech-to-text spells the same words differently in each script ("दूध वाले", "ದೂದ್ ವಾಲೆ", "doodh valle"), so allow one slip.
+  const loose = ws.map(looseKey).filter((k) => k.length >= 5);
+  return customers.filter((c) =>
+    c.aliases.some((a) => {
+      const k = looseKey(a);
+      return k.length >= 5 && loose.some((l) => l === k || editDistance(l, k) <= 1);
+    }),
+  );
+}
+
+type Script = 'latin' | 'devanagari' | 'kannada';
+const scriptOf = (s: string): Script => (/[\u0900-\u097F]/.test(s) ? 'devanagari' : /[\u0C80-\u0CFF]/.test(s) ? 'kannada' : 'latin');
+const WANT: Record<string, Script> = { en: 'latin', hi: 'devanagari', kn: 'kannada' };
+
+/** The aliases written in the script of the language being spoken (all of them if none are). */
+export function aliasesFor(aliases: string[], lang: string): string[] {
+  const want = WANT[lang];
+  const mine = aliases.filter((a) => scriptOf(a) === want);
+  return mine.length ? mine : aliases;
 }

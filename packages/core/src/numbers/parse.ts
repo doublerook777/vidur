@@ -1,4 +1,5 @@
 import { CURRENCY, NEEDS_CONTEXT, NOT_MONEY_AFTER, asciiDigits, lookup, norm, type Entry } from './lexicon.js';
+import { unglue } from './unglue.js';
 
 export type Lang = 'hi' | 'en' | 'kn' | 'hinglish';
 
@@ -220,7 +221,7 @@ const PHONE_RE = /(?:\+?\d{1,3}[\s-]?)?\d{5}[\s-]?\d{5}|\d{3,4}[\s-]\d{3,4}[\s-]
 /** `lang` is accepted for the API but all supported languages are always active, because shopkeepers mix them. */
 export function parseAmount(input: string, lang: Lang = 'hi'): AmountMatch[] {
   void lang;
-  const text = input.replace(PHONE_RE, (m) => ' '.repeat(m.length));
+  const text = unglue(input).replace(PHONE_RE, (m) => ' '.repeat(m.length));
   const toks = tokenize(text);
   const isCur = (k: number): boolean => k >= 0 && k < toks.length && CURRENCY.has(toks[k]!.n);
 

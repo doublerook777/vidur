@@ -1,7 +1,9 @@
 import type { CustomerRow } from '../contract.js';
 import { formatRupees } from './format.js';
 import { LABELS } from './labels.js';
-import { IconArrowDown, IconArrowUp, IconCustomers } from './icons.js';
+import { aliasesFor } from '@vidur/core';
+
+import { IconArrowDown, IconArrowUp, IconCustomers, IconPlus } from './icons.js';
 import type { ScreenProps } from './types.js';
 import { AiBadge } from './AiBadge.js';
 import { BottomNav } from './BottomNav.js';
@@ -19,6 +21,11 @@ export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
         <AiBadge vm={{}} actions={actions} lang={lang} />
       </header>
 
+      <button type="button" class="btn btn-new-customer" data-feature="new-customer" onClick={() => actions.openAddEntry({ newCustomer: true })}>
+        <IconPlus size={20} />
+        <span>{t.newCustomer}</span>
+      </button>
+
       <ul class="customer-list" data-feature="customer-list" aria-label={t.customersTitle}>
         {vm.customers.map((c) => {
           const positive = c.balancePaise >= 0;
@@ -32,7 +39,7 @@ export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
                 </span>
                 <span class="customer-info">
                   <span class="customer-name">{c.name}</span>
-                  {c.aliases.length > 0 && <span class="customer-aliases">{c.aliases.join(', ')}</span>}
+                  {c.aliases.length > 0 && <span class="customer-aliases">{aliasesFor(c.aliases, lang).join(', ')}</span>}
                 </span>
                 <span class="customer-balance">
                   <span class="customer-balance-direction">

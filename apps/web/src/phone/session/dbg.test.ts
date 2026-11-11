@@ -16,7 +16,7 @@ it('dbg', async () => {
   const config = { ...loadConfig({ MODE: 'local', GNANI_API_KEY: 'good', PORT: '0' }), gnaniBaseUrl: mock.url.replace('http', 'ws') };
   const gw = await createGateway({ config, log: createLogger(() => undefined, { strict: true }) });
   let timer: ReturnType<typeof setInterval> | null = null;
-  const mic = { async open() {}, begin(sink: (f: ArrayBuffer) => void) { timer = setInterval(() => sink(new Int16Array(512).fill(7).buffer), 32); }, end() { if (timer) clearInterval(timer); }, close() {} };
+  const mic = { async open() {}, begin(sink: (f: ArrayBuffer) => void) { timer = setInterval(() => sink(new Int16Array(512).fill(3000).buffer), 32); }, end() { if (timer) clearInterval(timer); }, close() {} };
   const spk = { async open() {}, push() {}, flush() { log.push(T() + ' flush'); }, close() {}, onBusy: null };
   const vault = await Vault.open('x', new IDBFactory());
   const s = await PhoneSession.create({ gatewayUrl: gw.url.replace('http', 'ws') + '/ws', WebSocketImpl: NodeWebSocket as unknown as typeof WebSocket, vault, capture: mic, playback: spk as never, backoffMs: [50], onTelemetry: (t) => log.push(T() + ' tel ' + JSON.stringify(t)) });

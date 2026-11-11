@@ -2,6 +2,7 @@ import { resolveDate, type Tense as DateTense } from '../dates/index.js';
 import { findByAlias, matchName } from '../names/index.js';
 import { CONFIRM_BELOW, parseAmount, type AmountMatch } from '../numbers/index.js';
 import { lookup, norm } from '../numbers/lexicon.js';
+import { unglue } from '../numbers/unglue.js';
 import { detectRefusal } from './guardrails.js';
 import type { EventTense as Tense, Interpretation, InterpretContext, Intent, Need, ParsedEvent } from './types.js';
 
@@ -259,7 +260,8 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
 /** From this amount up, the amount is always read back before saving. */
 export const LARGE_PAISE = 10_000 * 100;
 
-export function interpret(text: string, ctx: InterpretContext = {}): Interpretation {
+export function interpret(rawText: string, ctx: InterpretContext = {}): Interpretation {
+  const text = unglue(rawText);
   const nowMs = ctx.nowMs ?? Date.now();
   const refusal = detectRefusal(text);
   if (refusal) {

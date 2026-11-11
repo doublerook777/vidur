@@ -44,6 +44,8 @@ export interface EntryCardVM {
   kind?: 'credit' | 'payment' | 'note';
   /** Set when the open question is a yes or no, so the card can show two big buttons. */
   answers?: 'yes_no';
+  /** Set after a note was saved: the customer whose notes the card links to. */
+  noteCustomerId?: string;
 }
 
 export interface ErrorVM {
@@ -100,6 +102,8 @@ export interface ToastVM {
 export interface AddPreset {
   customerId?: string;
   kind?: 'credit' | 'payment';
+  /** Opens with the name box first, to add a new customer by hand. */
+  newCustomer?: boolean;
 }
 
 /** Callbacks the screens may call. */
@@ -123,6 +127,8 @@ export interface Actions {
   dismissToast(): void;
   /** Taps Yes or No for the open question. Same as saying it. */
   answer(a: 'yes' | 'no'): void;
+  /** Drops the open question, nothing saved, so the person can say the whole thing again. */
+  cancelAnswer(): void;
   retry(): void;
   finishOnboarding(opts: { lang: Lang; demoData: boolean }): void;
 }

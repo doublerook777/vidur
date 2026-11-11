@@ -291,6 +291,39 @@ try {
   check('the page has no visible scrollbar', await show.evaluate(() => getComputedStyle(document.documentElement).scrollbarWidth === 'none'));
   check('the title cycles through three languages in one cell', await show.evaluate(() => { const w = [...document.querySelectorAll('.wordmark .word')]; return w.length === 3 && w.map((x) => x.textContent).join(',') === 'Vidur,विदुर,ವಿದುರ' && document.getElementById('wordmark').getAttribute('aria-label') === 'Vidur'; }));
 
+  // ---------------------------------------------------------------- fixes from the first live rehearsal
+  await page.evaluate(() => { window.__vidur.quiet = true; window.__vidur.actions.navigate('customers'); });
+  await sleep(250);
+  check('the customers screen has a "new customer" button', (await page.locator('.btn-new-customer').count()) === 1);
+  await page.locator('.btn-new-customer').click();
+  await sleep(250);
+  const nameFirst = await page.evaluate(() => { const i = document.querySelector('.keypad-new-name'); const l = document.querySelector('.keypad-customer-list'); return !!i && document.activeElement === i && !!(i.compareDocumentPosition(l) & Node.DOCUMENT_POSITION_FOLLOWING); });
+  check('"new customer" opens the keypad with the name box first and focused', nameFirst);
+  await page.evaluate(() => window.__vidur.actions.navigate('home'));
+  await sleep(150);
+  const entriesBefore = await state(page, 's.history.length');
+  await page.evaluate(() => window.__vidur.onTranscript({ text: 'Ramesh ka 340 udhaar', lang: 'hi', sttMs: 0, audioMs: 0 }));
+  await sleep(250);
+  check('a follow-up question offers a cancel button', (await page.locator('.btn-cancel-input').count()) === 1);
+  check('the Hindi question names the two Rameshes in Devanagari, not Latin', /दूध वाले/.test(await page.locator('.entry-agent-line').innerText()));
+  await page.locator('.btn-cancel-input').click();
+  await sleep(250);
+  check('cancel drops the question, saves nothing and clears the buttons', (await state(page, 's.history.length')) === entriesBefore && (await page.locator('.btn-cancel-input').count()) === 0 && (await state(page, "s.phase === 'idle'")));
+  await page.evaluate(() => window.__vidur.onTranscript({ text: 'Mohan kal paanch sau dega', lang: 'hi', sttMs: 0, audioMs: 0 }));
+  await sleep(250);
+  check('after a note the card links to the notes', (await page.locator('.btn-view-notes').count()) === 1);
+  await page.locator('.btn-view-notes').click();
+  await sleep(250);
+  check('the link opens that customer, with the note listed', (await page.locator('.detail-notes').innerText()).replace(/\s+/g, ' ').includes('500'));
+  await page.evaluate(() => window.__vidur.actions.navigate('home'));
+  await page.evaluate(() => window.__vidur.onGatewayError({ code: 'network', recoverable: true }));
+  await sleep(200);
+  check('an error banner offers "Add entry" next to "Try again"', (await page.locator('.error-banner .btn-error-alt').count()) === 1);
+  await page.locator('.error-banner .btn-error-alt').click();
+  await sleep(200);
+  check('"Add entry" in the banner opens the keypad', (await page.locator('[data-feature="keypad"]').count()) > 0);
+  await page.evaluate(() => window.__vidur.actions.navigate('home'));
+
   // ---------------------------------------------------------------- offline keypad
   server.kill();
   await waitState(page, "!s.online", 10000);

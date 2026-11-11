@@ -4,9 +4,9 @@ import type { Lang } from '../contract.js';
 type Msg = { text: string; action?: string };
 const M: Record<string, Record<Lang, Msg>> = {
   network: {
-    en: { text: 'No connection. You can still add entries with the keypad.', action: 'Try again' },
-    hi: { text: 'इंटरनेट नहीं है। आप कीपैड से एंट्री लिख सकते हैं।', action: 'फिर कोशिश करें' },
-    kn: { text: 'ಇಂಟರ್ನೆಟ್ ಇಲ್ಲ. ಕೀಪ್ಯಾಡ್‌ನಿಂದ ದಾಖಲೆ ಬರೆಯಬಹುದು.', action: 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ' },
+    en: { text: 'No connection. You can still add entries by hand: tap Add entry.', action: 'Try again' },
+    hi: { text: 'इंटरनेट नहीं है। आप हाथ से एंट्री लिख सकते हैं: एंट्री जोड़ें दबाएँ।', action: 'फिर कोशिश करें' },
+    kn: { text: 'ಇಂಟರ್ನೆಟ್ ಇಲ್ಲ. ಕೈಯಿಂದ ನಮೂದು ಬರೆಯಬಹುದು: ನಮೂದು ಸೇರಿಸಿ ಒತ್ತಿ.', action: 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ' },
   },
   speech_failed: {
     en: { text: 'The voice service did not answer. Say it once more, or use the keypad.', action: 'Try again' },

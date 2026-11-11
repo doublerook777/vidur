@@ -29,6 +29,23 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
   const [when, setWhen] = useState<When>('now');
   const [picked, setPicked] = useState(toLocalInput(now));
 
+  const newFirst = vm.preset?.newCustomer === true;
+  const nameBox = (
+        <label class="keypad-new-name-label">
+          <span class="keypad-new-name-title">{t.newName}</span>
+          <input
+            type="text"
+            class="keypad-new-name"
+            value={newName}
+            onInput={(e) => {
+              setNewName((e.target as HTMLInputElement).value);
+              setCustomerId(null);
+            }}
+            autocomplete="off"
+            autoFocus={newFirst}
+          />
+        </label>
+  );
   const rupees = digits === '' ? 0 : Number(digits);
   const paise = rupees * 100;
   const pickedMs = when === 'pick' ? fromLocalInput(picked) : null;
@@ -66,6 +83,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
       </output>
 
       <section class="keypad-customer" aria-label={t.chooseCustomer}>
+        {newFirst && nameBox}
         <ul class="keypad-customer-list">
           {vm.customers.map((c) => (
             <li key={c.id}>
@@ -83,19 +101,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
             </li>
           ))}
         </ul>
-        <label class="keypad-new-name-label">
-          <span class="keypad-new-name-title">{t.newName}</span>
-          <input
-            type="text"
-            class="keypad-new-name"
-            value={newName}
-            onInput={(e) => {
-              setNewName((e.target as HTMLInputElement).value);
-              setCustomerId(null);
-            }}
-            autocomplete="off"
-          />
-        </label>
+        {!newFirst && nameBox}
       </section>
 
       <section class="keypad-when" aria-label={t.whenTitle}>

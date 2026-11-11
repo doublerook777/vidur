@@ -6,6 +6,9 @@ import type { Lang, Phase } from '../contract.js';
  * common ones and their keys are listed in KN_REVIEW for a native speaker to check.
  */
 export const KN_REVIEW: readonly string[] = [
+  'cancelInput',
+  'viewNotes',
+  'newCustomer',
   'phaseThinking',
   'phaseNeedsAnswer',
   'mockMode',
@@ -103,6 +106,9 @@ export type LabelKey =
   | 'removed'
   | 'answerYes'
   | 'answerNo'
+  | 'cancelInput'
+  | 'viewNotes'
+  | 'newCustomer'
   | 'whenTitle'
   | 'whenNow'
   | 'whenYesterday'
@@ -197,6 +203,9 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     removed: 'Entry removed',
     answerYes: 'Yes',
     answerNo: 'No',
+    cancelInput: 'Cancel and start again',
+    viewNotes: 'See notes',
+    newCustomer: 'New customer',
     whenTitle: 'When',
     whenNow: 'Now',
     whenYesterday: 'Yesterday',
@@ -290,6 +299,9 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     removed: 'एंट्री हटा दी',
     answerYes: 'हाँ',
     answerNo: 'नहीं',
+    cancelInput: 'रद्द करें, फिर से बोलें',
+    viewNotes: 'नोट देखें',
+    newCustomer: 'नया ग्राहक',
     whenTitle: 'कब',
     whenNow: 'अभी',
     whenYesterday: 'कल',
@@ -383,6 +395,9 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     removed: 'ನಮೂದು ತೆಗೆದಿದೆ',
     answerYes: 'ಹೌದು',
     answerNo: 'ಇಲ್ಲ',
+    cancelInput: 'ರದ್ದು ಮಾಡಿ, ಮತ್ತೆ ಹೇಳಿ',
+    viewNotes: 'ಟಿಪ್ಪಣಿ ನೋಡಿ',
+    newCustomer: 'ಹೊಸ ಗ್ರಾಹಕ',
     whenTitle: 'ಯಾವಾಗ',
     whenNow: 'ಈಗ',
     whenYesterday: 'ನಿನ್ನೆ',

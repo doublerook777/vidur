@@ -3,7 +3,7 @@ import { say, type Key, type P, type SpeechLang } from '../i18n/index.js';
 import { detectDirection, guessCustomerName, interpret, isOptInStatement, residualWords, yesNo } from '../intent/index.js';
 import type { Interpretation, ParsedEvent } from '../intent/index.js';
 import type { Ledger } from '../ledger/index.js';
-import { findByAlias, matchName } from '../names/index.js';
+import { aliasesFor, findByAlias, matchName } from '../names/index.js';
 import { CONFIRM_BELOW, parseAmount } from '../numbers/index.js';
 import { canRemind } from '../reminders/index.js';
 import { amountToSpoken } from '../speak/index.js';
@@ -77,6 +77,13 @@ export class Dialogue {
   get lang(): SpeechLang {
     return this.o.lang;
   }
+  /** Drops the open question without saving anything. Returns what to show. */
+  cancelPending(): Reply[] {
+    if (!this.pending) return [];
+    this.pending = null;
+    return [this.r('dropped_pending')];
+  }
+
   hasPending(): boolean {
     return this.pending !== null;
   }
@@ -269,7 +276,7 @@ export class Dialogue {
     }
     if (m.kind === 'ambiguous') {
       w.candidates = m.customerIds;
-      const aliases = m.customerIds.map((id) => customers.find((c) => c.id === id)?.aliases[0]);
+      const aliases = m.customerIds.map((id) => aliasesFor(customers.find((c) => c.id === id)?.aliases ?? [], this.o.lang)[0]);
       if (aliases.every((a): a is string => !!a)) {
         const joiner = ` ${say(this.o.lang, 'or')} `;
         return this.ask(w, 'which', this.r('ask_which', { name: spoken, options: aliases.join(joiner) }));
@@ -311,6 +318,8 @@ export class Dialogue {
     const bal = L.balance(customerId);
     if (w.replaceEntryId && w.mode === 'move') out.push(this.r('moved', { name }));
     else if (w.replaceEntryId && !w.flipped) out.push(this.r('replaced', { amount }));
+    else if (kind === 'credit' && bal === 0) out.push(this.r('credit_saved_even', { name, amount, when: when ?? '' }));
+    else if (kind === 'credit' && bal < 0) out.push(this.r('credit_saved_advance', { name, amount, advance: this.money(-bal), when: when ?? '' }));
     else if (kind === 'credit') out.push(this.r(when ? 'credit_saved_dated' : 'credit_saved', { name, amount, balance: this.money(bal), when: when ?? '' }));
     else if (bal === 0) out.push(this.r('payment_cleared', { name, amount }));
     else if (bal < 0) out.push(this.r('payment_advance', { name, amount, advance: this.money(-bal) }));
@@ -341,7 +350,7 @@ export class Dialogue {
     const id = w.customerId!;
     const name = L.customer(id)?.name ?? '';
     const bal = L.balance(id);
-    return [bal > 0 ? this.r('balance_customer', { name, balance: this.money(bal) }) : this.r('balance_zero', { name })];
+    return [bal > 0 ? this.r('balance_customer', { name, balance: this.money(bal) }) : bal < 0 ? this.r('balance_advance', { name, advance: this.money(-bal) }) : this.r('balance_zero', { name })];
   }
 
   private dayTotals(ev: ParsedEvent): Reply[] {
@@ -549,7 +558,7 @@ export class Dialogue {
   private reask(p: Pending): Reply[] {
     const w = p.work;
     const customers = this.o.ledger.customers();
-    const aliases = (w.candidates ?? []).map((id) => customers.find((c) => c.id === id)?.aliases[0]);
+    const aliases = (w.candidates ?? []).map((id) => aliasesFor(customers.find((c) => c.id === id)?.aliases ?? [], this.o.lang)[0]);
     p.expiresAt = this.o.clock() + this.o.pendingTtlMs;
     if (aliases.every((a): a is string => !!a)) {
       return [this.r('ask_which', { name: w.ev.customerSpoken ?? '', options: aliases.join(` ${say(this.o.lang, 'or')} `) })];
