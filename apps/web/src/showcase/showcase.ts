@@ -115,6 +115,7 @@ window.addEventListener('message', (event: MessageEvent) => {
 
   if (data.type === 'vidur:ready') {
     sendState();
+    if (window.innerWidth > 700) postToPhone({ type: 'vidur:scene', scene: scene as 0 | 1 | 2 | 3 });
     return;
   }
   if (data.type === 'vidur:feature' && isFeatureId((data as { id?: unknown }).id)) {
@@ -139,6 +140,7 @@ const wrap = document.getElementById('phoneWrap');
 const CHAPTERS = 4;
 const wide = window.matchMedia('(min-width: 1100px) and (min-height: 620px)');
 let scrubbing = false;
+let scene = 0;
 let queued = false;
 
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
@@ -162,9 +164,14 @@ function scrub(): void {
   const travel = box.height - window.innerHeight;
   const p = travel > 0 ? clamp(-box.top / travel, 0, 1) : 0;
   const x = p * (CHAPTERS - 1);
+  const active = clamp(Math.round(x), 0, CHAPTERS - 1);
+  if (active !== scene) {
+    scene = active;
+    postToPhone({ type: 'vidur:scene', scene: scene as 0 | 1 | 2 | 3 });
+  }
   for (let i = 0; i < CHAPTERS; i++) {
-    // Fully visible near its own position, gone by two thirds of the way to the next one.
-    track.style.setProperty(`--o${i}`, clamp(1.6 - Math.abs(x - i) * 2.6, 0, 1).toFixed(3));
+    // Sharp for the middle of its stretch, then it fades out fully before the next one fades in: never two texts at once.
+    track.style.setProperty(`--o${i}`, clamp((0.5 - Math.abs(x - i)) * 8, 0, 1).toFixed(3));
   }
 }
 

@@ -163,9 +163,11 @@ export async function seedDemoLedger(
     customerIds[spec.key] = customer.id;
 
     for (const [ei, e] of spec.entries.entries()) {
+      // The newest entry of every other customer is from today, so the first screen shows real numbers.
+      const daysAgo = ei === spec.entries.length - 1 && si % 2 === 1 ? 0 : e.daysAgo;
       // A believable shop day: each entry lands somewhere between 9:00 and 20:30, never in the future.
-      const minutes = 9 * 60 + ((si * 97 + ei * 53 + e.daysAgo * 31) % 690);
-      const at = Math.min(startOfDayIst(nowMs - e.daysAgo * DAY_MS) + minutes * 60_000, nowMs - (si + ei + 1) * 7 * 60_000);
+      const minutes = 9 * 60 + ((si * 97 + ei * 53 + daysAgo * 31) % 690);
+      const at = Math.min(startOfDayIst(nowMs - daysAgo * DAY_MS) + minutes * 60_000, nowMs - (si + ei + 1) * 7 * 60_000);
       await ledger.postEntry({
         customerId: customer.id,
         kind: e.kind,

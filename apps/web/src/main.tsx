@@ -148,6 +148,10 @@ async function boot(): Promise<void> {
   window.addEventListener('message', (e: MessageEvent<BridgeDown>) => {
     if (e.origin !== window.location.origin || e.source !== window.parent) return;
     const m = e.data;
+    if (m && m.type === 'vidur:scene') {
+      void session.showScene(m.scene);
+      return;
+    }
     if (!m || m.type !== 'vidur:set') return;
     if (m.theme) session.actions.setTheme(m.theme);
     if (m.lang) session.actions.setLang(m.lang);

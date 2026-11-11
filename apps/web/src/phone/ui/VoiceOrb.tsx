@@ -79,7 +79,7 @@ export function VoiceOrb({ vm, actions, lang }: ScreenProps<VoiceOrbVM>) {
         <g class="orb-bars">
           {Array.from({ length: BARS }, (_, i) => (
             <g key={i} style={`rotate: ${(i * 360) / BARS}deg`}>
-              <line class="orb-bar" x1="0" y1="-43" x2="0" y2="-55" style={`--i: ${i}`} />
+              <line class="orb-bar" x1="0" y1="-42" x2="0" y2="-50" style={`--i: ${i}`} />
             </g>
           ))}
         </g>

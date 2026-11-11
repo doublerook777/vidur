@@ -136,7 +136,8 @@ main { display: flex; flex-direction: column; gap: 40px; }
   text-transform: uppercase;
   box-shadow: 0 10px 18px -10px rgb(0 0 0 / 55%);
 }
-.tab-pale { width: fit-content; margin-bottom: 20px; }
+.slab-title { grid-column: 1 / -1; margin: 0 0 20px; font-family: var(--font-display); font-size: clamp(2.6rem, 5vw, 3.6rem); line-height: 1; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--on-slab); }
+.chapter-title { margin: 0 0 14px; font-size: 1.5rem; line-height: 1.15; font-weight: 800; letter-spacing: -0.01em; color: var(--on-slab); text-wrap: balance; }
 
 /* capsules with a hairline ring inside, like the reference */
 .tag, .topbar-chip, .scroll-tab, .arrow-btn, .round-btn, .control {
@@ -207,17 +208,8 @@ main { display: flex; flex-direction: column; gap: 40px; }
   right: 0;
   width: min(480px, 44%);
   height: 120px;
-  margin: 0;
-  padding: 14px 0 0;
   border-radius: 44px 44px 0 0;
   background: var(--slab);
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.7em;
-  text-indent: 0.7em;
-  text-transform: uppercase;
-  color: var(--on-slab-dim);
 }
 .say {
   grid-column: 1;
@@ -243,8 +235,8 @@ main { display: flex; flex-direction: column; gap: 40px; }
   align-self: center;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(6rem, 15vw, 11rem);
-  line-height: 0.88;
+  font-size: clamp(7rem, 19vw, 15rem);
+  line-height: 0.86;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -263,7 +255,7 @@ main { display: flex; flex-direction: column; gap: 40px; }
 .band {
   position: absolute;
   left: -6px;
-  top: 60%;
+  top: 62%;
   z-index: 1;
   padding: 10px 28px;
   border-radius: 10px;
@@ -361,7 +353,6 @@ main { display: flex; flex-direction: column; gap: 40px; }
 .chapter-slab { padding: 0; min-height: 300px; position: relative; }
 .chapters { list-style: none; margin: 0; padding: 0; }
 .chapter { padding: 30px 32px 56px; }
-.chapter .tab { margin-bottom: 16px; }
 .chapter p { margin: 0; max-width: 46ch; color: var(--on-slab); font-size: 1.06rem; font-weight: 500; text-wrap: pretty; }
 .side .pane { margin-top: -28px; margin-left: 20px; margin-right: 20px; }
 .side-left .pane { margin-right: 36px; margin-left: 12px; }
@@ -377,7 +368,7 @@ main { display: flex; flex-direction: column; gap: 40px; }
   inset: 0;
   opacity: var(--o);
   transform: translateY(calc((1 - var(--o)) * 16px));
-  filter: blur(calc((1 - var(--o)) * 4px));
+  filter: blur(calc((1 - var(--o)) * 2px));
   will-change: opacity, transform;
   pointer-events: none;
 }
@@ -467,18 +458,19 @@ main { display: flex; flex-direction: column; gap: 40px; }
 .more { display: flex; flex-direction: column; gap: 56px; }
 
 .langs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 500px); gap: 24px 36px; padding-bottom: 44px; }
-.langs .tab { grid-column: 1 / -1; }
 .langs-type { display: flex; flex-direction: column; justify-content: center; margin: 0; font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
 .langs-type span:nth-child(odd) { color: var(--on-slab); }
 .langs-type span:nth-child(even) { color: #7ccbc4; -webkit-text-stroke: 2px var(--on-slab-dim); }
 .langs-pane { margin-top: -6px; }
 
 .measured { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 24px 40px; padding-bottom: 44px; }
-.measured .tab { grid-column: 1 / -1; }
 .measured-type { display: flex; flex-direction: column; justify-content: center; margin: 0; font-family: var(--font-display); font-size: clamp(3rem, 6.4vw, 5.5rem); line-height: 1; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
 .measured-type span:first-child { color: var(--on-slab); }
 .measured-type span:last-child { color: #7ccbc4; -webkit-text-stroke: 2px var(--on-slab-dim); }
-.measured-pane { margin-right: 24px; }
+.measured { direction: rtl; }
+.measured > * { direction: ltr; }
+.measured-pane { margin-left: 24px; margin-right: 0; }
+.measured-type { align-items: flex-end; text-align: right; }
 .figures { margin: 0; display: grid; gap: 0; }
 .figure { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 6px 28px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--ring-ink); }
 .figure:first-child { padding-top: 0; }
@@ -487,11 +479,11 @@ main { display: flex; flex-direction: column; gap: 40px; }
 .measured-pane .panel-note { margin-top: 14px; }
 
 .privacy { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 40px; align-items: start; padding-bottom: 44px; }
-.privacy .tab { grid-column: 1 / -1; }
-.arch-pane { margin-top: 36px; }
+.arch-pane { margin-top: 36px; margin-right: -20px; border-top-right-radius: 70px; }
+.privacy-pane { margin-left: -20px; border-bottom-left-radius: 70px; }
 
 .limits { padding-bottom: 44px; }
-.limits-pane { margin-right: 24px; }
+.limits-pane { margin-left: auto; margin-right: -20px; max-width: 920px; border-top-left-radius: 70px; }
 
 /* ---------- footer bar ---------- */
 
@@ -545,7 +537,9 @@ main { display: flex; flex-direction: column; gap: 40px; }
   .hero-round { justify-content: flex-start; }
   .langs, .privacy, .measured { grid-template-columns: 1fr; }
   .arch-pane { margin-top: 0; }
-  .measured-pane, .limits-pane { margin-right: 0; }
+  .measured-pane, .limits-pane, .arch-pane, .privacy-pane { margin-left: 0; margin-right: 0; }
+  .measured { direction: ltr; }
+  .measured-type { align-items: flex-start; text-align: left; }
 }
 
 /* ---------- a phone-sized screen: just the app, full screen ---------- */

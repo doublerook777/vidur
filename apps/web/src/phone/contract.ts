@@ -136,7 +136,9 @@ export const FEATURE_IDS = [
 export type FeatureId = (typeof FEATURE_IDS)[number];
 
 /** Showcase to phone, and phone to showcase, over postMessage. Always check event.origin. */
-export type BridgeDown = { type: 'vidur:set'; theme?: Theme; lang?: Lang; frame?: FrameKind };
+/** The showcase asks the phone to show one moment, so the page and the phone tell the same story. */
+export type Scene = 0 | 1 | 2 | 3;
+export type BridgeDown = { type: 'vidur:set'; theme?: Theme; lang?: Lang; frame?: FrameKind } | { type: 'vidur:scene'; scene: Scene };
 export type BridgeUp =
   | { type: 'vidur:ready' }
   | { type: 'vidur:feature'; id: FeatureId }

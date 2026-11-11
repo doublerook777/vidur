@@ -28,7 +28,7 @@
 
       <main id="top">
         <section class="hero slab" aria-labelledby="wordmark">
-          <p class="hero-raised" aria-hidden="true">Voice khata</p>
+          <div class="hero-raised" aria-hidden="true"></div>
 
           <p class="say">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
@@ -81,19 +81,19 @@
                 <div class="slab chapter-slab">
                   <ol class="chapters" aria-label="What you do">
                     <li class="chapter" style="--o: var(--o0)">
-                      <h3 class="tab">Hold and speak</h3>
+                      <h3 class="chapter-title">Hold and speak</h3>
                       <p>Press and hold the circle. Say it the way you would to a helper at the counter: “Mohan ka teen sau chalis rupaye udhaar.” Let go.</p>
                     </li>
                     <li class="chapter" style="--o: var(--o1)">
-                      <h3 class="tab">It asks, it never guesses</h3>
+                      <h3 class="chapter-title">It asks, it never guesses</h3>
                       <p>Two Rameshes? A name it has never heard? A number it is not sure of? Vidur asks one short question, and saves nothing until you answer.</p>
                     </li>
                     <li class="chapter" style="--o: var(--o2)">
-                      <h3 class="tab">Fix it, by voice or by hand</h3>
+                      <h3 class="chapter-title">Fix it, by voice or by hand</h3>
                       <p>Say “nahi, 500” or “galat”. Or tap the three dots on any entry to remove it, or add one yourself with the date and time.</p>
                     </li>
                     <li class="chapter" style="--o: var(--o3)">
-                      <h3 class="tab">Your khata, your phone</h3>
+                      <h3 class="chapter-title">Your khata, your phone</h3>
                       <p>The ledger is encrypted on your phone. Transcripts are kept for 24 hours at most, and one control deletes everything.</p>
                     </li>
                   </ol>
@@ -141,19 +141,19 @@
                 <div class="slab chapter-slab">
                   <ol class="chapters" aria-label="What Vidur does">
                     <li class="chapter" style="--o: var(--o0)">
-                      <h3 class="tab">While you talk</h3>
+                      <h3 class="chapter-title">While you talk</h3>
                       <p>Your voice streams to Gnani’s speech recognition as you speak. Our own parser reads the amount and whether it is credit or payment, so no language model decides money.</p>
                     </li>
                     <li class="chapter" style="--o: var(--o1)">
-                      <h3 class="tab">Nothing unclear is saved</h3>
+                      <h3 class="chapter-title">Nothing unclear is saved</h3>
                       <p>A new name is only created after you say yes, and an unanswered question is dropped after 30 seconds. In our test of 240 noisy synthetic recordings, no amount was saved wrong without a question.</p>
                     </li>
                     <li class="chapter" style="--o: var(--o2)">
-                      <h3 class="tab">Every entry has a time</h3>
+                      <h3 class="chapter-title">Every entry has a time</h3>
                       <p>Each entry shows when the money moved, and when it was written down if that was another day. Removing an entry can be taken back for a few seconds.</p>
                     </li>
                     <li class="chapter" style="--o: var(--o3)">
-                      <h3 class="tab">The server keeps nothing</h3>
+                      <h3 class="chapter-title">The server keeps nothing</h3>
                       <p>Reminders are opt-in per customer, polite, at most one a week, and Vidur only prepares the text. You share it yourself, and nothing is ever sent for you.</p>
                     </li>
                   </ol>
@@ -188,7 +188,6 @@
 
         <div class="more">
           <section id="languages" class="slab langs" aria-labelledby="languages-h">
-            <h2 id="languages-h" class="tab tab-pale">Languages</h2>
             <p class="langs-type" aria-hidden="true">
               <span>हिंदी</span>
               <span>Hinglish</span>
@@ -196,7 +195,7 @@
               <span>ಕನ್ನಡ</span>
             </p>
             <div class="pane langs-pane">
-              <h3>Spoken the way people talk</h3>
+              <h2 id="languages-h">Spoken the way people talk</h2>
               <p>
                 Hindi, Hinglish, English and Kannada work at full quality. Speech is code-mixed by nature:
                 “Ramesh ka 340 credit” is a perfectly normal sentence, and Vidur reads amounts in spoken Indian
@@ -207,8 +206,7 @@
           </section>
 
           <section id="measured" class="slab measured" aria-labelledby="measured-h">
-            <h2 id="measured-h" class="tab tab-pale">Measured</h2>
-            <p class="measured-type" aria-hidden="true"><span>Measured,</span><span>not promised.</span></p>
+            <h2 id="measured-h" class="measured-type"><span>Measured,</span> <span>not promised.</span></h2>
             <div class="pane measured-pane">
               <dl class="figures">
                 <div class="figure"><dt>648 ms</dt><dd>from letting go of the circle to the first sound of the reply, typical (median) over 20 real turns in a browser</dd></div>
@@ -221,7 +219,7 @@
           </section>
 
           <section id="privacy" class="slab privacy" aria-labelledby="privacy-h">
-            <h2 id="privacy-h" class="tab tab-pale">Privacy</h2>
+            <h2 id="privacy-h" class="slab-title">Privacy</h2>
             <div class="pane privacy-pane">
               <ul>
                 <li>The ledger lives only on your phone, encrypted. The server stores nothing about your entries.</li>
@@ -243,7 +241,7 @@
           </section>
 
           <section id="honest-limits" class="slab limits" aria-labelledby="limits-h">
-            <h2 id="limits-h" class="tab tab-pale">Honest limits</h2>
+            <h2 id="limits-h" class="slab-title">Honest limits</h2>
             <div class="pane limits-pane">
               <ul>
                 <li>Speech recognition is not perfect. Vidur is built to <em>ask</em> when unsure rather than record a wrong amount, but mistakes still happen, so check the entry.</li>

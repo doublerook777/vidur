@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 
 import type { FeedItem } from '../contract.js';
 import { dayKey, formatDay, formatDayLong, formatRupees, formatTime, formatWhen } from './format.js';
@@ -18,15 +18,18 @@ export interface FeedVM {
 }
 
 /** One entry: who, what, the time, the amount; and a way to remove it. */
-export function EntryRow({ item, undoable, now, lang, actions }: { item: FeedItem; undoable: boolean; now: number; lang: 'hi' | 'en' | 'kn'; actions: ScreenProps<FeedVM>['actions'] }) {
+export function EntryRow({ item, undoable, now, lang, actions, showDate = true }: { item: FeedItem; undoable: boolean; now: number; lang: 'hi' | 'en' | 'kn'; actions: ScreenProps<FeedVM>['actions']; showDate?: boolean }) {
   const t = LABELS[lang];
   const [open, setOpen] = useState(false);
   const [asking, setAsking] = useState(false);
+  const row = useRef<HTMLLIElement>(null);
+  // Opening the menu or the question brings it clear of the floating nav.
+  const reveal = (): void => void requestAnimationFrame(() => row.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
   const Icon = item.kind === 'credit' ? IconArrowUp : item.kind === 'payment' ? IconArrowDown : IconNote;
   const word = item.kind === 'credit' ? t.credit : item.kind === 'payment' ? t.payment : t.note;
   const manageable = item.kind !== 'note';
   return (
-    <li class={`feed-item feed-item-${item.kind}${open ? ' feed-item-open' : ''}`}>
+    <li ref={row} class={`feed-item feed-item-${item.kind}${open ? ' feed-item-open' : ''}`}>
       <div class="feed-item-main">
         <span class="feed-item-icon" aria-hidden="true">
           <Icon size={22} />
@@ -36,7 +39,7 @@ export function EntryRow({ item, undoable, now, lang, actions }: { item: FeedIte
           <span class="feed-item-when" data-feature="timestamp">
             <span class="feed-item-kind-word">{word}</span>
             <span aria-hidden="true"> · </span>
-            <time dateTime={new Date(item.at).toISOString()}>{formatWhen(item.at, now, lang)}</time>
+            <time dateTime={new Date(item.at).toISOString()}>{showDate ? formatWhen(item.at, now, lang) : formatTime(item.at, lang)}</time>
           </span>
           {item.heard ? <span class="feed-item-heard">{item.heard}</span> : null}
         </span>
@@ -51,6 +54,7 @@ export function EntryRow({ item, undoable, now, lang, actions }: { item: FeedIte
             onClick={() => {
               setOpen(!open);
               setAsking(false);
+              reveal();
             }}
           >
             <IconMore size={20} />
@@ -70,7 +74,7 @@ export function EntryRow({ item, undoable, now, lang, actions }: { item: FeedIte
             {t.recordedAt}: {formatDay(item.recordedAt, lang)}, {formatTime(item.recordedAt, lang)}
           </p>
           {!asking ? (
-            <button type="button" class="btn btn-danger feed-remove" onClick={() => setAsking(true)}>
+            <button type="button" class="btn btn-danger feed-remove" onClick={() => { setAsking(true); reveal(); }}>
               <IconTrash size={18} />
               <span>{t.remove}</span>
             </button>
@@ -131,7 +135,7 @@ export function Feed({ vm, actions, lang }: ScreenProps<FeedVM>) {
           {g.heading ? <h3 class="feed-day">{g.heading}</h3> : null}
           <ul class="feed-list">
             {g.rows.map((item) => (
-              <EntryRow key={item.id} item={item} undoable={item.id === vm.showUndoForId} now={now} lang={lang} actions={actions} />
+              <EntryRow key={item.id} item={item} undoable={item.id === vm.showUndoForId} now={now} lang={lang} actions={actions} showDate={!vm.grouped} />
             ))}
           </ul>
         </div>

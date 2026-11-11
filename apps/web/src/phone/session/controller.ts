@@ -261,6 +261,10 @@ export class PhoneSession {
   }
 
   private speak(replies: Reply[]): void {
+    if (this.quiet) {
+      this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
+      return;
+    }
     if (!this.gateway.canSend) {
       this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : this.state.online ? 'idle' : 'offline');
       return;
@@ -409,6 +413,26 @@ export class PhoneSession {
     }
     this.dismissToast();
     this.refresh();
+  }
+
+  private quiet = false;
+
+  /**
+   * Shows one moment of the story for the showcase page: 0 home with the demo khata, 1 a real question from the dialogue,
+   * 2 the entries with their times, 3 settings with the encryption badge. The question is silent and nothing is saved by it.
+   */
+  async showScene(scene: 0 | 1 | 2 | 3): Promise<void> {
+    if (!this.state.onboarded) await this.finishOnboarding({ lang: this.state.lang, demoData: true });
+    if (this.state.phase === 'listening') return; // never move the screen under a press
+    if (scene === 2) return void this.actions.navigate('history');
+    if (scene === 3) return void this.actions.navigate('settings');
+    this.actions.navigate('home');
+    this.store.update({ card: null });
+    if (scene === 1) {
+      this.quiet = true;
+      await this.onTranscript({ text: 'Kiran ka 100 udhaar', lang: this.state.lang, sttMs: 0, audioMs: 0 });
+      this.quiet = false;
+    }
   }
 
   private async undo(entryId: string): Promise<void> {

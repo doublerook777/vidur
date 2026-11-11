@@ -20,11 +20,11 @@ export function formatTime(ms: number, lang: L): string {
 }
 /** "11 Nov" */
 export function formatDay(ms: number, lang: L): string {
-  return fmt(lang, { day: 'numeric', month: lang === 'en' ? 'short' : 'long' }).format(ms);
+  return fmt(lang, { day: 'numeric', month: 'short' }).format(ms);
 }
 /** "Wed, 11 Nov" */
 export function formatDayLong(ms: number, lang: L): string {
-  return fmt(lang, { weekday: 'short', day: 'numeric', month: lang === 'en' ? 'short' : 'long' }).format(ms);
+  return fmt(lang, { weekday: 'short', day: 'numeric', month: 'long' }).format(ms);
 }
 /** The calendar day in IST as a number that sorts, e.g. 20261111. */
 export function dayKey(ms: number): number {

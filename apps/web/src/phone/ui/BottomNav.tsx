@@ -37,10 +37,13 @@ export function BottomNav({ vm, actions, lang, orb }: ScreenProps<BottomNavVM> &
     </button>
   ));
   return (
-    <nav class={`bottom-nav${orb ? ' bottom-nav-with-orb' : ''}`} aria-label="Screens">
-      <div class="bottom-nav-side">{tabs.slice(0, 2)}</div>
-      {orb ? <div class="bottom-nav-orb">{orb}</div> : null}
-      <div class="bottom-nav-side">{tabs.slice(2)}</div>
-    </nav>
+    <>
+      <div class="nav-scrim" aria-hidden="true" />
+      <nav class={`bottom-nav${orb ? ' bottom-nav-with-orb' : ''}`} aria-label="Screens">
+        <div class="bottom-nav-side">{tabs.slice(0, 2)}</div>
+        {orb ? <div class="bottom-nav-orb">{orb}</div> : null}
+        <div class="bottom-nav-side">{tabs.slice(2)}</div>
+      </nav>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { dayKey, formatDay, formatTime, formatWhen, fromLocalInput, isBackdated, toLocalInput } from './format.js';
+import { dayKey, formatDay, formatDayLong, formatTime, formatWhen, fromLocalInput, isBackdated, toLocalInput } from './format.js';
 
 // Wed 11 Nov 2026, 14:30 in India (09:00 UTC)
 const NOW = Date.UTC(2026, 10, 11, 9, 0);
@@ -14,10 +14,11 @@ describe('dates are shown in India time', () => {
     expect(formatWhen(NOW - 26 * 3600e3, NOW, 'en')).toContain('·');
     expect(formatWhen(NOW - 26 * 3600e3, NOW, 'en')).toContain('10 Nov');
   });
-  it('names the month in full for Hindi and Kannada, short for English', () => {
+  it('uses a short month in every language so a row never wraps, and the long form for the heading date', () => {
     expect(formatDay(NOW, 'en')).toBe('11 Nov');
-    expect(formatDay(NOW, 'hi')).toContain('नवंबर');
-    expect(formatDay(NOW, 'kn').length).toBeGreaterThan(5);
+    expect(formatDay(NOW, 'hi')).toMatch(/^11 /);
+    expect(formatDay(NOW, 'hi').length).toBeLessThan(10);
+    expect(formatDayLong(NOW, 'hi')).toContain('नवंबर');
   });
   it('a time after midnight India time belongs to the next India day', () => {
     // 19:00 UTC on the 11th is 00:30 on the 12th in India

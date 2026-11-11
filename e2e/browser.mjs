@@ -265,8 +265,10 @@ try {
   const f0 = await fade(0); const f1 = await fade(1);
   check('the chapters around the phone are pinned and the first shows at the start', (await show.evaluate(() => document.getElementById('stage').classList.contains('scrub'))) && Number(f0[0]) > 0.95 && Number(f0[3]) < 0.05, f0.join(' '));
   check('the last chapter shows at the end and the first is gone', Number(f1[3]) > 0.95 && Number(f1[0]) < 0.05, f1.join(' '));
-  const fm = await fade(0.5);
-  check('in between, one chapter fades out as the next fades in', Number(fm[1]) > 0.1 && Number(fm[2]) > 0.1 && Number(fm[1]) < 0.9, fm.join(' '));
+  const fh = await fade(0.5);
+  check('at the handoff neither chapter shows, so two texts are never on top of each other', Number(fh[1]) < 0.15 && Number(fh[2]) < 0.15, fh.join(' '));
+  const fm = await fade(0.48);
+  check('just before the handoff the chapter is fading out', Number(fm[1]) > 0.1 && Number(fm[1]) < 0.9 && Number(fm[2]) < 0.05, fm.join(' '));
   const phoneBox = await show.locator('#phoneFrame').boundingBox();
   check('the whole phone stays in view while it is pinned', phoneBox.y >= 0 && phoneBox.y + phoneBox.height <= 900, `${Math.round(phoneBox.y)}-${Math.round(phoneBox.y + phoneBox.height)}`);
 

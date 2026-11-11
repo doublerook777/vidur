@@ -30,7 +30,10 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
     <main class="screen screen-home">
       <header class="screen-header">
         <StateIndicator vm={{ phase: vm.phase }} actions={actions} lang={lang} />
-        <AiBadge vm={{}} actions={actions} lang={lang} />
+        <span class="header-badges">
+          {vm.mockMode && <span class="demo-chip">{t.mockMode}</span>}
+          <AiBadge vm={{}} actions={actions} lang={lang} />
+        </span>
       </header>
 
       <div class="greeting">
@@ -46,8 +49,6 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
           {t.offlineBanner}
         </div>
       )}
-      {vm.mockMode && <div class="mock-banner" role="status">{t.mockMode}</div>}
-
       {vm.error && (
         <div class="error-banner" role="alert">
           <span class="error-text">{vm.error.text}</span>
@@ -60,7 +61,6 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
       <section class="totals" data-feature="totals" aria-label="today">
         <div class="totals-peek" aria-hidden="true">
           <span>{t.todayWord}</span>
-          <span>{formatDayLong(now, lang)}</span>
         </div>
         <div class="totals-card">
           <div class="totals-item totals-credit">

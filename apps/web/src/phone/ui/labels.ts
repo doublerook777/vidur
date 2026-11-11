@@ -218,7 +218,7 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     aiBadge: 'AI',
     navHome: 'होम',
     navCustomers: 'ग्राहक',
-    navReminders: 'याद दिलाएँ',
+    navReminders: 'याद',
     navSettings: 'सेटिंग',
     todayCredit: 'आज का उधार',
     todayPayment: 'आज जमा',
