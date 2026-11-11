@@ -1,0 +1,916 @@
+{
+  "lang": "bn",
+  "status": "draft",
+  "source": "https://www.preply.com/en/blog/bengali-numbers-1-to-100/ ; https://www.shalusharma.com/2020/12/bengali-numbers-1-to-100-in-words-in.html ; https://en.wikipedia.org/wiki/Bengali_numerals",
+  "units": {
+    "0": {
+      "native": [
+        "শূন্য"
+      ],
+      "roman": [
+        "shunyo"
+      ]
+    },
+    "1": {
+      "native": [
+        "এক"
+      ],
+      "roman": [
+        "ek"
+      ]
+    },
+    "2": {
+      "native": [
+        "দুই"
+      ],
+      "roman": [
+        "dui"
+      ]
+    },
+    "3": {
+      "native": [
+        "তিন"
+      ],
+      "roman": [
+        "tin"
+      ]
+    },
+    "4": {
+      "native": [
+        "চার"
+      ],
+      "roman": [
+        "char"
+      ]
+    },
+    "5": {
+      "native": [
+        "পাঁচ"
+      ],
+      "roman": [
+        "panch"
+      ]
+    },
+    "6": {
+      "native": [
+        "ছয়"
+      ],
+      "roman": [
+        "chhoy"
+      ]
+    },
+    "7": {
+      "native": [
+        "সাত"
+      ],
+      "roman": [
+        "sat"
+      ]
+    },
+    "8": {
+      "native": [
+        "আট"
+      ],
+      "roman": [
+        "ath"
+      ]
+    },
+    "9": {
+      "native": [
+        "নয়"
+      ],
+      "roman": [
+        "noy",
+        "noo"
+      ]
+    },
+    "10": {
+      "native": [
+        "দশ"
+      ],
+      "roman": [
+        "dosh"
+      ]
+    },
+    "11": {
+      "native": [
+        "এগারো"
+      ],
+      "roman": [
+        "egaro"
+      ]
+    },
+    "12": {
+      "native": [
+        "বারো"
+      ],
+      "roman": [
+        "baro"
+      ]
+    },
+    "13": {
+      "native": [
+        "তেরো"
+      ],
+      "roman": [
+        "tero"
+      ]
+    },
+    "14": {
+      "native": [
+        "চৌদ্দ"
+      ],
+      "roman": [
+        "choudo"
+      ]
+    },
+    "15": {
+      "native": [
+        "পনেরো"
+      ],
+      "roman": [
+        "ponero"
+      ]
+    },
+    "16": {
+      "native": [
+        "ষোলো"
+      ],
+      "roman": [
+        "solo"
+      ]
+    },
+    "17": {
+      "native": [
+        "সতেরো"
+      ],
+      "roman": [
+        "sotero"
+      ]
+    },
+    "18": {
+      "native": [
+        "আঠারো"
+      ],
+      "roman": [
+        "atharo"
+      ]
+    },
+    "19": {
+      "native": [
+        "ঊনিশ"
+      ],
+      "roman": [
+        "unish"
+      ]
+    },
+    "20": {
+      "native": [
+        "বিশ"
+      ],
+      "roman": [
+        "bish",
+        "kuri"
+      ]
+    },
+    "21": {
+      "native": [
+        "একুশ"
+      ],
+      "roman": [
+        "ekush"
+      ]
+    },
+    "22": {
+      "native": [
+        "বাইশ"
+      ],
+      "roman": [
+        "baish"
+      ]
+    },
+    "23": {
+      "native": [
+        "তেইশ"
+      ],
+      "roman": [
+        "teish"
+      ]
+    },
+    "24": {
+      "native": [
+        "চব্বিশ"
+      ],
+      "roman": [
+        "chobbish"
+      ]
+    },
+    "25": {
+      "native": [
+        "পঁচিশ"
+      ],
+      "roman": [
+        "ponchish"
+      ]
+    },
+    "26": {
+      "native": [
+        "ছাব্বিশ"
+      ],
+      "roman": [
+        "chhobbish"
+      ]
+    },
+    "27": {
+      "native": [
+        "সাতাশ"
+      ],
+      "roman": [
+        "satash"
+      ]
+    },
+    "28": {
+      "native": [
+        "আঠাশ"
+      ],
+      "roman": [
+        "athash"
+      ]
+    },
+    "29": {
+      "native": [
+        "ঊনত্রিশ"
+      ],
+      "roman": [
+        "unotrish"
+      ]
+    },
+    "30": {
+      "native": [
+        "ত্রিশ"
+      ],
+      "roman": [
+        "trish"
+      ]
+    },
+    "31": {
+      "native": [
+        "একত্রিশ"
+      ],
+      "roman": [
+        "ektrish"
+      ]
+    },
+    "32": {
+      "native": [
+        "বত্রিশ"
+      ],
+      "roman": [
+        "botrish"
+      ]
+    },
+    "33": {
+      "native": [
+        "তেত্রিশ"
+      ],
+      "roman": [
+        "tetrish"
+      ]
+    },
+    "34": {
+      "native": [
+        "চৌত্রিশ"
+      ],
+      "roman": [
+        "coutrish"
+      ]
+    },
+    "35": {
+      "native": [
+        "পঁয়ত্রিশ"
+      ],
+      "roman": [
+        "ponytrish"
+      ]
+    },
+    "36": {
+      "native": [
+        "ছত্রিশ"
+      ],
+      "roman": [
+        "chhotrish"
+      ]
+    },
+    "37": {
+      "native": [
+        "সাঁইত্রিশ"
+      ],
+      "roman": [
+        "sanitrish"
+      ]
+    },
+    "38": {
+      "native": [
+        "আটত্রিশ"
+      ],
+      "roman": [
+        "atrish"
+      ]
+    },
+    "39": {
+      "native": [
+        "ঊনচল্লিশ"
+      ],
+      "roman": [
+        "unochollish"
+      ]
+    },
+    "40": {
+      "native": [
+        "চল্লিশ"
+      ],
+      "roman": [
+        "chollish"
+      ]
+    },
+    "41": {
+      "native": [
+        "একচল্লিশ"
+      ],
+      "roman": [
+        "ekchollish"
+      ]
+    },
+    "42": {
+      "native": [
+        "বিয়াল্লিশ"
+      ],
+      "roman": [
+        "biyallish"
+      ]
+    },
+    "43": {
+      "native": [
+        "তেতাল্লিশ"
+      ],
+      "roman": [
+        "tetallish"
+      ]
+    },
+    "44": {
+      "native": [
+        "চুয়াল্লিশ"
+      ],
+      "roman": [
+        "chuyallish"
+      ]
+    },
+    "45": {
+      "native": [
+        "পঁয়তাল্লিশ"
+      ],
+      "roman": [
+        "ponytalish"
+      ]
+    },
+    "46": {
+      "native": [
+        "ছেচল্লিশ"
+      ],
+      "roman": [
+        "chhechollish"
+      ]
+    },
+    "47": {
+      "native": [
+        "সাতচল্লিশ"
+      ],
+      "roman": [
+        "shatchollish"
+      ]
+    },
+    "48": {
+      "native": [
+        "আটচল্লিশ"
+      ],
+      "roman": [
+        "atchollish"
+      ]
+    },
+    "49": {
+      "native": [
+        "ঊনপঞ্চাশ"
+      ],
+      "roman": [
+        "unoponchash"
+      ]
+    },
+    "50": {
+      "native": [
+        "পঞ্চাশ"
+      ],
+      "roman": [
+        "ponchash"
+      ]
+    },
+    "51": {
+      "native": [
+        "একান্ন"
+      ],
+      "roman": [
+        "ekanno"
+      ]
+    },
+    "52": {
+      "native": [
+        "বাহান্ন"
+      ],
+      "roman": [
+        "bahanno"
+      ]
+    },
+    "53": {
+      "native": [
+        "তিপ্পান্ন"
+      ],
+      "roman": [
+        "tippanno"
+      ]
+    },
+    "54": {
+      "native": [
+        "চুয়ান্ন"
+      ],
+      "roman": [
+        "chuyanno"
+      ]
+    },
+    "55": {
+      "native": [
+        "পঞ্চান্ন"
+      ],
+      "roman": [
+        "ponchanno"
+      ]
+    },
+    "56": {
+      "native": [
+        "ছাপ্পান্ন"
+      ],
+      "roman": [
+        "chhappanno"
+      ]
+    },
+    "57": {
+      "native": [
+        "সাতান্ন"
+      ],
+      "roman": [
+        "shatanno"
+      ]
+    },
+    "58": {
+      "native": [
+        "আটান্ন"
+      ],
+      "roman": [
+        "atanno"
+      ]
+    },
+    "59": {
+      "native": [
+        "ঊনষাট"
+      ],
+      "roman": [
+        "unoshat"
+      ]
+    },
+    "60": {
+      "native": [
+        "ষাট"
+      ],
+      "roman": [
+        "shat"
+      ]
+    },
+    "61": {
+      "native": [
+        "একষট্টি"
+      ],
+      "roman": [
+        "ekshotti"
+      ]
+    },
+    "62": {
+      "native": [
+        "বাষট্টি"
+      ],
+      "roman": [
+        "bashotti"
+      ]
+    },
+    "63": {
+      "native": [
+        "তেষট্টি"
+      ],
+      "roman": [
+        "teshotti"
+      ]
+    },
+    "64": {
+      "native": [
+        "চৌষট্টি"
+      ],
+      "roman": [
+        "choushotti"
+      ]
+    },
+    "65": {
+      "native": [
+        "পঁয়ষট্টি"
+      ],
+      "roman": [
+        "ponyshotti"
+      ]
+    },
+    "66": {
+      "native": [
+        "ছেষট্টি"
+      ],
+      "roman": [
+        "chheshotti"
+      ]
+    },
+    "67": {
+      "native": [
+        "সাতষট্টি"
+      ],
+      "roman": [
+        "shotshotti"
+      ]
+    },
+    "68": {
+      "native": [
+        "আটষট্টি"
+      ],
+      "roman": [
+        "atshotti"
+      ]
+    },
+    "69": {
+      "native": [
+        "ঊনসত্তর"
+      ],
+      "roman": [
+        "unshottor"
+      ]
+    },
+    "70": {
+      "native": [
+        "সত্তর"
+      ],
+      "roman": [
+        "shottor"
+      ]
+    },
+    "71": {
+      "native": [
+        "একাত্তর"
+      ],
+      "roman": [
+        "ekattor"
+      ]
+    },
+    "72": {
+      "native": [
+        "বাহাত্তর"
+      ],
+      "roman": [
+        "bahattor"
+      ]
+    },
+    "73": {
+      "native": [
+        "তিয়াত্তর"
+      ],
+      "roman": [
+        "tiyattor"
+      ]
+    },
+    "74": {
+      "native": [
+        "চুয়াত্তর"
+      ],
+      "roman": [
+        "chuyattor"
+      ]
+    },
+    "75": {
+      "native": [
+        "পঁচাত্তর"
+      ],
+      "roman": [
+        "ponchattor"
+      ]
+    },
+    "76": {
+      "native": [
+        "ছিয়াত্তর"
+      ],
+      "roman": [
+        "chhiyattor"
+      ]
+    },
+    "77": {
+      "native": [
+        "সাতাত্তর"
+      ],
+      "roman": [
+        "shatattor"
+      ]
+    },
+    "78": {
+      "native": [
+        "আটাত্তর"
+      ],
+      "roman": [
+        "atattor"
+      ]
+    },
+    "79": {
+      "native": [
+        "ঊনআশি"
+      ],
+      "roman": [
+        "unoashi"
+      ]
+    },
+    "80": {
+      "native": [
+        "আশি"
+      ],
+      "roman": [
+        "ashi"
+      ]
+    },
+    "81": {
+      "native": [
+        "একাশি"
+      ],
+      "roman": [
+        "ekashi"
+      ]
+    },
+    "82": {
+      "native": [
+        "বিরাশি"
+      ],
+      "roman": [
+        "birashi"
+      ]
+    },
+    "83": {
+      "native": [
+        "তিরাশি"
+      ],
+      "roman": [
+        "tirashi"
+      ]
+    },
+    "84": {
+      "native": [
+        "চুরাশি"
+      ],
+      "roman": [
+        "churashi"
+      ]
+    },
+    "85": {
+      "native": [
+        "পঁচাশি"
+      ],
+      "roman": [
+        "ponchashi"
+      ]
+    },
+    "86": {
+      "native": [
+        "ছিয়াশি"
+      ],
+      "roman": [
+        "chhiyashi"
+      ]
+    },
+    "87": {
+      "native": [
+        "সাতাশি"
+      ],
+      "roman": [
+        "shatashi"
+      ]
+    },
+    "88": {
+      "native": [
+        "আটাশি"
+      ],
+      "roman": [
+        "atashi"
+      ]
+    },
+    "89": {
+      "native": [
+        "ঊননব্বই"
+      ],
+      "roman": [
+        "unonobboi"
+      ]
+    },
+    "90": {
+      "native": [
+        "নব্বই"
+      ],
+      "roman": [
+        "nobboi"
+      ]
+    },
+    "91": {
+      "native": [
+        "একানব্বই"
+      ],
+      "roman": [
+        "ekanobboi"
+      ]
+    },
+    "92": {
+      "native": [
+        "বিরানব্বই"
+      ],
+      "roman": [
+        "biranobboi"
+      ]
+    },
+    "93": {
+      "native": [
+        "তিরানব্বই"
+      ],
+      "roman": [
+        "tiranobboi"
+      ]
+    },
+    "94": {
+      "native": [
+        "চুরানব্বই"
+      ],
+      "roman": [
+        "churanobboi"
+      ]
+    },
+    "95": {
+      "native": [
+        "পঁচানব্বই"
+      ],
+      "roman": [
+        "ponchanobboi"
+      ]
+    },
+    "96": {
+      "native": [
+        "ছিয়ানব্বই"
+      ],
+      "roman": [
+        "chhiyanobboi"
+      ]
+    },
+    "97": {
+      "native": [
+        "সাতানব্বই"
+      ],
+      "roman": [
+        "shatanobboi"
+      ]
+    },
+    "98": {
+      "native": [
+        "আটানব্বই"
+      ],
+      "roman": [
+        "atanobboi"
+      ]
+    },
+    "99": {
+      "native": [
+        "নিরানব্বই"
+      ],
+      "roman": [
+        "niranobboi"
+      ]
+    },
+    "100": {
+      "native": [
+        "একশ"
+      ],
+      "roman": [
+        "eksho",
+        "shot"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "শত",
+        "একশ"
+      ],
+      "roman": [
+        "shoto",
+        "eksho"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "হাজার"
+      ],
+      "roman": [
+        "hajar"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "লক্ষ",
+        "লাখ"
+      ],
+      "roman": [
+        "lokkho",
+        "lakh"
+      ]
+    },
+    "crore": {
+      "native": [
+        "কোটি"
+      ],
+      "roman": [
+        "koti"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "দেড়"
+      ],
+      "roman": [
+        "der"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "আড়াই"
+      ],
+      "roman": [
+        "arai"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "সোয়া"
+      ],
+      "roman": [
+        "sowa"
+      ],
+      "value": 1.25
+    },
+    "paune": {
+      "native": [
+        "পোনে"
+      ],
+      "roman": [
+        "pone"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "সাড়ে"
+      ],
+      "roman": [
+        "sare"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "০": "0",
+    "১": "1",
+    "২": "2",
+    "৩": "3",
+    "৪": "4",
+    "৫": "5",
+    "৬": "6",
+    "৭": "7",
+    "৮": "8",
+    "৯": "9"
+  },
+  "notes": "Near-complete 0-100; romanized forms from shalusharma (colloquial western-India-leaning transliteration) cross-checked against preply and Wikipedia (Bengali numerals). শূন্য also 'sunnyo'. 20 also 'কুড়ি' (kuri, traditional/colloquial), 6 also 'ছ'. Fractions are cognate with Hindi (dedh~ḍer 1.5, dhai~arai 2.5, sawa~sowa 1.25, paune~pone 3/4, saade~sare +1/2 for units >= 3). Verify with a native speaker. Indian numbering uses lakh/crore."
+}

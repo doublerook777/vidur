@@ -1,0 +1,916 @@
+{
+  "lang": "pa",
+  "status": "draft",
+  "source": "https://www.shalusharma.com/2024/10/punjabi-numbers-1-to-100-in-english.html ; https://www.omniglot.com/language/numbers/punjabi.htm (bot-blocked at fetch time; search snippet used for 0-9)",
+  "units": {
+    "0": {
+      "native": [
+        "ਸਿਫਰ",
+        "ਸੁੰਨ"
+      ],
+      "roman": [
+        "sifar",
+        "sunn"
+      ]
+    },
+    "1": {
+      "native": [
+        "ਇੱਕ"
+      ],
+      "roman": [
+        "ikk"
+      ]
+    },
+    "2": {
+      "native": [
+        "ਦੋ"
+      ],
+      "roman": [
+        "do"
+      ]
+    },
+    "3": {
+      "native": [
+        "ਤਿੰਨ"
+      ],
+      "roman": [
+        "tinn"
+      ]
+    },
+    "4": {
+      "native": [
+        "ਚਾਰ"
+      ],
+      "roman": [
+        "chaar"
+      ]
+    },
+    "5": {
+      "native": [
+        "ਪੰਜ"
+      ],
+      "roman": [
+        "panj"
+      ]
+    },
+    "6": {
+      "native": [
+        "ਛੇ"
+      ],
+      "roman": [
+        "chhe"
+      ]
+    },
+    "7": {
+      "native": [
+        "ਸੱਤ"
+      ],
+      "roman": [
+        "satt"
+      ]
+    },
+    "8": {
+      "native": [
+        "ਅੱਠ"
+      ],
+      "roman": [
+        "ath"
+      ]
+    },
+    "9": {
+      "native": [
+        "ਨੌਂ"
+      ],
+      "roman": [
+        "nao"
+      ]
+    },
+    "10": {
+      "native": [
+        "ਦਸ"
+      ],
+      "roman": [
+        "das"
+      ]
+    },
+    "11": {
+      "native": [
+        "ਗਿਆਰਾਂ"
+      ],
+      "roman": [
+        "giaraan"
+      ]
+    },
+    "12": {
+      "native": [
+        "ਬਾਰਾਂ"
+      ],
+      "roman": [
+        "baran"
+      ]
+    },
+    "13": {
+      "native": [
+        "ਤੇਰਾਂ"
+      ],
+      "roman": [
+        "teran"
+      ]
+    },
+    "14": {
+      "native": [
+        "ਚੌਦਾਂ"
+      ],
+      "roman": [
+        "chaudan"
+      ]
+    },
+    "15": {
+      "native": [
+        "ਪੰਦਰਾਂ"
+      ],
+      "roman": [
+        "pandran"
+      ]
+    },
+    "16": {
+      "native": [
+        "ਸੋਲਾਂ"
+      ],
+      "roman": [
+        "solan"
+      ]
+    },
+    "17": {
+      "native": [
+        "ਸਤਾਰਾਂ"
+      ],
+      "roman": [
+        "sataran"
+      ]
+    },
+    "18": {
+      "native": [
+        "ਅਠਾਰਾਂ"
+      ],
+      "roman": [
+        "atharan"
+      ]
+    },
+    "19": {
+      "native": [
+        "ਉੱਨੀ"
+      ],
+      "roman": [
+        "unni"
+      ]
+    },
+    "20": {
+      "native": [
+        "ਵੀਹ"
+      ],
+      "roman": [
+        "veeh"
+      ]
+    },
+    "21": {
+      "native": [
+        "ਇੱਕੀ"
+      ],
+      "roman": [
+        "ikki"
+      ]
+    },
+    "22": {
+      "native": [
+        "ਬਾਈ"
+      ],
+      "roman": [
+        "baayi"
+      ]
+    },
+    "23": {
+      "native": [
+        "ਤਾਈ"
+      ],
+      "roman": [
+        "taayi"
+      ]
+    },
+    "24": {
+      "native": [
+        "ਚੌਵੀ"
+      ],
+      "roman": [
+        "chovi"
+      ]
+    },
+    "25": {
+      "native": [
+        "ਪੱਚੀ"
+      ],
+      "roman": [
+        "pachi"
+      ]
+    },
+    "26": {
+      "native": [
+        "ਛੱਬੀ"
+      ],
+      "roman": [
+        "chhabi"
+      ]
+    },
+    "27": {
+      "native": [
+        "ਸੱਤੀ"
+      ],
+      "roman": [
+        "satti"
+      ]
+    },
+    "28": {
+      "native": [
+        "ਅਠੱਤੀ"
+      ],
+      "roman": [
+        "athatti"
+      ]
+    },
+    "29": {
+      "native": [
+        "ਉਣੱਤੀ"
+      ],
+      "roman": [
+        "unatti"
+      ]
+    },
+    "30": {
+      "native": [
+        "ਤੀਹ"
+      ],
+      "roman": [
+        "teeh"
+      ]
+    },
+    "31": {
+      "native": [
+        "ਇਕੱਤੀ"
+      ],
+      "roman": [
+        "ikatti"
+      ]
+    },
+    "32": {
+      "native": [
+        "ਬੱਤੀ"
+      ],
+      "roman": [
+        "batti"
+      ]
+    },
+    "33": {
+      "native": [
+        "ਤੈਂਤੀ"
+      ],
+      "roman": [
+        "tainti"
+      ]
+    },
+    "34": {
+      "native": [
+        "ਚੌਂਤੀ"
+      ],
+      "roman": [
+        "chaunti"
+      ]
+    },
+    "35": {
+      "native": [
+        "ਪੈਂਤੀ"
+      ],
+      "roman": [
+        "penti"
+      ]
+    },
+    "36": {
+      "native": [
+        "ਛੱਤੀ"
+      ],
+      "roman": [
+        "chhatti"
+      ]
+    },
+    "37": {
+      "native": [
+        "ਸੰਤੀ"
+      ],
+      "roman": [
+        "santi"
+      ]
+    },
+    "38": {
+      "native": [
+        "ਅਠੰਤੀ"
+      ],
+      "roman": [
+        "athanti"
+      ]
+    },
+    "39": {
+      "native": [
+        "ਉਨਤਾਲੀ"
+      ],
+      "roman": [
+        "untali"
+      ]
+    },
+    "40": {
+      "native": [
+        "ਚਾਲੀ"
+      ],
+      "roman": [
+        "chaali"
+      ]
+    },
+    "41": {
+      "native": [
+        "ਇਕਤਾਲੀ"
+      ],
+      "roman": [
+        "iktali"
+      ]
+    },
+    "42": {
+      "native": [
+        "ਬਿਆਲੀ"
+      ],
+      "roman": [
+        "byali"
+      ]
+    },
+    "43": {
+      "native": [
+        "ਤਿਰਤਾਲੀ"
+      ],
+      "roman": [
+        "tirtali"
+      ]
+    },
+    "44": {
+      "native": [
+        "ਚੁਤਾਲੀ"
+      ],
+      "roman": [
+        "chutali"
+      ]
+    },
+    "45": {
+      "native": [
+        "ਪੰਤਾਲੀ"
+      ],
+      "roman": [
+        "pantali"
+      ]
+    },
+    "46": {
+      "native": [
+        "ਛਿਆਲੀ"
+      ],
+      "roman": [
+        "chiyali"
+      ]
+    },
+    "47": {
+      "native": [
+        "ਸੰਤਾਲੀ"
+      ],
+      "roman": [
+        "santaali"
+      ]
+    },
+    "48": {
+      "native": [
+        "ਅਠਤਾਲੀ"
+      ],
+      "roman": [
+        "athtali"
+      ]
+    },
+    "49": {
+      "native": [
+        "ਉਨੰਜਾ"
+      ],
+      "roman": [
+        "unanja"
+      ]
+    },
+    "50": {
+      "native": [
+        "ਪੰਜਾਹ"
+      ],
+      "roman": [
+        "panjah"
+      ]
+    },
+    "51": {
+      "native": [
+        "ਇਕਵੰਜਾ"
+      ],
+      "roman": [
+        "ikvanja"
+      ]
+    },
+    "52": {
+      "native": [
+        "ਬਵੰਜਾ"
+      ],
+      "roman": [
+        "bavnja"
+      ]
+    },
+    "53": {
+      "native": [
+        "ਤ੍ਰੇਵੰਜਾ"
+      ],
+      "roman": [
+        "trevanja"
+      ]
+    },
+    "54": {
+      "native": [
+        "ਚਉਵੰਜਾ"
+      ],
+      "roman": [
+        "chauvanja"
+      ]
+    },
+    "55": {
+      "native": [
+        "ਪਚਵੰਜਾ"
+      ],
+      "roman": [
+        "pachvanja"
+      ]
+    },
+    "56": {
+      "native": [
+        "ਛਪੰਜਾ"
+      ],
+      "roman": [
+        "chhapanja"
+      ]
+    },
+    "57": {
+      "native": [
+        "ਸਤਵੰਜਾ"
+      ],
+      "roman": [
+        "satvanja"
+      ]
+    },
+    "58": {
+      "native": [
+        "ਅਠਵੰਜਾ"
+      ],
+      "roman": [
+        "athvanja"
+      ]
+    },
+    "59": {
+      "native": [
+        "ਉਣਾਹਠ"
+      ],
+      "roman": [
+        "unahatha"
+      ]
+    },
+    "60": {
+      "native": [
+        "ਸੱਠ"
+      ],
+      "roman": [
+        "satth"
+      ]
+    },
+    "61": {
+      "native": [
+        "ਇਕਾਹਠ"
+      ],
+      "roman": [
+        "ikahath"
+      ]
+    },
+    "62": {
+      "native": [
+        "ਬਾਹਠ"
+      ],
+      "roman": [
+        "bahath"
+      ]
+    },
+    "63": {
+      "native": [
+        "ਤ੍ਰੇਹਠ"
+      ],
+      "roman": [
+        "trehat"
+      ]
+    },
+    "64": {
+      "native": [
+        "ਚੌਹਠ"
+      ],
+      "roman": [
+        "chauhat"
+      ]
+    },
+    "65": {
+      "native": [
+        "ਪੈਂਹਠ"
+      ],
+      "roman": [
+        "painhat"
+      ]
+    },
+    "66": {
+      "native": [
+        "ਛਿਆਹਠ"
+      ],
+      "roman": [
+        "chiahat"
+      ]
+    },
+    "67": {
+      "native": [
+        "ਸਤਾਹਠ"
+      ],
+      "roman": [
+        "satahath"
+      ]
+    },
+    "68": {
+      "native": [
+        "ਅਠਾਹਠ"
+      ],
+      "roman": [
+        "athahat"
+      ]
+    },
+    "69": {
+      "native": [
+        "ਉਣਾਨੱਵੈ"
+      ],
+      "roman": [
+        "unannavai"
+      ]
+    },
+    "70": {
+      "native": [
+        "ਸੱਤਰ"
+      ],
+      "roman": [
+        "sattar"
+      ]
+    },
+    "71": {
+      "native": [
+        "ਇਕਹੱਤਰ"
+      ],
+      "roman": [
+        "ikhattar"
+      ]
+    },
+    "72": {
+      "native": [
+        "ਬਹੱਤਰ"
+      ],
+      "roman": [
+        "bahattar"
+      ]
+    },
+    "73": {
+      "native": [
+        "ਤਿਹੱਤਰ"
+      ],
+      "roman": [
+        "tihattar"
+      ]
+    },
+    "74": {
+      "native": [
+        "ਚੌਹੱਤਰ"
+      ],
+      "roman": [
+        "chauhattar"
+      ]
+    },
+    "75": {
+      "native": [
+        "ਪਹੱਤਰ"
+      ],
+      "roman": [
+        "pahattar"
+      ]
+    },
+    "76": {
+      "native": [
+        "ਛਿਹੱਤਰ"
+      ],
+      "roman": [
+        "chihattar"
+      ]
+    },
+    "77": {
+      "native": [
+        "ਸਤਹੱਤਰ"
+      ],
+      "roman": [
+        "sathattar"
+      ]
+    },
+    "78": {
+      "native": [
+        "ਅਠਹੱਤਰ"
+      ],
+      "roman": [
+        "athhattar"
+      ]
+    },
+    "79": {
+      "native": [
+        "ਉਣਾਸੀ"
+      ],
+      "roman": [
+        "unnasi"
+      ]
+    },
+    "80": {
+      "native": [
+        "ਅੱਸੀ"
+      ],
+      "roman": [
+        "assi"
+      ]
+    },
+    "81": {
+      "native": [
+        "ਇਕਿਆਸੀ"
+      ],
+      "roman": [
+        "ikiasi"
+      ]
+    },
+    "82": {
+      "native": [
+        "ਬਿਆਸੀ"
+      ],
+      "roman": [
+        "byasi"
+      ]
+    },
+    "83": {
+      "native": [
+        "ਤਿਰਾਸੀ"
+      ],
+      "roman": [
+        "tirasi"
+      ]
+    },
+    "84": {
+      "native": [
+        "ਚੌਰਾਸੀ"
+      ],
+      "roman": [
+        "chaurasi"
+      ]
+    },
+    "85": {
+      "native": [
+        "ਪਚਾਸੀ"
+      ],
+      "roman": [
+        "pachasi"
+      ]
+    },
+    "86": {
+      "native": [
+        "ਛਿਆਸੀ"
+      ],
+      "roman": [
+        "chhiyasi"
+      ]
+    },
+    "87": {
+      "native": [
+        "ਸਤਾਸੀ"
+      ],
+      "roman": [
+        "satasi"
+      ]
+    },
+    "88": {
+      "native": [
+        "ਅਠਾਸੀ"
+      ],
+      "roman": [
+        "athasi"
+      ]
+    },
+    "89": {
+      "native": [
+        "ਉਨਾਨਵੇ"
+      ],
+      "roman": [
+        "unannave"
+      ]
+    },
+    "90": {
+      "native": [
+        "ਨੱਬੇ"
+      ],
+      "roman": [
+        "nabbe"
+      ]
+    },
+    "91": {
+      "native": [
+        "ਇਕਾਨਵੇ"
+      ],
+      "roman": [
+        "ekanve"
+      ]
+    },
+    "92": {
+      "native": [
+        "ਬਾਨਵੇ"
+      ],
+      "roman": [
+        "banve"
+      ]
+    },
+    "93": {
+      "native": [
+        "ਤਿਰਾਨਵੇ"
+      ],
+      "roman": [
+        "tiranve"
+      ]
+    },
+    "94": {
+      "native": [
+        "ਚੁਰਾਨਵੇ"
+      ],
+      "roman": [
+        "churannve"
+      ]
+    },
+    "95": {
+      "native": [
+        "ਪੰਜਾਨਵੇ"
+      ],
+      "roman": [
+        "panjanve"
+      ]
+    },
+    "96": {
+      "native": [
+        "ਛਿਆਨਵੇ"
+      ],
+      "roman": [
+        "chhianve"
+      ]
+    },
+    "97": {
+      "native": [
+        "ਸਤਾਨਵੇ"
+      ],
+      "roman": [
+        "sataanve"
+      ]
+    },
+    "98": {
+      "native": [
+        "ਅਠਾਨਵੇ"
+      ],
+      "roman": [
+        "athaanve"
+      ]
+    },
+    "99": {
+      "native": [
+        "ਨੜੱਸੀ"
+      ],
+      "roman": [
+        "narasi"
+      ]
+    },
+    "100": {
+      "native": [
+        "ਸੌ"
+      ],
+      "roman": [
+        "sau"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "ਸੌ"
+      ],
+      "roman": [
+        "sau"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "ਹਜ਼ਾਰ",
+        "ਹਜਾਰ"
+      ],
+      "roman": [
+        "hazaar",
+        "hajaar"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "ਲੱਖ"
+      ],
+      "roman": [
+        "lakh"
+      ]
+    },
+    "crore": {
+      "native": [
+        "ਕਰੋੜ"
+      ],
+      "roman": [
+        "karod",
+        "crore"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "ਡੇਢ"
+      ],
+      "roman": [
+        "dedh"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "ਢਾਈ"
+      ],
+      "roman": [
+        "dhai"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "ਸਵਾ"
+      ],
+      "roman": [
+        "savaa",
+        "sawa"
+      ],
+      "value": 1.25
+    },
+    "paune": {
+      "native": [
+        "ਪੌਣੇ"
+      ],
+      "roman": [
+        "paune"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "ਸਾਢੇ"
+      ],
+      "roman": [
+        "sadhe",
+        "saade"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "੦": "0",
+    "੧": "1",
+    "੨": "2",
+    "੩": "3",
+    "੪": "4",
+    "੫": "5",
+    "੬": "6",
+    "੭": "7",
+    "੮": "8",
+    "੯": "9"
+  },
+  "notes": "Near-complete 0-100 per source (single source; verify with a native speaker). 62 source prints 'ਬਾਠ' (suspected typo); standard ਬਾਹਠ used. 99 'ਨੜੱਸੀ' is as printed in source; dialectal variants exist. Fractions are cognate with Hindi usage (dedh=1.5, dhai=2.5, savaa=1.25 e.g. ਸਵਾ ਸੌ = 125, paune=3/4 of next unit e.g. ਪੌਣੇ ਦੋ ਸੌ = 175, sadhe=+1/2 e.g. ਸਾਢੇ ਤਿੰਨ ਸੌ = 350). Punjabi is usually written in Gurmukhi in India and Shahmukhi in Pakistan; only Gurmukhi tables are included here."
+}

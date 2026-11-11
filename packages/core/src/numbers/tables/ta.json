@@ -1,0 +1,935 @@
+{
+  "lang": "ta",
+  "status": "draft",
+  "source": "https://ilearntamil.com/numbers-in-tamil/ ; https://en.wikipedia.org/wiki/Tamil_numerals",
+  "units": {
+    "0": {
+      "native": [
+        "பூஜ்யம்",
+        "பூஜ்ஜியம்"
+      ],
+      "roman": [
+        "puujyam",
+        "poojyam"
+      ]
+    },
+    "1": {
+      "native": [
+        "ஒன்று"
+      ],
+      "roman": [
+        "onru",
+        "onnu"
+      ]
+    },
+    "2": {
+      "native": [
+        "இரண்டு"
+      ],
+      "roman": [
+        "irandu",
+        "rendu"
+      ]
+    },
+    "3": {
+      "native": [
+        "மூன்று"
+      ],
+      "roman": [
+        "muunru",
+        "moonu"
+      ]
+    },
+    "4": {
+      "native": [
+        "நான்கு"
+      ],
+      "roman": [
+        "naanku",
+        "naalu"
+      ]
+    },
+    "5": {
+      "native": [
+        "ஐந்து"
+      ],
+      "roman": [
+        "aintu",
+        "anju"
+      ]
+    },
+    "6": {
+      "native": [
+        "ஆறு"
+      ],
+      "roman": [
+        "aaru"
+      ]
+    },
+    "7": {
+      "native": [
+        "ஏழு"
+      ],
+      "roman": [
+        "eelu",
+        "yelu"
+      ]
+    },
+    "8": {
+      "native": [
+        "எட்டு"
+      ],
+      "roman": [
+        "ettu"
+      ]
+    },
+    "9": {
+      "native": [
+        "ஒன்பது"
+      ],
+      "roman": [
+        "onpatu",
+        "onbadhu"
+      ]
+    },
+    "10": {
+      "native": [
+        "பத்து"
+      ],
+      "roman": [
+        "pattu",
+        "pathu"
+      ]
+    },
+    "11": {
+      "native": [
+        "பதினொன்று"
+      ],
+      "roman": [
+        "patinonru",
+        "pathinonnu"
+      ]
+    },
+    "12": {
+      "native": [
+        "பன்னிரண்டு"
+      ],
+      "roman": [
+        "pannirandu"
+      ]
+    },
+    "13": {
+      "native": [
+        "பதிமூன்று"
+      ],
+      "roman": [
+        "patimuunru"
+      ]
+    },
+    "14": {
+      "native": [
+        "பதிநான்கு"
+      ],
+      "roman": [
+        "patinaanku"
+      ]
+    },
+    "15": {
+      "native": [
+        "பதினைந்து"
+      ],
+      "roman": [
+        "patinaintu"
+      ]
+    },
+    "16": {
+      "native": [
+        "பதினாறு"
+      ],
+      "roman": [
+        "patinaaru"
+      ]
+    },
+    "17": {
+      "native": [
+        "பதினேழு"
+      ],
+      "roman": [
+        "patineelu"
+      ]
+    },
+    "18": {
+      "native": [
+        "பதினெட்டு"
+      ],
+      "roman": [
+        "patinettu"
+      ]
+    },
+    "19": {
+      "native": [
+        "பத்தொன்பது"
+      ],
+      "roman": [
+        "pattompatu",
+        "pathombodhu"
+      ]
+    },
+    "20": {
+      "native": [
+        "இருபது"
+      ],
+      "roman": [
+        "irupatu",
+        "irubathu"
+      ]
+    },
+    "21": {
+      "native": [
+        "இருபத்தி ஒன்று"
+      ],
+      "roman": [
+        "irupatthi onru"
+      ]
+    },
+    "22": {
+      "native": [
+        "இருபத்தி இரண்டு"
+      ],
+      "roman": [
+        "irupatthi irandu"
+      ]
+    },
+    "23": {
+      "native": [
+        "இருபத்தி மூன்று"
+      ],
+      "roman": [
+        "irupatthi muunru"
+      ]
+    },
+    "24": {
+      "native": [
+        "இருபத்தி நான்கு"
+      ],
+      "roman": [
+        "irupatthi naanku"
+      ]
+    },
+    "25": {
+      "native": [
+        "இருபத்தி ஐந்து"
+      ],
+      "roman": [
+        "irupatthi aintu"
+      ]
+    },
+    "26": {
+      "native": [
+        "இருபத்தி ஆறு"
+      ],
+      "roman": [
+        "irupatthi aaru"
+      ]
+    },
+    "27": {
+      "native": [
+        "இருபத்தி ஏழு"
+      ],
+      "roman": [
+        "irupatthi eelu"
+      ]
+    },
+    "28": {
+      "native": [
+        "இருபத்தி எட்டு"
+      ],
+      "roman": [
+        "irupatthi ettu"
+      ]
+    },
+    "29": {
+      "native": [
+        "இருபத்தி ஒன்பது"
+      ],
+      "roman": [
+        "irupatthi onpatu"
+      ]
+    },
+    "30": {
+      "native": [
+        "முப்பது"
+      ],
+      "roman": [
+        "muppatu",
+        "muppathu"
+      ]
+    },
+    "31": {
+      "native": [
+        "முப்பத்தி ஒன்று"
+      ],
+      "roman": [
+        "muppatthi onru"
+      ]
+    },
+    "32": {
+      "native": [
+        "முப்பத்தி இரண்டு"
+      ],
+      "roman": [
+        "muppatthi irandu"
+      ]
+    },
+    "33": {
+      "native": [
+        "முப்பத்தி மூன்று"
+      ],
+      "roman": [
+        "muppatthi muunru"
+      ]
+    },
+    "34": {
+      "native": [
+        "முப்பத்தி நான்கு"
+      ],
+      "roman": [
+        "muppatthi naanku"
+      ]
+    },
+    "35": {
+      "native": [
+        "முப்பத்தி ஐந்து"
+      ],
+      "roman": [
+        "muppatthi aintu"
+      ]
+    },
+    "36": {
+      "native": [
+        "முப்பத்தி ஆறு"
+      ],
+      "roman": [
+        "muppatthi aaru"
+      ]
+    },
+    "37": {
+      "native": [
+        "முப்பத்தி ஏழு"
+      ],
+      "roman": [
+        "muppatthi eelu"
+      ]
+    },
+    "38": {
+      "native": [
+        "முப்பத்தி எட்டு"
+      ],
+      "roman": [
+        "muppatthi ettu"
+      ]
+    },
+    "39": {
+      "native": [
+        "முப்பத்தி ஒன்பது"
+      ],
+      "roman": [
+        "muppatthi onpatu"
+      ]
+    },
+    "40": {
+      "native": [
+        "நாற்பது"
+      ],
+      "roman": [
+        "naarpatu",
+        "nartpathu"
+      ]
+    },
+    "41": {
+      "native": [
+        "நாற்பத்தி ஒன்று"
+      ],
+      "roman": [
+        "naarpatthi onru"
+      ]
+    },
+    "42": {
+      "native": [
+        "நாற்பத்தி இரண்டு"
+      ],
+      "roman": [
+        "naarpatthi irandu"
+      ]
+    },
+    "43": {
+      "native": [
+        "நாற்பத்தி மூன்று"
+      ],
+      "roman": [
+        "naarpatthi muunru"
+      ]
+    },
+    "44": {
+      "native": [
+        "நாற்பத்தி நான்கு"
+      ],
+      "roman": [
+        "naarpatthi naanku"
+      ]
+    },
+    "45": {
+      "native": [
+        "நாற்பத்தி ஐந்து"
+      ],
+      "roman": [
+        "naarpatthi aintu"
+      ]
+    },
+    "46": {
+      "native": [
+        "நாற்பத்தி ஆறு"
+      ],
+      "roman": [
+        "naarpatthi aaru"
+      ]
+    },
+    "47": {
+      "native": [
+        "நாற்பத்தி ஏழு"
+      ],
+      "roman": [
+        "naarpatthi eelu"
+      ]
+    },
+    "48": {
+      "native": [
+        "நாற்பத்தி எட்டு"
+      ],
+      "roman": [
+        "naarpatthi ettu"
+      ]
+    },
+    "49": {
+      "native": [
+        "நாற்பத்தி ஒன்பது"
+      ],
+      "roman": [
+        "naarpatthi onpatu"
+      ]
+    },
+    "50": {
+      "native": [
+        "ஐம்பது"
+      ],
+      "roman": [
+        "aimpatu",
+        "aimpathu"
+      ]
+    },
+    "51": {
+      "native": [
+        "ஐம்பத்தி ஒன்று"
+      ],
+      "roman": [
+        "aimpatthi onru"
+      ]
+    },
+    "52": {
+      "native": [
+        "ஐம்பத்தி இரண்டு"
+      ],
+      "roman": [
+        "aimpatthi irandu"
+      ]
+    },
+    "53": {
+      "native": [
+        "ஐம்பத்தி மூன்று"
+      ],
+      "roman": [
+        "aimpatthi muunru"
+      ]
+    },
+    "54": {
+      "native": [
+        "ஐம்பத்தி நான்கு"
+      ],
+      "roman": [
+        "aimpatthi naanku"
+      ]
+    },
+    "55": {
+      "native": [
+        "ஐம்பத்தி ஐந்து"
+      ],
+      "roman": [
+        "aimpatthi aintu"
+      ]
+    },
+    "56": {
+      "native": [
+        "ஐம்பத்தி ஆறு"
+      ],
+      "roman": [
+        "aimpatthi aaru"
+      ]
+    },
+    "57": {
+      "native": [
+        "ஐம்பத்தி ஏழு"
+      ],
+      "roman": [
+        "aimpatthi eelu"
+      ]
+    },
+    "58": {
+      "native": [
+        "ஐம்பத்தி எட்டு"
+      ],
+      "roman": [
+        "aimpatthi ettu"
+      ]
+    },
+    "59": {
+      "native": [
+        "ஐம்பத்தி ஒன்பது"
+      ],
+      "roman": [
+        "aimpatthi onpatu"
+      ]
+    },
+    "60": {
+      "native": [
+        "அறுபது"
+      ],
+      "roman": [
+        "arupatu",
+        "arupathu"
+      ]
+    },
+    "61": {
+      "native": [
+        "அறுபத்து ஒன்று"
+      ],
+      "roman": [
+        "arupatthu onru"
+      ]
+    },
+    "62": {
+      "native": [
+        "அறுபத்து இரண்டு"
+      ],
+      "roman": [
+        "arupatthu irandu"
+      ]
+    },
+    "63": {
+      "native": [
+        "அறுபத்து மூன்று"
+      ],
+      "roman": [
+        "arupatthu muunru"
+      ]
+    },
+    "64": {
+      "native": [
+        "அறுபத்து நான்கு"
+      ],
+      "roman": [
+        "arupatthu naanku"
+      ]
+    },
+    "65": {
+      "native": [
+        "அறுபத்து ஐந்து"
+      ],
+      "roman": [
+        "arupatthu aintu"
+      ]
+    },
+    "66": {
+      "native": [
+        "அறுபத்து ஆறு"
+      ],
+      "roman": [
+        "arupatthu aaru"
+      ]
+    },
+    "67": {
+      "native": [
+        "அறுபத்து ஏழு"
+      ],
+      "roman": [
+        "arupatthu eelu"
+      ]
+    },
+    "68": {
+      "native": [
+        "அறுபத்து எட்டு"
+      ],
+      "roman": [
+        "arupatthu ettu"
+      ]
+    },
+    "69": {
+      "native": [
+        "அறுபத்து ஒன்பது"
+      ],
+      "roman": [
+        "arupatthu onpatu"
+      ]
+    },
+    "70": {
+      "native": [
+        "எழுபது"
+      ],
+      "roman": [
+        "ezupatu",
+        "ezhupathu"
+      ]
+    },
+    "71": {
+      "native": [
+        "எழுபத்து ஒன்று"
+      ],
+      "roman": [
+        "ezupatthu onru"
+      ]
+    },
+    "72": {
+      "native": [
+        "எழுபத்து இரண்டு"
+      ],
+      "roman": [
+        "ezupatthu irandu"
+      ]
+    },
+    "73": {
+      "native": [
+        "எழுபத்து மூன்று"
+      ],
+      "roman": [
+        "ezupatthu muunru"
+      ]
+    },
+    "74": {
+      "native": [
+        "எழுபத்து நான்கு"
+      ],
+      "roman": [
+        "ezupatthu naanku"
+      ]
+    },
+    "75": {
+      "native": [
+        "எழுபத்து ஐந்து"
+      ],
+      "roman": [
+        "ezupatthu aintu"
+      ]
+    },
+    "76": {
+      "native": [
+        "எழுபத்து ஆறு"
+      ],
+      "roman": [
+        "ezupatthu aaru"
+      ]
+    },
+    "77": {
+      "native": [
+        "எழுபத்து ஏழு"
+      ],
+      "roman": [
+        "ezupatthu eelu"
+      ]
+    },
+    "78": {
+      "native": [
+        "எழுபத்து எட்டு"
+      ],
+      "roman": [
+        "ezupatthu ettu"
+      ]
+    },
+    "79": {
+      "native": [
+        "எழுபத்து ஒன்பது"
+      ],
+      "roman": [
+        "ezupatthu onpatu"
+      ]
+    },
+    "80": {
+      "native": [
+        "எண்பது"
+      ],
+      "roman": [
+        "enpatu"
+      ]
+    },
+    "81": {
+      "native": [
+        "எண்பத்து ஒன்று"
+      ],
+      "roman": [
+        "enpatthu onru"
+      ]
+    },
+    "82": {
+      "native": [
+        "எண்பத்து இரண்டு"
+      ],
+      "roman": [
+        "enpatthu irandu"
+      ]
+    },
+    "83": {
+      "native": [
+        "எண்பத்து மூன்று"
+      ],
+      "roman": [
+        "enpatthu muunru"
+      ]
+    },
+    "84": {
+      "native": [
+        "எண்பத்து நான்கு"
+      ],
+      "roman": [
+        "enpatthu naanku"
+      ]
+    },
+    "85": {
+      "native": [
+        "எண்பத்து ஐந்து"
+      ],
+      "roman": [
+        "enpatthu aintu"
+      ]
+    },
+    "86": {
+      "native": [
+        "எண்பத்து ஆறு"
+      ],
+      "roman": [
+        "enpatthu aaru"
+      ]
+    },
+    "87": {
+      "native": [
+        "எண்பத்து ஏழு"
+      ],
+      "roman": [
+        "enpatthu eelu"
+      ]
+    },
+    "88": {
+      "native": [
+        "எண்பத்து எட்டு"
+      ],
+      "roman": [
+        "enpatthu ettu"
+      ]
+    },
+    "89": {
+      "native": [
+        "எண்பத்து ஒன்பது"
+      ],
+      "roman": [
+        "enpatthu onpatu"
+      ]
+    },
+    "90": {
+      "native": [
+        "தொன்னூறு",
+        "தொண்ணூறு"
+      ],
+      "roman": [
+        "thonnuuru",
+        "thonnooru"
+      ]
+    },
+    "91": {
+      "native": [
+        "தொன்னூற்று ஒன்று"
+      ],
+      "roman": [
+        "thonnuutru onru"
+      ]
+    },
+    "92": {
+      "native": [
+        "தொன்னூற்று இரண்டு"
+      ],
+      "roman": [
+        "thonnuutru irandu"
+      ]
+    },
+    "93": {
+      "native": [
+        "தொன்னூற்று மூன்று"
+      ],
+      "roman": [
+        "thonnuutru muunru"
+      ]
+    },
+    "94": {
+      "native": [
+        "தொன்னூற்று நான்கு"
+      ],
+      "roman": [
+        "thonnuutru naanku"
+      ]
+    },
+    "95": {
+      "native": [
+        "தொன்னூற்று ஐந்து"
+      ],
+      "roman": [
+        "thonnuutru aintu"
+      ]
+    },
+    "96": {
+      "native": [
+        "தொன்னூற்று ஆறு"
+      ],
+      "roman": [
+        "thonnuutru aaru"
+      ]
+    },
+    "97": {
+      "native": [
+        "தொன்னூற்று ஏழு"
+      ],
+      "roman": [
+        "thonnuutru eelu"
+      ]
+    },
+    "98": {
+      "native": [
+        "தொன்னூற்று எட்டு"
+      ],
+      "roman": [
+        "thonnuutru ettu"
+      ]
+    },
+    "99": {
+      "native": [
+        "தொன்னூற்று ஒன்பது"
+      ],
+      "roman": [
+        "thonnuutru onpatu"
+      ]
+    },
+    "100": {
+      "native": [
+        "நூறு"
+      ],
+      "roman": [
+        "nuuru",
+        "nooru"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "நூறு"
+      ],
+      "roman": [
+        "nuuru",
+        "nooru"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "ஆயிரம்"
+      ],
+      "roman": [
+        "aayiram"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "லட்சம்"
+      ],
+      "roman": [
+        "latcham",
+        "lakh"
+      ]
+    },
+    "crore": {
+      "native": [
+        "கோடி"
+      ],
+      "roman": [
+        "kodi",
+        "crore"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "ஒன்றரை"
+      ],
+      "roman": [
+        "ondrarai",
+        "ondraray"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "இரண்டரை"
+      ],
+      "roman": [
+        "irandrai",
+        "irandaray"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "கால்"
+      ],
+      "roman": [
+        "kaal"
+      ],
+      "value": 0.25
+    },
+    "paune": {
+      "native": [
+        "முக்கால்"
+      ],
+      "roman": [
+        "mukkaal"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "அரை"
+      ],
+      "roman": [
+        "arai"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "௦": "0",
+    "௧": "1",
+    "௨": "2",
+    "௩": "3",
+    "௪": "4",
+    "௫": "5",
+    "௬": "6",
+    "௭": "7",
+    "௮": "8",
+    "௯": "9"
+  },
+  "notes": "Source list omits 0, 1 and 51; 0 (பூஜ்யம்) is standard but unverified in fetched sources, 1 (ஒன்று) is standard, 51 (ஐம்பத்தி ஒன்று) is pattern-constructed per attested பத்து+unit connectors. Compounds are two words (இருபத்தி ஒன்று) per source. 90 தொன்னூறு (also தொண்ணூறு); 91-99 use தொன்னூற்று+unit per source. Fractions are equivalents not cognates: arai = half (unit+arai fused e.g. மூன்றரை = 3.5), kaal = quarter (1 1/4 spoken 'ஒன்றே கால்', unverified), mukkaal = 3/4. Verify all with a native speaker before production use."
+}

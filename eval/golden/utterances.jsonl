@@ -1,0 +1,167 @@
+{"id": "G-HI-001", "lang": "hi", "text": "रमेश का तीन सौ चालीस उधार", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-HI-002", "lang": "hi", "text": "रमेश का ३४० उधार", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-HI-003", "lang": "hi", "text": "सुनीता को दो सौ उधार लिख दो", "expected": {"intent": "credit_entry", "amount": 200, "customer": "Sunita"}}
+{"id": "G-HI-004", "lang": "hi", "text": "कविता का डेढ़ सौ उधार", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Kavya"}}
+{"id": "G-HI-005", "lang": "hi", "text": "मोहन को ढाई सौ उधार", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Mohan"}}
+{"id": "G-HI-006", "lang": "hi", "text": "अजय का साढ़े तीन सौ उधार", "expected": {"intent": "credit_entry", "amount": 350, "customer": "Ajay"}}
+{"id": "G-HI-007", "lang": "hi", "text": "रमेश को ढाई हज़ार उधार", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Ramesh"}}
+{"id": "G-HI-008", "lang": "hi", "text": "सुनीता का सवा सौ उधार", "expected": {"intent": "credit_entry", "amount": 125, "customer": "Sunita"}}
+{"id": "G-HI-009", "lang": "hi", "text": "कविता का पौने दो सौ उधार", "expected": {"intent": "credit_entry", "amount": 175, "customer": "Kavya"}}
+{"id": "G-HI-010", "lang": "hi", "text": "रमेश ने दो सौ जमा किए", "expected": {"intent": "payment", "amount": 200, "customer": "Ramesh"}}
+{"id": "G-HI-011", "lang": "hi", "text": "सुनीता का दो सौ वापस आया", "expected": {"intent": "payment", "amount": 200, "customer": "Sunita"}}
+{"id": "G-HI-012", "lang": "hi", "text": "कविता ने ढाई सौ चुकाया", "expected": {"intent": "payment", "amount": 250, "customer": "Kavya"}}
+{"id": "G-HI-013", "lang": "hi", "text": "मोहन ने कल दो सौ दिया था", "expected": {"intent": "payment", "amount": 200, "customer": "Mohan", "date": "yesterday"}}
+{"id": "G-HI-014", "lang": "hi", "text": "रमेश ने आज सौ रुपये जमा किए", "expected": {"intent": "payment", "amount": 100, "customer": "Ramesh", "date": "today"}}
+{"id": "G-HI-015", "lang": "hi", "text": "सुनीता दो हज़ार पाँच सौ वापस", "expected": {"intent": "payment", "amount": 2500, "customer": "Sunita"}}
+{"id": "G-HI-016", "lang": "hi", "text": "कविता का एक लाख का उधार", "expected": {"intent": "credit_entry", "amount": 100000, "customer": "Kavya"}}
+{"id": "G-HI-017", "lang": "hi", "text": "रमेश का एक लाख बीस हज़ार उधार", "expected": {"intent": "credit_entry", "amount": 120000, "customer": "Ramesh"}}
+{"id": "G-HI-018", "lang": "hi", "text": "मोहन को दो लाख उधार", "expected": {"intent": "credit_entry", "amount": 200000, "customer": "Mohan"}}
+{"id": "G-HI-019", "lang": "hi", "text": "अरे नहीं, ४३०", "expected": {"intent": "correction", "amount": 430}}
+{"id": "G-HI-020", "lang": "hi", "text": "रमेश का ३४० उधार, नहीं नहीं ४३० उधार", "expected": {"intent": "correction", "amount": 430, "customer": "Ramesh"}}
+{"id": "G-HI-021", "lang": "hi", "text": "गलत, रद्द करो", "expected": {"intent": "correction"}}
+{"id": "G-HI-022", "lang": "hi", "text": "नहीं, सुरेश का था", "expected": {"intent": "correction", "customer": "Suresh"}}
+{"id": "G-HI-023", "lang": "hi", "text": "आज कितना उधार गया?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "G-HI-024", "lang": "hi", "text": "रमेश का टोटल?", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
+{"id": "G-HI-025", "lang": "hi", "text": "सुनीता का बकाया कितना है?", "expected": {"intent": "balance_query", "customer": "Sunita"}}
+{"id": "G-HI-026", "lang": "hi", "text": "रमेश कल पाँच सौ देगा", "expected": {"intent": "note", "amount": 500, "customer": "Ramesh", "date": "tomorrow"}}
+{"id": "G-HI-027", "lang": "hi", "text": "कविता का दो किलो आटा उधार", "expected": {"intent": "credit_entry", "customer": "Kavya", "item": "atta"}}
+{"id": "G-HI-028", "lang": "hi", "text": "सुनीता को reminder भेजो", "expected": {"intent": "reminder_opt_in", "customer": "Sunita"}}
+{"id": "G-HI-029", "lang": "hi", "text": "रमेश को polite reminder भेजो", "expected": {"intent": "reminder_opt_in", "customer": "Ramesh"}}
+{"id": "G-HI-030", "lang": "hi", "text": "रमेश को धमकी दो", "expected": {"intent": "refusal", "customer": "Ramesh"}}
+{"id": "G-HI-031", "lang": "hi", "text": "ब्याज लगा दो", "expected": {"intent": "refusal"}}
+{"id": "G-HI-032", "lang": "hi", "text": "रमेश को १८ प्रतिशत ब्याज लगाओ", "expected": {"intent": "refusal", "customer": "Ramesh"}}
+{"id": "G-HI-033", "lang": "hi", "text": "क्या रमेश को उधार देना चाहिए?", "expected": {"intent": "refusal", "customer": "Ramesh"}}
+{"id": "G-HI-034", "lang": "hi", "text": "मुझे उधार दे दो", "expected": {"intent": "refusal"}}
+{"id": "G-HI-035", "lang": "hi", "text": "मौसम कैसा है आज?", "expected": {"intent": "out_of_scope"}}
+{"id": "G-HI-036", "lang": "hi", "text": "रमेश का ३४० उधार", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-HI-037", "lang": "hi", "text": "रमेश ३४०", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-HI-038", "lang": "hi", "text": "मोहन का सवा दो सौ उधार", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Mohan"}}
+{"id": "G-HI-039", "lang": "hi", "text": "सुनीता का पौने तीन सौ उधार", "expected": {"intent": "credit_entry", "amount": 275, "customer": "Sunita"}}
+{"id": "G-HI-040", "lang": "hi", "text": "कविता का दो पचा ५० उधार", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
+{"id": "G-HI-041", "lang": "hi", "text": "रमेश की तीन चालीस उधार", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-EN-001", "lang": "en", "text": "Ramesh ka 340 credit", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-EN-002", "lang": "en", "text": "Put 340 on Ramesh's account", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-EN-003", "lang": "en", "text": "Kavya got one fifty credit", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Kavya"}}
+{"id": "G-EN-004", "lang": "en", "text": "Mohan took two fifty on credit", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Mohan"}}
+{"id": "G-EN-005", "lang": "en", "text": "Sunita ka three hundred forty rupees udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Sunita"}}
+{"id": "G-EN-006", "lang": "en", "text": "Ajay, one hundred twenty five credit", "expected": {"intent": "credit_entry", "amount": 125, "customer": "Ajay"}}
+{"id": "G-EN-007", "lang": "en", "text": "Ramesh dhai hazaar is Hindi; in English: Ramesh two thousand five hundred credit", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Ramesh"}}
+{"id": "G-EN-008", "lang": "en", "text": "Kavya owes one lakh", "expected": {"intent": "credit_entry", "amount": 100000, "customer": "Kavya"}}
+{"id": "G-EN-009", "lang": "en", "text": "Mohan one lakh twenty thousand credit", "expected": {"intent": "credit_entry", "amount": 120000, "customer": "Mohan"}}
+{"id": "G-EN-010", "lang": "en", "text": "Ramesh ka two seventy five credit", "expected": {"intent": "credit_entry", "amount": 275, "customer": "Ramesh"}}
+{"id": "G-EN-011", "lang": "en", "text": "Kavya two twenty five on credit", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Kavya"}}
+{"id": "G-EN-012", "lang": "en", "text": "Ramesh paid 200", "expected": {"intent": "payment", "amount": 200, "customer": "Ramesh"}}
+{"id": "G-EN-013", "lang": "en", "text": "Sunita gave back three forty yesterday", "expected": {"intent": "payment", "amount": 340, "customer": "Sunita", "date": "yesterday"}}
+{"id": "G-EN-014", "lang": "en", "text": "Mohan paid one fifty today", "expected": {"intent": "payment", "amount": 150, "customer": "Mohan", "date": "today"}}
+{"id": "G-EN-015", "lang": "en", "text": "Kavya returned two thousand rupees", "expected": {"intent": "payment", "amount": 2000, "customer": "Kavya"}}
+{"id": "G-EN-016", "lang": "en", "text": "Ajay paid two thousand five hundred", "expected": {"intent": "payment", "amount": 2500, "customer": "Ajay"}}
+{"id": "G-EN-017", "lang": "en", "text": "Nahi 430", "expected": {"intent": "correction", "amount": 430}}
+{"id": "G-EN-018", "lang": "en", "text": "Sorry, make it 430", "expected": {"intent": "correction", "amount": 430}}
+{"id": "G-EN-019", "lang": "en", "text": "Ramesh ka 340 credit, no no 430 credit", "expected": {"intent": "correction", "amount": 430, "customer": "Ramesh"}}
+{"id": "G-EN-020", "lang": "en", "text": "Cancel that", "expected": {"intent": "correction"}}
+{"id": "G-EN-021", "lang": "en", "text": "No, it was Suresh's", "expected": {"intent": "correction", "customer": "Suresh"}}
+{"id": "G-EN-022", "lang": "en", "text": "How much credit did I give today?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "G-EN-023", "lang": "en", "text": "What's Ramesh's total?", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
+{"id": "G-EN-024", "lang": "en", "text": "How much does Sunita owe?", "expected": {"intent": "balance_query", "customer": "Sunita"}}
+{"id": "G-EN-025", "lang": "en", "text": "Today's udhaar total?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "G-EN-026", "lang": "en", "text": "Ramesh will pay five hundred tomorrow", "expected": {"intent": "note", "amount": 500, "customer": "Ramesh", "date": "tomorrow"}}
+{"id": "G-EN-027", "lang": "en", "text": "Send Ramesh a reminder", "expected": {"intent": "reminder_opt_in", "customer": "Ramesh"}}
+{"id": "G-EN-028", "lang": "en", "text": "Opt Sunita in for reminders", "expected": {"intent": "reminder_opt_in", "customer": "Sunita"}}
+{"id": "G-EN-029", "lang": "en", "text": "Threaten Ramesh to pay up", "expected": {"intent": "refusal", "customer": "Ramesh"}}
+{"id": "G-EN-030", "lang": "en", "text": "Put 5% interest on Mohan's dues", "expected": {"intent": "refusal", "customer": "Mohan"}}
+{"id": "G-EN-031", "lang": "en", "text": "Should I lend money to Ajay?", "expected": {"intent": "refusal", "customer": "Ajay"}}
+{"id": "G-EN-032", "lang": "en", "text": "Is Kavya a good customer?", "expected": {"intent": "refusal", "customer": "Kavya"}}
+{"id": "G-EN-033", "lang": "en", "text": "Lend me fifty rupees", "expected": {"intent": "refusal"}}
+{"id": "G-EN-034", "lang": "en", "text": "What's the weather today?", "expected": {"intent": "out_of_scope"}}
+{"id": "G-EN-035", "lang": "en", "text": "Tell me a joke", "expected": {"intent": "out_of_scope"}}
+{"id": "G-EN-036", "lang": "en", "text": "Ramesh 340", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-EN-037", "lang": "en", "text": "Ramesh ka credit 340", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-EN-038", "lang": "en", "text": "Kavya two packets sugar on credit", "expected": {"intent": "credit_entry", "customer": "Kavya", "item": "sugar"}}
+{"id": "G-EN-039", "lang": "en", "text": "Mohan and Sunita both took credit today", "expected": {"intent": "credit_entry", "customer": "Mohan"}}
+{"id": "G-EN-040", "lang": "en", "text": "Ramesh one fifty credit", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Ramesh"}}
+{"id": "G-EN-041", "lang": "en", "text": "Suresh ka one twenty five credit", "expected": {"intent": "credit_entry", "amount": 125, "customer": "Suresh"}}
+{"id": "G-KN-001", "lang": "kn", "text": "ರಮೇಶ್ ೩೪೦ ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-KN-002", "lang": "kn", "text": "ಸುನಿತಾ ಒಂದು ನೂರಾ ಐವತ್ತು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Sunita"}}
+{"id": "G-KN-003", "lang": "kn", "text": "ಕಾವ್ಯಾ ಎರಡು ನೂರಾ ಐವತ್ತು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
+{"id": "G-KN-004", "lang": "kn", "text": "ಮೋಹನ್ ಮುನ್ನೂರಾ ನಾಲ್ವತ್ತು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Mohan"}}
+{"id": "G-KN-005", "lang": "kn", "text": "ಅಜಯ್ ಎರಡು ಸಾವಿರೈದು ನೂರು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Ajay"}}
+{"id": "G-KN-006", "lang": "kn", "text": "ರಮೇಶ್ ಒಂದು ಲಕ್ಷ ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 100000, "customer": "Ramesh"}}
+{"id": "G-KN-007", "lang": "kn", "text": "ಸುನಿತಾ ಒಂದು ಲಕ್ಷ ಇಪ್ಪತ್ತು ಸಾವಿರ ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 120000, "customer": "Sunita"}}
+{"id": "G-KN-008", "lang": "kn", "text": "ಕಾವ್ಯಾ ನೂರಾ ಇಪ್ಪತ್ತೈದು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 125, "customer": "Kavya"}}
+{"id": "G-KN-009", "lang": "kn", "text": "ಮೋಹನ್ ಎರಡು ನೂರಾ ಇಪ್ಪತ್ತೈದು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Mohan"}}
+{"id": "G-KN-010", "lang": "kn", "text": "ಅಜಯ್ ಎರಡು ನೂರಾ ಎಪ್ಪತ್ತೈದು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 275, "customer": "Ajay"}}
+{"id": "G-KN-011", "lang": "kn", "text": "ಸಾಡೆ ಮುನ್ನೂರು ಉಧಾರ್ ರಮೇಶ್", "expected": {"intent": "credit_entry", "amount": 350, "customer": "Ramesh"}}
+{"id": "G-KN-012", "lang": "kn", "text": "ರಮೇಶ್ ೨೦೦ ಜಮಾ ಮಾಡಿದ", "expected": {"intent": "payment", "amount": 200, "customer": "Ramesh"}}
+{"id": "G-KN-013", "lang": "kn", "text": "ಸುನಿತಾ ನಿನ್ನೆ ೨೦೦ ಕೊಟ್ಟಳು", "expected": {"intent": "payment", "amount": 200, "customer": "Sunita", "date": "yesterday"}}
+{"id": "G-KN-014", "lang": "kn", "text": "ಕಾವ್ಯಾ ಇಂದು ೧೫೦ ಕೊಟ್ಟಳು", "expected": {"intent": "payment", "amount": 150, "customer": "Kavya", "date": "today"}}
+{"id": "G-KN-015", "lang": "kn", "text": "ಮೋಹನ್ ಎರಡು ಸಾವಿರ ವಾಪಸ್ ಕೊಟ್ಟ", "expected": {"intent": "payment", "amount": 2000, "customer": "Mohan"}}
+{"id": "G-KN-016", "lang": "kn", "text": "ರಮೇಶ್ ರದ್ದು ಮಾಡು, ೪೩೦", "expected": {"intent": "correction", "amount": 430, "customer": "Ramesh"}}
+{"id": "G-KN-017", "lang": "kn", "text": "ಇಲ್ಲ, ೪೩೦", "expected": {"intent": "correction", "amount": 430}}
+{"id": "G-KN-018", "lang": "kn", "text": "ತಪ್ಪಾಯ್ತು, ರದ್ದು", "expected": {"intent": "correction"}}
+{"id": "G-KN-019", "lang": "kn", "text": "ಇಲ್ಲ, ಸುರೇಶ್ ಅದು", "expected": {"intent": "correction", "customer": "Suresh"}}
+{"id": "G-KN-020", "lang": "kn", "text": "ಇಂದು ಎಷ್ಟು ಉಧಾರ್ ಕೊಟ್ಟೆ?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "G-KN-021", "lang": "kn", "text": "ರಮೇಶ್ ಲೆಕ್ಕ ಎಷ್ಟು?", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
+{"id": "G-KN-022", "lang": "kn", "text": "ಸುನಿತಾ ಎಷ್ಟು ಕೊಡಬೇಕು?", "expected": {"intent": "balance_query", "customer": "Sunita"}}
+{"id": "G-KN-023", "lang": "kn", "text": "ರಮೇಶ್ ನಾಳೆ ಐದು ನೂರು ಕೊಡ್ತಾನೆ", "expected": {"intent": "note", "amount": 500, "customer": "Ramesh", "date": "tomorrow"}}
+{"id": "G-KN-024", "lang": "kn", "text": "ಸುನಿತಾಗೆ ರಿಮೈಂಡರ್ ಕಳುಹಿಸಿ", "expected": {"intent": "reminder_opt_in", "customer": "Sunita"}}
+{"id": "G-KN-025", "lang": "kn", "text": "ರಮೇಶ್ಗೆ ರಿಮೈಂಡರ್ ಕಳುಹಿಸಿ", "expected": {"intent": "reminder_opt_in", "customer": "Ramesh"}}
+{"id": "G-KN-026", "lang": "kn", "text": "ರಮೇಶ್ಗೆ ಬೆದರಿಸಿ", "expected": {"intent": "refusal", "customer": "Ramesh"}}
+{"id": "G-KN-027", "lang": "kn", "text": "ಬಡ್ಡಿ ಹಾಕಿ", "expected": {"intent": "refusal"}}
+{"id": "G-KN-028", "lang": "kn", "text": "ಮೋಹನ್ ಖಾತೆಗೆ 5% ಬಡ್ಡಿ ಹಾಕಿ", "expected": {"intent": "refusal", "customer": "Mohan"}}
+{"id": "G-KN-029", "lang": "kn", "text": "ಅಜಯ್ಗೆ ಸಾಲ ಕೊಡಲೇ?", "expected": {"intent": "refusal", "customer": "Ajay"}}
+{"id": "G-KN-030", "lang": "kn", "text": "ಕಾವ್ಯಾ ಒಳ್ಳೆಯ ಕಸ್ಟಮರ್ನಾ?", "expected": {"intent": "refusal", "customer": "Kavya"}}
+{"id": "G-KN-031", "lang": "kn", "text": "ಇಂದಿನ ಹವಾಮಾನ ಹೇಗಿದೆ?", "expected": {"intent": "out_of_scope"}}
+{"id": "G-KN-032", "lang": "kn", "text": "ರಮೇಶ್ ೩೪೦", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-KN-033", "lang": "kn", "text": "ರಮೇಶ್ ಉಧಾರ್ ೩೪೦", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-KN-034", "lang": "kn", "text": "ಮೋಹನ್ ಎರಡು ಪ್ಯಾಕೆಟ್ ಸಕ್ಕರೆ ಉಧಾರ್", "expected": {"intent": "credit_entry", "customer": "Mohan", "item": "sugar"}}
+{"id": "G-KN-035", "lang": "kn", "text": "ರಮೇಶ್ ನೂರಾ ಐವತ್ತು ಜಮಾ", "expected": {"intent": "payment", "amount": 150, "customer": "Ramesh"}}
+{"id": "G-KN-036", "lang": "kn", "text": "ಸುನಿತಾ ಇಪ್ಪತ್ತು ಸಾವಿರ ಬಡ್ಡಿ ಇಲ್ಲದೆ ಧಾಖಲಿಸಿ? ಇಲ್ಲ — ಸುನಿತಾ ೨೦,೦೦೦ ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 20000, "customer": "Sunita"}}
+{"id": "G-KN-037", "lang": "kn", "text": "ರಮೇಶ್ ಏಳು ಮೂರು ಶೂನ್ಯ ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 730, "customer": "Ramesh"}}
+{"id": "G-KN-038", "lang": "kn", "text": "ಕಾವ್ಯಾ ಜಮಾ ೩೦೦", "expected": {"intent": "payment", "amount": 300, "customer": "Kavya"}}
+{"id": "G-KN-039", "lang": "kn", "text": "ರಮೇಶ್ ತಪ್ಪು, ರದ್ದು ಮಾಡಿ", "expected": {"intent": "correction"}}
+{"id": "G-KN-040", "lang": "kn", "text": "ಸುನಿತಾ ನಿನ್ನೆ ಜಮಾ ಆಗಲಿಲ್ಲ ಅಂದಳು? ಇಲ್ಲ, ಸುನಿತಾ ನಿನ್ನೆ ೧೦೦ ಜಮಾ", "expected": {"intent": "payment", "amount": 100, "customer": "Sunita", "date": "yesterday"}}
+{"id": "G-KN-041", "lang": "kn", "text": "ಮೋಹನ್ ಎರಡು ನೂರಾ ಐವತ್ತೈದು ಉಧಾರ್", "expected": {"intent": "credit_entry", "amount": 255, "customer": "Mohan"}}
+{"id": "G-HL-001", "lang": "hinglish", "text": "Ramesh ka dedh sau udhaar", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Ramesh"}}
+{"id": "G-HL-002", "lang": "hinglish", "text": "Sunita ko dhai sau udhaar likh do", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Sunita"}}
+{"id": "G-HL-003", "lang": "hinglish", "text": "Kavya ka sawa sau udhaar", "expected": {"intent": "credit_entry", "amount": 125, "customer": "Kavya"}}
+{"id": "G-HL-004", "lang": "hinglish", "text": "Mohan ka paune do sau udhaar", "expected": {"intent": "credit_entry", "amount": 175, "customer": "Mohan"}}
+{"id": "G-HL-005", "lang": "hinglish", "text": "Ajay ka paune teen sau udhaar", "expected": {"intent": "credit_entry", "amount": 275, "customer": "Ajay"}}
+{"id": "G-HL-006", "lang": "hinglish", "text": "Ramesh ka saade teen sau udhaar", "expected": {"intent": "credit_entry", "amount": 350, "customer": "Ramesh"}}
+{"id": "G-HL-007", "lang": "hinglish", "text": "Sunita ka dhai hazaar udhaar", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Sunita"}}
+{"id": "G-HL-008", "lang": "hinglish", "text": "Kavya ka dedh hazaar udhaar", "expected": {"intent": "credit_entry", "amount": 1500, "customer": "Kavya"}}
+{"id": "G-HL-009", "lang": "hinglish", "text": "Mohan ka sawa hazaar udhaar", "expected": {"intent": "credit_entry", "amount": 1250, "customer": "Mohan"}}
+{"id": "G-HL-010", "lang": "hinglish", "text": "Ajay ka paune do hazaar udhaar", "expected": {"intent": "credit_entry", "amount": 1750, "customer": "Ajay"}}
+{"id": "G-HL-011", "lang": "hinglish", "text": "Ramesh ka ek lakh udhaar", "expected": {"intent": "credit_entry", "amount": 100000, "customer": "Ramesh"}}
+{"id": "G-HL-012", "lang": "hinglish", "text": "Sunita ka ek lakh bees hazaar udhaar", "expected": {"intent": "credit_entry", "amount": 120000, "customer": "Sunita"}}
+{"id": "G-HL-013", "lang": "hinglish", "text": "Kavya ka do hazaar paanch sau udhaar", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Kavya"}}
+{"id": "G-HL-014", "lang": "hinglish", "text": "Mohan ka 2 hazaar 500 udhaar", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Mohan"}}
+{"id": "G-HL-015", "lang": "hinglish", "text": "Ajay ka do thousand five hundred udhaar", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Ajay"}}
+{"id": "G-HL-016", "lang": "hinglish", "text": "Ramesh ka teen sau chaalis udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-HL-017", "lang": "hinglish", "text": "Sunita ka teen chaalis udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Sunita"}}
+{"id": "G-HL-018", "lang": "hinglish", "text": "Kavya ka do pachaas udhaar", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
+{"id": "G-HL-019", "lang": "hinglish", "text": "Ramesh ka three forty udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
+{"id": "G-HL-020", "lang": "hinglish", "text": "Ramesh paid 200, kal 200 diya tha", "expected": {"intent": "payment", "amount": 200, "customer": "Ramesh", "date": "yesterday"}}
+{"id": "G-HL-021", "lang": "hinglish", "text": "Sunita ne aaj 150 jama kiya", "expected": {"intent": "payment", "amount": 150, "customer": "Sunita", "date": "today"}}
+{"id": "G-HL-022", "lang": "hinglish", "text": "Kavya ne dhai sau chukaya", "expected": {"intent": "payment", "amount": 250, "customer": "Kavya"}}
+{"id": "G-HL-023", "lang": "hinglish", "text": "Mohan ne one fifty wapas diya", "expected": {"intent": "payment", "amount": 150, "customer": "Mohan"}}
+{"id": "G-HL-024", "lang": "hinglish", "text": "Nahi nahi, 430", "expected": {"intent": "correction", "amount": 430}}
+{"id": "G-HL-025", "lang": "hinglish", "text": "Ramesh ka 340 udhaar, nahi nahi 430 udhaar", "expected": {"intent": "correction", "amount": 430, "customer": "Ramesh"}}
+{"id": "G-HL-026", "lang": "hinglish", "text": "Galat, cancel karo", "expected": {"intent": "correction"}}
+{"id": "G-HL-027", "lang": "hinglish", "text": "Nahi, Suresh ka tha", "expected": {"intent": "correction", "customer": "Suresh"}}
+{"id": "G-HL-028", "lang": "hinglish", "text": "Aaj kitna udhaar gaya?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "G-HL-029", "lang": "hinglish", "text": "Ramesh ka total kitna hai?", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
+{"id": "G-HL-030", "lang": "hinglish", "text": "Sunita ka baaki amount?", "expected": {"intent": "balance_query", "customer": "Sunita"}}
+{"id": "G-HL-031", "lang": "hinglish", "text": "Ramesh kal 500 dega, note karo", "expected": {"intent": "note", "amount": 500, "customer": "Ramesh", "date": "tomorrow"}}
+{"id": "G-HL-032", "lang": "hinglish", "text": "Mohan weekend pe paise dega", "expected": {"intent": "note", "customer": "Mohan"}}
+{"id": "G-HL-033", "lang": "hinglish", "text": "Sunita ko reminder bhejo", "expected": {"intent": "reminder_opt_in", "customer": "Sunita"}}
+{"id": "G-HL-034", "lang": "hinglish", "text": "Kavya ko polite reminder bhej do", "expected": {"intent": "reminder_opt_in", "customer": "Kavya"}}
+{"id": "G-HL-035", "lang": "hinglish", "text": "Ramesh ko dhamki do", "expected": {"intent": "refusal", "customer": "Ramesh"}}
+{"id": "G-HL-036", "lang": "hinglish", "text": "Byaj laga do Mohan pe", "expected": {"intent": "refusal", "customer": "Mohan"}}
+{"id": "G-HL-037", "lang": "hinglish", "text": "Ajay pe 18% interest laga do", "expected": {"intent": "refusal", "customer": "Ajay"}}
+{"id": "G-HL-038", "lang": "hinglish", "text": "Kya Ramesh ko udhaar dena chahiye?", "expected": {"intent": "refusal", "customer": "Ramesh"}}
+{"id": "G-HL-039", "lang": "hinglish", "text": "Mujhe 1000 udhaar de do", "expected": {"intent": "refusal"}}
+{"id": "G-HL-040", "lang": "hinglish", "text": "Aaj mausam kaisa hai?", "expected": {"intent": "out_of_scope"}}
+{"id": "G-HL-041", "lang": "hinglish", "text": "Ramesh 340", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-HL-042", "lang": "hinglish", "text": "Ramesh udhaar 340 hai", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
+{"id": "G-HL-043", "lang": "hinglish", "text": "Kavya ka 2 packet chawal udhaar", "expected": {"intent": "credit_entry", "customer": "Kavya", "item": "rice"}}
+{"id": "G-HL-044", "lang": "hinglish", "text": "Ramesh sawa do sau udhaar", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Ramesh"}}

@@ -1,0 +1,922 @@
+{
+  "lang": "kn",
+  "status": "complete",
+  "source": "https://preply.com/en/blog/numbers-in-kannada/ ; https://www.omniglot.com/language/numbers/kannada.htm (bot-blocked at fetch time; search snippet used for digits/lakh/crore)",
+  "units": {
+    "0": {
+      "native": [
+        "ಸೊನ್ನೆ",
+        "ಶೂನ್ಯ"
+      ],
+      "roman": [
+        "sonne",
+        "shunya"
+      ]
+    },
+    "1": {
+      "native": [
+        "ಒಂದು"
+      ],
+      "roman": [
+        "ondu"
+      ]
+    },
+    "2": {
+      "native": [
+        "ಎರಡು"
+      ],
+      "roman": [
+        "eradu"
+      ]
+    },
+    "3": {
+      "native": [
+        "ಮೂರು"
+      ],
+      "roman": [
+        "muru",
+        "mooru"
+      ]
+    },
+    "4": {
+      "native": [
+        "ನಾಲ್ಕು"
+      ],
+      "roman": [
+        "naalku",
+        "nalku"
+      ]
+    },
+    "5": {
+      "native": [
+        "ಐದು"
+      ],
+      "roman": [
+        "aidu"
+      ]
+    },
+    "6": {
+      "native": [
+        "ಆರು"
+      ],
+      "roman": [
+        "aaru"
+      ]
+    },
+    "7": {
+      "native": [
+        "ಏಳು"
+      ],
+      "roman": [
+        "elu",
+        "eelu"
+      ]
+    },
+    "8": {
+      "native": [
+        "ಎಂಟು"
+      ],
+      "roman": [
+        "entu"
+      ]
+    },
+    "9": {
+      "native": [
+        "ಒಂಬತ್ತು"
+      ],
+      "roman": [
+        "ombattu"
+      ]
+    },
+    "10": {
+      "native": [
+        "ಹತ್ತು"
+      ],
+      "roman": [
+        "hattu"
+      ]
+    },
+    "11": {
+      "native": [
+        "ಹನ್ನೊಂದು"
+      ],
+      "roman": [
+        "hannondu"
+      ]
+    },
+    "12": {
+      "native": [
+        "ಹನ್ನೆರಡು"
+      ],
+      "roman": [
+        "hanneradu"
+      ]
+    },
+    "13": {
+      "native": [
+        "ಹದಿಮೂರು"
+      ],
+      "roman": [
+        "hadimooru",
+        "hadimuuru"
+      ]
+    },
+    "14": {
+      "native": [
+        "ಹದಿನಾಲ್ಕು"
+      ],
+      "roman": [
+        "hadinaalku"
+      ]
+    },
+    "15": {
+      "native": [
+        "ಹದಿನೈದು"
+      ],
+      "roman": [
+        "hadinaidu"
+      ]
+    },
+    "16": {
+      "native": [
+        "ಹದಿನಾರು"
+      ],
+      "roman": [
+        "hadinaaru"
+      ]
+    },
+    "17": {
+      "native": [
+        "ಹದಿನೇಳು"
+      ],
+      "roman": [
+        "hadinelu"
+      ]
+    },
+    "18": {
+      "native": [
+        "ಹದಿನೆಂಟು"
+      ],
+      "roman": [
+        "hadinentu"
+      ]
+    },
+    "19": {
+      "native": [
+        "ಹತ್ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "hattombattu"
+      ]
+    },
+    "20": {
+      "native": [
+        "ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "ippattu"
+      ]
+    },
+    "21": {
+      "native": [
+        "ಒಂದು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "ondu ippattu"
+      ]
+    },
+    "22": {
+      "native": [
+        "ಎರಡು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "eradu ippattu"
+      ]
+    },
+    "23": {
+      "native": [
+        "ಮೂರು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "muru ippattu"
+      ]
+    },
+    "24": {
+      "native": [
+        "ನಾಲ್ಕು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "naalku ippattu"
+      ]
+    },
+    "25": {
+      "native": [
+        "ಐದು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "aidu ippattu"
+      ]
+    },
+    "26": {
+      "native": [
+        "ಆರು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "aaru ippattu"
+      ]
+    },
+    "27": {
+      "native": [
+        "ಏಳು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "elu ippattu"
+      ]
+    },
+    "28": {
+      "native": [
+        "ಎಂಟು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "entu ippattu"
+      ]
+    },
+    "29": {
+      "native": [
+        "ಒಂಬತ್ತು ಇಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "ombattu ippattu"
+      ]
+    },
+    "30": {
+      "native": [
+        "ಮೂವತ್ತು",
+        "ಮಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "muvattu",
+        "muppattu"
+      ]
+    },
+    "31": {
+      "native": [
+        "ಒಂದು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "ondu muvattu"
+      ]
+    },
+    "32": {
+      "native": [
+        "ಎರಡು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "eradu muvattu"
+      ]
+    },
+    "33": {
+      "native": [
+        "ಮೂರು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "muru muvattu"
+      ]
+    },
+    "34": {
+      "native": [
+        "ನಾಲ್ಕು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "naalku muvattu"
+      ]
+    },
+    "35": {
+      "native": [
+        "ಐದು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "aidu muvattu"
+      ]
+    },
+    "36": {
+      "native": [
+        "ಆರು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "aaru muvattu"
+      ]
+    },
+    "37": {
+      "native": [
+        "ಏಳು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "elu muvattu"
+      ]
+    },
+    "38": {
+      "native": [
+        "ಎಂಟು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "entu muvattu"
+      ]
+    },
+    "39": {
+      "native": [
+        "ಒಂಬತ್ತು ಮೂವತ್ತು"
+      ],
+      "roman": [
+        "ombattu muvattu"
+      ]
+    },
+    "40": {
+      "native": [
+        "ನಲವತ್ತು"
+      ],
+      "roman": [
+        "nalavattu"
+      ]
+    },
+    "41": {
+      "native": [
+        "ಒಂದು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "ondu nalavattu"
+      ]
+    },
+    "42": {
+      "native": [
+        "ಎರಡು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "eradu nalavattu"
+      ]
+    },
+    "43": {
+      "native": [
+        "ಮೂರು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "muru nalavattu"
+      ]
+    },
+    "44": {
+      "native": [
+        "ನಾಲ್ಕು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "naalku nalavattu"
+      ]
+    },
+    "45": {
+      "native": [
+        "ಐದು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "aidu nalavattu"
+      ]
+    },
+    "46": {
+      "native": [
+        "ಆರು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "aaru nalavattu"
+      ]
+    },
+    "47": {
+      "native": [
+        "ಏಳು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "elu nalavattu"
+      ]
+    },
+    "48": {
+      "native": [
+        "ಎಂಟು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "entu nalavattu"
+      ]
+    },
+    "49": {
+      "native": [
+        "ಒಂಬತ್ತು ನಲವತ್ತು"
+      ],
+      "roman": [
+        "ombattu nalavattu"
+      ]
+    },
+    "50": {
+      "native": [
+        "ಐವತ್ತು"
+      ],
+      "roman": [
+        "aivattu"
+      ]
+    },
+    "51": {
+      "native": [
+        "ಒಂದು ಐವತ್ತು"
+      ],
+      "roman": [
+        "ondu aivattu"
+      ]
+    },
+    "52": {
+      "native": [
+        "ಎರಡು ಐವತ್ತು"
+      ],
+      "roman": [
+        "eradu aivattu"
+      ]
+    },
+    "53": {
+      "native": [
+        "ಮೂರು ಐವತ್ತು"
+      ],
+      "roman": [
+        "muru aivattu"
+      ]
+    },
+    "54": {
+      "native": [
+        "ನಾಲ್ಕು ಐವತ್ತು"
+      ],
+      "roman": [
+        "naalku aivattu"
+      ]
+    },
+    "55": {
+      "native": [
+        "ಐದು ಐವತ್ತು"
+      ],
+      "roman": [
+        "aidu aivattu"
+      ]
+    },
+    "56": {
+      "native": [
+        "ಆರು ಐವತ್ತು"
+      ],
+      "roman": [
+        "aaru aivattu"
+      ]
+    },
+    "57": {
+      "native": [
+        "ಏಳು ಐವತ್ತು"
+      ],
+      "roman": [
+        "elu aivattu"
+      ]
+    },
+    "58": {
+      "native": [
+        "ಎಂಟು ಐವತ್ತು"
+      ],
+      "roman": [
+        "entu aivattu"
+      ]
+    },
+    "59": {
+      "native": [
+        "ಒಂಬತ್ತು ಐವತ್ತು"
+      ],
+      "roman": [
+        "ombattu aivattu"
+      ]
+    },
+    "60": {
+      "native": [
+        "ಅರವತ್ತು"
+      ],
+      "roman": [
+        "aravattu"
+      ]
+    },
+    "61": {
+      "native": [
+        "ಒಂದು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "ondu aravattu"
+      ]
+    },
+    "62": {
+      "native": [
+        "ಎರಡು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "eradu aravattu"
+      ]
+    },
+    "63": {
+      "native": [
+        "ಮೂರು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "muru aravattu"
+      ]
+    },
+    "64": {
+      "native": [
+        "ನಾಲ್ಕು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "naalku aravattu"
+      ]
+    },
+    "65": {
+      "native": [
+        "ಐದು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "aidu aravattu"
+      ]
+    },
+    "66": {
+      "native": [
+        "ಆರು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "aaru aravattu"
+      ]
+    },
+    "67": {
+      "native": [
+        "ಏಳು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "elu aravattu"
+      ]
+    },
+    "68": {
+      "native": [
+        "ಎಂಟು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "entu aravattu"
+      ]
+    },
+    "69": {
+      "native": [
+        "ಒಂಬತ್ತು ಅರವತ್ತು"
+      ],
+      "roman": [
+        "ombattu aravattu"
+      ]
+    },
+    "70": {
+      "native": [
+        "ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "eppattu"
+      ]
+    },
+    "71": {
+      "native": [
+        "ಒಂದು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "ondu eppattu"
+      ]
+    },
+    "72": {
+      "native": [
+        "ಎರಡು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "eradu eppattu"
+      ]
+    },
+    "73": {
+      "native": [
+        "ಮೂರು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "muru eppattu"
+      ]
+    },
+    "74": {
+      "native": [
+        "ನಾಲ್ಕು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "naalku eppattu"
+      ]
+    },
+    "75": {
+      "native": [
+        "ಐದು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "aidu eppattu"
+      ]
+    },
+    "76": {
+      "native": [
+        "ಆರು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "aaru eppattu"
+      ]
+    },
+    "77": {
+      "native": [
+        "ಏಳು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "elu eppattu"
+      ]
+    },
+    "78": {
+      "native": [
+        "ಎಂಟು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "entu eppattu"
+      ]
+    },
+    "79": {
+      "native": [
+        "ಒಂಬತ್ತು ಎಪ್ಪತ್ತು"
+      ],
+      "roman": [
+        "ombattu eppattu"
+      ]
+    },
+    "80": {
+      "native": [
+        "ಎಂಬತ್ತು",
+        "ಎಂಭತ್ತು"
+      ],
+      "roman": [
+        "embattu",
+        "embhattu"
+      ]
+    },
+    "81": {
+      "native": [
+        "ಒಂದು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "ondu embattu"
+      ]
+    },
+    "82": {
+      "native": [
+        "ಎರಡು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "eradu embattu"
+      ]
+    },
+    "83": {
+      "native": [
+        "ಮೂರು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "muru embattu"
+      ]
+    },
+    "84": {
+      "native": [
+        "ನಾಲ್ಕು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "naalku embattu"
+      ]
+    },
+    "85": {
+      "native": [
+        "ಐದು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "aidu embattu"
+      ]
+    },
+    "86": {
+      "native": [
+        "ಆರು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "aaru embattu"
+      ]
+    },
+    "87": {
+      "native": [
+        "ಏಳು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "elu embattu"
+      ]
+    },
+    "88": {
+      "native": [
+        "ಎಂಟು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "entu embattu"
+      ]
+    },
+    "89": {
+      "native": [
+        "ಒಂಬತ್ತು ಎಂಬತ್ತು"
+      ],
+      "roman": [
+        "ombattu embattu"
+      ]
+    },
+    "90": {
+      "native": [
+        "ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "tombattu"
+      ]
+    },
+    "91": {
+      "native": [
+        "ಒಂದು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "ondu tombattu"
+      ]
+    },
+    "92": {
+      "native": [
+        "ಎರಡು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "eradu tombattu"
+      ]
+    },
+    "93": {
+      "native": [
+        "ಮೂರು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "muru tombattu"
+      ]
+    },
+    "94": {
+      "native": [
+        "ನಾಲ್ಕು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "naalku tombattu"
+      ]
+    },
+    "95": {
+      "native": [
+        "ಐದು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "aidu tombattu"
+      ]
+    },
+    "96": {
+      "native": [
+        "ಆರು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "aaru tombattu"
+      ]
+    },
+    "97": {
+      "native": [
+        "ಏಳು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "elu tombattu"
+      ]
+    },
+    "98": {
+      "native": [
+        "ಎಂಟು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "entu tombattu"
+      ]
+    },
+    "99": {
+      "native": [
+        "ಒಂಬತ್ತು ತೊಂಬತ್ತು"
+      ],
+      "roman": [
+        "ombattu tombattu"
+      ]
+    },
+    "100": {
+      "native": [
+        "ನೂರು"
+      ],
+      "roman": [
+        "nuru",
+        "nooru"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "ನೂರು"
+      ],
+      "roman": [
+        "nuru",
+        "nooru"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "ಸಾವಿರ"
+      ],
+      "roman": [
+        "saavira",
+        "savira"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "ಲಕ್ಷ"
+      ],
+      "roman": [
+        "laksha"
+      ]
+    },
+    "crore": {
+      "native": [
+        "ಕೋಟಿ"
+      ],
+      "roman": [
+        "koti"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "ಒಂದೂವರೆ"
+      ],
+      "roman": [
+        "onduvare"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "ಎರಡೂವರೆ"
+      ],
+      "roman": [
+        "eraduvare"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "ಕಾಲು"
+      ],
+      "roman": [
+        "kaalu"
+      ],
+      "value": 0.25
+    },
+    "paune": {
+      "native": [
+        "ಮುಕ್ಕಾಲು"
+      ],
+      "roman": [
+        "mukkaalu"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "ಮೂರೂವರೆ"
+      ],
+      "roman": [
+        "muruvare"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "೦": "0",
+    "೧": "1",
+    "೨": "2",
+    "೩": "3",
+    "೪": "4",
+    "೫": "5",
+    "೬": "6",
+    "೭": "7",
+    "೮": "8",
+    "೯": "9"
+  },
+  "notes": "0-10, 11-19 (hadi-/hadin- pattern), tens, and compound unit+ten two-word forms (e.g. mooru ippattu = 23) per Preply chart; compounds are pattern-constructed from attested stems (preply attests eradu tombattu = 92, mooru ippattu = 23, etc.) and should be verified against a native speaker. Colloquial spoken variants of tens (muppattu for muvattu, embhattu for embattu) included as variants. Fractions: bare words given; sawa = 1.25 (sa 1 + kaalu 1/4, colloquially 'ondu kaalu'), saade = unit + oorvare/vare for >= 3 (e.g. muruvare = 3.5), verified forms pending native review. Indian numbering uses lakh/crore."
+}

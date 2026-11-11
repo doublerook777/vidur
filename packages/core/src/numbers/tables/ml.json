@@ -1,0 +1,342 @@
+{
+  "lang": "ml",
+  "status": "draft",
+  "source": "https://www.akshharam.com/blog-detail/guide-to-malayalam-numbers-and-counting ; https://www.preply.com/en/blog/numbers-in-malayalam/ ; https://www.omniglot.com/language/numbers/malayalam.htm (bot-blocked at fetch time; search snippet used for digits/tens/90/100)",
+  "units": {
+    "0": {
+      "native": [
+        "പൂജ്യം"
+      ],
+      "roman": [
+        "poojyam"
+      ]
+    },
+    "1": {
+      "native": [
+        "ഒന്ന്"
+      ],
+      "roman": [
+        "onnu"
+      ]
+    },
+    "2": {
+      "native": [
+        "രണ്ട്"
+      ],
+      "roman": [
+        "rantu",
+        "randu"
+      ]
+    },
+    "3": {
+      "native": [
+        "മൂന്ന്"
+      ],
+      "roman": [
+        "muunnu",
+        "moonu"
+      ]
+    },
+    "4": {
+      "native": [
+        "നാല്"
+      ],
+      "roman": [
+        "naalu"
+      ]
+    },
+    "5": {
+      "native": [
+        "അഞ്ച്"
+      ],
+      "roman": [
+        "anchu",
+        "anju"
+      ]
+    },
+    "6": {
+      "native": [
+        "ആറ്"
+      ],
+      "roman": [
+        "aaru"
+      ]
+    },
+    "7": {
+      "native": [
+        "ഏഴ്"
+      ],
+      "roman": [
+        "ezhu"
+      ]
+    },
+    "8": {
+      "native": [
+        "എട്ട്"
+      ],
+      "roman": [
+        "ettu"
+      ]
+    },
+    "9": {
+      "native": [
+        "ഒൻപത്"
+      ],
+      "roman": [
+        "onpathu",
+        "onpatu"
+      ]
+    },
+    "10": {
+      "native": [
+        "പത്ത്"
+      ],
+      "roman": [
+        "pathu",
+        "patt"
+      ]
+    },
+    "11": {
+      "native": [
+        "പതിനൊന്ന്"
+      ],
+      "roman": [
+        "pathinonnu"
+      ]
+    },
+    "12": {
+      "native": [
+        "പന്ത്രണ്ട്"
+      ],
+      "roman": [
+        "panthrantu",
+        "pantrandu"
+      ]
+    },
+    "13": {
+      "native": [
+        "പതിമൂന്ന്"
+      ],
+      "roman": [
+        "pathimuunnu",
+        "pathimoonu"
+      ]
+    },
+    "14": {
+      "native": [
+        "പതിനാല്"
+      ],
+      "roman": [
+        "pathinaalu"
+      ]
+    },
+    "15": {
+      "native": [
+        "പതിനഞ്ച്"
+      ],
+      "roman": [
+        "pathinanchu"
+      ]
+    },
+    "16": {
+      "native": [
+        "പതിനാറ്"
+      ],
+      "roman": [
+        "pathinaaru"
+      ]
+    },
+    "17": {
+      "native": [
+        "പതിനേഴ്"
+      ],
+      "roman": [
+        "pathinezhu"
+      ]
+    },
+    "18": {
+      "native": [
+        "പതിനെട്ട്"
+      ],
+      "roman": [
+        "pathinettu"
+      ]
+    },
+    "19": {
+      "native": [
+        "പത്തൊൻപത്"
+      ],
+      "roman": [
+        "pathonpathu",
+        "pathonapathu"
+      ]
+    },
+    "20": {
+      "native": [
+        "ഇരുപത്"
+      ],
+      "roman": [
+        "irupathu"
+      ]
+    },
+    "30": {
+      "native": [
+        "മുപ്പത്"
+      ],
+      "roman": [
+        "muppathu"
+      ]
+    },
+    "40": {
+      "native": [
+        "നാല്പത്"
+      ],
+      "roman": [
+        "naalpathu",
+        "nalpathu"
+      ]
+    },
+    "50": {
+      "native": [
+        "അൻപത്"
+      ],
+      "roman": [
+        "anpathu"
+      ]
+    },
+    "60": {
+      "native": [
+        "അറുപത്"
+      ],
+      "roman": [
+        "arupathu"
+      ]
+    },
+    "70": {
+      "native": [
+        "എഴുപത്"
+      ],
+      "roman": [
+        "ezhupathu"
+      ]
+    },
+    "80": {
+      "native": [
+        "എൺപത്"
+      ],
+      "roman": [
+        "enpathu"
+      ]
+    },
+    "90": {
+      "native": [
+        "തൊണ്ണൂറ്"
+      ],
+      "roman": [
+        "thonnooru"
+      ]
+    },
+    "100": {
+      "native": [
+        "നൂറ്"
+      ],
+      "roman": [
+        "nooru"
+      ]
+    }
+  },
+  "multipliers": {
+    "hundred": {
+      "native": [
+        "നൂറ്"
+      ],
+      "roman": [
+        "nooru"
+      ]
+    },
+    "thousand": {
+      "native": [
+        "ആയിരം"
+      ],
+      "roman": [
+        "aayiram"
+      ]
+    },
+    "lakh": {
+      "native": [
+        "ലക്ഷം"
+      ],
+      "roman": [
+        "laksham"
+      ]
+    },
+    "crore": {
+      "native": [
+        "കോടി"
+      ],
+      "roman": [
+        "kodi"
+      ]
+    }
+  },
+  "fractions": {
+    "dedh": {
+      "native": [
+        "ഒന്നര"
+      ],
+      "roman": [
+        "onnara"
+      ],
+      "value": 1.5
+    },
+    "dhai": {
+      "native": [
+        "രണ്ടര"
+      ],
+      "roman": [
+        "randara"
+      ],
+      "value": 2.5
+    },
+    "sawa": {
+      "native": [
+        "കാൽ"
+      ],
+      "roman": [
+        "kaal"
+      ],
+      "value": 0.25
+    },
+    "paune": {
+      "native": [
+        "മുക്കാൽ"
+      ],
+      "roman": [
+        "mukkaal"
+      ],
+      "value": 0.75
+    },
+    "saade": {
+      "native": [
+        "മൂന്നര"
+      ],
+      "roman": [
+        "munnara"
+      ],
+      "value": 0.5
+    }
+  },
+  "digits": {
+    "൦": "0",
+    "൧": "1",
+    "൨": "2",
+    "൩": "3",
+    "൪": "4",
+    "൫": "5",
+    "൬": "6",
+    "൭": "7",
+    "൮": "8",
+    "൯": "9"
+  },
+  "notes": "0-20 (inclusive of teens), tens 20-90 and 100 per sources. 21-99 compound forms are fused sandhi words (e.g. path + thi + unit with gemination) and are OMITTED rather than guessed — this file is intentionally sparse and must be completed with a native speaker before parser work. Fractions: onnara = one and a half, randara = 2.5, munnara = 3.5 (construction following രണ്ടര); kaal = quarter, mukkaal = three-quarters; 'ഒന്നേകാൽ' for 1.25 is unverified and omitted. Indian numbering uses laksham/kodi."
+}
