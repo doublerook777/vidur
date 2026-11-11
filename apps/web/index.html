@@ -3,10 +3,155 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vidur — Showcase</title>
+    <meta name="description" content="Vidur — a voice-first khata for Indian kirana shops. Speak an entry, see the receipt, undo anything. The ledger lives on the phone." />
+    <title>Vidur — Speak your khata</title>
+    <link rel="stylesheet" href="/src/showcase/showcase.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <header class="site-header">
+      <a class="wordmark" href="#top">Vidur</a>
+      <nav class="site-nav" aria-label="Sections">
+        <a href="#what-it-is">What it is</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#languages">Languages</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#honest-limits">Honest limits</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section id="what-it-is" class="prose">
+        <h1>Say it, don’t write it.</h1>
+        <p>
+          Vidur is a voice-first khata for Indian kirana shops. Mid-sale, hands full,
+          the shopkeeper says “Ramesh ka 340 udhaar” and Vidur hears it, asks one short
+          question when anything is unclear, saves the entry, and shows it on screen as
+          a receipt. Everything is undoable by voice. The ledger lives only on the phone,
+          encrypted, and the server stores nothing.
+        </p>
+      </section>
+
+      <section id="stage" class="stage" aria-label="Interactive demo">
+        <h2 class="visually-hidden">Interactive demo</h2>
+
+        <div class="rail" aria-label="Demo controls">
+          <fieldset class="control-group">
+            <legend>Frame</legend>
+            <button type="button" class="control" data-frame="notch" aria-pressed="true">Notch</button>
+            <button type="button" class="control" data-frame="no-notch" aria-pressed="false">No notch</button>
+            <button type="button" class="control" data-frame="punch-hole" aria-pressed="false">Punch-hole</button>
+          </fieldset>
+
+          <fieldset class="control-group">
+            <legend>Theme</legend>
+            <button type="button" class="control" data-theme="light" aria-pressed="true">Light</button>
+            <button type="button" class="control" data-theme="dark" aria-pressed="false">Dark</button>
+          </fieldset>
+
+          <fieldset class="control-group">
+            <legend>Language</legend>
+            <button type="button" class="control" data-lang="hi" aria-pressed="true">हिंदी</button>
+            <button type="button" class="control" data-lang="en" aria-pressed="false">English</button>
+            <button type="button" class="control" data-lang="kn" aria-pressed="false">ಕನ್ನಡ</button>
+          </fieldset>
+
+          <p class="rail-note">Controls talk to the phone over a local bridge. Nothing leaves your machine.</p>
+        </div>
+
+        <div class="phone-wrap">
+          <div class="phone-frame" data-frame="notch" id="phoneFrame">
+            <div class="phone-screen">
+              <iframe
+                id="phoneApp"
+                src="/app.html"
+                allow="microphone"
+                title="Vidur phone app"
+              ></iframe>
+            </div>
+            <div class="frame-notch" aria-hidden="true"></div>
+            <div class="frame-punchhole" aria-hidden="true"></div>
+            <div class="frame-homebar" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <aside class="panel" aria-label="Live explanation and telemetry">
+          <h2 class="panel-title">Live</h2>
+
+          <div class="feature-card" id="featureCard" role="status" aria-live="polite">
+            <h3 class="feature-title" id="featureTitle">Tap anything in the phone to see what it does</h3>
+            <p class="feature-what" id="featureWhat"></p>
+            <p class="feature-why" id="featureWhy"></p>
+          </div>
+
+          <dl class="telemetry" id="telemetry">
+            <div class="telemetry-row"><dt>Transcript</dt><dd id="tTranscript">—</dd></div>
+            <div class="telemetry-row"><dt>Parsed</dt><dd id="tParsed">—</dd></div>
+            <div class="telemetry-row"><dt>Speech-to-text</dt><dd id="tStt">—</dd></div>
+            <div class="telemetry-row"><dt>Time to first audio</dt><dd id="tFirstAudio">—</dd></div>
+            <div class="telemetry-row"><dt>State</dt><dd id="tState">—</dd></div>
+          </dl>
+          <p class="panel-note">Telemetry is shown on this page only. It is not sent anywhere.</p>
+        </aside>
+      </section>
+
+      <section id="how-it-works" class="prose">
+        <h2>How it works</h2>
+        <ol>
+          <li>You press and hold the mic and say the entry — “Ramesh ka 340 udhaar, kal 200 diya tha”.</li>
+          <li>Vidur listens, works out the amounts and the direction (udhaar vs jama), and if anything is unclear it asks one short question instead of guessing.</li>
+          <li>The entry is saved on the phone and shown as a receipt you can read at a glance. Say “nahi, 430” to fix it — everything is undoable by voice for 10 seconds.</li>
+        </ol>
+      </section>
+
+      <section id="languages" class="prose">
+        <h2>Languages</h2>
+        <p>
+          Hindi, Hinglish, English and Kannada are supported at full quality. Speech is
+          code-mixed by nature — “Ramesh ka 340 credit” is a perfectly normal sentence, and
+          Vidur reads amounts in spoken Indian forms like “dedh sau” and “dhai hazaar”.
+          Seven more languages (ta, te, ml, mr, bn, gu, pa) are planned, not shipped.
+        </p>
+      </section>
+
+      <section id="privacy" class="prose">
+        <h2>Privacy</h2>
+        <ul>
+          <li>The ledger lives only on your phone, encrypted on the device. The server stores nothing about your entries.</li>
+          <li>Transcripts are kept in memory only and purged after 24 hours. There is a delete-all control.</li>
+          <li>No phone numbers are stored. Reminders are polite, opt-in only, and capped at one per customer per 7 days.</li>
+          <li>Vidur does not rate customers, does not shame anyone, and does not advise on lending or interest.</li>
+        </ul>
+      </section>
+
+      <section id="architecture" class="prose">
+        <h2>Architecture</h2>
+        <p>
+          A thin phone app (preact) talks to a speech pipeline over WebSocket: streaming
+          speech-to-text, a small deterministic parser for amounts and direction, and a
+          dialogue engine that holds anything unclear as pending until you answer. An LLM
+          fallback exists for hard cases, and every amount it returns is re-derived from
+          your transcript before anything is saved. Money is integer paise everywhere.
+          The ledger is event-sourced and encrypted on the device.
+        </p>
+      </section>
+
+      <section id="honest-limits" class="prose">
+        <h2>Honest limits</h2>
+        <ul>
+          <li>Speech recognition is not perfect. Vidur is built to <em>ask</em> when unsure rather than record a wrong amount, but mistakes still happen — check the receipt.</li>
+          <li>Hindi, Hinglish, English and Kannada only. Other languages are on the roadmap.</li>
+          <li>Reminders work only for customers who opted in, and nothing is sent automatically — you tap to share.</li>
+          <li>The browser build cannot hide its key from code running on the same page; entries never leave the device, but treat the demo as a demo.</li>
+          <li>Latency depends on the network. On a bad connection, use the keypad entry.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Vidur — voice khata for kirana shops. Demo content is synthetic; no real customers.</p>
+    </footer>
+
+    <script type="module" src="/src/showcase/showcase.ts"></script>
   </body>
 </html>

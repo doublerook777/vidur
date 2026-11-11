@@ -54,8 +54,12 @@ export class Playback {
     this.node?.port.postMessage(f, [f.buffer]);
   }
 
+  /** performance.now() of the last flush, so tests can measure how fast barge-in silences the speaker. */
+  lastFlushAt = 0;
+
   /** Silence now. Anything still buffered is dropped. */
   flush(): void {
+    this.lastFlushAt = performance.now();
     this.node?.port.postMessage('flush');
   }
 

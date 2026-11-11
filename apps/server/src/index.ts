@@ -13,7 +13,15 @@ export function serverBanner(): string {
   return `vidur gateway - ${coreBanner()}`;
 }
 
-const MOCK_SCRIPT = ['Ramesh ka 340 udhaar', 'Ramesh ka total?', 'Sunita ne 200 jama kiye', 'Aaj kitna udhaar gaya?', 'galat'];
+const DEFAULT_SCRIPT = ['Mohan ka 340 udhaar', 'Mohan ka total?', 'Sunita ne 200 jama kiye', 'Aaj kitna udhaar gaya?', 'galat'];
+const MOCK_SCRIPT: string[] = (() => {
+  try {
+    const j = JSON.parse(process.env['MOCK_SCRIPT'] ?? 'null') as unknown;
+    return Array.isArray(j) && j.every((x) => typeof x === 'string') ? (j as string[]) : DEFAULT_SCRIPT;
+  } catch {
+    return DEFAULT_SCRIPT;
+  }
+})();
 
 async function main(): Promise<void> {
   try {

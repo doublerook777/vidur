@@ -111,8 +111,13 @@ export class PhoneSession {
     this.store.update({ lang: meta.lang, theme: meta.theme, shopName: meta.shopName, onboarded: meta.onboarded, screen: meta.onboarded ? 'home' : 'onboarding', loaded: true });
     this.buildDialogue();
     this.connect();
+    // The server streams a reply much faster than it plays, so audio keeps playing from the buffer after the
+    // last chunk arrives. The speaker, not the socket, says when the agent has really stopped talking.
     this.o.playback.onBusy = (busy) => {
       this.speaking = busy;
+      if (this.pressing) return;
+      if (busy) this.setPhase('speaking');
+      else if (this.active.size === 0 && this.state.phase === 'speaking') this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
     };
     this.purgeTimer = setInterval(() => void this.o.vault.purgeTranscripts(this.now()), 60 * 60 * 1000);
     this.refresh();
@@ -158,10 +163,8 @@ export class PhoneSession {
         },
         onTtsEnd: (id) => {
           if (!this.active.delete(id)) return;
-          if (this.active.size === 0 && !this.pressing) {
-            this.speaking = false;
-            this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
-          }
+          // Still playing from the buffer? Then onBusy(false) will finish the state.
+          if (this.active.size === 0 && !this.pressing && !this.speaking) this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
         },
         onAudio: (b) => {
           if (this.active.size === 0) return; // late audio of an interrupted sentence
