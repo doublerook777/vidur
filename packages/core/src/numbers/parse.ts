@@ -126,6 +126,10 @@ function feed(st: State, el: El): boolean {
       if (ok) { st.last = 'unit'; st.conf = Math.min(st.conf, st.colloquial ? 0.8 : 0.95); }
     } else if (e.kind === 'fusedHundred') {
       if (!st.hasAny || (st.last === 'mult' && st.lastMult >= 1000)) { st.cur += e.value; st.last = 'mult'; st.lastMult = 100; ok = true; }
+      else if (st.last === 'unit' && st.cur >= 1 && st.cur <= 9 && e.value === 100) {
+        // "ಎರಡು ನೂರಾ" (two hundred) and "ಒಂದು ನೂರಾ" (one hundred): the small number counts the hundreds.
+        st.cur *= 100; st.last = 'mult'; st.lastMult = 100; ok = true;
+      }
       if (ok) st.conf = Math.min(st.conf, 0.95);
     } else if (e.kind === 'mult') {
       if (e.value === 100) {
@@ -156,8 +160,34 @@ function composeFractions(els: El[]): El[] {
   const out: El[] = [];
   for (let k = 0; k < els.length; k++) {
     const el = els[k]!;
+    if (el.t === 'word' && el.e.kind === 'half') {
+      const nx = els[k + 1];
+      if (nx && nx.t === 'word' && nx.e.kind === 'mult') {
+        out.push({ t: 'groupFrac', value: el.e.value * nx.e.value, scale: nx.e.value, i0: el.i, i1: nx.i });
+        k += 1;
+      } else if (nx && nx.t === 'word' && nx.e.kind === 'fusedHundred' && nx.e.value === 100) {
+        out.push({ t: 'groupFrac', value: el.e.value * 100, scale: 100, i0: el.i, i1: nx.i });
+        k += 1;
+      }
+      continue;
+    }
     if (el.t === 'word' && el.e.kind === 'frac') {
       const word = el.e.word;
+      const fh = els[k + 1];
+      if (fh && fh.t === 'word' && fh.e.kind === 'fusedHundred' && fh.e.value === 100 && (word === 'dedh' || word === 'dhai')) {
+        out.push({ t: 'groupFrac', value: word === 'dedh' ? 150 : 250, scale: 100, i0: el.i, i1: fh.i });
+        k += 1;
+        continue;
+      }
+      if (fh && fh.t === 'word' && fh.e.kind === 'fusedHundred') {
+        // Kannada: ಸಾಡೆ ಮುನ್ನೂರು (saade 300 = 350), paune and sawa likewise.
+        const d = word === 'saade' ? 50 : word === 'sawa' ? 25 : word === 'paune' ? -25 : null;
+        if (d !== null) {
+          out.push({ t: 'groupFrac', value: fh.e.value + d, scale: 100, i0: el.i, i1: fh.i });
+          k += 1;
+          continue;
+        }
+      }
       let j = k + 1;
       let base: number | null = null;
       const nx = els[j];
@@ -213,6 +243,19 @@ export function parseAmount(input: string, lang: Lang = 'hi'): AmountMatch[] {
   endRun();
 
   const out: AmountMatch[] = [];
+  const dictated: AmountMatch[] = [];
+  // Digits dictated one by one ("saat teen shunya" = 730): three or more single-digit words in a row.
+  for (let r = 0; r < runs.length; r++) {
+    const run0 = runs[r]!;
+    const digitsOnly = run0.length >= 3 && run0.every((e) => e.t === 'word' && e.e.kind === 'unit' && e.e.value <= 9);
+    if (digitsOnly) {
+      const value = Number(run0.map((e) => (e.t === 'word' && e.e.kind === 'unit' ? e.e.value : 0)).join(''));
+      const i0 = (run0[0] as { i: number }).i, i1 = (run0[run0.length - 1] as { i: number }).i;
+      if (value > 0) dictated.push({ paise: value * 100, source: 'colloquial', confidence: 0.6, span: [toks[i0]!.start, toks[i1]!.end], text: input.slice(toks[i0]!.start, toks[i1]!.end) });
+      runs.splice(r, 1);
+      r--;
+    }
+  }
   const emit = (st: State): void => {
     if (!st.hasAny) return;
     const value = st.total + st.cur;
@@ -250,7 +293,7 @@ export function parseAmount(input: string, lang: Lang = 'hi'): AmountMatch[] {
     }
     emit(st);
   }
-  return out.sort((a, b) => a.span[0] - b.span[0]);
+  return [...out, ...dictated].sort((a, b) => a.span[0] - b.span[0]);
 }
 
 /** The single best amount, or null. Used by the grounding check. */

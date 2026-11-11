@@ -15,7 +15,8 @@ export type Entry =
   | { kind: 'unit'; value: number } // 0..99
   | { kind: 'fusedHundred'; value: number } // Kannada ಮುನ್ನೂರು = 300
   | { kind: 'mult'; value: 100 | 1000 | 100000 | 10000000 }
-  | { kind: 'frac'; word: 'dedh' | 'dhai' | 'sawa' | 'paune' | 'saade' };
+  | { kind: 'frac'; word: 'dedh' | 'dhai' | 'sawa' | 'paune' | 'saade' }
+  | { kind: 'half'; value: number }; // Kannada ಮೂರೂವರೆ = 3.5, used before ನೂರು or ಸಾವಿರ
 
 /**
  * Folds spelling variants together so that table rows and STT output meet:
@@ -87,7 +88,7 @@ for (const t of [mr, gu, pa, bn, ta, te, ml]) {
 // ---- Kannada extras ----
 const KN_TENS: [string, number][] = [
   ['ಇಪ್ಪತ್ತ', 20], ['ಮೂವತ್ತ', 30], ['ನಲವತ್ತ', 40], ['ಐವತ್ತ', 50],
-  ['ಅರವತ್ತ', 60], ['ಎಪ್ಪತ್ತ', 70], ['ಎಂಬತ್ತ', 80], ['ತೊಂಬತ್ತ', 90],
+  ['ಅರವತ್ತ', 60], ['ಎಪ್ಪತ್ತ', 70], ['ಎಂಬತ್ತ', 80], ['ತೊಂಬತ್ತ', 90], ['ನಾಲ್ವತ್ತ', 40],
 ];
 const KN_JOIN: [string, number][] = [
   ['ೊಂದು', 1], ['ೆರಡು', 2], ['್ಮೂರು', 3], ['ಮೂರು', 3], ['ನಾಲ್ಕು', 4], ['ೈದು', 5],
@@ -103,8 +104,19 @@ const KN_HUNDREDS: [string, number][] = [
 for (const [w, n] of KN_HUNDREDS) {
   add(w, { kind: 'fusedHundred', value: n * 100 });
   add(w.replace(/ು$/, ''), { kind: 'fusedHundred', value: n * 100 }); // ಮುನ್ನೂರ before another number
+  add(w.replace(/ು$/, 'ಾ'), { kind: 'fusedHundred', value: n * 100 }); // ಮುನ್ನೂರಾ, a spelling seen in text
 }
+// pi's kn table maps ಮೂರೂವರೆ (three and a half) to "saade", which is wrong. Replace it and add the other halves.
+lexicon.delete(norm('ಮೂರೂವರೆ'));
+lexicon.delete(norm('muruvare'));
+for (const [w, v] of [['ಮೂರೂವರೆ', 3.5], ['ನಾಲ್ಕೂವರೆ', 4.5], ['ಐದೂವರೆ', 5.5], ['ಆರೂವರೆ', 6.5], ['ಏಳೂವರೆ', 7.5], ['ಎಂಟೂವರೆ', 8.5], ['ಒಂಬತ್ತೂವರೆ', 9.5], ['ಹತ್ತೂವರೆ', 10.5]] as const) {
+  add(w, { kind: 'half', value: v });
+}
+add('ಸಾಡೆ', { kind: 'frac', word: 'saade' });
+add('ಸವಾ', { kind: 'frac', word: 'sawa' });
+add('ಪೌನೆ', { kind: 'frac', word: 'paune' });
 add('ಸಾವಿರದ', { kind: 'mult', value: 1000 });
+add('ನಾಲ್ವತ್ತು', { kind: 'unit', value: 40 });
 add('ಲಕ್ಷದ', { kind: 'mult', value: 100000 });
 for (const [w, n] of [['nuru', 1], ['innuru', 2], ['munnuru', 3], ['nanuru', 4], ['ainuru', 5], ['arunuru', 6], ['elunuru', 7], ['entunuru', 8], ['ombainuru', 9]] as const) {
   add(w, { kind: 'fusedHundred', value: n * 100 });

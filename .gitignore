@@ -11,3 +11,4 @@ eval/results/raw/
 *.pcm
 *.tsbuildinfo
 spikes/runs.log
+eval/results/golden-diag.txt

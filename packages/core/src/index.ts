@@ -9,3 +9,4 @@ export * from './ledger/index.js';
 export * from './dates/index.js';
 export * from './names/index.js';
 export * from './speak/index.js';
+export * from './intent/index.js';
