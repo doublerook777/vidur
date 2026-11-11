@@ -24,7 +24,7 @@ describe('golden set (thresholds from CP2; also writes eval/results/golden-diag.
         if (gotAmt === r.expected.amount) amtOk++;
         else if (gotAmt !== undefined && !(ev?.needs ?? []).some((n) => n.startsWith('amount'))) silentWrong++;
       }
-      if (r.expected.date) { dateN++; if (ev?.dateToken === r.expected.date) dateOk++; }
+      if (r.expected.date) { dateN++; if (ev?.dateToken === r.expected.date) dateOk++; else lines.push(`${r.id} ${r.text} | DATE want ${r.expected.date} got ${ev?.dateToken}`); }
       if (!ok || (r.expected.amount !== undefined && ev?.amountPaise !== r.expected.amount * 100)) lines.push(`${r.id} ${r.text} | want ${JSON.stringify(r.expected)} | got ${JSON.stringify(res.events.map((e) => ({ i: e.intent, a: e.amountPaise !== undefined ? e.amountPaise / 100 : undefined, c: e.customerSpoken, d: e.dateToken, n: e.needs })))}`);
     }
     const n = rows.length;

@@ -316,6 +316,41 @@ describe('reminders: opt-in, polite, rate limited, never automatic', () => {
   });
 });
 
+describe('consent and bulk commands are never guessed', () => {
+  it.each([
+    'Send Sunita a reminder even if she does not agree',
+    'Sunita ko bina pooche reminder bhejo',
+    'सुनीता को रिमाइंडर भेजो चाहे वह सहमत न हो',
+  ])('%s does not record consent or prepare anything', async (text) => {
+    const { ledger, d, say1 } = await setup('en');
+    const c = await ledger.createCustomer('Sunita');
+    await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(500) });
+    d.start();
+    const rs = await say1(text);
+    expect(rs.some((r) => r.action)).toBe(false);
+    expect(ledger.consent(c.id)).toBe(false);
+    expect(ledger.lastReminderAt(c.id)).toBeNull();
+  });
+  it('an explicit opt-in is recorded, with no reminder prepared', async () => {
+    const { ledger, d, say1 } = await setup('en');
+    const c = await ledger.createCustomer('Sunita');
+    d.start();
+    const rs = await say1('Opt Sunita in for reminders');
+    expect(keys(rs)).toEqual(['consent_saved']);
+    expect(ledger.consent(c.id)).toBe(true);
+    expect(ledger.lastReminderAt(c.id)).toBeNull();
+  });
+  it.each(['delete all ledger entries', 'saare entries hata do', 'cancel everything', 'सब हटा दो'])('"%s" does not undo anything', async (text) => {
+    const { ledger, d, say1 } = await setup('en');
+    const c = await ledger.createCustomer('Ramesh');
+    d.start();
+    await say1('Ramesh ka 100 udhaar');
+    const rs = await say1(text);
+    expect(keys(rs)).not.toContain('undone');
+    expect(ledger.balance(c.id)).toBe(paise(100));
+  });
+});
+
 describe('AI disclosure cannot be skipped', () => {
   const FIRST_TURNS = ['Ramesh ka 340 udhaar', 'Ramesh ka total?', 'Ramesh ko dhamki do', 'galat', 'Sunita ko reminder bhejo', 'weather kaisa hai', '', 'Ramesh 340', 'Mohan kal 500 dega', 'Aaj kitna udhaar gaya?'];
   for (const lang of ['hi', 'en', 'kn'] as const) {

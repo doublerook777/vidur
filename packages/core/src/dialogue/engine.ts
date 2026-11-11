@@ -1,6 +1,6 @@
 import { addDaysIst, resolveDate, startOfDayIst } from '../dates/index.js';
 import { say, type Key, type P, type SpeechLang } from '../i18n/index.js';
-import { detectDirection, guessCustomerName, interpret, residualWords, yesNo } from '../intent/index.js';
+import { detectDirection, guessCustomerName, interpret, isOptInStatement, residualWords, yesNo } from '../intent/index.js';
 import type { Interpretation, ParsedEvent } from '../intent/index.js';
 import type { Ledger } from '../ledger/index.js';
 import { findByAlias, matchName } from '../names/index.js';
@@ -191,7 +191,7 @@ export class Dialogue {
 
   private workFor(ev: ParsedEvent, rest: ParsedEvent[]): Work {
     const mode: Mode =
-      ev.intent === 'credit_entry' || ev.intent === 'payment' ? 'entry' : ev.intent === 'note' ? 'note' : ev.intent === 'balance_query' ? 'query' : ev.intent === 'reminder_opt_in' ? (/opt|consent|सहमत|ಒಪ್ಪ/i.test(ev.text) ? 'consent' : 'reminder') : 'entry';
+      ev.intent === 'credit_entry' || ev.intent === 'payment' ? 'entry' : ev.intent === 'note' ? 'note' : ev.intent === 'balance_query' ? 'query' : ev.intent === 'reminder_opt_in' ? (isOptInStatement(ev.text) ? 'consent' : 'reminder') : 'entry';
     return { mode, ev, rest, asked: 0 };
   }
 

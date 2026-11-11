@@ -47,6 +47,13 @@ describe('golden utterance set', () => {
   it('validates every line against the schema', () => {
     const errors = lines.flatMap((l) => {
       if (l.parseError) return [`${l.file}:${l.lineNo}: ${l.parseError}`];
+      // heldout.jsonl uses H- ids by design; validate them against the same rules with the prefix swapped
+      if (l.file === 'heldout.jsonl' && l.value && typeof l.value === 'object') {
+        const v = l.value as Record<string, unknown>;
+        if (typeof v.id === 'string' && v.id.startsWith('H-')) {
+          return validateUtterance({ ...v, id: `G-${v.id.slice(2)}` }, l.lineNo).errors.map((e) => `${l.file}: ${e}`);
+        }
+      }
       return validateUtterance(l.value, l.lineNo).errors.map((e) => `${l.file}: ${e}`);
     });
     expect(errors).toEqual([]);

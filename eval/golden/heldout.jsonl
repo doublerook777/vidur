@@ -1,0 +1,140 @@
+{"id": "H-HI-001", "lang": "hi", "text": "लक्ष्मी को तीन सौ चालीस उधार लिख दो", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Lakshmi"}}
+{"id": "H-HI-002", "lang": "hi", "text": "मनोज का ३४० उधार", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Manoj"}}
+{"id": "H-HI-003", "lang": "hi", "text": "फातिमा को डेढ़ सौ उधार", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Fatima"}}
+{"id": "H-HI-004", "lang": "hi", "text": "राहुल का सवा दो सौ उधार", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Rahul"}}
+{"id": "H-HI-005", "lang": "hi", "text": "दीपा को ढाई सौ उधार लिख दो", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Deepa"}}
+{"id": "H-HI-006", "lang": "hi", "text": "इमरान का साढ़े पाँच सौ उधार", "expected": {"intent": "credit_entry", "amount": 550, "customer": "Imran"}}
+{"id": "H-HI-007", "lang": "hi", "text": "गीता को पौने तीन सौ उधार", "expected": {"intent": "credit_entry", "amount": 275, "customer": "Geeta"}}
+{"id": "H-HI-008", "lang": "hi", "text": "अर्जुन का एक हज़ार दो सौ उधार", "expected": {"intent": "credit_entry", "amount": 1200, "customer": "Arjun"}}
+{"id": "H-HI-009", "lang": "hi", "text": "मीना को दो लाख दस हज़ार उधार", "expected": {"intent": "credit_entry", "amount": 210000, "customer": "Meena"}}
+{"id": "H-HI-010", "lang": "hi", "text": "संजय का 400 उधार और दीपा ने 100 जमा किए", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Sanjay"}}
+{"id": "H-HI-011", "lang": "hi", "text": "तीन सौ चालीस उधार है लक्ष्मी का", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Lakshmi"}}
+{"id": "H-HI-012", "lang": "hi", "text": "लक्ष्मी को दो सौ दिए", "expected": {"intent": "credit_entry", "amount": 200, "customer": "Lakshmi"}}
+{"id": "H-HI-013", "lang": "hi", "text": "राहुल का एक लाख अस्सी हज़ार उधार", "expected": {"intent": "credit_entry", "amount": 180000, "customer": "Rahul"}}
+{"id": "H-HI-014", "lang": "hi", "text": "राहुल का ३४० उधार, नहीं नहीं ४३० उधार", "expected": {"intent": "credit_entry", "amount": 430, "customer": "Rahul"}}
+{"id": "H-HI-015", "lang": "hi", "text": "लक्ष्मी ने तीन सौ जमा किए", "expected": {"intent": "payment", "amount": 300, "customer": "Lakshmi"}}
+{"id": "H-HI-016", "lang": "hi", "text": "मनोज ने कल 200 दिए", "expected": {"intent": "payment", "amount": 200, "customer": "Manoj", "date": "yesterday"}}
+{"id": "H-HI-017", "lang": "hi", "text": "फातिमा का दो सौ वापस आया", "expected": {"intent": "payment", "amount": 200, "customer": "Fatima"}}
+{"id": "H-HI-018", "lang": "hi", "text": "दीपा ने पाँच सौ की वापसी की", "expected": {"intent": "payment", "amount": 500, "customer": "Deepa"}}
+{"id": "H-HI-019", "lang": "hi", "text": "आज कुल कितना उधार गया?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "H-HI-020", "lang": "hi", "text": "लक्ष्मी का टोटल कितना है?", "expected": {"intent": "balance_query", "customer": "Lakshmi"}}
+{"id": "H-HI-021", "lang": "hi", "text": "गीता का बकाया कितना है?", "expected": {"intent": "balance_query", "customer": "Geeta"}}
+{"id": "H-HI-022", "lang": "hi", "text": "गलत, ४३०", "expected": {"intent": "correction", "amount": 430}}
+{"id": "H-HI-023", "lang": "hi", "text": "हटा दो", "expected": {"intent": "correction"}}
+{"id": "H-HI-024", "lang": "hi", "text": "नहीं, संजय का था", "expected": {"intent": "correction", "customer": "Sanjay"}}
+{"id": "H-HI-025", "lang": "hi", "text": "दीपा परसों पैसे देगी", "expected": {"intent": "note", "customer": "Deepa", "date": "day_after_tomorrow"}}
+{"id": "H-HI-026", "lang": "hi", "text": "मनोज सोमवार को तीन सौ देगा", "expected": {"intent": "note", "amount": 300, "customer": "Manoj", "date": "weekday:monday"}}
+{"id": "H-HI-027", "lang": "hi", "text": "गीता को polite reminder भेजो", "expected": {"intent": "reminder_opt_in", "customer": "Geeta"}}
+{"id": "H-HI-028", "lang": "hi", "text": "इमरान को धमकी दो", "expected": {"intent": "refusal", "customer": "Imran"}}
+{"id": "H-HI-029", "lang": "hi", "text": "गीता पर ब्याज लगा दो", "expected": {"intent": "refusal", "customer": "Geeta"}}
+{"id": "H-HI-030", "lang": "hi", "text": "क्या अर्जुन को उधार देना चाहिए?", "expected": {"intent": "refusal", "customer": "Arjun"}}
+{"id": "H-HI-031", "lang": "hi", "text": "आज मौसम कैसा है?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HI-032", "lang": "hi", "text": "तुम कौन हो?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HI-033", "lang": "hi", "text": "आज का मैच कौन जीता?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HI-034", "lang": "hi", "text": "एक चुटकुला सुनाओ", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HI-035", "lang": "hi", "text": "मुझे खाना ऑर्डर करना है", "expected": {"intent": "out_of_scope"}}
+{"id": "H-EN-001", "lang": "en", "text": "Manoj's 340 on credit", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Manoj"}}
+{"id": "H-EN-002", "lang": "en", "text": "Fatima took 250 on credit", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Fatima"}}
+{"id": "H-EN-003", "lang": "en", "text": "Arjun took three-forty on credit", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Arjun"}}
+{"id": "H-EN-004", "lang": "en", "text": "Rahul's one lakh on credit", "expected": {"intent": "credit_entry", "amount": 100000, "customer": "Rahul"}}
+{"id": "H-EN-005", "lang": "en", "text": "Meena owes fifteen hundred", "expected": {"intent": "credit_entry", "amount": 1500, "customer": "Meena"}}
+{"id": "H-EN-006", "lang": "en", "text": "Geeta took 22 hundred on credit", "expected": {"intent": "credit_entry", "amount": 2200, "customer": "Geeta"}}
+{"id": "H-EN-007", "lang": "en", "text": "Imran's three hundred fifty on credit", "expected": {"intent": "credit_entry", "amount": 350, "customer": "Imran"}}
+{"id": "H-EN-008", "lang": "en", "text": "Sanjay took 400 on credit and Deepa paid 100", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Sanjay"}}
+{"id": "H-EN-009", "lang": "en", "text": "One hundred twenty on credit for Fatima", "expected": {"intent": "credit_entry", "amount": 120, "customer": "Fatima"}}
+{"id": "H-EN-010", "lang": "en", "text": "Rahul took ₹500 on credit", "expected": {"intent": "credit_entry", "amount": 500, "customer": "Rahul"}}
+{"id": "H-EN-011", "lang": "en", "text": "Arjun's 340 on credit, no no, 430", "expected": {"intent": "credit_entry", "amount": 430, "customer": "Arjun"}}
+{"id": "H-EN-012", "lang": "en", "text": "Deepa took two kilos of sugar on credit", "expected": {"intent": "credit_entry", "customer": "Deepa", "item": "sugar"}}
+{"id": "H-EN-013", "lang": "en", "text": "Lakshmi paid 200", "expected": {"intent": "payment", "amount": 200, "customer": "Lakshmi"}}
+{"id": "H-EN-014", "lang": "en", "text": "Manoj paid 300 yesterday", "expected": {"intent": "payment", "amount": 300, "customer": "Manoj", "date": "yesterday"}}
+{"id": "H-EN-015", "lang": "en", "text": "Fatima paid one-fifty", "expected": {"intent": "payment", "amount": 150, "customer": "Fatima"}}
+{"id": "H-EN-016", "lang": "en", "text": "Deepa paid two hundred fifty back", "expected": {"intent": "payment", "amount": 250, "customer": "Deepa"}}
+{"id": "H-EN-017", "lang": "en", "text": "How much credit went out last week?", "expected": {"intent": "balance_query", "date": "last_week"}}
+{"id": "H-EN-018", "lang": "en", "text": "What's Lakshmi's total?", "expected": {"intent": "balance_query", "customer": "Lakshmi"}}
+{"id": "H-EN-019", "lang": "en", "text": "How much does Imran owe me?", "expected": {"intent": "balance_query", "customer": "Imran"}}
+{"id": "H-EN-020", "lang": "en", "text": "No no, 430", "expected": {"intent": "correction", "amount": 430}}
+{"id": "H-EN-021", "lang": "en", "text": "Cancel that", "expected": {"intent": "correction"}}
+{"id": "H-EN-022", "lang": "en", "text": "No, it was Sanjay's", "expected": {"intent": "correction", "customer": "Sanjay"}}
+{"id": "H-EN-023", "lang": "en", "text": "Geeta will pay 500 tomorrow", "expected": {"intent": "note", "amount": 500, "customer": "Geeta", "date": "tomorrow"}}
+{"id": "H-EN-024", "lang": "en", "text": "Imran will pay day after tomorrow", "expected": {"intent": "note", "customer": "Imran", "date": "day_after_tomorrow"}}
+{"id": "H-EN-025", "lang": "en", "text": "Deepa promised to pay on Monday", "expected": {"intent": "note", "customer": "Deepa", "date": "weekday:monday"}}
+{"id": "H-EN-026", "lang": "en", "text": "Send Lakshmi a reminder", "expected": {"intent": "reminder_opt_in", "customer": "Lakshmi"}}
+{"id": "H-EN-027", "lang": "en", "text": "Threaten Imran", "expected": {"intent": "refusal", "customer": "Imran"}}
+{"id": "H-EN-028", "lang": "en", "text": "Charge Geeta 2% interest", "expected": {"intent": "refusal", "customer": "Geeta"}}
+{"id": "H-EN-029", "lang": "en", "text": "Should I give Arjun credit?", "expected": {"intent": "refusal", "customer": "Arjun"}}
+{"id": "H-EN-030", "lang": "en", "text": "Can you lend me 1000 right now?", "expected": {"intent": "refusal"}}
+{"id": "H-EN-031", "lang": "en", "text": "What's the weather today?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-EN-032", "lang": "en", "text": "Who are you?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-EN-033", "lang": "en", "text": "Order me a pizza", "expected": {"intent": "out_of_scope"}}
+{"id": "H-EN-034", "lang": "en", "text": "Who won the match today?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-EN-035", "lang": "en", "text": "Tell me a joke", "expected": {"intent": "out_of_scope"}}
+{"id": "H-KN-001", "lang": "kn", "text": "ಮನೋಜ್‌ಗೆ ಮೂರು ನೂರು ನಲವತ್ತು ರೂಪಾಯಿ ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Manoj"}}
+{"id": "H-KN-002", "lang": "kn", "text": "ರಹುಲ್‌ಗೆ ೩೪೦ ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Rahul"}}
+{"id": "H-KN-003", "lang": "kn", "text": "ಫಾತಿಮಾಗೆ ಎರಡು ನೂರು ಐವತ್ತು ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Fatima"}}
+{"id": "H-KN-004", "lang": "kn", "text": "ದೀಪಾಗೆ ನೂರು ಐವತ್ತು ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Deepa"}}
+{"id": "H-KN-005", "lang": "kn", "text": "ಗೀತಾಗೆ ಎರಡು ನೂರು ಎಪ್ಪತ್ತೈದು ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 275, "customer": "Geeta"}}
+{"id": "H-KN-006", "lang": "kn", "text": "ಇಮ್ರಾನ್‌ಗೆ ಐದು ನೂರು ಐವತ್ತು ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 550, "customer": "Imran"}}
+{"id": "H-KN-007", "lang": "kn", "text": "ಮೀನಾ ಅವರಿಗೆ ೧೨೫೦ ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 1250, "customer": "Meena"}}
+{"id": "H-KN-008", "lang": "kn", "text": "ಅರ್ಜುನನಿಗೆ ಒಂದು ಲಕ್ಷ ಇಪ್ಪತ್ತು ಸಾವಿರ ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 120000, "customer": "Arjun"}}
+{"id": "H-KN-009", "lang": "kn", "text": "ಸಂಜಯನಿಗೆ ೪೦೦ ಉಧಾರ, ದೀಪಾ ನೂರು ಕೊಟ್ಲು", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Sanjay"}}
+{"id": "H-KN-010", "lang": "kn", "text": "ಮೂರು ನೂರು ನಲವತ್ತು ರೂಪಾಯಿ ಉಧಾರ ಲಕ್ಷ್ಮಿ ಅವರದು", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Lakshmi"}}
+{"id": "H-KN-011", "lang": "kn", "text": "ಲಕ್ಷ್ಮಿಗೆ ೩೦೦ ಉಧಾರ ಕೊಡಿ", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Lakshmi"}}
+{"id": "H-KN-012", "lang": "kn", "text": "ದೀಪಾಗೆ ಎರಡು ಕಿಲೋ ಸಕ್ಕರೆ ಉಧಾರ", "expected": {"intent": "credit_entry", "customer": "Deepa", "item": "sugar"}}
+{"id": "H-KN-013", "lang": "kn", "text": "ಮನೋಜ್‌ಗೆ ೩೪೦ ಉಧಾರ, ಇಲ್ಲ ಇಲ್ಲ ೪೩೦", "expected": {"intent": "credit_entry", "amount": 430, "customer": "Manoj"}}
+{"id": "H-KN-014", "lang": "kn", "text": "ಲಕ್ಷ್ಮಿ ೩೦೦ ಜಮಾ ಮಾಡಿದ್ರು", "expected": {"intent": "payment", "amount": 300, "customer": "Lakshmi"}}
+{"id": "H-KN-015", "lang": "kn", "text": "ಮನೋಜ್ ನಿನ್ನೆ ೨೦೦ ಕೊಟ್ಟರು", "expected": {"intent": "payment", "amount": 200, "customer": "Manoj", "date": "yesterday"}}
+{"id": "H-KN-016", "lang": "kn", "text": "ಫಾತಿಮಾ ನೂರು ಐವತ್ತು ಕೊಟ್ಲು", "expected": {"intent": "payment", "amount": 150, "customer": "Fatima"}}
+{"id": "H-KN-017", "lang": "kn", "text": "ಇವತ್ತು ಎಷ್ಟು ಉಧಾರ ಹೋಯ್ತು?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "H-KN-018", "lang": "kn", "text": "ಲಕ್ಷ್ಮಿಯ ಬಾಕಿ ಎಷ್ಟು?", "expected": {"intent": "balance_query", "customer": "Lakshmi"}}
+{"id": "H-KN-019", "lang": "kn", "text": "ಮನೋಜ್ ಖಾತೆಯಲ್ಲಿ ಎಷ್ಟಿದೆ?", "expected": {"intent": "balance_query", "customer": "Manoj"}}
+{"id": "H-KN-020", "lang": "kn", "text": "ಇಲ್ಲ ಇಲ್ಲ, ೪೩೦", "expected": {"intent": "correction", "amount": 430}}
+{"id": "H-KN-021", "lang": "kn", "text": "ರದ್ದು ಮಾಡಿ", "expected": {"intent": "correction"}}
+{"id": "H-KN-022", "lang": "kn", "text": "ಇಲ್ಲ, ಸಂಜಯನದು", "expected": {"intent": "correction", "customer": "Sanjay"}}
+{"id": "H-KN-023", "lang": "kn", "text": "ನಾಳೆ ಗೀತಾ ಐದು ನೂರು ಕೊಡ್ತಾಳೆ", "expected": {"intent": "note", "amount": 500, "customer": "Geeta", "date": "tomorrow"}}
+{"id": "H-KN-024", "lang": "kn", "text": "ಪರಸೋ ದೀಪಾ ಕೊಡ್ತಾಳೆ", "expected": {"intent": "note", "customer": "Deepa", "date": "day_after_tomorrow"}}
+{"id": "H-KN-025", "lang": "kn", "text": "ಸೋಮವಾರ ಮನೋಜ್ ಕೊಡ್ತಾನೆ", "expected": {"intent": "note", "customer": "Manoj", "date": "weekday:monday"}}
+{"id": "H-KN-026", "lang": "kn", "text": "ಲಕ್ಷ್ಮಿಗೆ ನೆನಪಿನ ಸಂದೇಶ ಕಳಿಸು", "expected": {"intent": "reminder_opt_in", "customer": "Lakshmi"}}
+{"id": "H-KN-027", "lang": "kn", "text": "ಇಮ್ರಾನ್‌ಗೆ ಬೆದರಿಕೆ ಹಾಕು", "expected": {"intent": "refusal", "customer": "Imran"}}
+{"id": "H-KN-028", "lang": "kn", "text": "ಗೀತಾಗೆ ಬಡ್ಡಿ ಹಾಕು", "expected": {"intent": "refusal", "customer": "Geeta"}}
+{"id": "H-KN-029", "lang": "kn", "text": "ಅರ್ಜುನನಿಗೆ ಉಧಾರ ಕೊಡಬಹುದೇ?", "expected": {"intent": "refusal", "customer": "Arjun"}}
+{"id": "H-KN-030", "lang": "kn", "text": "ನನಗೆ ಸಾವಿರ ರೂಪಾಯಿ ಸಾಲ ಕೊಡು", "expected": {"intent": "refusal"}}
+{"id": "H-KN-031", "lang": "kn", "text": "ಇವತ್ತು ಹವಾಮಾನ ಹೇಗಿದೆ?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-KN-032", "lang": "kn", "text": "ನೀವು ಯಾರು?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-KN-033", "lang": "kn", "text": "ಈ ದಿನದ ಸುದ್ದಿ ಹೇಳು", "expected": {"intent": "out_of_scope"}}
+{"id": "H-KN-034", "lang": "kn", "text": "ಊಟಕ್ಕೆ ಏನಿದೆ?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-KN-035", "lang": "kn", "text": "ಒಂದು ಕಥೆ ಹೇಳು", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HL-001", "lang": "hinglish", "text": "Lakshmi ko teen sau chaalis udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Lakshmi"}}
+{"id": "H-HL-002", "lang": "hinglish", "text": "Fatima ko dhai sau udhaar", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Fatima"}}
+{"id": "H-HL-003", "lang": "hinglish", "text": "Deepa ka dedh sau udhaar", "expected": {"intent": "credit_entry", "amount": 150, "customer": "Deepa"}}
+{"id": "H-HL-004", "lang": "hinglish", "text": "Rahul ka sawa do sau udhaar", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Rahul"}}
+{"id": "H-HL-005", "lang": "hinglish", "text": "Geeta ko paune teen sau udhaar", "expected": {"intent": "credit_entry", "amount": 275, "customer": "Geeta"}}
+{"id": "H-HL-006", "lang": "hinglish", "text": "Imran ka saade paanch sau udhaar", "expected": {"intent": "credit_entry", "amount": 550, "customer": "Imran"}}
+{"id": "H-HL-007", "lang": "hinglish", "text": "Arjun ka ek hazaar do sau udhaar", "expected": {"intent": "credit_entry", "amount": 1200, "customer": "Arjun"}}
+{"id": "H-HL-008", "lang": "hinglish", "text": "Meena ko do lakh das hazaar udhaar", "expected": {"intent": "credit_entry", "amount": 210000, "customer": "Meena"}}
+{"id": "H-HL-009", "lang": "hinglish", "text": "Sanjay ka 400 udhaar aur Deepa ne 100 diye", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Sanjay"}}
+{"id": "H-HL-010", "lang": "hinglish", "text": "teen sau chaalis udhaar hai Lakshmi ka", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Lakshmi"}}
+{"id": "H-HL-011", "lang": "hinglish", "text": "Lakshmi ko do sau diye", "expected": {"intent": "credit_entry", "amount": 200, "customer": "Lakshmi"}}
+{"id": "H-HL-012", "lang": "hinglish", "text": "Deepa ko 2 kilo chini udhaar", "expected": {"intent": "credit_entry", "customer": "Deepa", "item": "sugar"}}
+{"id": "H-HL-013", "lang": "hinglish", "text": "Rahul ka 340 udhaar, nahi nahi 430 udhaar", "expected": {"intent": "credit_entry", "amount": 430, "customer": "Rahul"}}
+{"id": "H-HL-014", "lang": "hinglish", "text": "Manoj ka teen chaalis udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Manoj"}}
+{"id": "H-HL-015", "lang": "hinglish", "text": "Manoj ne kal 200 diye", "expected": {"intent": "payment", "amount": 200, "customer": "Manoj", "date": "yesterday"}}
+{"id": "H-HL-016", "lang": "hinglish", "text": "Deepa ne paanch sau chukaye", "expected": {"intent": "payment", "amount": 500, "customer": "Deepa"}}
+{"id": "H-HL-017", "lang": "hinglish", "text": "Aaj kitna udhaar gaya?", "expected": {"intent": "balance_query", "date": "today"}}
+{"id": "H-HL-018", "lang": "hinglish", "text": "Lakshmi ka total kya hai?", "expected": {"intent": "balance_query", "customer": "Lakshmi"}}
+{"id": "H-HL-019", "lang": "hinglish", "text": "Geeta ka baaki kitna hai?", "expected": {"intent": "balance_query", "customer": "Geeta"}}
+{"id": "H-HL-020", "lang": "hinglish", "text": "Nahi nahi, 430", "expected": {"intent": "correction", "amount": 430}}
+{"id": "H-HL-021", "lang": "hinglish", "text": "Hata do", "expected": {"intent": "correction"}}
+{"id": "H-HL-022", "lang": "hinglish", "text": "Nahi, Sanjay ka tha", "expected": {"intent": "correction", "customer": "Sanjay"}}
+{"id": "H-HL-023", "lang": "hinglish", "text": "Geeta kal paanch sau degi", "expected": {"intent": "note", "amount": 500, "customer": "Geeta", "date": "tomorrow"}}
+{"id": "H-HL-024", "lang": "hinglish", "text": "Imran parso dega", "expected": {"intent": "note", "customer": "Imran", "date": "day_after_tomorrow"}}
+{"id": "H-HL-025", "lang": "hinglish", "text": "Deepa monday ko teen sau degi", "expected": {"intent": "note", "amount": 300, "customer": "Deepa", "date": "weekday:monday"}}
+{"id": "H-HL-026", "lang": "hinglish", "text": "Lakshmi ko reminder bhejo", "expected": {"intent": "reminder_opt_in", "customer": "Lakshmi"}}
+{"id": "H-HL-027", "lang": "hinglish", "text": "Imran ko dhamki do", "expected": {"intent": "refusal", "customer": "Imran"}}
+{"id": "H-HL-028", "lang": "hinglish", "text": "Geeta pe byaj laga do", "expected": {"intent": "refusal", "customer": "Geeta"}}
+{"id": "H-HL-029", "lang": "hinglish", "text": "Kya Arjun ko udhaar dena chahiye?", "expected": {"intent": "refusal", "customer": "Arjun"}}
+{"id": "H-HL-030", "lang": "hinglish", "text": "Mujhe 1000 udhaar de do", "expected": {"intent": "refusal"}}
+{"id": "H-HL-031", "lang": "hinglish", "text": "Aaj mausam kaisa hai?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HL-032", "lang": "hinglish", "text": "Tum kaun ho?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HL-033", "lang": "hinglish", "text": "Pizza order karwa do", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HL-034", "lang": "hinglish", "text": "Kal match kon jita?", "expected": {"intent": "out_of_scope"}}
+{"id": "H-HL-035", "lang": "hinglish", "text": "Ek chutkula sunao", "expected": {"intent": "out_of_scope"}}

@@ -14,23 +14,23 @@ const CREDIT = W(
 );
 const PAYMENT = W(
   'jama jamaa wapas vapas wapis chukaya chukaye chukai chuka chukaayi paid repaid returned refund refunded settled deposit deposited lautaya lauta ' +
-    'जमा वापस वापिस चुकाया चुकाए चुकाई चुकता लौटाया लौटाए ಜಮಾ ವಾಪಸ್ ಹಿಂತಿರುಗಿಸಿದರು ಕಟ್ಟಿದರು ಕಟ್ಟಿದ ಕಟ್ಟಿದಳು ಕಟ್ಟಿದನು',
+    'वापसी जमा वापस वापिस चुकाया चुकाए चुकाई चुकता लौटाया लौटाए ಜಮಾ ವಾಪಸ್ ವಾಪಸಿ ಹಿಂತಿರುಗಿಸಿದರು ಕಟ್ಟಿದರು ಕಟ್ಟಿದ ಕಟ್ಟಿದಳು ಕಟ್ಟಿದನು',
 );
 const GIVE = W('diya diye di dia dee gave give given gives दिया दिए दी दिये');
-const GIVE_KN_CUSTOMER = W('ಕೊಟ್ಟಳು ಕೊಟ್ಟನು ಕೊಟ್ಟರು ಕೊಟ್ಟಿದ್ದಾಳೆ ಕೊಟ್ಟಿದ್ದಾರೆ ಕೊಟ್ಟಿದ್ದಾನೆ ಕೊಟ್ಟಳೆ');
+const GIVE_KN_CUSTOMER = W('ಕೊಟ್ಲು ಕೊಟ್ರು ಕೊಟ್ಟಳು ಕೊಟ್ಟನು ಕೊಟ್ಟರು ಕೊಟ್ಟಿದ್ದಾಳೆ ಕೊಟ್ಟಿದ್ದಾರೆ ಕೊಟ್ಟಿದ್ದಾನೆ ಕೊಟ್ಟಳೆ');
 const GIVE_KN_SHOP = W('ಕೊಟ್ಟೆ ಕೊಟ್ಟಿದ್ದೇನೆ ಕೊಟ್ಟೆನು');
 const TOOK = W('liya lie le_gaya legaya liye ले गया लिया लिए ಪಡೆದ ಪಡೆದರು ತೆಗೆದುಕೊಂಡ ತೆಗೆದುಕೊಂಡರು ತೆಗೆದುಕೊಂಡಳು');
 const FUTURE = W(
-  'dega degi denge dunga dungi dunge dene_wala dene_wali will shall tomorrow_pay karega karegi karenge ' +
+  'dega degi denge dunga dungi dunge dene_wala dene_wali will shall tomorrow_pay karega karegi karenge promised promise promises वादा ' +
     'देगा देगी देंगे दूँगा दूंगा दूँगी दूंगी करेगा करेगी करेंगे ಕೊಡ್ತಾರೆ ಕೊಡ್ತಾನೆ ಕೊಡ್ತಾಳೆ ಕೊಡುತ್ತಾರೆ ಕೊಡುತ್ತಾನೆ ಕೊಡುತ್ತಾಳೆ ಕೊಡ್ತೀನಿ ಕೊಡುತ್ತೇನೆ ಕೊಡ್ತಾರೆ ಕಟ್ಟುತ್ತಾರೆ ಕಟ್ಟುತ್ತಾನೆ ಕಟ್ಟುತ್ತಾಳೆ',
 );
 const PAST = W('tha thi the gaya gayi gaye diya liya kiya paid gave took was had था थी थे गया गयी लिया दिया किया ಆಯ್ತು ಆಗಿತ್ತು');
 const QUERY = W(
   'kitna kitni kitne kitna_hai total hisab hisaab hisaabh much many ' +
-    'कितना कितनी कितने कुल हिसाब टोटल ಎಷ್ಟು ಒಟ್ಟು ಲೆಕ್ಕ',
+    'कितना कितनी कितने कुल हिसाब टोटल ಎಷ್ಟು ಎಷ್ಟಿದೆ ಎಷ್ಟಾಗಿದೆ ಎಷ್ಟಾಯ್ತು ಒಟ್ಟು ಲೆಕ್ಕ',
 );
 const QUERY_EN = W('how what which show tell list who');
-const REMINDER = W('reminder reminders remind yaad yaaddilao optin opt consent रिमाइंडर याद ರಿಮೈಂಡರ್ ನೆನಪಿಸಿ');
+const REMINDER = W('reminder reminders remind yaad yaaddilao optin opt consent रिमाइंडर याद ರಿಮೈಂಡರ್ ನೆನಪಿಸಿ ನೆನಪಿನ ನೆನಪು ಜ್ಞಾಪನೆ');
 const UNDO = W(
   'cancel undo delete hata hatao hataiye remove rad radd galat wrong mistake ruko ' +
     'रद्द हटा हटाओ हटाइए गलत ग़लत रुको ಗಲತ್ ತಪ್ಪು ತಪ್ಪಾಯ್ತು ರದ್ದು ತೆಗೆ ಅಳಿಸಿ',
@@ -57,6 +57,7 @@ const DATE_WORDS: Record<string, string> = {
   aaj: 'aaj', आज: 'aaj', today: 'today', ಇಂದು: 'ಇಂದು', kal: 'kal', कल: 'kal', yesterday: 'yesterday', ನಿನ್ನೆ: 'ನಿನ್ನೆ', tomorrow: 'tomorrow', ನಾಳೆ: 'ನಾಳೆ',
   parso: 'parso', परसों: 'parso', monday: 'monday', tuesday: 'tuesday', wednesday: 'wednesday', thursday: 'thursday', friday: 'friday', saturday: 'saturday', sunday: 'sunday',
   somvar: 'somvar', mangalvar: 'mangalvar', budhvar: 'budhvar', guruvar: 'guruvar', shukravar: 'shukravar', shanivar: 'shanivar', ravivar: 'ravivar',
+  ಇವತ್ತು: 'aaj', ಪರಸೋ: 'parso', ನಾಡಿದ್ದು: 'parso', ಸೋಮವಾರ: 'somvar', ಮಂಗಳವಾರ: 'mangalvar', ಬುಧವಾರ: 'budhvar', ಗುರುವಾರ: 'guruvar', ಶುಕ್ರವಾರ: 'shukravar', ಶನಿವಾರ: 'shanivar', ಭಾನುವಾರ: 'ravivar',
   सोमवार: 'somvar', मंगलवार: 'mangalvar', बुधवार: 'budhvar', गुरुवार: 'guruvar', शुक्रवार: 'shukravar', शनिवार: 'shanivar', रविवार: 'ravivar',
 };
 
@@ -67,9 +68,18 @@ const isNumberish = (t: string): boolean => /^\p{N}/u.test(t) || lookup(t) !== u
 const isCue = (n: string): boolean => ALL_CUES.some((s) => s.has(n));
 
 function findDate(tokens: { w: string; n: string }[], tense: DateTense, nowMs: number): string | undefined {
+  const phrase = tokens.map((t) => t.w.toLowerCase()).join(' ');
+  for (const p of ['day after tomorrow', 'day before yesterday']) {
+    if (phrase.includes(p)) {
+      const r = resolveDate(p, tense, nowMs);
+      if (r.kind === 'resolved') return r.token;
+    }
+  }
   for (let i = 0; i < tokens.length; i++) {
     const t = tokens[i]!;
-    if ((t.n === 'last' && tokens[i + 1]?.n === 'week') || ((t.n === 'pichle' || t.n === 'pichhle') && (tokens[i + 1]?.n === 'hafte' || tokens[i + 1]?.n === 'hafta'))) {
+    const lw = t.w.toLowerCase();
+    const nw = tokens[i + 1]?.w.toLowerCase();
+    if ((lw === 'last' && nw === 'week') || ((lw === 'pichle' || lw === 'pichhle' || lw === 'पिछले') && (nw === 'hafte' || nw === 'hafta' || nw === 'हफ्ते' || nw === 'हफ़्ते'))) {
       const r = resolveDate('last week', 'past', nowMs);
       if (r.kind === 'resolved') return r.token;
     }
@@ -204,8 +214,11 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
   // 3. future promises are notes
   if (future) return withAmount({ ...base, intent: 'note', needs: [] });
   // 4. corrections
-  const undo = has(UNDO) && !direction;
+  // "Delete all ledger entries" is not an undo: a voice undo is short and about the last entry only.
+  const undoAll = /\b(all|every|everything|entire|saare|saari|sab|sabhi|ledger|entries)\b|सब|सारे|सभी|ಎಲ್ಲ/i.test(text) || toks.length > 6;
+  const undo = has(UNDO) && !direction && !undoAll;
   const cue = has(CORR_CUE);
+  if (has(UNDO) && undoAll && !direction && !amount) return { ...base, intent: 'out_of_scope', needs: [] };
   if (undo && !amount) return { ...base, intent: 'correction', correction: { kind: 'undo' }, needs: [] };
   if (undo && amount) return withAmount({ ...base, intent: 'correction', correction: { kind: 'amount' }, needs: amount.confidence < CONFIRM_BELOW ? ['amount_confirm'] : [] });
   if (cue && !direction) {
@@ -291,6 +304,17 @@ function guessNameForRefusal(text: string, ctx: InterpretContext): string | unde
     }
   }
   return guessName(toks);
+}
+
+/**
+ * True only for an explicit, un-negated statement that a customer agreed to reminders ("Opt Sunita in",
+ * "Sunita ne reminder ke liye haan kaha"). "Send it even if she doesn't agree" is not consent.
+ */
+export function isOptInStatement(text: string): boolean {
+  const t = text.toLowerCase();
+  const negated = /\b(not|nahi|nahin|na|without|bina|don'?t|doesn'?t|dont|never|refuse[sd]?|even if|chahe|bhale)\b|नहीं|नही|बिना|चाहे|भले|ಒಪ್ಪದ|ಇಲ್ಲ|ಬಿನಾ|ಇಲ್ಲದೆ|ಆದರೂ/.test(t);
+  if (negated) return false;
+  return /\bopt(ed)? ?(.{0,30})?in\b|\boptin\b|\bconsent(ed)?\b|\bagreed\b|\bsahmat\b|सहमत|ಒಪ್ಪಿದ್ದಾರೆ|ಒಪ್ಪಿಗೆ/.test(t);
 }
 
 /** The direction a short answer like "udhaar" or "jama" gives, or undefined. */

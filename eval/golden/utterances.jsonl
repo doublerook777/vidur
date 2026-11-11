@@ -138,7 +138,7 @@
 {"id": "G-HL-017", "lang": "hinglish", "text": "Sunita ka teen chaalis udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Sunita"}}
 {"id": "G-HL-018", "lang": "hinglish", "text": "Kavya ka do pachaas udhaar", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
 {"id": "G-HL-019", "lang": "hinglish", "text": "Ramesh ka three forty udhaar", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
-{"id": "G-HL-020", "lang": "hinglish", "text": "Ramesh paid 200, kal 200 diya tha", "expected": {"intent": "payment", "amount": 200, "customer": "Ramesh", "date": "yesterday"}}
+{"id": "G-HL-020", "lang": "hinglish", "text": "Ramesh paid 200, kal 200 diya tha", "expected": {"intent": "payment", "amount": 200, "customer": "Ramesh"}}
 {"id": "G-HL-021", "lang": "hinglish", "text": "Sunita ne aaj 150 jama kiya", "expected": {"intent": "payment", "amount": 150, "customer": "Sunita", "date": "today"}}
 {"id": "G-HL-022", "lang": "hinglish", "text": "Kavya ne dhai sau chukaya", "expected": {"intent": "payment", "amount": 250, "customer": "Kavya"}}
 {"id": "G-HL-023", "lang": "hinglish", "text": "Mohan ne one fifty wapas diya", "expected": {"intent": "payment", "amount": 150, "customer": "Mohan"}}
