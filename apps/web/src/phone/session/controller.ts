@@ -72,6 +72,14 @@ export interface SessionOptions {
   backoffMs?: number[];
 }
 
+/** A fresh install starts in the phone's own language (English, Kannada), and in Hindi for anything else. */
+function deviceLang(): Lang {
+  const tag = typeof navigator === 'undefined' ? '' : (navigator.language || '').toLowerCase();
+  if (tag.startsWith('kn')) return 'kn';
+  if (tag.startsWith('en')) return 'en';
+  return 'hi';
+}
+
 const initial = (): SessionState => ({
   loaded: false, onboarded: false, screen: 'onboarding', openCustomerId: null, lang: 'hi', theme: 'light', shopName: '', phase: 'idle', online: false, mockMode: false,
   card: null, error: null, credit: 0, payment: 0, people: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
@@ -112,7 +120,7 @@ export class PhoneSession {
 
   private async init(): Promise<void> {
     this.ledger = await Ledger.load(this.o.vault.ledgerStore, this.now, this.newId);
-    const meta = (await this.o.vault.getMeta<{ lang: Lang; theme: Theme; shopName: string; onboarded: boolean }>('settings')) ?? { lang: 'hi' as Lang, theme: 'light' as Theme, shopName: '', onboarded: false };
+    const meta = (await this.o.vault.getMeta<{ lang: Lang; theme: Theme; shopName: string; onboarded: boolean }>('settings')) ?? { lang: deviceLang(), theme: 'light' as Theme, shopName: '', onboarded: false };
     this.store.update({ lang: meta.lang, theme: meta.theme, shopName: meta.shopName, onboarded: meta.onboarded, screen: meta.onboarded ? 'home' : 'onboarding', loaded: true });
     this.buildDialogue();
     this.connect();
@@ -442,7 +450,10 @@ export class PhoneSession {
   }
 
   private async setLang(lang: Lang): Promise<void> {
-    this.store.update({ lang });
+    // An agent line already on screen was written in the old language: redo the greeting, drop anything else.
+    const card = this.state.card;
+    const wasGreeting = card?.agentLine === say(this.state.lang, 'disclosure');
+    this.store.update({ lang, ...(card?.agentLine ? { card: wasGreeting ? { state: 'heard' as const, agentLine: say(lang, 'disclosure') } : null } : {}) });
     await this.saveSettings();
     this.gateway.setLang(lang);
     this.gateway.close();

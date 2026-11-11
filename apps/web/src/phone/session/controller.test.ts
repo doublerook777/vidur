@@ -63,7 +63,7 @@ async function turn(text: string, holdMs = 400): Promise<void> {
   await until(() => telemetry.filter((t) => t.transcript !== undefined).length > before);
   await until(() => ['idle', 'needs_answer'].includes(session!.state.phase), 6000);
 }
-afterEach(async () => { session?.dispose(); await gw?.close(); await mock?.close(); session = null; gw = mock = null; telemetry.length = 0; });
+afterEach(async () => { session?.dispose(); await gw?.close(); await mock?.close(); session = null; gw = mock = null; telemetry.length = 0; vi.unstubAllGlobals(); });
 
 describe('PhoneSession end to end with the real gateway, the mock Gnani and fake audio devices', () => {
   it('onboarding with demo data speaks the AI disclosure first, in the chosen language', async () => {
@@ -165,6 +165,7 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
   });
 
   it('out of credit: the app says so in the shopkeeper\'s language and points to running it with their own key', async () => {
+    vi.stubGlobal('navigator', { language: 'hi-IN' });
     mock = await startMockGnani({ ttfbMs: 5, chunkIntervalMs: 15 });
     const config = { ...loadConfig({ MODE: 'local', GNANI_API_KEY: 'nocredit', PORT: '0' }), gnaniBaseUrl: mock.url.replace('http', 'ws') };
     gw = await createGateway({ config, log: createLogger(() => undefined, { strict: true }) });
@@ -174,6 +175,32 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     expect(session!.state.error!.text).toContain('कीपैड');
     expect(session!.state.error!.text).toContain('अपनी चाबी');
     expect(session!.state.phase).toBe('offline');
+    vi.unstubAllGlobals();
+  });
+
+  it('a fresh install starts in the phone\'s own language: English, Kannada, and Hindi for anything else', async () => {
+    for (const [tag, lang] of [['en-IN', 'en'], ['kn-IN', 'kn'], ['hi-IN', 'hi'], ['ta-IN', 'hi']] as const) {
+      vi.stubGlobal('navigator', { language: tag });
+      await boot();
+      expect(session!.state.lang).toBe(lang);
+      expect(session!.state.screen).toBe('onboarding');
+      session!.dispose();
+      await gw?.close(); await mock?.close(); gw = null; mock = null; session = null;
+    }
+    vi.unstubAllGlobals();
+  });
+
+  it('switching language rewrites the greeting on screen in the new language, and drops other stale agent lines', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, false); // finishes in Hindi
+    expect(session!.state.card?.agentLine).toContain('विदुर');
+    session!.actions.setLang('en');
+    await until(() => session!.state.lang === 'en');
+    expect(session!.state.card?.agentLine).toBe("Hello, I'm Vidur, an AI assistant for your khata. Tell me a credit or a payment, or ask for a balance.");
+    session!.actions.setLang('kn');
+    await until(() => session!.state.lang === 'kn');
+    expect(session!.state.card?.agentLine).toContain('ನಾನು ವಿದುರ');
+    expect(session!.state.card?.agentLine).not.toMatch(/[\u0900-\u097F]/);
   });
 
   it('a recoverable gateway error shows what to do, a fatal one stops retrying', async () => {
