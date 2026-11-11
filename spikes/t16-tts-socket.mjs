@@ -53,7 +53,6 @@ let sec = 0;
 
 // C: abandon by closing the socket and reopening
 {
-  const t0 = performance.now();
   const { ws, openMs } = await open();
   ws.close();
   const { ws: ws2, openMs: o2 } = await open();

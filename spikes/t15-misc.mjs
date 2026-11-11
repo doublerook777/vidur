@@ -1,10 +1,8 @@
 // T1.5: pre-roll burst, mid-session keyterms, concurrent sessions, how Timbre reads amounts, Kannada.
-import { readFileSync } from 'node:fs';
 import WebSocket from 'ws';
 import { env, stt, tts, logRun } from './lib.mjs';
 const key = env().GNANI_API_KEY;
 let sttSec = 0, ttsSec = 0;
-const clip = readFileSync('eval/audio/t14/c00.pcm'); // रमेश का तीन सौ चालीस रुपये उधार
 const raw = (headers) => new WebSocket('wss://api.vachana.ai/stt/v3/stream', { headers: { 'x-api-key-id': key, model: 'prisma-v3.0', language_code: 'hi-IN', format: 'codemix', 'x-sample-rate': '16000', ...headers } });
 
 // 2. keyterms: header at connect, and update_settings mid-session
