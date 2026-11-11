@@ -18,6 +18,17 @@ export function todayTotals(ledger: Ledger, now: number): { credit: number; paym
   return { credit: t.creditPaise, payment: t.paymentPaise, people: t.customerCount };
 }
 
+/** Everything ever given on credit and everything ever paid back, over all customers. */
+export function ledgerTotals(ledger: Ledger): { credit: number; payment: number } {
+  let credit = 0;
+  let payment = 0;
+  for (const e of ledger.activeEntries()) {
+    if (e.kind === 'credit') credit += e.paise;
+    else payment += e.paise;
+  }
+  return { credit, payment };
+}
+
 /** Newest first by when the entry was recorded. `limit` caps how many; the history screen asks for many. */
 export function feed(ledger: Ledger, now: number, limit = 20): FeedItem[] {
   const names = new Map(ledger.customers().map((c) => [c.id, c.name]));

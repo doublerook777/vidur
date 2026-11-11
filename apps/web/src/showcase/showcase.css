@@ -230,6 +230,12 @@ main { display: flex; flex-direction: column; gap: 40px; }
   box-shadow: inset 0 2px 8px rgb(0 0 0 / 35%);
 }
 .say svg { flex: none; width: 24px; height: 24px; color: var(--amber); }
+/* what is said cycles through the three ways it is said, in step with the name below (same 9 second loop); one grid cell, so the pill never changes size */
+.say-lines { display: grid; min-width: 0; }
+.say-line { grid-area: 1 / 1; opacity: 0; animation: word-cycle 9s var(--ease) infinite; }
+.say-en { animation-delay: 0s; }
+.say-hi { animation-delay: -6s; }
+.say-kn { animation-delay: -3s; }
 
 .title { grid-column: 1; grid-row: 2; align-self: center; display: grid; gap: 14px; justify-items: start; }
 .wordmark {
@@ -615,5 +621,7 @@ main { display: flex; flex-direction: column; gap: 40px; }
   .scroll-tab svg { animation: none; }
   .word { animation: none; }
   .word-en { opacity: 1; }
+  .say-line { animation: none; }
+  .say-en { opacity: 1; }
   .track.scrub .chapter { transform: none; filter: none; }
 }

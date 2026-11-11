@@ -310,6 +310,35 @@
   border-color: var(--color-border);
 }
 .btn-view-notes { align-self: flex-start; margin-top: var(--space-2); background: var(--color-bg-2); color: var(--color-text); }
+/* all-time totals over every customer, at the top of the Customers screen */
+.customers-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-raised);
+  box-shadow: var(--shadow-card);
+}
+.summary-col { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.summary-payment { padding-left: var(--space-4); border-left: 1px solid var(--color-border); }
+.summary-label { display: inline-flex; align-items: center; gap: 6px; font-size: var(--font-sm); font-weight: 700; }
+.summary-value { font-family: var(--font-display); font-size: 28px; line-height: 1.1; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.summary-credit .summary-label, .summary-credit .summary-value { color: var(--color-credit); }
+.summary-payment .summary-label, .summary-payment .summary-value { color: var(--color-payment); }
+.summary-due {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+  font-weight: 600;
+}
+.summary-due strong { color: var(--color-text); font-variant-numeric: tabular-nums; }
 .btn-new-customer {
   align-self: stretch;
   background: var(--color-card);

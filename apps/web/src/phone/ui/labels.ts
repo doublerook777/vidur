@@ -6,6 +6,8 @@ import type { Lang, Phase } from '../contract.js';
  * common ones and their keys are listed in KN_REVIEW for a native speaker to check.
  */
 export const KN_REVIEW: readonly string[] = [
+  'summaryTotal',
+  'summaryDue',
   'cancelInput',
   'viewNotes',
   'newCustomer',
@@ -109,6 +111,8 @@ export type LabelKey =
   | 'cancelInput'
   | 'viewNotes'
   | 'newCustomer'
+  | 'summaryTotal'
+  | 'summaryDue'
   | 'whenTitle'
   | 'whenNow'
   | 'whenYesterday'
@@ -206,6 +210,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     cancelInput: 'Cancel and start again',
     viewNotes: 'See notes',
     newCustomer: 'New customer',
+    summaryTotal: 'All time',
+    summaryDue: 'Still due',
     whenTitle: 'When',
     whenNow: 'Now',
     whenYesterday: 'Yesterday',
@@ -302,6 +308,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     cancelInput: 'रद्द करें, फिर से बोलें',
     viewNotes: 'नोट देखें',
     newCustomer: 'नया ग्राहक',
+    summaryTotal: 'कुल',
+    summaryDue: 'अभी बाकी',
     whenTitle: 'कब',
     whenNow: 'अभी',
     whenYesterday: 'कल',
@@ -398,6 +406,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     cancelInput: 'ರದ್ದು ಮಾಡಿ, ಮತ್ತೆ ಹೇಳಿ',
     viewNotes: 'ಟಿಪ್ಪಣಿ ನೋಡಿ',
     newCustomer: 'ಹೊಸ ಗ್ರಾಹಕ',
+    summaryTotal: 'ಒಟ್ಟು',
+    summaryDue: 'ಈಗ ಬಾಕಿ',
     whenTitle: 'ಯಾವಾಗ',
     whenNow: 'ಈಗ',
     whenYesterday: 'ನಿನ್ನೆ',

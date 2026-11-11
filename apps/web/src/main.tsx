@@ -71,9 +71,9 @@ function App({ session }: { session: PhoneSession }) {
     case 'onboarding':
       return <Onboarding vm={{ lang: s.lang }} actions={a} lang={s.lang} />;
     case 'customers':
-      return <Customers vm={{ customers: s.customers }} actions={a} lang={s.lang} />;
+      return <Customers vm={{ customers: s.customers, creditPaise: s.allCredit, paymentPaise: s.allPayment }} actions={a} lang={s.lang} />;
     case 'customer':
-      return s.detail ? <CustomerDetail vm={s.detail} actions={a} lang={s.lang} /> : <Customers vm={{ customers: s.customers }} actions={a} lang={s.lang} />;
+      return s.detail ? <CustomerDetail vm={s.detail} actions={a} lang={s.lang} /> : <Customers vm={{ customers: s.customers, creditPaise: s.allCredit, paymentPaise: s.allPayment }} actions={a} lang={s.lang} />;
     case 'reminders':
       return <Reminders vm={{ customers: s.customers }} actions={a} lang={s.lang} />;
     case 'settings':

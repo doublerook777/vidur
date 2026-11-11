@@ -7,7 +7,7 @@ import { Vault } from '../storage/vault.js';
 import { LABELS } from '../ui/labels.js';
 import { errorMessage } from './messages.js';
 import { Store } from './store.js';
-import { UNDO_MS, customerDetail, customerRows, feed, todayTotals } from './viewmodels.js';
+import { UNDO_MS, customerDetail, customerRows, feed, ledgerTotals, todayTotals } from './viewmodels.js';
 
 export interface AudioIn {
   open(): Promise<void>;
@@ -48,6 +48,9 @@ export interface SessionState {
   credit: number;
   payment: number;
   people: number;
+  /** All time, over every customer: shown at the top of the Customers screen. */
+  allCredit: number;
+  allPayment: number;
   feed: FeedItem[];
   /** Every entry, newest first, for the All entries screen. */
   history: FeedItem[];
@@ -82,7 +85,7 @@ function deviceLang(): Lang {
 
 const initial = (): SessionState => ({
   loaded: false, onboarded: false, screen: 'onboarding', openCustomerId: null, lang: 'hi', theme: 'light', shopName: '', phase: 'idle', online: false, mockMode: false,
-  card: null, error: null, credit: 0, payment: 0, people: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
+  card: null, error: null, credit: 0, payment: 0, people: 0, allCredit: 0, allPayment: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
 });
 
 /** A recording whose loudest sample stays under this (of 32767) is silence: nothing was said. Speech peaks well above 1,000. */
@@ -230,7 +233,8 @@ export class PhoneSession {
     const now = this.now();
     const t = todayTotals(this.ledger, now);
     const open = this.state.openCustomerId;
-    this.store.update({ credit: t.credit, payment: t.payment, people: t.people, feed: feed(this.ledger, now), history: feed(this.ledger, now, 500), customers: customerRows(this.ledger), detail: open ? customerDetail(this.ledger, open, now) : null });
+    const all = ledgerTotals(this.ledger);
+    this.store.update({ credit: t.credit, payment: t.payment, people: t.people, allCredit: all.credit, allPayment: all.payment, feed: feed(this.ledger, now), history: feed(this.ledger, now, 500), customers: customerRows(this.ledger), detail: open ? customerDetail(this.ledger, open, now) : null });
     if (this.undoTimer) clearTimeout(this.undoTimer);
     if (this.state.feed[0]?.undoableUntil) this.undoTimer = setTimeout(() => this.refresh(), UNDO_MS + 50); // the undo button disappears on its own
   }

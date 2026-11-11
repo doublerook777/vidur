@@ -10,6 +10,9 @@ import { BottomNav } from './BottomNav.js';
 
 export interface CustomersVM {
   customers: CustomerRow[];
+  /** Every credit ever given and every payment ever received, in paise. */
+  creditPaise?: number;
+  paymentPaise?: number;
 }
 
 export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
@@ -20,6 +23,27 @@ export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
         <h1 class="screen-title">{t.customersTitle}</h1>
         <AiBadge vm={{}} actions={actions} lang={lang} />
       </header>
+
+      <section class="customers-summary" data-feature="customers-summary" aria-label={t.summaryTotal}>
+        <div class="summary-col summary-credit">
+          <span class="summary-label">
+            <IconArrowUp size={16} />
+            <span>{t.credit}</span>
+          </span>
+          <span class="summary-value">{formatRupees(vm.creditPaise ?? 0)}</span>
+        </div>
+        <div class="summary-col summary-payment">
+          <span class="summary-label">
+            <IconArrowDown size={16} />
+            <span>{t.payment}</span>
+          </span>
+          <span class="summary-value">{formatRupees(vm.paymentPaise ?? 0)}</span>
+        </div>
+        <p class="summary-due">
+          <span>{t.summaryDue}</span>
+          <strong>{formatRupees(Math.max(0, (vm.creditPaise ?? 0) - (vm.paymentPaise ?? 0)))}</strong>
+        </p>
+      </section>
 
       <button type="button" class="btn btn-new-customer" data-feature="new-customer" onClick={() => actions.openAddEntry({ newCustomer: true })}>
         <IconPlus size={20} />

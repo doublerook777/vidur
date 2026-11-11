@@ -290,6 +290,12 @@ try {
   check('the desktop page does not show the full-screen link', await show.evaluate(() => getComputedStyle(document.querySelector('.open-app')).display === 'none'));
   check('the page has no visible scrollbar', await show.evaluate(() => getComputedStyle(document.documentElement).scrollbarWidth === 'none'));
   check('the title cycles through three languages in one cell', await show.evaluate(() => { const w = [...document.querySelectorAll('.wordmark .word')]; return w.length === 3 && w.map((x) => x.textContent).join(',') === 'Vidur,विदुर,ವಿದುರ' && document.getElementById('wordmark').getAttribute('aria-label') === 'Vidur'; }));
+  check('the sample sentence cycles Hinglish, Hindi and Kannada in one cell, in step with the title', await show.evaluate(() => {
+    const l = [...document.querySelectorAll('.say .say-line')];
+    const t = [...document.querySelectorAll('.wordmark .word')];
+    const same = l.every((x, i) => getComputedStyle(x).animationDelay === getComputedStyle(t[i]).animationDelay && getComputedStyle(x).animationDuration === getComputedStyle(t[i]).animationDuration);
+    return l.length === 3 && /udhaar/.test(l[0].textContent) && /उधार/.test(l[1].textContent) && /ಉಧಾರ್/.test(l[2].textContent) && same && l.slice(1).every((x) => x.getAttribute('aria-hidden') === 'true');
+  }));
 
   // ---------------------------------------------------------------- fixes from the first live rehearsal
   await page.evaluate(() => { window.__vidur.quiet = true; window.__vidur.actions.navigate('customers'); });
@@ -299,6 +305,12 @@ try {
   await sleep(250);
   const nameFirst = await page.evaluate(() => { const i = document.querySelector('.keypad-new-name'); const l = document.querySelector('.keypad-customer-list'); return !!i && document.activeElement === i && !!(i.compareDocumentPosition(l) & Node.DOCUMENT_POSITION_FOLLOWING); });
   check('"new customer" opens the keypad with the name box first and focused', nameFirst);
+  await page.evaluate(() => window.__vidur.actions.navigate('customers'));
+  await sleep(250);
+  const sum = await page.evaluate(() => { const st = window.__vidur.state; const c = document.querySelector('.customers-summary'); return { text: c ? c.innerText.replace(/\s+/g, ' ') : '', credit: st.allCredit, payment: st.allPayment, rows: st.customers.reduce((n, x) => n + x.balancePaise, 0) }; });
+  const fmtIN = (p) => { const r = String(Math.round(p / 100)); return '₹' + (r.length <= 3 ? r : r.slice(0, -3).replace(/\B(?=(\d{2})+$)/g, ',') + ',' + r.slice(-3)); };
+  check('the customers screen shows total credit and total paid, and what is still due', sum.credit > 0 && sum.text.includes(fmtIN(sum.credit)) && sum.text.includes(fmtIN(sum.payment)) && sum.text.includes(fmtIN(Math.max(0, sum.credit - sum.payment))), sum.text);
+  check('still due equals the sum of every customer balance', sum.credit - sum.payment === sum.rows);
   await page.evaluate(() => window.__vidur.actions.navigate('home'));
   await sleep(150);
   const entriesBefore = await state(page, 's.history.length');
