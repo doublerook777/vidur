@@ -38,9 +38,11 @@ describe('brief: WebSocket streaming only, no telephony, no phone numbers', () =
     const urls = hits(/vachana\.ai/);
     for (const loc of urls) {
       const [f, n] = loc.split(':');
-      expect(read(f!).split('\n')[Number(n) - 1]).toMatch(/api\.vachana\.ai(['"`/]|$)/);
+      expect(read(f!).split('\n')[Number(n) - 1]).toMatch(/api\.vachana\.ai(['"`/.]|$)/);
     }
-    expect(hits(/\/stt\/v3\/stream|\/api\/v1\/tts/).length).toBe(2);
+    // The gateway has exactly the two sockets. The doctor script probes the same two, nothing else.
+    expect(hits(/\/stt\/v3\/stream|\/api\/v1\/tts/, source.filter((f) => f.startsWith('apps/'))).length).toBe(2);
+    expect(hits(/vachana\.ai/, source.filter((f) => f.startsWith('scripts/'))).every((l) => l.startsWith('scripts/doctor.mjs:'))).toBe(true);
     expect(hits(/vachana\.ai\/(api\/v1\/)?(agent|inya|assistant|call|voice-agent|dialog)/i)).toEqual([]);
   });
 });
