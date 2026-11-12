@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 /**
- * Repo-level proofs for the project's responsible-AI rules (docs/COMPLIANCE.md maps each rule to a test here).
+ * Repo-level proofs for the project's responsible-AI rules (each `describe` block below is one rule).
  * These search the shipped source, not the tests or docs.
  */
 const root = new URL('../../../', import.meta.url).pathname;

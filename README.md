@@ -260,7 +260,7 @@ These are the decisions that shape the code. Each is covered by tests.
 
 ## Privacy and responsible AI
 
-`docs/COMPLIANCE.md` maps each responsible-AI rule the project follows to the code that enforces it and to a command that proves it.
+Each rule below is enforced in code and proved by a test. `apps/server/src/compliance.test.ts` holds the repo-level proofs, and the red-team set in `eval/redteam/` exercises the refusals.
 
 - **The agent says it is an AI in its first turn,** in the user's language. Every reply leaves through one function that puts the disclosure first until it has been said.
 - **No voice cloning.** Only stock Timbre voices are requested.
@@ -300,7 +300,7 @@ eval/            golden and red-team sets, noise corpus, scorer, results
 e2e/             real-browser checks
 scripts/         start, setup, doctor, tunnel, keepwarm, secret scan
 spikes/          throwaway speech probes (see spikes/README.md)
-docs/            COMPLIANCE, REHEARSAL, PLAN
+docs/            PLAN.md, the original build plan
 ```
 
 Other files at the root: `Dockerfile`, `docker-compose.yml` and `render.yaml`.
@@ -330,7 +330,7 @@ The accuracy numbers come from a noisy-audio corpus: golden utterances spoken by
 | Phone app JavaScript | 58.5 KB gzipped |
 | Tests | about 1,500, plus 36 real-browser checks, 83 red-team utterances and the compliance checks |
 
-The recordings were made by Timbre and recognized by Prisma, which flatters accuracy. `docs/REHEARSAL.md` is the script and the results of a live test with a real voice and room noise. The raw results are in `eval/results/`.
+The recordings were made by Timbre and recognized by Prisma, which flatters accuracy. A live test with a real voice and room noise is the check that matters. The raw results are in `eval/results/`.
 
 ## Deploying
 
