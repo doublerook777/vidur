@@ -51,6 +51,7 @@ const STOP = W(
     'rupaye rupaya rupees rupee rupye rupiye rupay rupai ruppee rupyee rs inr paise paisa amount ' +
     'today tomorrow yesterday last week weekend monday tuesday wednesday thursday friday saturday sunday somvar mangalvar budhvar guruvar shukravar shanivar ravivar ' +
     'ko_diya ne_diya pay back give ' +
+    'did does has have had should how much many what whats who whose when where why which ' +
     'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपए रुपया पैसे पैसा ' +
     'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು',
 );

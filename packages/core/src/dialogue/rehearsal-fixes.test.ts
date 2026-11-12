@@ -159,3 +159,18 @@ describe('the answer to "credit or payment?" survives odd spellings', () => {
     expect(rs.map((r) => r.key)).not.toContain('credit_saved');
   });
 });
+
+describe('English helper words are never taken for a customer name', () => {
+  it('"How much credit did I give today?" is the day total, not a customer called "did"', async () => {
+    const { d } = await setup('en');
+    const rs = await d.handle('How much credit did I give today?');
+    expect(rs.map((r) => r.key)).toContain('balance_day');
+    expect(text(rs)).not.toMatch(/did/i);
+  });
+  it('"How much does Mohan owe?" asks about Mohan, not about "does"', async () => {
+    const { d } = await setup('en');
+    const rs = await d.handle('How much does Mohan owe?');
+    expect(rs.map((r) => r.key)).toContain('balance_customer');
+    expect(text(rs)).toContain('Mohan');
+  });
+});
