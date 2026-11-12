@@ -145,6 +145,16 @@ async function boot(): Promise<void> {
   (window as unknown as { __vidur: PhoneSession }).__vidur = session; // used by the browser tests
 
   applyFrame('no-notch');
+  // Tell the showcase page which theme and language the phone is in, now and on every change, so its buttons match.
+  let sentPrefs = '';
+  const sendPrefs = (): void => {
+    const { theme, lang } = session.state;
+    const key = `${theme}/${lang}`;
+    if (key === sentPrefs) return;
+    sentPrefs = key;
+    post({ type: 'vidur:prefs', theme, lang });
+  };
+  session.store.subscribe(sendPrefs);
   window.addEventListener('message', (e: MessageEvent<BridgeDown>) => {
     if (e.origin !== window.location.origin || e.source !== window.parent) return;
     const m = e.data;
@@ -162,6 +172,7 @@ async function boot(): Promise<void> {
     const id = el?.dataset['feature'] as FeatureId | undefined;
     if (id && (FEATURE_IDS as readonly string[]).includes(id)) post({ type: 'vidur:feature', id });
   }, true);
+  sendPrefs();
   post({ type: 'vidur:ready' });
 }
 

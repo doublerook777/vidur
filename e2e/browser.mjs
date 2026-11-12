@@ -229,6 +229,11 @@ try {
   await sleep(600);
   const lang = await show.evaluate(() => document.getElementById('phoneApp').contentDocument.documentElement.lang);
   check('showcase language control changes the phone live', lang === 'en', String(lang));
+  // and the other way: a change made inside the phone shows on the page's buttons
+  await show.evaluate(() => { const w = document.getElementById('phoneApp').contentWindow; w.__vidur.actions.setLang('kn'); w.__vidur.actions.setTheme('light'); });
+  await sleep(600);
+  const pressed = await show.evaluate(() => ({ lang: document.querySelector('button[data-lang][aria-pressed="true"]')?.dataset.lang, theme: document.querySelector('button[data-theme][aria-pressed="true"]')?.dataset.theme }));
+  check('a language or theme change inside the phone updates the page controls', pressed.lang === 'kn' && pressed.theme === 'light', JSON.stringify(pressed));
   await frame.locator('[data-feature="ai-badge"]').first().click();
   await sleep(200);
   const title = await show.locator('#featureTitle').innerText();

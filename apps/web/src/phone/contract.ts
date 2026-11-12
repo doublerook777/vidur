@@ -147,5 +147,6 @@ export type Scene = 0 | 1 | 2 | 3;
 export type BridgeDown = { type: 'vidur:set'; theme?: Theme; lang?: Lang; frame?: FrameKind } | { type: 'vidur:scene'; scene: Scene };
 export type BridgeUp =
   | { type: 'vidur:ready' }
+  | { type: 'vidur:prefs'; theme: Theme; lang: Lang }
   | { type: 'vidur:feature'; id: FeatureId }
   | { type: 'vidur:telemetry'; transcript?: string; parsed?: string; sttMs?: number; firstAudioMs?: number; phase?: Phase };

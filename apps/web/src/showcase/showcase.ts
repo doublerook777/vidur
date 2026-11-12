@@ -40,6 +40,11 @@ function sendState(): void {
   postToPhone({ type: 'vidur:set', theme: state.theme, lang: state.lang, frame: state.frame });
 }
 
+/** Only the frame is the page's to decide; theme and language belong to the phone, which remembers them. */
+function sendFrame(): void {
+  postToPhone({ type: 'vidur:set', frame: state.frame });
+}
+
 function setPressed(selector: string, activeValue: string, attr: string): void {
   for (const btn of document.querySelectorAll<HTMLButtonElement>(selector)) {
     btn.setAttribute('aria-pressed', String(btn.dataset[attr] === activeValue));
@@ -113,8 +118,20 @@ window.addEventListener('message', (event: MessageEvent) => {
   const data = event.data as Partial<BridgeUp> | null;
   if (typeof data !== 'object' || data === null) return;
 
+  if (data.type === 'vidur:prefs') {
+    const p = data as { theme?: unknown; lang?: unknown };
+    if (p.theme === 'light' || p.theme === 'dark') {
+      state.theme = p.theme;
+      setPressed('[data-theme]', p.theme, 'theme');
+    }
+    if (p.lang === 'hi' || p.lang === 'en' || p.lang === 'kn') {
+      state.lang = p.lang;
+      setPressed('[data-lang]', p.lang, 'lang');
+    }
+    return;
+  }
   if (data.type === 'vidur:ready') {
-    sendState();
+    sendFrame();
     postToPhone({ type: 'vidur:scene', scene: scene as 0 | 1 | 2 | 3 });
     return;
   }
@@ -128,8 +145,8 @@ window.addEventListener('message', (event: MessageEvent) => {
 });
 
 // Push initial state once the iframe has loaded (and on load, for good measure).
-iframe?.addEventListener('load', sendState);
-sendState();
+iframe?.addEventListener('load', sendFrame);
+sendFrame();
 
 // ---------------------------------------------------------------- the pinned stage
 // On a wide screen the phone stays in view while the page scrolls, and the sections on both sides
