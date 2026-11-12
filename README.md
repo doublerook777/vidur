@@ -296,7 +296,7 @@ spikes/          throwaway speech probes (see spikes/README.md)
 docs/            DECISIONS, COMPLIANCE, REHEARSAL, PLAN
 ```
 
-Other files at the root: `PRODUCT.md` and `DESIGN.md` (product and design intent), `progress.md` (the build log), `Dockerfile`, `docker-compose.yml` and `render.yaml`.
+Other files at the root: `Dockerfile`, `docker-compose.yml` and `render.yaml`.
 
 ## Testing and evaluation
 
