@@ -300,7 +300,7 @@ eval/            golden and red-team sets, noise corpus, scorer, results
 e2e/             real-browser checks
 scripts/         start, setup, doctor, tunnel, keepwarm, secret scan
 spikes/          throwaway speech probes (see spikes/README.md)
-docs/            PLAN.md, the original build plan
+docs/            about.md, the technical deep dive
 ```
 
 Other files at the root: `Dockerfile`, `docker-compose.yml` and `render.yaml`.

@@ -15,8 +15,8 @@
  * - clarify: true when the utterance is ambiguous and a short spoken
  *   clarification question is the CORRECT outcome (e.g. two same-name
  *   customers, missing direction, very low confidence amount).
- * - intent names follow docs/PLAN.md section 1.4 (conversation behaviour) and
- *   the F2–F11 feature list. The plan has no closed intent enum; these names
+ * - intent names follow the conversation behaviour the dialogue engine
+ *   implements. There is no closed intent enum elsewhere; these names
  *   are the canonical ones used by the golden set:
  *     credit_entry     – udhaar/baaki/"X ko diya", goods taken on credit
  *     payment          – jama/wapas/chukaya/paid, "X ne diya"

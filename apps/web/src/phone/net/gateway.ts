@@ -1,6 +1,6 @@
 /**
  * The phone's connection to the speech gateway (one WebSocket, `/ws`). Reconnects with backoff, carries the
- * session token across reconnects, and exposes the protocol from PLAN section 2.3 as plain methods and callbacks.
+ * session token across reconnects, and exposes the gateway protocol (docs/about.md) as plain methods and callbacks.
  */
 import type { Lang } from '../contract.js';
 
