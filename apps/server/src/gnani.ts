@@ -242,7 +242,7 @@ export class SttLink extends EventEmitter {
   }
 }
 
-const TTS_LANG: Record<Lang, string> = { hi: 'hi-en', en: 'auto', kn: 'kn-IN' };
+const TTS_LANG: Record<Lang, string> = { hi: 'hi-en', en: 'en-IN', kn: 'kn-IN' };
 
 interface Job {
   id: string;
