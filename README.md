@@ -5,7 +5,7 @@
 > "Ramesh ka teen sau chalis udhaar" → *"Ramesh, ₹340 credit. Balance ₹340."*
 > "Aaj kitna udhaar gaya?" → *"Today ₹175 credit, to 6 people."*
 
-Built for the voice-agent challenge, the Voice Khata track, on Gnani's **Prisma** (speech to text) and **Timbre** (text to speech).
+Built on Gnani's **Prisma** (speech to text) and **Timbre** (text to speech).
 
 **Languages:** Hindi, Hinglish, English and Kannada work end to end. Seven more (Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi) are planned and not built.
 
@@ -113,7 +113,7 @@ npm run typecheck && npm run lint && npm run build
 | `npm test` | unit, integration, red-team and compliance tests (about 1,500) |
 | `npm run test:e2e` | real browser, fake microphone, mock speech service |
 | `npm run test:live` | one real-speech turn in a real browser (spends a few credits) |
-| `npm run keepwarm -- <url>` | keeps a free host awake during judging |
+| `npm run keepwarm -- <url>` | keeps a free host awake for a demo |
 | `npm run scan:secrets` | looks for keys in the working tree (`-- --history` scans every commit) |
 
 ## Things to say
@@ -253,7 +253,7 @@ These are the decisions that shape the code. Each is covered by tests.
 
 ## Privacy and responsible AI
 
-`docs/COMPLIANCE.md` maps each rule in the project rules to the code that enforces it and to a command that proves it.
+`docs/COMPLIANCE.md` maps each responsible-AI rule the project follows to the code that enforces it and to a command that proves it.
 
 - **The agent says it is an AI in its first turn,** in the user's language. Every reply leaves through one function that puts the disclosure first until it has been said.
 - **No voice cloning.** Only stock Timbre voices are requested.
