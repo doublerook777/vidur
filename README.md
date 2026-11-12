@@ -256,7 +256,7 @@ These are the decisions that shape the code. Each is covered by tests.
 - **Our own code decides.** The orchestration (streaming, parsing, deciding) is ours. Prisma and Timbre are called directly. No hosted agent platform is in the loop.
 - **Replies are fixed, polite wording** in three reply languages, so what the app says is predictable and reviewable. A test scans every template for pressure and threat words.
 - **Push to talk, with `commit`, not voice-activity detection.** Measured: it beats the best VAD setting by about 350 ms and never cuts a sentence at a pause.
-- **STT runs as `format=codemix`, one locale per connection.** The STT's own digits are not trusted for money, so our parser reads number words (see `docs/DECISIONS.md`).
+- **STT runs as `format=codemix`, one locale per connection.** The STT's own digits are not trusted for money, so our parser reads number words.
 
 ## Privacy and responsible AI
 
@@ -300,7 +300,7 @@ eval/            golden and red-team sets, noise corpus, scorer, results
 e2e/             real-browser checks
 scripts/         start, setup, doctor, tunnel, keepwarm, secret scan
 spikes/          throwaway speech probes (see spikes/README.md)
-docs/            DECISIONS, COMPLIANCE, REHEARSAL, PLAN
+docs/            COMPLIANCE, REHEARSAL, PLAN
 ```
 
 Other files at the root: `Dockerfile`, `docker-compose.yml` and `render.yaml`.
@@ -330,7 +330,7 @@ The accuracy numbers come from a noisy-audio corpus: golden utterances spoken by
 | Phone app JavaScript | 58.5 KB gzipped |
 | Tests | about 1,500, plus 36 real-browser checks, 83 red-team utterances and the compliance checks |
 
-The recordings were made by Timbre and recognized by Prisma, which flatters accuracy. `docs/REHEARSAL.md` is the script and the results of a live test with a real voice and room noise. The full numbers, and every problem found along the way, are in `docs/DECISIONS.md`.
+The recordings were made by Timbre and recognized by Prisma, which flatters accuracy. `docs/REHEARSAL.md` is the script and the results of a live test with a real voice and room noise. The raw results are in `eval/results/`.
 
 ## Deploying
 

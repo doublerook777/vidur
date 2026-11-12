@@ -4,8 +4,8 @@ import { HI_UNITS } from '../numbers/hi-units.js';
  * Money is integer paise. This module speaks whole rupees only.
  *
  * style 'digits': `₹` + Indian (3,2,2) grouping — read correctly by Timbre in hi, kn and English
- *                 (see docs/DECISIONS.md "How Timbre reads amounts").
- * style 'words':  number words. hi/hinglish in Devanagari per DECISIONS (सौ/हज़ार/लाख/करोड़),
+ *                 (Timbre reads `₹` + digits correctly, measured in a spike).
+ * style 'words':  number words. hi/hinglish in Devanagari (सौ/हज़ार/लाख/करोड़),
  *                 en in English Indian style. No fractional words, no 'and'. kn not supported.
  */
 export type SpeakLang = 'hi' | 'en' | 'kn' | 'hinglish';
