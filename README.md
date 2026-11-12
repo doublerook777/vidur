@@ -7,6 +7,8 @@
 
 Built on Gnani's **Prisma** (speech to text) and **Timbre** (text to speech).
 
+**Live demo:** <https://vidur-xu96.onrender.com>. The showcase page opens for anyone. Speaking to it needs an access code, which is not published here. It runs on Render's free plan, so the first load after a quiet spell can be slow while it wakes up.
+
 **Languages:** Hindi, Hinglish, English and Kannada work end to end. Seven more (Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi) are planned and not built.
 
 ---
@@ -172,14 +174,19 @@ Open the app, pick a language, choose **start with demo data** (12 synthetic cus
 
 ### In Hindi and Kannada
 
-| Say | Means |
-|---|---|
-| "मोहन का तीन सौ चालीस उधार" | Mohan, ₹340 credit |
-| "सुनीता ने दो सौ जमा किए" | Sunita paid ₹200 |
-| "आज कितना उधार गया?" | how much credit went out today |
-| "ಮೋಹನ್ ೩೪೦ ಉಧಾರ್" | Mohan, ₹340 credit |
-| "ಸುನಿತಾ ೨೦೦ ಜಮಾ ಮಾಡಿದ" | Sunita paid ₹200 |
-| "ಇಂದು ಎಷ್ಟು ಉಧಾರ್ ಕೊಟ್ಟೆ?" | how much credit today |
+Each line is shown in script and in Latin letters, so it is readable even where the script does not render. The Latin spelling is only a guide to how it sounds.
+
+| Say (Hindi) | How it sounds | Means |
+|---|---|---|
+| "मोहन का तीन सौ चालीस उधार" | Mohan ka teen sau chalis udhaar | Mohan, ₹340 credit |
+| "सुनीता ने दो सौ जमा किए" | Sunita ne do sau jama kiye | Sunita paid ₹200 |
+| "आज कितना उधार गया?" | Aaj kitna udhaar gaya? | how much credit went out today |
+
+| Say (Kannada) | How it sounds | Means |
+|---|---|---|
+| "ಮೋಹನ್ ೩೪೦ ಉಧಾರ್" | Mohan mooru nooru nalavattu udhaar | Mohan, ₹340 credit |
+| "ಸುನಿತಾ ೨೦೦ ಜಮಾ ಮಾಡಿದ" | Sunita eradu nooru jama maadida | Sunita paid ₹200 |
+| "ಇಂದು ಎಷ್ಟು ಉಧಾರ್ ಕೊಟ್ಟೆ?" | Indu eshtu udhaar kotte? | how much credit today |
 
 The app replies in the language you picked. If you set it to English, everything it says is in English, including the amount.
 
@@ -327,7 +334,7 @@ The recordings were made by Timbre and recognized by Prisma, which flatters accu
 
 ## Deploying
 
-`render.yaml` is a [Render](https://render.com) blueprint for one free web service that builds the `Dockerfile` and serves the phone app, the showcase and the gateway together. It runs in `hosted` mode. `GNANI_API_KEY`, `LLM_API_KEY` and `ACCESS_CODE` are typed into Render's dashboard and never stored in the repository. Auto-deploy is off, so a push never deploys by itself. The free plan sleeps after about 15 minutes idle; `npm run keepwarm -- <url>` keeps it awake.
+The live demo at <https://vidur-xu96.onrender.com> runs this way. `render.yaml` is a [Render](https://render.com) blueprint for one free web service that builds the `Dockerfile` and serves the phone app, the showcase and the gateway together. It runs in `hosted` mode. `GNANI_API_KEY`, `LLM_API_KEY` and `ACCESS_CODE` are typed into Render's dashboard and never stored in the repository. Auto-deploy is off, so a push never deploys by itself. The free plan sleeps after about 15 minutes idle; `npm run keepwarm -- <url>` keeps it awake.
 
 ## Honest limits
 
