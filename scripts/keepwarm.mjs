@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Keeps a free host from sleeping: pings <url>/healthz every 5 minutes. Run it from a laptop during judging.
+// Keeps a free host from sleeping: pings <url>/healthz every 5 minutes. Run it from a laptop during a demo.
 // Usage: npm run keepwarm -- https://your-app.onrender.com [intervalSeconds]
 const url = process.argv[2];
 if (!url) { console.error('Usage: npm run keepwarm -- <url> [intervalSeconds]'); process.exit(1); }

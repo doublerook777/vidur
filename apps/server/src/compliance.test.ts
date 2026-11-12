@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 /**
- * Repo-level proofs for the project rules's rules (docs/COMPLIANCE.md maps each rule to a test here).
+ * Repo-level proofs for the project's responsible-AI rules (docs/COMPLIANCE.md maps each rule to a test here).
  * These search the shipped source, not the tests or docs.
  */
 const root = new URL('../../../', import.meta.url).pathname;
@@ -12,7 +12,7 @@ const source = tracked.filter((f) => /\.(ts|tsx|mjs|js|html|css)$/.test(f) && !/
 const read = (f: string): string => readFileSync(root + f, 'utf8');
 const hits = (re: RegExp, files = source): string[] => files.flatMap((f) => read(f).split('\n').map((l, i) => ({ l, i })).filter(({ l }) => re.test(l) && !l.trim().startsWith('//') && !l.trim().startsWith('*')).map(({ i }) => `${f}:${i + 1}`));
 
-describe('brief: no voice cloning', () => {
+describe('rule: no voice cloning', () => {
   it('no clone endpoint, no cloning code', () => {
     expect(hits(/voice[_ -]?clon|clone[_-]?voice|\/clone\b|voice_id_clone|instant[_-]?clone/i)).toEqual([]);
   });
@@ -26,7 +26,7 @@ describe('brief: no voice cloning', () => {
   });
 });
 
-describe('brief: WebSocket streaming only, no telephony, no phone numbers', () => {
+describe('rule: WebSocket streaming only, no telephony, no phone numbers', () => {
   it('no telephony provider, dialling or SMS code', () => {
     expect(hits(/twilio|exotel|plivo|vonage|knowlarity|\bsip:|\btel:|\bdial(ing|er)?\b|msisdn|\bsms\b|whatsapp\.(send|api)/i)).toEqual([]);
   });
@@ -47,14 +47,14 @@ describe('brief: WebSocket streaming only, no telephony, no phone numbers', () =
   });
 });
 
-describe('brief: hosted agent platforms are not the core loop', () => {
+describe('rule: hosted agent platforms are not the core loop', () => {
   it('orchestration is our own code: no hosted agent SDK is a dependency', () => {
     const deps = tracked.filter((f) => f.endsWith('package.json')).map((f) => read(f)).join('\n') + read('package.json');
     expect(deps).not.toMatch(/livekit|vapi|retell|bland|pipecat|elevenlabs|openai-agents|@anthropic-ai\/claude-agent|langchain|langgraph/i);
   });
 });
 
-describe('brief: the API key stays on the server and out of git', () => {
+describe('rule: the API key stays on the server and out of git', () => {
   it('.env is git-ignored', () => {
     const ignore = read('.gitignore').split('\n').map((l) => l.trim());
     expect(ignore).toContain('.env');
@@ -76,7 +76,7 @@ describe('brief: the API key stays on the server and out of git', () => {
   });
 });
 
-describe('brief: reminders are shopkeeper-triggered, opt-in and never sent by the app', () => {
+describe('rule: reminders are shopkeeper-triggered, opt-in and never sent by the app', () => {
   it('the app has no code that sends a message to a customer', () => {
     // The only outbound path for reminder text is the browser share sheet or the clipboard, started by the shopkeeper.
     const outbound = hits(/navigator\.share|clipboard\.writeText/, source);
@@ -91,7 +91,7 @@ describe('brief: reminders are shopkeeper-triggered, opt-in and never sent by th
   });
 });
 
-describe('brief: data stays on the device or is encrypted; transcripts are purged', () => {
+describe('rule: data stays on the device or is encrypted; transcripts are purged', () => {
   it('the vault uses AES-GCM 256 with a non-extractable key and a 24 hour transcript limit', () => {
     const v = read('apps/web/src/phone/storage/vault.ts');
     expect(v).toMatch(/AES-GCM/);
