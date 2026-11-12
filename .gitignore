@@ -14,3 +14,4 @@ spikes/runs.log
 eval/results/golden-diag.txt
 eval/results/heldout-diag.txt
 eval/results/redteam-diag.txt
+CLAUDE.md
