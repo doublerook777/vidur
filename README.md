@@ -7,7 +7,7 @@
 
 Built on Gnani's **Prisma** (speech to text) and **Timbre** (text to speech).
 
-**Live demo:** <https://vidur-xu96.onrender.com>. The showcase page opens for anyone. Speaking to it needs an access code, which is not published here. It runs on Render's free plan, so the first load after a quiet spell can be slow while it wakes up.
+**Live demo:** <https://vidur-xu96.onrender.com>. The showcase page opens for anyone. Speaking to it needs an access code (given in the description), for demo purposes only. It runs on Render's free plan, so the first load after a quiet spell can be slow while it wakes up.
 
 **Languages:** Hindi, Hinglish, English and Kannada work end to end. Seven more (Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi) are planned and not built.
 
