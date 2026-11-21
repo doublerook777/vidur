@@ -340,6 +340,7 @@ main { display: flex; flex-direction: column; gap: 40px; }
 .tag-en { animation-delay: 0s; }
 .tag-hi { animation-delay: -6s; letter-spacing: 0.04em; }
 .tag-kn { animation-delay: -3s; }
+.tag-text[lang] { letter-spacing: 0.04em; }
 .hero-round { grid-column: 2; grid-row: 3; display: flex; justify-content: flex-end; gap: 16px; align-self: end; }
 .round-btn {
   display: inline-flex;
