@@ -21,6 +21,9 @@ Companion files, all in `docs/`:
 | Yes/no window | Raise from 30 s to **60 s**, counted from when the question has finished being spoken. |
 | Same name already exists | **Ask for a nickname** (for example "Ramesh (dairy)"). The shopkeeper may skip it. |
 | Voiced customer summary | **Fixed-template** line built from facts in the ledger. Never model-generated. |
+| Editing old entries by voice | A judge asked for it, so it is in scope (F8). New amounts come from the deterministic parser only; every edit is a reverse-and-repost so history stays auditable. |
+| "Change the total to 1000" | **Post one adjustment entry** for the difference, with a **mandatory read-back** (yes or no) every time, whatever the size. |
+| More languages | **Tamil, Telugu, Marathi, Gujarati** (F9), after the Gnani probe confirms each locale. No native speakers yet: strings are machine-drafted, shown as **Beta**, and tested minimally until someone reviews them. |
 
 Assumption to confirm: "include 1 2 3 all" was read as "accept the defaults proposed for all three of the yes/no window, nickname and summary". If the summary should say more than the facts in section 3.5, say so in `conversation.md` before Member A starts F5.
 
@@ -38,8 +41,10 @@ Parked, not in this plan: accounts and server-side sync, WhatsApp Business API, 
 | F5 | Voiced base summary for each customer | A (intent, template), B (button) | C |
 | F6 | WhatsApp reminders | B | A |
 | F7 | Manual test campaign and fixes ("more samples") | C, with fixes routed to A or B | A + B |
+| F8 | Edit any customer's ledger by voice (by day, by old amount, set the total, undo an older entry) | A (core), B (screens) | C |
+| F9 | Four more languages: Tamil, Telugu, Marathi, Gujarati | A (core, templates), B (labels, fonts), C (probe, gateway, tests) | C for A, A for B and C |
 | B1 | Kannada "paid today" label clipped behind Add entry | B | C |
-| B2 | Corrections reach older entries, not only the last | A | C |
+| B2 | Corrections reach older entries, not only the last | A (now part of F8) | C |
 | B3 | Long speech: press cap and a wait that scales | C | A |
 
 Reviewers rotate so nobody reviews their own work: A is reviewed by C, B by C and A, C by A. Compliance-sensitive changes (dialogue, templates, reminders, logging) always need a second pair of eyes.
@@ -151,18 +156,69 @@ Purpose: replace "more training samples" with a repeatable way to find failures.
 5. **Pass line for each round:** zero silent wrong amounts. Anything else is a bug to fix but does not block the round.
 6. Repeat the campaign after F1 to F6 land, as a regression pass.
 
+### F8: edit any customer's ledger by voice (A core, B screens)
+
+Why: a judge added a few entries ("Anil credit 200", "Anuj credit 100") and asked to change Anil's. Today a correction acts only on the last entry, so that fails. This is also the F8 version of B2.
+
+Four cases. Each one names one customer.
+
+| # | The shopkeeper says | What happens |
+|---|---|---|
+| 1 | "Anil ka aaj ka udhaar 100 karo" / "change today's credit of Anil to 100" | Customer, day and (optionally) direction pick the entry; the amount is the new value. One match: change it. Several: ask which, by amount or time, as a question that expires like the others. |
+| 2 | "Mohan ka 500 nahi 300" / "Mohan's 500 should be 300" | The old amount picks the entry (latest live match for that customer). Several matches: ask which, by day. |
+| 3 | "Anil ka total 1000 karo" / "change Anil's total to 1000" | "Total" means what the customer owes now (the balance). Post **one adjustment entry** for the difference. Always read it back first: "Anil owes ₹X now. Set it to ₹1,000? I will add ₹Y credit." Only a yes saves it. Same total as now: say so and save nothing. |
+| 4 | "Anil ka kal ka entry hata do" / "remove Anil's yesterday entry" | Undo an older entry, or flip its direction ("nahi, jama tha"), using the same matching as 1. |
+
+Rules:
+
+- The new amount, and any target total, comes only from the deterministic parser. A language-model result is accepted only if the parser also finds that amount in the transcript (existing rule).
+- Cases 1, 2 and 4 are **reverse-and-repost** ledger events. The repost keeps the original date. Case 3 is a normal entry with an optional `reason: 'balance_set'` field (new optional field on `entry_posted`, so old events replay unchanged). The reply and the feed say "balance set" so an adjustment is never confused with a real sale or payment.
+- Case 3 always reads back. Cases 1, 2 and 4 read back under the existing rule (large, doubtful or garbled amount) and in every case the confirmation names the old and new amount.
+- One customer per sentence. "Set everyone's balance to zero", "delete all entries" and anything without a single named customer is refused with a fixed template that asks for one name. The target total must be zero or more; an advance (customer is owed money) is not supported and gets the same kind of fixed reply.
+- Nothing is saved while a question is open; the 60 s window applies.
+- Suggested order: A merges the optional `reason` field first (a small contract PR), then the engine and templates, then B shows it in the feed and on the customer page.
+
+Acceptance: scripted dialogue tests in hi, en and kn for each case (one match, several matches, none found, large amount, garbled amount, answered no, expired question); a replay test that an old ledger loads and balances are identical; red-team lines for "everyone to zero", "delete everything", an injected instruction inside a customer name, and a set-total with no customer; compliance tests green; golden and held-out lines added for cases 1 to 4.
+
+### F9: four more languages, Tamil, Telugu, Marathi, Gujarati (A, B, C)
+
+Why: a judge asked for more languages. Today `hi`, `en` and `kn` work end to end. Number tables for `ta`, `te`, `mr`, `gu` (and `bn`, `ml`, `pa`) exist in `packages/core/src/numbers/tables/`; nothing else does.
+
+No native speakers are available for these four yet. So:
+
+- Every string is machine-drafted by a cheap agent and **labelled Beta** in the language picker. The Beta tag comes off one language only when a native speaker has reviewed it (the Kannada review is the model); record the reviewer's sign-off in `conversation.md`.
+- Testing is minimal but real: fixed-template and parser tests, a synthetic speech pass (below), and a short manual round by anyone who speaks the language. Say plainly in the PR and `progress.md` which languages were not heard by a speaker.
+
+**F9.0 probe (C, Phase 1).** Before anyone drafts strings, find out what Gnani supports. For `ta-IN`, `te-IN`, `mr-IN`, `gu-IN`: does STT accept the locale with `format=codemix`, does TTS have a voice, how does Timbre read amounts and does it say Latin digits, rupee, paise. A few turns each, credits logged. Write the result under `docs/progress.md` and post `DECISION:` in `conversation.md`. If a locale is not supported, drop that language here instead of building around it.
+
+**F9.1 core (A, Phase 3).**
+- `SpeechLang` (`packages/core/src/i18n/templates.ts`) and the numbers `Lang` type grow to seven languages. Every template exists in every language, and a test fails if a key is missing.
+- Parser: check each table against spoken amounts (digits-in-words, hundreds, thousands, lakh, the "one and a half" forms), the credit and payment words, yes and no, today and yesterday, and the reminder and refusal words. Add the missing words.
+- Marathi shares the Devanagari script with Hindi but not the words: do not reuse the Hindi lists.
+- Golden, held-out and red-team lines per language (at least 40 golden, 10 held-out and 8 red-team each, drafted by an agent, checked by the schema tests). Mark unreviewed lines in a comment.
+- Compliance: the AI disclosure is the first spoken line in every language; the refusal and no-shaming rules hold in every language.
+
+**F9.2 screens (B, Phase 3).**
+- `labels.ts` for the four languages, in a block per language.
+- Fonts: Noto Sans Tamil, Telugu and Gujarati, self-hosted in `apps/web/public/fonts/`, **loaded only when that language is chosen** (each is about 90 to 120 KB). Marathi uses the Devanagari font already there. Note the sizes in `progress.md`; font files are not part of the JS budget.
+- Language picker in onboarding, settings and the showcase gets the four languages, each with a Beta tag.
+- Browser check at 360 px for every language (seven in total): no text clipped or overlapping, the same kind of check as B1.
+
+**F9.3 gateway and tests (C, Phase 3).**
+- `SPEECH_LANG` in `apps/server/src/gnani.ts` and `LANGS` in `server.ts` get the four locales; the mock Gnani and `guards.ts` accept them; `compliance.test.ts` still passes.
+- E2E: one mock turn per new language.
+- Synthetic speech pass: use the corpus generator to make Timbre speak test lines in each language and run them back through STT. This tests the parser against real STT output without a native speaker (it tests the machine voice, not a real accent, so say so). Needs credits: read the balance first, keep at least 1,500 afterwards, log every run.
+- Manual round: at least 20 lines per language by anyone who can speak it. Log in `docs/test-campaign.md`. Pass line: zero silent wrong amounts.
+
+Dependencies: F9.1 and F9.2 wait for F9.0 and for F8 and F5 to merge, so each template is written once in seven languages and not twice.
+
 ### B1: Kannada label clipped (B)
 
 Reproduced on 2026-11-21 in mock mode at 390 and 360 px: the "ಇಂದು ಜಮಾ" label in the `.totals-payment` cell overlaps the `.notch-btn` Add entry button (`apps/web/src/phone/ui/phone.css`, the `.totals-card` grid). Fix the layout so the label and amount never sit under the button in any language at 360 px. Add a browser check for hi, en and kn that asserts the label and button boxes do not intersect. Close B1 only after that check passes.
 
 ### B2: corrections reach older entries (A)
 
-Today a correction acts only on the last entry. Support "Mohan ka 500 nahi 300" or "Mohan's 500 should be 300" for an older entry.
-
-- Find the most recent live entry for the named customer with the stated old amount. If there is exactly one, change it. If several match, ask which one (by day), as a question that expires like the others.
-- The new amount still comes from the deterministic parser. A language-model result is never trusted for money.
-- It is a reverse-and-repost through ledger events, so history stays auditable. Read the change back before saving if the amount is large, doubtful or garbled (existing rule).
-- Cover direction flips and "undo" on an older entry as separate cases, with scripted dialogue tests.
+Folded into F8 below. Same rules; "Mohan ka 500 nahi 300" is case 2 of F8.
 
 ### B3: long speech (C)
 
@@ -176,13 +232,14 @@ No calendar dates are promised. Phases are in order; inside a phase people work 
 
 | Phase | Goal | A | B | C |
 |---|---|---|---|---|
-| **0. Setup** | Everyone can work safely | F0 contract (with B). Check the "naya customer" intent (F3). | F0 contract (with A). | Add collaborators to the repo, turn on branch protection, add the PR template, record a baseline: tests, e2e, size of the gzipped JS (58.5 KB at last count). Open the test log. |
-| **1. Core** | The engine and data are ready | F4 engine, F3 flow, F2 function | F1 profile and PIN, B1 | B3, start F7 round 1 on the current app |
-| **2. Screens** | Features are visible | F5, B2 | F2 screen, F3 and F4 screens, F6 | Browser checks for each feature as it merges, F7 round 1 fixes |
-| **3. Integration** | All together, three languages | Review, fixes | Review, fixes | F7 round 2 as a regression pass, compliance and red-team full run, load test (I3), cold-start and mobile-data timing (I2, I5) |
-| **4. Release** | Ship to Render | Fixes | Fixes | Build, run all checks, deploy by hand (autoDeploy is off), check `/healthz`, one real turn through the hosted copy |
+| **0. Setup** | Everyone can work safely | F0 contract (with B). Check the "naya customer" intent (F3). | F0 contract (with A). | Add collaborators to the repo, set up the GitHub ruleset (deletion and force-push blocked on `main`), add the PR template, record a baseline: tests, e2e, size of the gzipped JS (68 KB at last count). Open the test log. |
+| **1. Core** | The engine and data are ready | F4 engine, F3 flow, F2 function | F1 profile and PIN, B1 | B3, start F7 round 1 on the current app, F9.0 Gnani locale probe |
+| **2. Screens** | Features are visible | F5, F8 (core) | F2 screen, F3 and F4 screens, F6, F8 (feed and customer page) | Browser checks for each feature as it merges, F7 round 1 fixes |
+| **3. Languages** | Tamil, Telugu, Marathi, Gujarati work end to end, marked Beta | F9.1 core and templates | F9.2 labels, fonts, picker | F9.3 gateway, mock e2e, synthetic speech pass, manual round |
+| **4. Integration** | All together, seven languages | Review, fixes | Review, fixes | F7 round 2 as a regression pass, compliance and red-team full run, load test (I3), cold-start and mobile-data timing (I2, I5) |
+| **5. Release** | Ship to Render | Fixes | Fixes | Build, run all checks, deploy by hand (autoDeploy is off), check `/healthz`, one real turn through the hosted copy |
 
-Dependencies: F1 to F6 all need F0. B (F3 screens) needs A's `nickname` pending kind, and B (F4 countdown) needs A's `questionSpoken()`; A merges those engine pieces first and posts `DONE:` in `conversation.md`, and B starts that screen then. F5's button needs A's intent. F6 is independent of A once F0 has merged.
+Dependencies: F1 to F6 all need F0. B (F3 screens) needs A's `nickname` pending kind, and B (F4 countdown) needs A's `questionSpoken()`; A merges those engine pieces first and posts `DONE:` in `conversation.md`, and B starts that screen then. F5's button needs A's intent. F6 is independent of A once F0 has merged. F8 needs F0 and the 60 s window (F4). F9 needs the F9.0 probe, and its templates wait for F5 and F8 so each string is written once.
 
 ### Phase gates: every person's checkpoint must pass before the next phase starts
 
@@ -194,7 +251,7 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 
 1. Each person ticks their own checkpoint: they add a line under their own heading in `progress.md` Log with the evidence (commands run and results, PR numbers, screenshot paths), and post `CHECKPOINT: CP11-B passed` in `conversation.md`.
 2. A person other than the owner checks the evidence is real (runs the command, opens the PR). The reviewer in the table below is the one who verifies.
-3. When all three are verified, Member C sets the project checkpoint (CP10 to CP14) in the `progress.md` table to Passed with the date, and posts `GATE OPEN: CP11` in `conversation.md`. Only then does the next phase start.
+3. When all three are verified, Member C sets the project checkpoint (CP10 to CP15) in the `progress.md` table to Passed with the date, and posts `GATE OPEN: CP11` in `conversation.md`. Only then does the next phase start.
 4. A checkpoint that fails is not skipped. Add a tracker row, fix it, and verify again. A waiver is allowed only with a `DECISION:` message from all three people, and it goes in the `Waivers` section of `progress.md`.
 
 **Phase 0 gate: CP10 (setup done, contract merged)**
@@ -203,7 +260,7 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 |---|---|---|---|---|
 | CP10-A | A | F0 core part merged: optional `nickname` and `phone` on customers, `customer_updated` event, `nickname` pending kind. The "naya customer" check for F3 is written up in `conversation.md`. | PR number; the ledger replay test over old events passes; `npm test` green on `main` | C |
 | CP10-B | B | F0 phone part merged: `profile` meta type, the new actions and view-model fields compile, nothing visible changes yet. Fresh `main` runs in mock mode. | PR number; `npm run typecheck` and `npm run demo:mock` work; old-install settings still load | A |
-| CP10-C | C | Repo is ready for three people: collaborators added, branch protection on `main` (PR and green CI required), PR template added, baseline recorded (test count, e2e result, gzipped JS size), `docs/test-campaign.md` created. Tracker rows match section 2 of this plan. | Settings page screenshot or `gh api` output, baseline numbers in `progress.md` | A |
+| CP10-C | C | Repo is ready for three people: collaborators added, a GitHub ruleset on `main` (blocks deletion and force-push; PRs are a team agreement, see section 5), PR template added, baseline recorded (test count, e2e result, gzipped JS size), `docs/test-campaign.md` created. Tracker rows match section 2 of this plan. | Ruleset screenshot or `gh api` output, baseline numbers in `progress.md` | A |
 
 **Phase 1 gate: CP11 (engine and first screens)**
 
@@ -211,31 +268,39 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 |---|---|---|---|---|
 | CP11-A | A | F4 engine (`PENDING_TTL_MS`, `questionSpoken()`), F3 nickname flow, and the pure `searchCustomers` function merged, with scripted dialogue tests in hi, en and kn. | PR numbers; the new test names; compliance and red-team tests green | C |
 | CP11-B | B | F1 sign-up and profile (including the PIN lock and the old-install card) and B1 merged; B1 has a browser check for hi, en and kn that fails without the fix. | PR numbers; browser e2e green; screenshots at 360 px in three languages; raw IndexedDB check still shows nothing readable | C |
-| CP11-C | C | B3 merged (press cap, scaled wait) with mock-Gnani tests for short, 20 s and 45 s. F7 round 1 run on the current app: log filled, every `W` has a tracker row. | PR number; `docs/test-campaign.md` round 1 table; credit log entry | A |
+| CP11-C | C | B3 merged (press cap, scaled wait) with mock-Gnani tests for short, 20 s and 45 s. F7 round 1 run on the current app: log filled, every `W` has a tracker row. F9.0 probe done: result for ta, te, mr and gu written in `progress.md` and a `DECISION:` posted for which languages go ahead. | PR number; `docs/test-campaign.md` round 1 table; the probe note; credit log entry | A |
 
 **Phase 2 gate: CP12 (all features visible)**
 
 | CP | Member | Must be true | Evidence | Verified by |
 |---|---|---|---|---|
-| CP12-A | A | F5 intent and template and B2 older-entry corrections merged; golden set grew with the new intents; Kannada text reviewed by the native speaker. | PR numbers; golden, held-out and red-team suites green; reviewer's sign-off in `conversation.md` | C |
-| CP12-B | B | F2 search screen, F3 and F4 screens (nickname prompt, countdown), F5 button and F6 WhatsApp reminders merged. | PR numbers; screenshots in three languages, light and dark; the browser check on the `wa.me` link digits and text; reminder buttons disabled in every blocked state | A |
-| CP12-C | C | A browser check exists for every feature F1 to F6 and passes; every `W` from round 1 is fixed or has an owner and a date; each fixed line was added to a golden, held-out or red-team set. | `npm run test:e2e` output; the fixed rows in the tracker with PR numbers | B |
+| CP12-A | A | F5 intent and template and F8 (all four cases, set-total with read-back) merged; golden set grew with the new intents; Kannada text reviewed by the native speaker. | PR numbers; golden, held-out and red-team suites green, including the F8 red-team lines; reviewer's sign-off in `conversation.md` | C |
+| CP12-B | B | F2 search screen, F3 and F4 screens (nickname prompt, countdown), F5 button, F6 WhatsApp reminders, and F8 display (adjustment label in the feed and customer page) merged. | PR numbers; screenshots in three languages, light and dark; the browser check on the `wa.me` link digits and text; reminder buttons disabled in every blocked state | A |
+| CP12-C | C | A browser check exists for every feature F1 to F6 and F8 and passes; every `W` from round 1 is fixed or has an owner and a date; each fixed line was added to a golden, held-out or red-team set. | `npm run test:e2e` output; the fixed rows in the tracker with PR numbers | B |
 
-**Phase 3 gate: CP13 (integration passed)**
-
-| CP | Member | Must be true | Evidence | Verified by |
-|---|---|---|---|---|
-| CP13-A | A | Full regression: `npm test`, golden, held-out and red-team, compliance all green on `main`; no open P0 or P1 bug in A's area. | Command output pasted or linked in `progress.md` | C |
-| CP13-B | B | Whole app walked through by hand in hi, en, kn on a real phone: sign-up, add by voice, nickname, search, summary, WhatsApp reminder, PIN lock, delete all. No open P0 or P1 bug in B's area. | A checklist in `progress.md` with pass or fail per step | A |
-| CP13-C | C | F7 round 2 regression pass done: **zero silent wrong amounts**; load test (I3) and mobile-data and cold-start timing (I2, I5) recorded. | `docs/test-campaign.md` round 2 table; numbers in `progress.md`; credit log | B |
-
-**Phase 4 gate: CP14 (released)**
+**Phase 3 gate: CP13 (four new languages)**
 
 | CP | Member | Must be true | Evidence | Verified by |
 |---|---|---|---|---|
-| CP14-A | A | A tagged release on `main` with release notes of what changed for users. | Tag name and notes link | B |
-| CP14-B | B | Hosted copy used on a phone over mobile data: a real turn works in each language, and the new screens render at 360 px. | Short note in `progress.md` | C |
-| CP14-C | C | Deployed to Render by hand from a clean `main`; `/healthz` ok; one real turn through the hosted copy; secret scan clean over history. | `progress.md` entry with the time and results | A |
+| CP13-A | A | ta, te, mr and gu (the ones the probe approved) work in the core: `SpeechLang` extended, every template present in all languages (a test fails on a missing key), parser words checked, golden, held-out and red-team lines added per language, AI disclosure first in each. | PR numbers; the missing-key test; suites green; the line counts per language | C |
+| CP13-B | B | Labels, self-hosted fonts loaded only for the chosen language, Beta tag in the picker, no clipping at 360 px in all seven languages. | PR numbers; screenshots at 360 px per language; browser check output; font sizes noted in `progress.md` | A |
+| CP13-C | C | Gateway accepts the new locales; one mock e2e turn per language; the synthetic speech pass run per language with zero silent wrong amounts; the manual round done (or noted as not heard by a speaker); credit log written, floor of 1,500 kept. | `npm run test:e2e` output; `docs/test-campaign.md` language tables; credit log | A |
+
+**Phase 4 gate: CP14 (integration passed)**
+
+| CP | Member | Must be true | Evidence | Verified by |
+|---|---|---|---|---|
+| CP14-A | A | Full regression: `npm test`, golden, held-out and red-team, compliance all green on `main`; no open P0 or P1 bug in A's area. | Command output pasted or linked in `progress.md` | C |
+| CP14-B | B | Whole app walked through by hand in hi, en, kn on a real phone (plus one pass in each new language): sign-up, add by voice, nickname, search, summary, WhatsApp reminder, PIN lock, delete all. No open P0 or P1 bug in B's area. | A checklist in `progress.md` with pass or fail per step | A |
+| CP14-C | C | F7 round 2 regression pass done: **zero silent wrong amounts**; load test (I3) and mobile-data and cold-start timing (I2, I5) recorded. | `docs/test-campaign.md` round 2 table; numbers in `progress.md`; credit log | B |
+
+**Phase 5 gate: CP15 (released)**
+
+| CP | Member | Must be true | Evidence | Verified by |
+|---|---|---|---|---|
+| CP15-A | A | A tagged release on `main` with release notes of what changed for users. | Tag name and notes link | B |
+| CP15-B | B | Hosted copy used on a phone over mobile data: a real turn works in each of the seven languages, and the new screens render at 360 px. | Short note in `progress.md` | C |
+| CP15-C | C | Deployed to Render by hand from a clean `main`; `/healthz` ok; one real turn through the hosted copy; secret scan clean over history. | `progress.md` entry with the time and results | A |
 
 The tracker rows in `bugs&improvements.md` move to Done only when the PR that closes them has merged **and** the checkpoint that covers them has passed.
 
@@ -254,7 +319,7 @@ cp .env.example .env                   # only if you run real speech; never comm
 
 **Branches**
 
-- `main` is always releasable. Nobody pushes code to `main` directly.
+- `main` is always releasable. By team agreement, code reaches `main` through a PR. GitHub does not enforce this (anyone with write access can merge), only blocking deletion and force-push of `main`, so the agreement is only as good as we keep it.
 - One branch per work package or fix, named `<type>/<id>-<short-words>`: `feat/F3-nickname-flow`, `fix/B1-kn-label-clip`, `test/F7-round1`, `chore/F0-contract`.
 - Keep branches short-lived: open a PR within two days and merge within three. Rebase on `main` at least once a day: `git fetch && git rebase origin/main`.
 - Never force-push `main`. Force-push to your own branch only with `--force-with-lease`.
@@ -279,7 +344,7 @@ npx vitest run --config eval/golden/vitest.config.ts
 **Pull requests**
 
 - Title is the commit style. Body: what and why, the work package id, how it was tested, screenshots for UI in Hindi, English and Kannada, and a line saying whether compliance-sensitive code changed.
-- One approving review from someone else (see the reviewer column in section 2) and green CI (`scan:secrets`, typecheck, lint, test, build) before merge.
+- Before merging, one approving review from someone else (see the reviewer column in section 2) and green CI (`scan:secrets`, typecheck, lint, test, build). GitHub does not force this, so check it yourself; do not merge your own PR without a review.
 - **Squash and merge**, with the commit message cleaned up. Delete the branch after merging.
 - Review within one working day. A reviewer checks: the rules in `CLAUDE.md`, tests exist and fail without the change, three languages covered, no new network calls or logged text, no new `process.env` or DOM use in `packages/core`.
 - Anything that changes how money is parsed, saved or spoken needs both A and one other person to approve.
@@ -301,7 +366,7 @@ Only Member C deploys, from a clean `main`: all checks above green, then trigger
 
 ### `docs/bugs&improvements.md` (the tracker)
 
-- Everything we do has a row. Copy the work packages in section 2 into it in Phase 0 (use ids `F0` to `F7`, keep `B1` to `B3`), with the owner filled in.
+- Everything we do has a row. Copy the work packages in section 2 into it in Phase 0 (use ids `F0` to `F9`, keep `B1` to `B3`), with the owner filled in.
 - Change the status in place: `open`, `in progress`, `blocked`, `done`, `wontfix`. When you start something, set the owner and `in progress`. When it merges, move the row to the Done table with the PR number and the evidence (test names, screenshot, run).
 - Found a bug while working? Add a row at the bottom with steps to reproduce and where you saw it. Do not fix unrelated bugs inside another PR.
 - Priority: P0 breaks the money or privacy rules (stop and tell everyone), P1 users hit it, P2 nice to have.
@@ -341,7 +406,7 @@ Only Member C deploys, from a clean `main`: all checks above green, then trigger
 
 ## 7. Definition of done (every work package)
 
-- [ ] Works in Hindi, English and Kannada (Hinglish for parsing), strings reviewed for Kannada.
+- [ ] Works in Hindi, English and Kannada (Hinglish for parsing), strings reviewed for Kannada. The four F9 languages count as done when they pass F9's own checks and carry the Beta tag.
 - [ ] Unit tests added, and they fail without the change. Dialogue changes have scripted dialogue tests.
 - [ ] `npm run typecheck`, `lint`, `test`, `build` green. `npm run test:e2e` green for UI and gateway changes.
 - [ ] Compliance and red-team tests green if dialogue, templates, reminders or logging changed.
@@ -360,8 +425,12 @@ Only Member C deploys, from a clean `main`: all checks above green, then trigger
 | WhatsApp link behaviour differs across phones and browsers | Test on at least one Android Chrome and one iPhone Safari; the share-sheet fallback stays. |
 | Yes/no window of 60 s feels too long or too short | Constants live in one place; tune after the F7 rounds. |
 | Kannada strings for new templates | A drafts them with the existing glossary; the native speaker reviews before F5 and F3 merge. |
+| No native speaker for Tamil, Telugu, Marathi, Gujarati | Beta tag, machine-drafted strings, minimal tests, and a note that the language was not heard by a speaker. Find a reviewer before calling any of them done. |
+| Gnani may not support one of the four locales | F9.0 probe in Phase 1 decides; drop the language rather than ship text-only support. |
+| "Set the total" could be abused or misheard | Read-back every time, one named customer, target of zero or more, red-team lines in F8. |
+| Template file grows to seven languages | Templates for F5 and F8 are written once, after both merge; a test fails on any missing key. |
 | Credit burn from F7 | Floor of 1,500 credits, logged runs, mock mode for everything that does not need real speech. |
-| The three members and who is A, B and C | Fill in the table below in Phase 0. |
+| The three members and who is A, B and C | Fill in the table below in Phase 0. A is set. Member C still needs the GitHub handles of A and B recorded; the git log shows commits under two other names (Ayush and Lokesh), so say who is who. |
 
 | Letter | Member | Agents they run |
 |---|---|---|

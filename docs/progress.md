@@ -7,13 +7,13 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 - **Phase:** Plan 2 (improvements after submission). The hackathon submission went in before the deadline; its history is kept below. Work is described in `docs/plan2.md` and tracked in `docs/bugs&improvements.md`. Messages between us and our agents go in `docs/conversation.md`.
 - **Live copy:** https://vidur-xu96.onrender.com (Render free plan, deploys by hand; the access code is in Render's dashboard, never in the repo).
 - **Active phase of Plan 2:** Phase 0 (setup). Nothing is built yet. A phase ends only when all three people's checkpoints (for example CP10-A, CP10-B, CP10-C) are verified; see "Phase gates" in `docs/plan2.md`.
-- **Last checkpoint passed:** CP9 (hackathon deliverables, submitted). Plan 2 checkpoints are CP10 to CP14 below.
+- **Last checkpoint passed:** CP9 (hackathon deliverables, submitted). Plan 2 checkpoints are CP10 to CP15 below.
 - **Next actions:**
-  1. Fill in who is Member A, B and C in `docs/plan2.md` section 8.
-  2. Add collaborators, branch protection and a PR template to the repo (Member C).
-  3. Merge F0, the shared contract (Members A and B), then start F1 to F6 in parallel.
-  4. Record a baseline: test counts, e2e result and gzipped JS size (Member C).
-- **Known open bugs:** B1 (Kannada label clipped, reproduced 2026-11-21), B2 (corrections only reach the last entry), B3 (long speech uncapped). See the tracker.
+  1. Fill in who is Member A, B and C in `docs/plan2.md` section 8 (the git log shows two names besides Member C).
+  2. Member C: confirm the GitHub ruleset on `main` (deletion and force-push blocked). Collaborators, PR template and baseline are done.
+  3. Merge ONE F0, the shared contract: it exists twice (on `main` and in PR #1) and the two conflict. See `conversation.md`.
+  4. Then F1 to F6, F8 and F9 follow the phases in `docs/plan2.md`.
+- **Known open bugs:** B1 (Kannada label clipped; CSS fix merged, browser check still missing), B2 (corrections only reach the last entry, now part of F8), B3 (long speech uncapped). See the tracker.
 
 ## Checkpoints
 
@@ -30,10 +30,11 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 | CP8 | Deployment | Passed except the phone on mobile data and a cold-start measurement | 2026-11-12 | Hosted on Render's free plan at https://vidur-xu96.onrender.com (blueprint `render.yaml`, Docker image test-built locally first; keys and the access code typed into Render's dashboard by the user, never in the repo). Checked from here: `/healthz` 200 in 80 ms (warm); hosted mode needs the code; no code and a wrong code get `bad_access_code`, the right one `ready` with `degraded:false` and the LLM on; a foreign origin gets 403; showcase loads in 0.3 to 0.5 s with no console errors and no horizontal scroll at 1366 and 390; real speech turn through the hosted copy with a fake mic: AI disclosure spoken first, "Ramesh ka teen sau chalis rupaye udhaar" heard correctly, which-Ramesh question asked, release to first audio 751 ms; a silent press says it heard nothing. Not done: the user's phone over mobile data, and the cold-start time after sleeping (the free plan sleeps after about 15 minutes idle; `npm run keepwarm -- <url>` or opening it early). |
 | CP9 | Deliverables | In progress | | Done: README, architecture and system-flow diagrams, deck (7 slides) and `references/slides.md`, framed and unframed screenshots in en and kn, demo video script. Not done: the video itself, team details on slide 1, public repo, submission form. |
 | CP10 | Plan 2 gate 0: setup and contract | Not started | | CP10-A, CP10-B, CP10-C all verified (see `plan2.md` Phase gates): F0 merged, repo ready for three people, baseline recorded |
-| CP11 | Plan 2 gate 1: engine and first screens | Not started | | CP11-A (F4, F3, search function), CP11-B (F1, B1), CP11-C (B3, F7 round 1) |
-| CP12 | Plan 2 gate 2: all features visible | Not started | | CP12-A (F5, B2), CP12-B (F2, F3, F4 screens, F5 button, F6), CP12-C (browser checks, round 1 fixes) |
-| CP13 | Plan 2 gate 3: integration passed | Not started | | CP13-A (full regression), CP13-B (hand walkthrough on a phone), CP13-C (F7 round 2: zero silent wrong amounts, load and timing) |
-| CP14 | Plan 2 gate 4: released | Not started | | CP14-A (tagged release), CP14-B (phone over mobile data), CP14-C (deployed, `/healthz`, one real turn) |
+| CP11 | Plan 2 gate 1: engine and first screens | Not started | | CP11-A (F4, F3, search function), CP11-B (F1, B1), CP11-C (B3, F7 round 1, F9.0 locale probe) |
+| CP12 | Plan 2 gate 2: all features visible | Not started | | CP12-A (F5, F8), CP12-B (F2, F3, F4 screens, F5 button, F6), CP12-C (browser checks, round 1 fixes) |
+| CP13 | Plan 2 gate 3: four new languages | Not started | | CP13-A (ta, te, mr, gu core and templates), CP13-B (labels, fonts, Beta tag, 360 px checks), CP13-C (gateway locales, mock e2e per language, synthetic speech pass) |
+| CP14 | Plan 2 gate 4: integration passed | Not started | | CP14-A (full regression), CP14-B (hand walkthrough on a phone), CP14-C (F7 round 2: zero silent wrong amounts, load and timing) |
+| CP15 | Plan 2 gate 5: released | Not started | | CP15-A (tagged release), CP15-B (phone over mobile data), CP15-C (deployed, `/healthz`, one real turn) |
 
 ## Open user decisions
 
@@ -82,6 +83,7 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 
 - 2026-11-21, baseline on `main` before any Plan 2 code (CP10-C): `typecheck`, `lint`, `build` exit 0; `npm test` 31 files / 1,482 tests pass; browser e2e (mock Gnani, fake mic) 77/77; gzipped JS across all three bundles in `apps/web/dist/assets` is 69,455 bytes (about 68 KB), so the proposed budget with 20% headroom is 83,000 bytes.
 - 2026-11-21: added `.github/pull_request_template.md`, `docs/test-campaign.md` and plan2 section 9 (Member C's own agent setup). Still open for CP10-C: collaborators and branch protection (need Members A and B's GitHub handles).
+- 2026-11-21: judge feedback added two items to Plan 2: F8 (edit any customer's ledger by voice, including set-the-total with a mandatory read-back) and F9 (Tamil, Telugu, Marathi, Gujarati, Beta until a native speaker reviews them). B2 folded into F8. A new Phase 3 (languages) was inserted, so integration is now CP14 and release is CP15. Branch protection was replaced by a GitHub ruleset that blocks deletion and force-push; PRs are a team agreement.
 
 ### 2026-11-21 (setup, claude for the team)
 

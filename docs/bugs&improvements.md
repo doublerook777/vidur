@@ -20,13 +20,15 @@ Rules that never bend are in `CLAUDE.md` (integer paise, fixed reply templates, 
 | F5 | P1 | open | A + B | Voiced base summary for each customer | Fixed template: balance, last entry, entries in the last 30 days. No judgement words. Kannada text needs the native speaker. Reviewer: C. |
 | F6 | P1 | open | B | WhatsApp reminders: optional customer phone, "Remind on WhatsApp" opens a `wa.me` link with the fixed text, "Due now" list | Gate in `reminders/gate.ts` unchanged. The app cannot know if the message was sent. No server involvement. Reviewer: A. |
 | F7 | P1 | open | C | Manual test campaign: log failures, fix them, add each failed line to the golden, held-out or red-team set | At least 60 lines per language group, two speakers, a third noisy. Keep 1,500 Gnani credits. Log in `docs/test-campaign.md`. |
+| F8 | P1 | open | A + B | Edit any customer's ledger by voice: by day ("change today's credit of Anil to 100"), by old amount ("Mohan ka 500 nahi 300", the old B2), set the total ("change Anil's total to 1000"), undo or flip an older entry | Raised by a judge at the demo. Set-total posts one adjustment entry with a **mandatory read-back**. New amounts come from the deterministic parser only. A: core and templates. B: how adjustments and edits show in the feed and customer page. Reviewer: C. |
+| F9 | P1 | open | A + B + C | Four more languages: Tamil, Telugu, Marathi, Gujarati | Raised by a judge. Number tables exist for all four; nothing else does. C first probes which locales Gnani STT and TTS support (F9.0). Every string is machine-drafted and shown as **Beta** until a native speaker reviews it; no native speakers available yet, so testing stays minimal. Reviewer: A for B and C parts, C for A parts. |
 
 ## Bugs
 
 | ID | Pri | Status | Owner | Item | Notes |
 |---|---|---|---|---|---|
-| B1 | P1 | open | B | Kannada Home: the "ಇಂದು ಜಮಾ" (paid today) label is clipped behind the Add entry button | Rechecked 2026-11-21 in mock mode: still overlaps at 390 and 360 px. Label is `.totals-payment` and button is `.notch-btn` in `apps/web/src/phone/ui/phone.css`; `.totals-card` grid area `paid` shares the row with the button. Add a browser check for hi, en and kn that the two boxes do not intersect. |
-| B2 | P1 | open | A | Corrections only act on the last entry | "Mohan's 500 was actually 300" cannot reach an older entry. Find the latest matching entry for that customer, ask if several match, reverse and repost, amount from the deterministic parser only. Scripted dialogue tests. |
+| B1 | P1 | in progress | B | Kannada Home: the "ಇಂದು ಜಮಾ" (paid today) label is clipped behind the Add entry button | Rechecked 2026-11-21 in mock mode: still overlaps at 390 and 360 px. Label is `.totals-payment` and button is `.notch-btn` in `apps/web/src/phone/ui/phone.css`; `.totals-card` grid area `paid` shares the row with the button. Add a browser check for hi, en and kn that the two boxes do not intersect. CSS fix merged in `ca3b828` (2026-11-21); stays open until the browser check exists and passes. |
+| B2 | P1 | in progress | A | Corrections only act on the last entry | **Folded into F8** (2026-11-21), which also covers editing by day and setting a total. "Mohan's 500 was actually 300" cannot reach an older entry. Find the latest matching entry for that customer, ask if several match, reverse and repost, amount from the deterministic parser only. Scripted dialogue tests. |
 | B3 | P1 | open | C | Very long speech untested and uncapped | Server waits 6 s for the final transcript; no cap on press length. Phone cap at 30 s with a countdown, gateway wait of 6 s plus 0.5 s per second of audio up to 20 s. Tests with the mock Gnani. |
 
 ## Other improvements
@@ -34,10 +36,10 @@ Rules that never bend are in `CLAUDE.md` (integer paise, fixed reply templates, 
 | ID | Pri | Status | Owner | Item | Notes |
 |---|---|---|---|---|---|
 | I1 | P2 | parked | unassigned | Backup and restore | The ledger lives only on the phone. An encrypted export and import file keeps "server stores nothing". Not chosen for Plan 2; revisit after it. Server-side sync would break the privacy promise. |
-| I2 | P2 | open | C | Cold start on the hosted copy | Render free plan sleeps after about 15 minutes. Time a cold start; we stay on Render for now. Phase 3 of the plan. |
-| I3 | P2 | open | C | Load test | Never tested under load. Phase 3. |
+| I2 | P2 | open | C | Cold start on the hosted copy | Render free plan sleeps after about 15 minutes. Time a cold start; we stay on Render for now. Phase 4 of the plan. |
+| I3 | P2 | open | C | Load test | Never tested under load. Phase 4. |
 | I4 | P2 | open | unassigned | Real low-end Android check | Only tested on one mid-range phone. Needs a person with a low-end phone. |
-| I5 | P2 | open | C | Hosted copy on mobile data | Not yet timed from a phone. Phase 3. |
+| I5 | P2 | open | C | Hosted copy on mobile data | Not yet timed from a phone. Phase 4. |
 | I6 | P2 | open | unassigned | Stale mock server processes | pids 89168, 97102, 97684 may still run on one machine: `kill 89168 97102 97684`. |
 | I7 | P2 | open | C | Add a gzipped JS size budget to CI or the baseline | Baseline 2026-11-21: 69,455 bytes gzipped across all three bundles. Proposed budget 83,000 bytes (20% headroom). |
 

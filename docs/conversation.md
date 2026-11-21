@@ -105,3 +105,18 @@ Summary:
   - Disambiguation questions (`ask_which`) speak nicknames: "Which Ramesh? Ramesh dairy or Ramesh school?" (hi: "कौन से रमेश? रमेश डेयरी या रमेश स्कूल?", kn: "ಯಾವ ರಮೇಶ್? ರಮೇಶ್ ಡೇರಿ ಅಥವಾ ರಮೇಶ್ ಸ್ಕೂಲ್?").
 - `KnownCustomer` in `matchName` and `findByAlias` updated to match by `nickname` across scripts.
 - Scripted dialogue unit tests in `packages/core/src/dialogue/dialogue.test.ts` covering all required scenarios in en, hi, and kn. Full workspace tests (1,513 tests across 32 files) pass.
+
+### 2026-11-21 18:00 IST · claude (for Member C)
+
+DECISION: Member C added two items after judge feedback. This changes the plan, so please read `docs/plan2.md` sections 1 to 4 (F8, F9, the new Phase 3) and say if you object.
+
+- **F8: edit any customer's ledger by voice.** A judge added "Anil credit 200" and "Anuj credit 100" and asked to change Anil's entry. Today only the last entry can be corrected. F8 covers four cases: edit by day ("change today's credit of Anil to 100"), edit by old amount (the old B2), set the total ("change Anil's total to 1000": one adjustment entry, **mandatory read-back every time**), and undo or flip an older entry. B2 is folded into F8. A: core, templates, an optional `reason: 'balance_set'` field on `entry_posted`. B: how adjustments show in the feed and on the customer page.
+- **F9: Tamil, Telugu, Marathi, Gujarati.** No native speakers, so strings are machine-drafted, tagged **Beta**, tested minimally. First step is F9.0, a probe of which locales Gnani supports (Member C, Phase 1). A: core and templates. B: labels, self-hosted fonts loaded only for the chosen language, language picker, 360 px checks. C: gateway locales, mock e2e, synthetic speech pass.
+- **Phases:** a new Phase 3 (languages, gate CP13) sits between screens and integration. Integration is now CP14 and release is CP15. CP11-C gained the probe; CP12-A and CP12-B gained F8.
+- **Git:** there is no branch protection. A GitHub ruleset blocks deleting and force-pushing `main`. Anyone can merge, and review before merge is a team agreement (plan2 section 5).
+
+Q: Member A and Member B, F9 and F8 both add templates. To write each string once, F9 templates wait for F5 and F8. OK?
+
+Q: Member A, **F0 exists twice.** `main` has `ddda513` (nickname, phone, `customer_updated`, `Profile` in `contract.ts`). PR #1 (`chore/F0-contract`) has the same pieces with different rules and conflicts with `main`. Please rebase PR #1 on `main`. Where they differ, use PR #1's behaviour: `updateCustomer` ignores an unknown customer, trims, and treats an empty string as clearing the nickname or phone; actions in `contract.ts` required and wired in `controller.ts`; `CustomerRow` gets `nickname` and `phone` in `viewmodels.ts`; keep `profile.ts` storage and the frozen old-events replay test. Drop the string overload of `createCustomer`. Put the `compliance.test.ts` and `purity.test.ts` path changes in their own commit and say why. Member C will review.
+
+Q: Everyone, please record your GitHub handle in `plan2.md` section 8. The git log shows commits by Ayush and Lokesh; say which of you is Member A and which is Member B.
