@@ -1,7 +1,7 @@
 import { Dialogue, Ledger, PENDING_TTL_MS, amountToSpoken, canRemind, groundLlmOutput, say, seedDemoLedger, type LlmParser, type Reply } from '@vidur/core';
 
 import { bytesToPcm16 } from '../audio/pcm.js';
-import type { Actions, AddPreset, CustomerDetailVM, CustomerRow, EntryCardVM, ErrorVM, FeedItem, Lang, Phase, Screen, Theme, ToastVM } from '../contract.js';
+import type { Actions, AddPreset, CustomerDetailVM, CustomerRow, EntryCardVM, ErrorVM, FeedItem, Lang, Phase, Screen, Theme, ReminderConfirmVM, ToastVM } from '../contract.js';
 import { GatewayClient, type GatewayError, type Transcript } from '../net/gateway.js';
 import { Vault } from '../storage/vault.js';
 import { hashPin, verifyPin, loadProfile, saveProfile, type Profile } from '../storage/profile.js';
@@ -61,6 +61,8 @@ export interface SessionState {
   customers: CustomerRow[];
   detail: CustomerDetailVM | null;
   shareReminder: { customerId: string; text: string } | null;
+  /** Set after a reminder was handed to WhatsApp or copied: waits for the shopkeeper's yes before the lock starts. */
+  reminderConfirm: ReminderConfirmVM | null;
   /** Milliseconds from releasing the button to the first audio of the reply, for the last turn. */
   lastEndToAudioMs: number | null;
   // F1 profile and PIN lock
@@ -103,7 +105,7 @@ function deviceLang(): Lang {
 
 const initial = (): SessionState => ({
   loaded: false, onboarded: false, screen: 'onboarding', openCustomerId: null, lang: 'hi', theme: 'light', shopName: '', phase: 'idle', online: false, mockMode: false,
-  card: null, error: null, credit: 0, payment: 0, people: 0, allCredit: 0, allPayment: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
+  card: null, error: null, credit: 0, payment: 0, people: 0, allCredit: 0, allPayment: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, reminderConfirm: null, lastEndToAudioMs: null,
   profile: null, locked: false, lockUntil: null, wrongAttempts: 0, lockError: null, showCompleteProfile: false,
 });
 
@@ -400,6 +402,9 @@ export class PhoneSession {
     },
     setConsent: (id, optIn) => void this.ledger.setConsent(id, optIn).then(() => this.refresh()),
     prepareReminder: (id) => void this.prepareReminder(id),
+    confirmReminderSent: (id) => void this.confirmReminderSent(id),
+    askReminderSent: (id) => this.askReminderSent(id),
+    dismissReminderConfirm: () => this.store.update({ reminderConfirm: null }),
     deleteAll: () => void this.deleteAll(),
     saveKeypadEntry: (i) => void this.saveKeypad(i),
     openAddEntry: (preset) => {
@@ -720,9 +725,7 @@ export class PhoneSession {
     if (!c) return;
     const amount = amountToSpoken(this.ledger.balance(id), this.state.lang, 'digits');
     const text = say(this.state.lang, 'reminder_text', { name: c.name, amount });
-    await this.ledger.recordReminder(id);
-    this.refresh();
-
+    // The lock starts only after the shopkeeper says it was sent (confirmReminderSent), so closing WhatsApp does not lock the customer.
     const rawPhone = c.phone?.trim();
     if (rawPhone) {
       const digits = rawPhone.replace(/\D/g, '');
@@ -731,6 +734,7 @@ export class PhoneSession {
       if (typeof window !== 'undefined') {
         window.open(url, '_blank', 'noopener,noreferrer');
       }
+      this.askReminderSent(id);
     } else {
       this.store.update({ shareReminder: { customerId: id, text } });
     }
@@ -741,8 +745,18 @@ export class PhoneSession {
     if (!gate.ok) return this.refresh();
     const name = this.ledger.customer(id)?.name ?? '';
     const text = say(this.state.lang, 'reminder_text', { name, amount: amountToSpoken(this.ledger.balance(id), this.state.lang, 'digits') });
-    await this.ledger.recordReminder(id);
     this.store.update({ shareReminder: { customerId: id, text } });
+  }
+
+  private askReminderSent(id: string): void {
+    const name = this.ledger.customer(id)?.name;
+    if (name) this.store.update({ reminderConfirm: { customerId: id, name } });
+  }
+
+  private async confirmReminderSent(id: string): Promise<void> {
+    this.store.update({ reminderConfirm: null });
+    if (!this.ledger.customer(id)) return;
+    await this.ledger.recordReminder(id);
     this.refresh();
   }
 

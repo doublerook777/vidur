@@ -5,6 +5,7 @@ import { IconReminders } from './icons.js';
 import type { ScreenProps } from './types.js';
 import { AiBadge } from './AiBadge.js';
 import { BottomNav } from './BottomNav.js';
+import { reminderHint } from './reminderHint.js';
 
 export interface RemindersVM {
   customers: CustomerRow[];
@@ -53,6 +54,9 @@ export function Reminders({ vm, actions, lang }: ScreenProps<RemindersVM>) {
             <span class="reminder-info">
               <span class="reminder-name">{c.name}</span>
               <span class="reminder-balance">{formatRupees(Math.abs(c.balancePaise))}</span>
+              {reminderHint(c.lastReminderAt, c.nextReminderAt, Date.now(), lang) && (
+                <span class="reminder-sent-hint" data-feature="reminder-sent-hint">{reminderHint(c.lastReminderAt, c.nextReminderAt, Date.now(), lang)}</span>
+              )}
             </span>
             <span class="reminder-actions">
               <button

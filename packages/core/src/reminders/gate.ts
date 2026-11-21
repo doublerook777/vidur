@@ -1,6 +1,6 @@
 import type { Ledger } from '../ledger/index.js';
 
-export const REMINDER_MIN_GAP_MS = 7 * 24 * 60 * 60 * 1000;
+export const REMINDER_MIN_GAP_MS = 2 * 24 * 60 * 60 * 1000;
 
 export type RemindDecision =
   | { ok: true }
@@ -8,7 +8,7 @@ export type RemindDecision =
 
 /**
  * The only place that decides whether a reminder may be prepared. A reminder needs:
- * the customer's opt-in recorded by the shopkeeper, a balance that is actually due, and at least 7 days
+ * the customer's opt-in recorded by the shopkeeper, a balance that is actually due, and at least 2 days
  * since the last one. Nothing is ever sent automatically: the shopkeeper shares the text themselves.
  */
 export function canRemind(ledger: Ledger, customerId: string, nowMs: number): RemindDecision {

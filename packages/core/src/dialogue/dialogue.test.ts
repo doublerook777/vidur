@@ -282,7 +282,8 @@ describe('reminders: opt-in, polite, rate limited, never automatic', () => {
     expect(done[0]!.action?.type).toBe('share_reminder');
     expect(done[0]!.action?.text).toContain('₹500');
     expect(ledger.consent(c.id)).toBe(true);
-    expect(ledger.lastReminderAt(c.id)).not.toBeNull();
+    // preparing the text does not start the lock: only a send does (the phone records it)
+    expect(ledger.lastReminderAt(c.id)).toBeNull();
   });
   it('declining consent prepares nothing', async () => {
     const { ledger, d, say1 } = await setup();
@@ -294,17 +295,20 @@ describe('reminders: opt-in, polite, rate limited, never automatic', () => {
     expect(ledger.consent(c.id)).toBe(false);
     expect(ledger.lastReminderAt(c.id)).toBeNull();
   });
-  it('at most one reminder per customer per 7 days', async () => {
+  it('at most one reminder per customer per 2 days', async () => {
     const { ledger, d, say1, tick } = await setup();
     const c = await ledger.createCustomer('Sunita');
     await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(500) });
     await ledger.setConsent(c.id, true);
     d.start();
     expect(keys(await say1('Sunita ko reminder bhejo'))).toEqual(['reminder_ready']);
+    // asking again before anything was sent (a cancelled share) is still allowed
+    expect(keys(await say1('Sunita ko reminder bhejo'))).toEqual(['reminder_ready']);
+    await ledger.recordReminder(c.id); // what the phone does once the shopkeeper has sent it
     expect(keys(await say1('Sunita ko reminder bhejo'))).toEqual(['reminder_too_soon']);
-    tick(6 * 24 * 3600_000);
+    tick(1 * 24 * 3600_000);
     expect(keys(await say1('Sunita ko reminder bhejo'))).toEqual(['reminder_too_soon']);
-    tick(2 * 24 * 3600_000);
+    tick(1 * 24 * 3600_000);
     expect(keys(await say1('Sunita ko reminder bhejo'))).toEqual(['reminder_ready']);
   });
   it('no reminder when nothing is due', async () => {

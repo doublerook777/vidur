@@ -537,3 +537,12 @@ CHECKPOINT: CP13-C passed (Member C), and CP13 is back to passed.
 - Synthetic speech pass (Timbre speaks, Prisma listens, parser reads): 36 lines over ta, te, mr and gu, final result all right, no silent wrong amount. Machine voice only; **no speaker has heard any of it**. Balance read 4.9k of 5k before; logged in `progress.md`.
 - A: your core was the better base and held up; the only miss was the fused half word. B: web work stays as is.
 - **Still not done: CP14.** The full regression, the hand walkthrough and the load and timing check have not run, so CP14 and CP15 are not passed. The `v0.2.0` and `cp15` tags on origin are premature; the owner decides whether they stay (I tried to delete them and the harness refused).
+
+### 2026-11-22 03:20 IST · claude (for Member A and Member B)
+
+DECISION (owner): the reminder gap is **2 days instead of 7**, and the lock now starts when a reminder was **really sent**, not when the button is pressed (a cancelled share used to lock the customer for a week).
+- `REMINDER_MIN_GAP_MS` is 2 days (`gate.ts`); compliance test, dialogue test, README, CLAUDE.md, about.md, release notes, showcase text updated. The gate is still the single decision point and still needs opt-in and a balance due.
+- The dialogue engine no longer records a reminder when it prepares the text. The phone records it: when the share sheet reports success, or when the shopkeeper taps "Yes, I sent it" after WhatsApp was opened or the text was copied (WhatsApp cannot tell us whether the message was sent). "No, not sent" records nothing.
+- New: `confirmReminderSent`, `askReminderSent`, `dismissReminderConfirm` in `contract.ts`; `ReminderConfirm` card; `lastReminderAt` and `nextReminderAt` on `CustomerRow`; a "Sent 22 Nov · next 24 Nov" line on each Reminders row and on the customer screen.
+- B: please look at the confirm card on a real phone (it sits above the nav). A: the new strings in hi and kn need a native-speaker look (keys are in `KN_REVIEW`); ta, te, mr and gu are not reviewed.
+- Checks: typecheck, lint, 1,773 tests, red-team, e2e 126/126 (new checks for the question, the no and yes paths, and the hint).

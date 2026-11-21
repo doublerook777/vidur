@@ -146,7 +146,7 @@ If `interpret()` finds nothing it can use, the phone may send `parse` to get the
 | `ledger/` | Event-sourced ledger over a `LedgerStore` interface (`MemoryStore` for tests, the vault in the browser). |
 | `i18n/` | Fixed reply templates in `hi`, `en`, `kn`, as a typed key-to-function table. |
 | `speak/` | `amountToSpoken`: formats rupees with Indian digit grouping (`₹1,20,000`), the form Timbre reads correctly in all three languages. |
-| `reminders/` | `canRemind`: the single gate for reminders (opt-in recorded, a balance due, at least 7 days since the last one). |
+| `reminders/` | `canRemind`: the single gate for reminders (opt-in recorded, a balance due, at least 2 days since the last one). |
 | `demo/` | The 12-customer synthetic seed ledger. |
 
 ### How `interpret()` reads a sentence
@@ -287,7 +287,7 @@ Every entry carries two times: `at`, when the money moved (can be backdated, "ka
 | Saving while unsure | Nothing awaiting an answer is saved; questions expire after 30 seconds. |
 | Speaking before disclosing | One `emit` function puts the AI disclosure first. Tested for every kind of first utterance in three languages. |
 | Pressure, threats, interest, lending, judgments | `guardrails.ts` runs before everything else; fixed polite templates; a test scans every template for pressure words; 83 red-team utterances. |
-| Unwanted reminders | `canRemind` gate (opt-in, balance due, 7-day gap); the app only prepares text for the browser share sheet and sends nothing. |
+| Unwanted reminders | `canRemind` gate (opt-in, balance due, 2-day gap); the app only prepares text for the browser share sheet and sends nothing. |
 | Customer data exposure | Ledger encrypted on the phone; server stores nothing; logger refuses content; transcripts purged after 24 hours; delete-all. |
 | Key exposure | The key lives only in the server's environment; `.env` is git-ignored; a secret scanner runs in a pre-commit hook, in CI, and over history. |
 | Abuse and cost | Guards: origin, access code, rate limit, session and daily audio caps, kill switch. |

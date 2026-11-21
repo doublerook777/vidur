@@ -22,6 +22,16 @@ export interface CustomerRow {
   lastActivityAt: number | null;
   reminderOptIn: boolean;
   canRemind?: boolean;
+  /** When the last reminder was really sent (epoch ms), or null. The lock starts here, not when the button is pressed. */
+  lastReminderAt?: number | null;
+  /** The earliest time the next reminder can go, when one was sent. */
+  nextReminderAt?: number | null;
+}
+
+/** Asks the shopkeeper whether the reminder was really sent; only a yes starts the 2-day lock. */
+export interface ReminderConfirmVM {
+  customerId: string;
+  name: string;
 }
 
 export interface Profile {
@@ -154,6 +164,12 @@ export interface Actions {
   setTheme(theme: Theme): void;
   setConsent(customerId: string, optIn: boolean): void;
   prepareReminder(customerId: string): void;
+  /** The reminder was really sent: records it, which starts the 2-day lock. */
+  confirmReminderSent(customerId: string): void;
+  /** The text was copied or handed to WhatsApp, so ask whether it was sent. */
+  askReminderSent(customerId: string): void;
+  /** "No, not sent": nothing is recorded and the customer is not locked. */
+  dismissReminderConfirm(): void;
   deleteAll(): void;
   saveKeypadEntry(input: { customerId: string | null; newName: string | null; newNickname?: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): void;
   /** Opens the Add entry screen. */

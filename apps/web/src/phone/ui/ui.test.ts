@@ -266,3 +266,32 @@ describe('Phase 2 (CP12-B) UI components', () => {
     expect(feedHtml).toContain(LABELS.en.balanceSetTag);
   });
 });
+
+describe('reminders: ask whether it was sent, show when the next one can go', () => {
+  const langs = ['en', 'hi', 'kn', 'ta', 'te', 'mr', 'gu'] as const;
+  const day = 24 * 60 * 60 * 1000;
+  const t0 = Date.UTC(2026, 10, 22, 6, 0); // 22 Nov 2026
+
+  it('the confirm card names the customer and has a yes and a no in every language', async () => {
+    const { ReminderConfirm } = await import('./ReminderConfirm.js');
+    for (const lang of langs) {
+      const html = renderToString(h(ReminderConfirm, { vm: { customerId: 'c1', name: 'Suresh' }, actions: mockActions, lang }));
+      expect(html).toContain('Suresh');
+      expect(html).not.toContain('{name}');
+      expect(html).toContain(LABELS[lang].reminderConfirmYes);
+      expect(html).toContain(LABELS[lang].reminderConfirmNo);
+    }
+  });
+
+  it('the hint reads "Sent … · next …" while locked, "Sent …" afterwards, and nothing before the first send', async () => {
+    const { reminderHint } = await import('./reminderHint.js');
+    for (const lang of langs) {
+      const locked = reminderHint(t0, t0 + 2 * day, t0 + day, lang)!;
+      expect(locked).not.toContain('{');
+      expect(locked.length).toBeGreaterThan(reminderHint(t0, t0 + 2 * day, t0 + 3 * day, lang)!.length);
+      expect(reminderHint(null, null, t0, lang)).toBeNull();
+    }
+    expect(reminderHint(t0, t0 + 2 * day, t0 + day, 'en')).toBe('Sent 22 Nov · next 24 Nov');
+    expect(reminderHint(t0, t0 + 2 * day, t0 + 3 * day, 'en')).toBe('Sent 22 Nov');
+  });
+});

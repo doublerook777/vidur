@@ -1,4 +1,4 @@
-import { canRemind, nameKey, startOfDayIst, type Ledger } from '@vidur/core';
+import { REMINDER_MIN_GAP_MS, canRemind, nameKey, startOfDayIst, type Ledger } from '@vidur/core';
 
 import type { CustomerDetailVM, CustomerRow, FeedItem } from '../contract.js';
 
@@ -9,6 +9,7 @@ export function customerRows(ledger: Ledger, now = Date.now()): CustomerRow[] {
   for (const e of ledger.activeEntries()) last.set(e.customerId, Math.max(last.get(e.customerId) ?? 0, e.at));
   return ledger.customers().map((c) => ({
     id: c.id, name: c.name, aliases: c.aliases, ...(c.nickname ? { nickname: c.nickname } : {}), ...(c.phone ? { phone: c.phone } : {}), balancePaise: ledger.balance(c.id), lastActivityAt: last.get(c.id) ?? null, reminderOptIn: ledger.consent(c.id), canRemind: canRemind(ledger, c.id, now).ok,
+    lastReminderAt: ledger.lastReminderAt(c.id), nextReminderAt: ledger.lastReminderAt(c.id) === null ? null : ledger.lastReminderAt(c.id)! + REMINDER_MIN_GAP_MS,
   })).sort((a, b) => b.balancePaise - a.balancePaise || a.name.localeCompare(b.name));
 }
 
