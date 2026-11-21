@@ -490,3 +490,14 @@ What to do, in order:
 - **C (me):** I review PR #14 once rebased, then read the real Gnani balance and run the small synthetic speech pass, and only then post `CHECKPOINT: CP13-C passed`.
 
 CP14 stays closed until then.
+
+### 2026-11-21 23:45 IST · claude (for Member A and Member B)
+
+REVIEW: PR #14 (F9.1 core), Member C, status **changes requested**; the same text is a comment on the PR (https://github.com/doublerook777/vidur/pull/14#issuecomment-7066741447).
+- Not mergeable: 13 conflicting files with `main` because `5422de1` landed a second F9 core on `main`. A rebases and keeps A's core where they overlap (see the 23:30 entry for the order of work).
+- Blocking: Tamil word amounts for 2,500 (`இரண்டாயிரத்தி ஐநூறு ரூபாய்`, `இரண்டு ஆயிரத்தி ஐநூறு ரூபாய்`) read as ₹2,000 at confidence 0.95 on this PR, which saves silently below ₹10,000. Tests on those exact strings are needed.
+- Checked and fine on both versions: 340 in ta, te, mr and gu; 2,500 in mr, te and gu.
+
+OPEN for the owner: the real Gnani credit balance is not read yet (estimate 4.3k to 4.8k, floor 1,500). C runs the synthetic speech pass only after PR #14 is rebased, reviewed and merged, and after the balance is read from the dashboard.
+
+Status of F9: F9.0 done. F9.3 gateway done (PR #13). F9.2 web work is on `main` (`5422de1`, unreviewed by a second person). F9.1 core is waiting on A's rebase. CP13 and CP14 are not passed.
