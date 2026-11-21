@@ -30,6 +30,8 @@ export const mockActions: Actions = {
   prepareReminder: noop,
   deleteAll: noop,
   saveKeypadEntry: noop,
+  openEditEntry: noop,
+  saveEntryEdit: noop,
   openAddEntry: noop,
   removeEntry: noop,
   restoreEntry: noop,

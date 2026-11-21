@@ -126,6 +126,10 @@ export interface AddPreset {
   kind?: 'credit' | 'payment';
   /** Opens with the name box first, to add a new customer by hand. */
   newCustomer?: boolean;
+  /** Changing an entry that already exists: the screen opens with its amount, kind and time. */
+  editEntry?: { id: string; kind: 'credit' | 'payment'; paise: number; at: number };
+  /** The screen to go back to when the edit is saved or cancelled. */
+  returnTo?: Screen;
 }
 
 /** Callbacks the screens may call. */
@@ -143,6 +147,10 @@ export interface Actions {
   saveKeypadEntry(input: { customerId: string | null; newName: string | null; newNickname?: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): void;
   /** Opens the Add entry screen. */
   openAddEntry(preset?: AddPreset): void;
+  /** Opens the Add entry screen on an existing entry, to change its amount, kind or time. */
+  openEditEntry(entryId: string): void;
+  /** Saves the change: the old entry is reversed and a new one posted with the same customer, so it can be taken back. */
+  saveEntryEdit(input: { entryId: string; kind: 'credit' | 'payment'; paise: number; at?: number }): void;
   /** Removes one entry by hand. It is reversed, not erased, so `restoreEntry` can bring it back. */
   removeEntry(entryId: string): void;
   restoreEntry(restoreToken: string): void;

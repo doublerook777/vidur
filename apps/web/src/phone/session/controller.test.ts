@@ -260,6 +260,49 @@ describe('adding and removing entries by hand, and tapping answers', () => {
     expect(session!.state.toast).toBeNull();
   });
 
+  it('editing an entry by hand changes its amount, kind and time, keeps the customer, and can be taken back', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, true);
+    const c = session!.state.customers[0]!;
+    const threeDaysAgo = Date.now() - 3 * 86_400_000;
+    session!.actions.saveKeypadEntry({ customerId: c.id, newName: null, kind: 'credit', paise: 437_00, at: threeDaysAgo });
+    await until(() => session!.state.history.some((h) => h.paise === 437_00));
+    const entry = session!.state.history.find((h) => h.paise === 437_00)!;
+    const balanceBefore = session!.state.customers.find((x) => x.id === c.id)!.balancePaise;
+
+    session!.actions.openEditEntry(entry.id);
+    expect(session!.state.screen).toBe('keypad');
+    expect(session!.state.addPreset?.editEntry).toMatchObject({ id: entry.id, kind: 'credit', paise: 437_00, at: threeDaysAgo });
+
+    // same customer, new amount and kind, old time kept when no time is sent
+    session!.actions.saveEntryEdit({ entryId: entry.id, kind: 'payment', paise: 163_00 });
+    await until(() => session!.state.history.some((h) => h.paise === 163_00));
+    expect(session!.state.history.some((h) => h.id === entry.id)).toBe(false);
+    const changed = session!.state.history.find((h) => h.paise === 163_00)!;
+    expect(changed.kind).toBe('payment');
+    expect(changed.customerName).toBe(entry.customerName);
+    expect(changed.at).toBe(threeDaysAgo);
+    expect(session!.state.customers.find((x) => c.id === x.id)!.balancePaise).toBe(balanceBefore - 437_00 - 163_00);
+    expect(session!.state.addPreset).toBeNull();
+    expect(session!.state.toast?.restoreToken).toContain('|');
+
+    // taking it back restores the original entry and removes the new one
+    session!.actions.restoreEntry(session!.state.toast!.restoreToken);
+    await until(() => session!.state.history.some((h) => h.id === entry.id));
+    expect(session!.state.history.some((h) => h.paise === 163_00)).toBe(false);
+    expect(session!.state.customers.find((x) => c.id === x.id)!.balancePaise).toBe(balanceBefore);
+
+    // a new time is used, never one in the future; a zero amount changes nothing
+    session!.actions.openEditEntry(entry.id);
+    session!.actions.saveEntryEdit({ entryId: entry.id, kind: 'credit', paise: 0 });
+    await new Promise((r) => setTimeout(r, 60));
+    expect(session!.state.history.some((h) => h.id === entry.id)).toBe(true);
+    session!.actions.openEditEntry(entry.id);
+    session!.actions.saveEntryEdit({ entryId: entry.id, kind: 'credit', paise: 441_00, at: Date.now() + 5 * 86_400_000 });
+    await until(() => session!.state.history.some((h) => h.paise === 441_00));
+    expect(session!.state.history.find((h) => h.paise === 441_00)!.at).toBeLessThanOrEqual(Date.now());
+  });
+
   it('a hand-added entry keeps the date it was given and never a future one', async () => {
     const { speaker } = await boot();
     await onboard(speaker, true);

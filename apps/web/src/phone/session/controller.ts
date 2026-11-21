@@ -336,6 +336,8 @@ export class PhoneSession {
     openAddEntry: (preset) => {
       this.store.update({ addPreset: preset ?? null, screen: 'keypad' });
     },
+    openEditEntry: (id) => this.openEditEntry(id),
+    saveEntryEdit: (i) => void this.saveEntryEdit(i),
     removeEntry: (id) => void this.removeEntry(id),
     restoreEntry: (token) => void this.restoreEntry(token),
     dismissToast: () => this.dismissToast(),
@@ -471,6 +473,41 @@ export class PhoneSession {
     this.store.update({ toast: null });
   }
 
+  private openEditEntry(entryId: string): void {
+    const e = this.ledger.activeEntries().find((x) => x.id === entryId);
+    if (!e) return;
+    this.store.update({
+      addPreset: { customerId: e.customerId, kind: e.kind, editEntry: { id: e.id, kind: e.kind, paise: e.paise, at: e.at }, returnTo: this.state.screen },
+      screen: 'keypad',
+    });
+  }
+
+  /** Changing an entry is a reversal of the old one plus a new entry for the same customer, keeping its item and reason, so nothing is lost. */
+  private async saveEntryEdit(i: { entryId: string; kind: 'credit' | 'payment'; paise: number; at?: number }): Promise<void> {
+    const old = this.ledger.activeEntries().find((e) => e.id === i.entryId);
+    const back = this.state.addPreset?.returnTo ?? 'home';
+    if (!old || !Number.isInteger(i.paise) || i.paise <= 0) {
+      this.store.update({ addPreset: null, screen: back });
+      return;
+    }
+    const now = this.now();
+    const at = i.at !== undefined && Number.isFinite(i.at) ? Math.min(i.at, now) : old.at;
+    const reversalId = await this.ledger.reverse(old.id);
+    const posted = await this.ledger.postEntry({
+      customerId: old.customerId,
+      kind: i.kind,
+      paise: i.paise,
+      at,
+      ...(old.item !== undefined ? { item: old.item } : {}),
+      ...(old.reason !== undefined ? { reason: old.reason } : {}),
+    });
+    const t = LABELS[this.state.lang];
+    this.store.update({ card: null, addPreset: null, screen: back, toast: { text: t.entryEdited, actionLabel: t.undo, restoreToken: `${posted.id}|${reversalId}` } });
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => this.dismissToast(), 8000);
+    this.refresh();
+  }
+
   /** Removing is a reversal in the event log: the entry stays on record as removed and can be brought back for a while. */
   private async removeEntry(entryId: string): Promise<void> {
     let token: string;
@@ -488,10 +525,13 @@ export class PhoneSession {
   }
 
   private async restoreEntry(token: string): Promise<void> {
-    try {
-      await this.ledger.reverse(token);
-    } catch {
-      /* already restored */
+    // A removal has one id; an edit has two ("new entry|reversal of the old one"). Reversing both puts the old entry back.
+    for (const id of token.split('|')) {
+      try {
+        await this.ledger.reverse(id);
+      } catch {
+        /* already restored */
+      }
     }
     this.dismissToast();
     this.refresh();

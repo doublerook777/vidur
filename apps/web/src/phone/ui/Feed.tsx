@@ -4,7 +4,7 @@ import type { FeedItem } from '../contract.js';
 import { dayKey, formatDay, formatDayLong, formatRupees, formatTime, formatWhen } from './format.js';
 import { LABELS } from './labels.js';
 import type { ScreenProps } from './types.js';
-import { IconArrowDown, IconArrowUp, IconMore, IconNote, IconTrash } from './icons.js';
+import { IconArrowDown, IconArrowUp, IconEdit, IconMore, IconNote, IconTrash } from './icons.js';
 
 export interface FeedVM {
   items: FeedItem[];
@@ -74,10 +74,19 @@ export function EntryRow({ item, undoable, now, lang, actions, showDate = true }
             {t.recordedAt}: {formatDay(item.recordedAt, lang)}, {formatTime(item.recordedAt, lang)}
           </p>
           {!asking ? (
-            <button type="button" class="btn btn-danger feed-remove" onClick={() => { setAsking(true); reveal(); }}>
-              <IconTrash size={18} />
-              <span>{t.remove}</span>
-            </button>
+            <div class="feed-manage-row">
+              {/* The keypad works in whole rupees, so an entry with paise (spoken "250 rupees 50 paise") is only removed, not edited. */}
+              {item.paise !== null && item.paise % 100 === 0 ? (
+                <button type="button" class="btn feed-edit" onClick={() => actions.openEditEntry(item.id)}>
+                  <IconEdit size={18} />
+                  <span>{t.edit}</span>
+                </button>
+              ) : null}
+              <button type="button" class="btn btn-danger feed-remove" onClick={() => { setAsking(true); reveal(); }}>
+                <IconTrash size={18} />
+                <span>{t.remove}</span>
+              </button>
+            </div>
           ) : (
             <div class="feed-remove-ask" role="alert">
               <p class="feed-remove-text">
