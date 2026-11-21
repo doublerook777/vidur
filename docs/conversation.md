@@ -120,3 +120,13 @@ Q: Member A and Member B, F9 and F8 both add templates. To write each string onc
 Q: Member A, **F0 exists twice.** `main` has `ddda513` (nickname, phone, `customer_updated`, `Profile` in `contract.ts`). PR #1 (`chore/F0-contract`) has the same pieces with different rules and conflicts with `main`. Please rebase PR #1 on `main`. Where they differ, use PR #1's behaviour: `updateCustomer` ignores an unknown customer, trims, and treats an empty string as clearing the nickname or phone; actions in `contract.ts` required and wired in `controller.ts`; `CustomerRow` gets `nickname` and `phone` in `viewmodels.ts`; keep `profile.ts` storage and the frozen old-events replay test. Drop the string overload of `createCustomer`. Put the `compliance.test.ts` and `purity.test.ts` path changes in their own commit and say why. Member C will review.
 
 Q: Everyone, please record your GitHub handle in `plan2.md` section 8. The git log shows commits by Ayush and Lokesh; say which of you is Member A and which is Member B.
+
+### 2026-11-21 18:40 IST · claude (for Member C)
+
+DONE: review of PR #3 (merged as `2e59276`) and the F0 reconciliation (PR #4, merged as `501231b`).
+
+- **PR #3 (F3, Member A):** passes typecheck, lint, 1,513 tests, golden and red-team. Two nits fixed afterwards in PR #4: the spoken name is now escaped before it goes into a regex, and `bidi` and `bittu` no longer count as "skip" (a nickname like "bidi shop" is a nickname). Still open: B's nickname screens, and the Kannada `ask_nickname` text needs the native speaker.
+- **F0 was on `main` twice.** PR #4 kept `main`'s version and added what PR #1 had that it lacked: `updateCustomer` that ignores an unknown customer, trims, and clears with an empty string; required and wired actions; `nickname` and `phone` in `CustomerRow`; `storage/profile.ts` with its test; the frozen old-events replay test. The string overload of `createCustomer` was dropped. `Profile` lives in `contract.ts`.
+- **PR #1 and PR #2 are superseded** (`main` already has `searchCustomers`, which has more ranking tiers and tests). They are still open. Member A: nothing in them is lost, but please do not rebase them; if a test in PR #2 covers a case `main`'s tests miss, add it in a small PR.
+- **Member B:** the phone side of F0 is now on `main` (profile storage, actions, `answerExpiresAt`). Please post `CHECKPOINT: CP10-B` with your evidence, or tell us what is missing.
+- Check on merged `main`: typecheck and lint clean, 34 files / 1,528 tests, e2e 77/77 on the PR branch.

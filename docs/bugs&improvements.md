@@ -12,10 +12,10 @@ Rules that never bend are in `CLAUDE.md` (integer paise, fixed reply templates, 
 
 | ID | Pri | Status | Owner | Item | Notes |
 |---|---|---|---|---|---|
-| F0 | P1 | in progress | A + B | Shared contract: optional `nickname` and `phone` on customers, `customer_updated` event, `profile` in the vault, new actions and view-model fields, `nickname` pending kind | Core types & replay test done. Must merge first. Reviewer: C. |
+| F0 | P1 | in progress | A + B | Shared contract: optional `nickname` and `phone` on customers, `customer_updated` event, `profile` in the vault, new actions and view-model fields, `nickname` pending kind | Merged 2026-11-21 (`ddda513` core types, `501231b` PR #4: update rules, wired actions, profile storage, frozen replay test). Moves to Done when CP10 passes. Reviewer: C. |
 | F1 | P1 | open | B | First-time sign-up and profile management (local only): shop name, owner name, optional PIN screen lock, edit profile, delete all | PIN is a screen lock, not extra encryption: say so in the UI. Existing installs get a "Complete your profile" card. Reviewer: C. |
-| F2 | P1 | in progress | A + B | Search across all customers | A: pure `searchCustomers` done (cross-script, nicknames, aliases, phone digits). B: search box on Customers and the customer picker. Reviewer: C. |
-| F3 | P1 | in progress | A + B | Same name already exists: ask for a nickname (skippable) | A: core dialogue flow, templates, and tests done (PR #3). Reviewer: C. |
+| F2 | P1 | in progress | A + B | Search across all customers | A: pure `searchCustomers` merged (`8e18c42`; PR #2 was a duplicate of it). B: search box on Customers and the customer picker. Reviewer: C. |
+| F3 | P1 | in progress | A + B | Same name already exists: ask for a nickname (skippable) | A: core dialogue flow, templates and tests merged (PR #3, `2e59276`); review nits fixed in PR #4. Open: B's nickname screens; the Kannada `ask_nickname` text needs the native speaker. Reviewer: C. |
 | F4 | P1 | in progress | A + B | Yes/no window 30 s to 60 s, counted from when the question finishes being spoken, with a countdown on the buttons | A: `PENDING_TTL_MS`, `questionSpoken()` done. B: countdown, respects reduced motion. Reviewer: C. |
 | F5 | P1 | open | A + B | Voiced base summary for each customer | Fixed template: balance, last entry, entries in the last 30 days. No judgement words. Kannada text needs the native speaker. Reviewer: C. |
 | F6 | P1 | open | B | WhatsApp reminders: optional customer phone, "Remind on WhatsApp" opens a `wa.me` link with the fixed text, "Due now" list | Gate in `reminders/gate.ts` unchanged. The app cannot know if the message was sent. No server involvement. Reviewer: A. |
