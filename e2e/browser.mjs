@@ -335,7 +335,7 @@ try {
   check('an entry menu offers Edit next to Remove', (await editBtn.count()) === 1 && (await page.locator('.feed-remove').count()) >= 1);
   await editBtn.click();
   await sleep(250);
-  check('Edit opens the keypad on that entry, with the customer named and no customer list', (await page.locator('.keypad-editing-customer').count()) === 1 && (await page.locator('.keypad-customer').evaluate((el) => el.hidden)));
+  check('Edit opens the keypad on that entry, with the customer named and the customer list and time buttons really hidden', (await page.locator('.keypad-editing-customer').count()) === 1 && (await page.locator('.keypad-customer').evaluate((el) => getComputedStyle(el).display === 'none')) && (await page.locator('.when-row').evaluate((el) => getComputedStyle(el).display === 'none')));
   const rowBefore = await state(page, 's.history.length');
   const wasCredit = await page.locator('.kind-credit').getAttribute('aria-pressed');
   await page.locator(wasCredit === 'true' ? '.kind-payment' : '.kind-credit').click();

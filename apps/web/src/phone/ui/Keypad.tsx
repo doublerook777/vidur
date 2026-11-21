@@ -169,7 +169,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
         disabled={!canSave}
         onClick={() =>
           editing
-            ? actions.saveEntryEdit({ entryId: editing.id, kind, paise, ...(pickedMs !== null ? { at: pickedMs } : {}) })
+            ? actions.saveEntryEdit({ entryId: editing.id, kind, paise, ...(pickedMs !== null && picked !== toLocalInput(editing.at) ? { at: pickedMs } : {}) })
             : actions.saveKeypadEntry({ customerId, newName: newName.trim() === '' ? null : newName.trim(), ...(newNickname.trim() !== '' && newName.trim() !== '' ? { newNickname: newNickname.trim() } : {}), kind, paise, ...(at !== undefined ? { at } : {}) })}
       >
         {t.save}

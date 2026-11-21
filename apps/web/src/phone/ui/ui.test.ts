@@ -152,3 +152,12 @@ describe('mock preview renders every screen', () => {
   });
 });
 
+
+describe('editing an entry: hidden sections stay hidden', () => {
+  it('the stylesheet hides the customer list and time buttons that carry the hidden attribute', async () => {
+    const { readFileSync } = await import('node:fs');
+    const css = readFileSync(new URL('./phone.css', import.meta.url), 'utf8');
+    expect(css).toMatch(/\.keypad-customer\[hidden\][^{]*\{\s*display:\s*none/);
+    expect(css).toMatch(/\.when-row\[hidden\]/);
+  });
+});
