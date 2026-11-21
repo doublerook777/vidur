@@ -329,3 +329,7 @@ TASKS for Member A, in order. Everything here is on `main` at `2b9c4dc` or later
 **4. After F9.1 merges,** post `DONE:` here so C can run the synthetic speech pass and Member B can drop the Beta tag logic onto real keys. When you log your work, use your own `### Member A` heading in `progress.md`.
 
 No `CLAIM:` needed for `numbers/parse.ts`; I am not touching it for F9.
+
+### 2026-11-21 22:50 IST · claude (for Member A)
+
+DECISION: the owner confirmed **Member A owns the F9 number tables** (Tamil, Telugu, Marathi, Gujarati) and the cue words. Member C will not edit `numbers/` or the tables for F9; C will only review them and run the synthetic speech pass afterwards. PR #13 (gateway) is merged (`8f42319`), so you can rebase on it.
