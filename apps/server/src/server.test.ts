@@ -100,6 +100,41 @@ describe('a full turn against the mock Gnani', () => {
     expect(c.of('metric').some((m) => m['name'] === 'tts_first_audio_ms')).toBe(true);
   });
 
+  it.each([
+    ['ta', 'ta-IN', 'ரமேஷ் முன்னூற்று நாற்பது ரூபாய் கடன்', 'ரமேஷ், ₹340 கடன்.'],
+    ['te', 'te-IN', 'రమేష్ మూడు వందల నలభై రూపాయలు అప్పు', 'రమేష్, ₹340 అప్పు.'],
+    ['mr', 'mr-IN', 'रमेश तीनशे चाळीस रुपये उधार', 'रमेश, ₹340 उधार.'],
+    ['gu', 'gu-IN', 'રમેશ ત્રણસો ચાલીસ રૂપિયા ઉધાર', 'રમેશ, ₹340 ઉધાર.'],
+  ] as const)('F9: a full turn in %s asks for the %s locale for listening and for speaking', async (lang, locale, heard, reply) => {
+    const { mock } = await boot();
+    mock.scriptTranscripts([heard]);
+    const c = await connect();
+    c.send({ type: 'hello', lang });
+    await c.waitFor((m) => m.type === 'ready');
+    expect(mock.requests.stt[0]!.headers['language_code']).toBe(locale);
+    expect(mock.requests.stt[0]!.headers['format']).toBe('codemix');
+    const tr = await speakAUtterance(c);
+    expect(tr['text']).toBe(heard);
+    c.send({ type: 'speak', id: 'r1', text: reply, lang });
+    await c.waitFor((m) => m.type === 'tts_end' && m.id === 'r1');
+    expect(mock.requests.tts.at(-1)!['language']).toBe(locale);
+    expect(c.bins.length).toBeGreaterThan(3);
+  });
+
+  it('F9: an unknown language is never passed to Gnani: hello falls back to Hindi, speak to the session language', async () => {
+    const { mock } = await boot();
+    const c = await connect();
+    c.send({ type: 'hello', lang: 'xx' });
+    await c.waitFor((m) => m.type === 'ready');
+    expect(mock.requests.stt[0]!.headers['language_code']).toBe('hi-IN');
+    const d = await connect();
+    d.send({ type: 'hello', lang: 'ta' });
+    await d.waitFor((m) => m.type === 'ready');
+    d.send({ type: 'speak', id: 'x', text: 'சரி', lang: 'zz' });
+    await d.waitFor((m) => m.type === 'tts_end' && m.id === 'x');
+    expect(mock.requests.tts.at(-1)!['language']).toBe('ta-IN');
+  });
+
   it('a tap with no speech returns an empty transcript without calling the recognizer', async () => {
     await boot();
     const c = await connect();

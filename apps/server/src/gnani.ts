@@ -44,7 +44,11 @@ export interface LinkOptions {
   firstChunkMs?: number;
 }
 
-export const SPEECH_LANG = { hi: 'hi-IN', en: 'en-IN', kn: 'kn-IN' } as const;
+/**
+ * Speech locales, one per connection. ta, te, mr and gu were probed live on 2026-11-21 (F9.0, `spikes/f9-probe.mjs`): both Prisma with
+ * `format=codemix` and Timbre accept them. They are Beta until a native speaker has heard them.
+ */
+export const SPEECH_LANG = { hi: 'hi-IN', en: 'en-IN', kn: 'kn-IN', ta: 'ta-IN', te: 'te-IN', mr: 'mr-IN', gu: 'gu-IN' } as const;
 export type Lang = keyof typeof SPEECH_LANG;
 
 /** One warm speech-to-text socket for one phone. */
@@ -242,7 +246,7 @@ export class SttLink extends EventEmitter {
   }
 }
 
-const TTS_LANG: Record<Lang, string> = { hi: 'hi-en', en: 'en-IN', kn: 'kn-IN' };
+export const TTS_LANG: Record<Lang, string> = { hi: 'hi-en', en: 'en-IN', kn: 'kn-IN', ta: 'ta-IN', te: 'te-IN', mr: 'mr-IN', gu: 'gu-IN' };
 
 interface Job {
   id: string;
