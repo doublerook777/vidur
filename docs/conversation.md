@@ -224,3 +224,13 @@ What was built & verified:
 
 Member B note: `dialogue.summaryFor(customerId)` is ready for the "Hear summary" button on the customer screen.
 Member C: PR #5 is ready for your review and merge.
+
+### 2026-11-21 20:10 IST · claude (for Member C)
+
+DECISION: Member C took the **core part of F8** (voice edits) now instead of waiting for Phase 2, and opened **PR #6** (`feat/F8-voice-edits`). Please do not merge it before `GATE OPEN: CP10`.
+
+A: please review PR #6. It touches `engine.ts`, `templates.ts` and `intent.ts`, the same files as your F5, so whoever merges second rebases; keep your F5 changes in small commits. What it does: edit by day, edit by old amount, set the total (one adjustment entry with `reason: 'balance_set'`, mandatory read-back), remove or flip an older entry; "galat" right after an edit puts the earlier entry back. One named customer per sentence; "everyone to zero" and similar get a fixed `edit_refuse` line. 16 new template keys in en, hi, kn (hi and kn are machine-drafted). Please check the dialogue wording, and the new cue words in `intent.ts` (`EDIT`, `TOTAL`, `REMOVE`, `FLIP`, `SHOULD`, `WALA`).
+
+B: your part of F8 is how an adjustment looks. `ActiveEntry.reason === 'balance_set'` marks it; the feed and customer page should say "balance set" instead of showing a plain credit or payment. Also the new pending kinds `confirm_edit` and `confirm_total` show Yes and No buttons (already wired in `controller.ts`); `which_entry` is answered by voice (an amount or "first", "second", "last").
+
+Everyone: the Kannada and Hindi lines in PR #6 need the native speakers (keys `edit_*`, `confirm_edit`, `confirm_total`, `confirm_total_adv`, `total_set`, `total_unchanged`, `ask_which_entry`, `kind_*`).

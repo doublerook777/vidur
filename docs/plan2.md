@@ -156,7 +156,7 @@ Purpose: replace "more training samples" with a repeatable way to find failures.
 5. **Pass line for each round:** zero silent wrong amounts. Anything else is a bug to fix but does not block the round.
 6. Repeat the campaign after F1 to F6 land, as a regression pass.
 
-### F8: edit any customer's ledger by voice (A core, B screens)
+### F8: edit any customer's ledger by voice (core written by C in PR #6; B screens; A reviews)
 
 Why: a judge added a few entries ("Anil credit 200", "Anuj credit 100") and asked to change Anil's. Today a correction acts only on the last entry, so that fails. This is also the F8 version of B2.
 
@@ -177,6 +177,8 @@ Rules:
 - One customer per sentence. "Set everyone's balance to zero", "delete all entries" and anything without a single named customer is refused with a fixed template that asks for one name. The target total must be zero or more; an advance (customer is owed money) is not supported and gets the same kind of fixed reply.
 - Nothing is saved while a question is open; the 60 s window applies.
 - Suggested order: A merges the optional `reason` field first (a small contract PR), then the engine and templates, then B shows it in the feed and on the customer page.
+
+Status 2026-11-21: Member C wrote the core ahead of Phase 2 (PR #6, open, merge after `GATE OPEN: CP10`): the optional `reason` field, the parser cues, `editEntry` and `setTotal` in the engine, 16 templates (en, hi, kn), 58 tests, golden, held-out and red-team lines. Still to do: B's feed and customer-page display, A's review, the native speakers' check of hi and kn lines.
 
 Acceptance: scripted dialogue tests in hi, en and kn for each case (one match, several matches, none found, large amount, garbled amount, answered no, expired question); a replay test that an old ledger loads and balances are identical; red-team lines for "everyone to zero", "delete everything", an injected instruction inside a customer name, and a set-total with no customer; compliance tests green; golden and held-out lines added for cases 1 to 4.
 
