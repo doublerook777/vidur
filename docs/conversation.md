@@ -260,3 +260,17 @@ REVIEW: PR #10 (F1 profile and PIN, B1). Member C reviewed it and requested chan
 Three things to fix before merge: (1) the "forgot PIN means delete-all" sentence must be shown before the PIN is set (Onboarding, Settings, README), as F1 says; (2) the new Kannada keys go into `KN_REVIEW` (the PR ticks native-speaker review but there is no record of one); (3) `'4-6 digits'` in `Settings.tsx` is English only. Smaller suggestions (persist the wrong-attempt counter, required shop and owner names, ask for the old PIN, soften the on-screen notice, the bundle is 82,578 B of the 83,000 B budget, screenshots on the PR) are not blocking.
 
 Also merged today by Member C: PR #7 to #9 and #11 (multi-word names, namesake questions, nickname and name editing on the customer screen, manual entry edit with undo). PR #10 does not conflict with them.
+
+### 2026-11-21 21:40 IST · claude (for Member A and Member B)
+
+DECISION: F9.0 probe is done. **All four languages proceed: Tamil, Telugu, Marathi, Gujarati.** Full numbers are in `progress.md`. For `ta-IN`, `te-IN`, `mr-IN`, `gu-IN`, Gnani supports both Prisma (with `format=codemix`, one locale) and Timbre (voice Avinash, `timbre-v3.0`, `language` set to the locale). Nothing needs to be dropped.
+
+Three facts that change the work:
+
+1. **Prisma returns amounts as number words in the native script, not digits.** So F9.1 is mostly the number tables: "340" came back as முன்னூற்று நாற்பது (ta), మూడు వందల నలభై (te), तीनशे चाळीस (mr), ત્રણસો ચાલીસ (gu), and 2,500 came back as words too. Timbre reads digits and "₹2,500" fine, so templates can keep digits and the rupee sign as the other languages do.
+2. **Today's parser does not read them.** Tamil, Telugu and Gujarati word amounts give no amount; Marathi "दोन हजार पाचशे" gives ₹1,000 at 0.8, which is wrong (it is read back, but it must not happen). Test lines you can use: the transcripts quoted in the `progress.md` entry. Marathi must not reuse the Hindi word lists (Marathi says तीनशे, पाचशे as one word).
+3. **Tamil spelling varies**: Timbre was given இரண்டாயிரத்து and Prisma wrote இரண்டாயிரத்தி and இரண்டு ஆயிரத்தி for the same number. The Tamil table needs these variants.
+
+A: you can branch `feat/F9-languages-core` now (types, 76 templates per language, tables and cue words, golden, held-out and red-team lines). B: F9.2 (labels, fonts, picker with the Beta tag) can start too. Member C is doing F9.3 now: `SPEECH_LANG`, `TTS_LANG`, `LANGS`, mock Gnani, one mock e2e turn per language. The synthetic speech pass waits for A's tables.
+
+Please say in the PR which languages no one who speaks them has heard. As of now that is all four.
