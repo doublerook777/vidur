@@ -74,6 +74,7 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 - 2026-11-21: F2 pure search function implemented in `packages/core/src/names/search.ts` with ranking (whole-prefix, word-prefix, contains, one-edit typo) across scripts, nicknames, aliases, and phone digits. 11 tests in `search.test.ts` pass; `purity.test.ts` passes.
 - 2026-11-21: F4 dialogue engine implemented: exported `PENDING_TTL_MS = 60_000`, `questionSpoken()` hook, `pendingExpiresAt()`, and `pendingWindowMs()`. Added unit tests for 59s open, 61s expiry, audio-spoken clock reset, barge-in extension, and "nothing saved on expiry" across every pending kind. Total suite: 32 files / 1,499 tests pass.
 - 2026-11-21: F3 nickname dialogue flow implemented on branch feat/F3-nickname-flow (PR #3). Added ask_nickname template in en, hi, kn; handled duplicate name interception, nickname extraction, skip/no options, duplicate nickname rejection/re-ask, and disambiguation with spoken nicknames. 112 dialogue tests pass, all 1,513 workspace tests pass.
+- 2026-11-21, CP10-A passed: F0 core contract merged (`ddda513`, reconciled in `501231b`); legacy replay fixture passes with identical balances (`contract.test.ts` and `ledger.test.ts`); 34 files / 1,528 tests pass on `main`; spoken "naya customer" audit verified and merged.
 
 ### Plan 2: Member B
 
