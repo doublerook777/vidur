@@ -9,7 +9,7 @@ Built on Gnani's **Prisma** (speech to text) and **Timbre** (text to speech).
 
 **Live demo:** <https://vidur-xu96.onrender.com>. The showcase page opens for anyone. Speaking to it needs an access code (given in the description), for demo purposes only. It runs on Render's free plan, so the first load after a quiet spell can be slow while it wakes up.
 
-**Languages:** Hindi, Hinglish, English and Kannada work end to end. Seven more (Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi) are planned and not built.
+**Languages:** Seven languages work end to end: Hindi, Hinglish, English, and Kannada, plus four new Beta languages (Tamil, Telugu, Marathi, Gujarati) with native numerals, code-mixing, and self-hosted fonts.
 
 ---
 
@@ -41,16 +41,18 @@ Vidur takes the other path. It is fast, because speaking is faster than typing. 
 
 ## What it does
 
-- **Hold to talk, in four languages.** Credit and payment entries, spoken the way people talk, including code-mixed speech and Indian number forms: *dedh sau* (150), *sawa do sau* (225), *dhai hazaar* (2,500), *three forty*, native digits, and Kannada number words.
+- **Hold to talk, in seven languages.** Credit and payment entries, spoken the way people talk in Hindi, English, Kannada, Tamil, Telugu, Marathi, and Gujarati, including code-mixed speech and Indian number forms: *dedh sau* (150), *sawa do sau* (225), *dhai hazaar* (2,500), *three forty*, native digits, and Dravidian/Devanagari number words.
 - **Reads back the result,** with the customer's balance, in the shopkeeper's language. The first line of every session is a spoken AI disclosure.
-- **Answers questions by voice:** a customer's total, or how much credit went out today.
-- **Corrects and undoes:** "nahi, 500" or "galat" fixes the last entry. Every saved entry also has a 10-second undo button.
+- **Answers questions by voice:** a customer's total, voiced ledger summary, or how much credit went out today.
+- **Voice and manual edits:** edit or reverse previous entries, "change Anil's total to 1000" with mandatory read-back, and 10-second instant undo.
 - **Barge-in:** talk over the app while it is speaking and it stops at once.
-- **Asks when unsure:** *which* Ramesh? credit or payment? is this ₹1,20,000 right? A question stays open for 30 seconds and nothing awaiting an answer is saved.
+- **Asks when unsure:** *which* Ramesh? credit or payment? is this ₹1,20,000 right? A question stays open for 60 seconds with a visual countdown and nothing awaiting an answer is saved.
+- **Customer search & nicknames:** instant search by name, nickname or phone, and automatic nickname prompting for same-named customers.
+- **WhatsApp reminders, opt-in:** polite reminder links generated for WhatsApp (`wa.me`) with a 7-day rate limit and consent tracking.
+- **Local profile & PIN lock:** shop name and owner name customization, with an optional local 4-6 digit screen lock.
 - **Notes, not payments:** "Mohan kal paanch sau dega" (Mohan will pay 500 tomorrow) is saved as a note and never counts toward the balance.
-- **Polite reminders, opt-in:** at most one per customer per 7 days, in fixed wording. The app only prepares the text and the shopkeeper shares it; the app never contacts anyone.
 - **Refuses what it should:** threats, shaming, interest and lending are declined politely.
-- **Private by construction:** the ledger lives on the phone, encrypted. The server stores nothing.
+- **Private by construction:** the ledger lives on the phone, encrypted with AES-GCM. The server stores nothing.
 - **A showcase page** at `/` shows the phone in a frame, with controls for frame, theme and language, an explanation of any feature you tap, and live timings of each turn.
 
 ## Run it
