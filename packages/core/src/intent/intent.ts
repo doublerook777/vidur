@@ -43,6 +43,8 @@ const MARK_KO = W('ko को ಗೆ');
 const MARK_NE = W('ne ने');
 const MARK_POSS = W('ka ki ke का की के ಅವರ ಅವರಿಗೆ ಅವರು');
 const SEP = W('aur and phir then aur_phir tatha और फिर ಮತ್ತು ನಂತರ');
+const NEW_CUST = W('naya naye nayi new hosa नया नए नये नयी नई ಹೊಸ');
+const KHATA_CUST = W('customer khata grahak grahaka account ग्राहक खाता ಗ್ರಾಹಕ ಖಾತೆ');
 
 const STOP = W(
   'ka ki ke ko ne se me mein pe par ko hai hain ho tha thi the to ye wo woh yeh vo bhi hi bas mera meri mere mujhe hum aap please pls kya kab kaun kuch sab aaj kal parso ' +
@@ -55,7 +57,7 @@ const STOP = W(
     'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपए रुपया पैसे पैसा ' +
     'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು',
 );
-const ALL_CUES = [CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP];
+const ALL_CUES = [CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST];
 
 const DATE_WORDS: Record<string, string> = {
   aaj: 'aaj', आज: 'aaj', today: 'today', ಇಂದು: 'ಇಂದು', kal: 'kal', कल: 'kal', yesterday: 'yesterday', ನಿನ್ನೆ: 'ನಿನ್ನೆ', tomorrow: 'tomorrow', ನಾಳೆ: 'ನಾಳೆ',
@@ -140,7 +142,14 @@ function splitClauses(text: string, amounts: AmountMatch[]): Clause[] {
 
 /** Heuristic for a customer name when the ledger doesn't help: the first word that is not a cue, number or filler. */
 function guessName(tokens: { w: string; n: string }[]): string | undefined {
-  const cand = (t: { w: string; n: string }): boolean => !STOP.has(t.n) && !isCue(t.n) && !isNumberish(t.w) && !/^\p{N}/u.test(t.w) && t.n.length > 1;
+  const cand = (t: { w: string; n: string }): boolean =>
+    !STOP.has(t.n) &&
+    !isCue(t.n) &&
+    !NEW_CUST.has(t.n) &&
+    !KHATA_CUST.has(t.n) &&
+    !isNumberish(t.w) &&
+    !/^\p{N}/u.test(t.w) &&
+    t.n.length > 1;
   // Prefer the word right before a possessive or case marker.
   for (let i = 1; i < tokens.length; i++) {
     const t = tokens[i]!;
@@ -163,6 +172,10 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
   let customer: string | undefined;
   let customerKnown = false;
   const customers = ctx.customers ?? [];
+  const hasNewCust = has(NEW_CUST);
+  const hasKhataCust = has(KHATA_CUST);
+  const isExplicitNew = hasNewCust && (hasKhataCust || toks.some((t, i) => i > 0 && NEW_CUST.has(toks[i - 1]!.n)));
+
   if (customers.length) {
     const byAlias = findByAlias(text, customers);
     for (const t of toks) {
@@ -249,7 +262,12 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
     else if (amount.confidence < CONFIRM_BELOW) needs.push('amount_confirm');
     if (!who) needs.push('customer');
     if (!direction && !amount) return { ...base, intent: 'out_of_scope', needs: [] };
-    return withAmount({ ...base, intent: direction === 'payment' ? 'payment' : 'credit_entry', needs });
+    const ev = withAmount({ ...base, intent: direction === 'payment' ? 'payment' : 'credit_entry', needs });
+    if (isExplicitNew) ev.isNewCustomer = true;
+    return ev;
+  }
+  if (isExplicitNew && who) {
+    return { ...base, customerSpoken: who, intent: 'credit_entry', needs: ['direction', 'amount'], isNewCustomer: true };
   }
   return { ...base, intent: 'out_of_scope', needs: [] };
 }

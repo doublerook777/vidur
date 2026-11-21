@@ -3,7 +3,7 @@ import { say, type Key, type P, type SpeechLang } from '../i18n/index.js';
 import { detectDirection, directionByShape, guessCustomerName, interpret, isOptInStatement, residualWords, yesNo } from '../intent/index.js';
 import type { Interpretation, ParsedEvent } from '../intent/index.js';
 import type { Ledger } from '../ledger/index.js';
-import { aliasesFor, findByAlias, matchName } from '../names/index.js';
+import { aliasesFor, findByAlias, matchName, nameKey, type KnownCustomer } from '../names/index.js';
 import { CONFIRM_BELOW, parseAmount } from '../numbers/index.js';
 import { canRemind } from '../reminders/index.js';
 import { amountToSpoken } from '../speak/index.js';
@@ -47,6 +47,7 @@ interface Work {
   rest: ParsedEvent[];
   customerId?: string;
   createName?: string;
+  createNickname?: string;
   nearIds?: string[];
   candidates?: string[];
   replaceEntryId?: string;
@@ -75,6 +76,29 @@ interface Pending {
 const DAY = 24 * 60 * 60 * 1000;
 const ORDINAL_FIRST = /^(pehla|pehle|pahla|pahle|first|1|one|पहला|पहले|ಮೊದಲ|ಮೊದಲನೆ)/i;
 const ORDINAL_SECOND = /^(doosra|dusra|doosre|dusre|second|2|two|दूसरा|दूसरे|ಎರಡನೆ|ಎರಡನೇ)/i;
+
+const SKIP_WORDS = new Set([
+  'skip', 'chhod', 'chhodo', 'chhodie', 'chhod_do', 'chod', 'chodiye', 'bittubidi', 'bittu', 'bidi',
+  'छोड़', 'छोड़िए', 'छोड़ो', 'चोड़', 'चोड़दो', 'चोड़ दो', 'छोड़ दो', 'ಬಿಟ್ಟುಬಿಡಿ', 'ಬಿಡು', 'ಬೇಡ',
+]);
+
+function isSkip(text: string): boolean {
+  const normText = text.trim().toLowerCase();
+  if (SKIP_WORDS.has(normText)) return true;
+  const words = text.split(/\s+/).map((w) => w.toLowerCase());
+  return words.some((w) => SKIP_WORDS.has(w));
+}
+
+function extractNickname(text: string, baseName?: string): string | undefined {
+  let t = text.trim();
+  if (!t) return undefined;
+  if (baseName) {
+    const re = new RegExp(`^${baseName}\\s+(?:ka\\s+|ki\\s+|ke\\s+)?`, 'iu');
+    t = t.replace(re, '').trim();
+  }
+  t = t.replace(/^(?:nickname|उपनाम|निकनेम)\s+/iu, '').trim();
+  return t.length > 0 ? t : undefined;
+}
 
 export class Dialogue {
   private disclosed = false;
@@ -271,8 +295,18 @@ export class Dialogue {
     // Entries and notes
     if (w.mode === 'note') return this.saveNote(w);
 
-    if (ev.needs.includes('direction') && !w.replaceEntryId) return this.ask(w, 'direction', this.r('ask_direction'));
-    if (ev.amountPaise === undefined) return this.ask(w, 'amount', this.r('ask_amount'));
+    if (ev.needs.includes('direction') && !w.replaceEntryId) {
+      if (w.ev.isNewCustomer && ev.amountPaise === undefined) {
+        return this.commitCustomerOnly(w);
+      }
+      return this.ask(w, 'direction', this.r('ask_direction'));
+    }
+    if (ev.amountPaise === undefined) {
+      if (w.ev.isNewCustomer) {
+        return this.commitCustomerOnly(w);
+      }
+      return this.ask(w, 'amount', this.r('ask_amount'));
+    }
     if (!w.amountOk && (ev.needs.includes('amount_confirm') || (ev.amountConfidence ?? 1) < CONFIRM_BELOW)) {
       return this.ask(w, 'confirm_amount', this.r('confirm_amount', { amount: this.money(ev.amountPaise) }));
     }
@@ -300,15 +334,22 @@ export class Dialogue {
     const customers = this.o.ledger.customers();
     const m = matchName(spoken, customers, w.ev.text);
     if (m.kind === 'exact') {
+      if (w.ev.isNewCustomer) {
+        w.createName = spoken;
+        return this.ask(w, 'nickname', this.r('ask_nickname', { name: spoken }));
+      }
       w.customerId = m.customerId;
       return undefined;
     }
     if (m.kind === 'ambiguous') {
+      if (w.ev.isNewCustomer) {
+        w.createName = spoken;
+        return this.ask(w, 'nickname', this.r('ask_nickname', { name: spoken }));
+      }
       w.candidates = m.customerIds;
-      const aliases = m.customerIds.map((id) => aliasesFor(customers.find((c) => c.id === id)?.aliases ?? [], this.o.lang)[0]);
-      if (aliases.every((a): a is string => !!a)) {
-        const joiner = ` ${say(this.o.lang, 'or')} `;
-        return this.ask(w, 'which', this.r('ask_which', { name: spoken, options: aliases.join(joiner) }));
+      const options = this.formatAmbiguousOptions(m.customerIds, customers);
+      if (options) {
+        return this.ask(w, 'which', this.r('ask_which', { name: spoken, options }));
       }
       return this.ask(w, 'which', this.r('ask_which_ordinal', { name: spoken }));
     }
@@ -322,7 +363,33 @@ export class Dialogue {
     return this.ask(w, 'new_customer', this.r('confirm_new_customer', { name: spoken }));
   }
 
+  private formatAmbiguousOptions(candidateIds: string[], customers: KnownCustomer[]): string | undefined {
+    const labels = candidateIds.map((id) => {
+      const c = customers.find((cust) => cust.id === id);
+      if (!c) return undefined;
+      if (c.nickname) return `${c.name} ${c.nickname}`;
+      const alias = aliasesFor(c.aliases, this.o.lang)[0];
+      return alias ?? undefined;
+    });
+    if (labels.every((l): l is string => !!l)) {
+      const joiner = ` ${say(this.o.lang, 'or')} `;
+      return labels.join(joiner);
+    }
+    return undefined;
+  }
+
   // ---------------------------------------------------------------- actions
+
+  private async commitCustomerOnly(w: Work): Promise<Reply[]> {
+    const L = this.o.ledger;
+    if (w.createName) {
+      const aliases = w.createNickname ? [w.createNickname] : [];
+      const c = await L.createCustomer(w.createName, aliases, w.createNickname ? { nickname: w.createNickname } : undefined);
+      w.customerId = c.id;
+      return [this.r('new_customer', { name: c.nickname ? `${c.name} ${c.nickname}` : c.name })];
+    }
+    return [this.r('didnt_catch')];
+  }
 
   private async commitEntry(w: Work): Promise<Reply[]> {
     const L = this.o.ledger;
@@ -330,9 +397,10 @@ export class Dialogue {
     const out: Reply[] = [];
     let customerId = w.customerId;
     if (!customerId && w.createName) {
-      const c = await L.createCustomer(w.createName);
+      const aliases = w.createNickname ? [w.createNickname] : [];
+      const c = await L.createCustomer(w.createName, aliases, w.createNickname ? { nickname: w.createNickname } : undefined);
       customerId = c.id;
-      out.push(this.r('new_customer', { name: c.name }));
+      out.push(this.r('new_customer', { name: c.nickname ? `${c.name} ${c.nickname}` : c.name }));
     }
     if (!customerId) return [this.r('didnt_catch')];
     const kind = ev.intent === 'payment' ? 'payment' : 'credit';
@@ -362,8 +430,10 @@ export class Dialogue {
     const out: Reply[] = [];
     let customerId = w.customerId;
     if (!customerId && w.createName) {
-      customerId = (await L.createCustomer(w.createName)).id;
-      out.push(this.r('new_customer', { name: w.createName }));
+      const aliases = w.createNickname ? [w.createNickname] : [];
+      const c = await L.createCustomer(w.createName, aliases, w.createNickname ? { nickname: w.createNickname } : undefined);
+      customerId = c.id;
+      out.push(this.r('new_customer', { name: c.nickname ? `${c.name} ${c.nickname}` : c.name }));
     }
     if (!customerId) return [this.r('didnt_catch')];
     const due = this.dayStart(ev.dateToken, this.o.clock());
@@ -461,7 +531,7 @@ export class Dialogue {
     if (peek) {
       const full = (peek.intent === 'credit_entry' || peek.intent === 'payment') && peek.customerSpoken && peek.amountPaise !== undefined && !peek.needs.includes('direction') && residualWords(text) >= 2;
       if (full) return undefined;
-      const yesNoKind = p.kind === 'confirm_amount' || p.kind === 'near' || p.kind === 'consent' || p.kind === 'new_customer';
+      const yesNoKind = p.kind === 'confirm_amount' || p.kind === 'near' || p.kind === 'consent' || p.kind === 'new_customer' || p.kind === 'nickname';
       if (!yesNoKind && peek.intent === 'correction' && peek.correction?.kind === 'undo') {
         clear();
         return [this.r('dropped_pending')];
@@ -542,7 +612,14 @@ export class Dialogue {
       case 'new_customer': {
         const yn = yesNo(text);
         if (yn === 'yes') {
-          w.createName = w.ev.customerSpoken;
+          const createName = w.ev.customerSpoken;
+          w.createName = createName;
+          const customers = this.o.ledger.customers();
+          const alreadyExists = createName && customers.some((c) => nameKey(c.name) === nameKey(createName));
+          if (alreadyExists) {
+            clear();
+            return this.ask(w, 'nickname', this.r('ask_nickname', { name: createName }));
+          }
           return proceed();
         }
         if (yn === 'no') {
@@ -557,6 +634,37 @@ export class Dialogue {
           return this.ask(w, 'customer', this.r('ask_customer'));
         }
         return undefined;
+      }
+      case 'nickname': {
+        const yn = yesNo(text);
+        const skip = isSkip(text) || yn === 'no';
+        if (skip) {
+          w.createNickname = undefined;
+          return proceed();
+        }
+        const nick = extractNickname(text, w.createName);
+        if (!nick) {
+          w.asked += 1;
+          if (w.asked >= 2) {
+            clear();
+            return [this.r('didnt_catch'), this.r('dropped_pending')];
+          }
+          return this.reaskNickname(p);
+        }
+        const createName = w.createName ?? w.ev.customerSpoken ?? '';
+        const sameNameCustomers = this.o.ledger.customers().filter((c) => nameKey(c.name) === nameKey(createName));
+        const nickKey = nameKey(nick);
+        const nickTaken = sameNameCustomers.some((c) => c.nickname && nameKey(c.nickname) === nickKey);
+        if (nickTaken) {
+          w.asked += 1;
+          if (w.asked >= 2) {
+            clear();
+            return [this.r('didnt_catch'), this.r('dropped_pending')];
+          }
+          return this.reaskNickname(p);
+        }
+        w.createNickname = nick;
+        return proceed();
       }
       case 'customer': {
         const name = guessCustomerName(text);
@@ -584,13 +692,19 @@ export class Dialogue {
     return this.ask(w, 'new_customer', this.r('confirm_new_customer', { name: w.ev.customerSpoken ?? '' }));
   }
 
+  private reaskNickname(p: Pending): Reply[] {
+    p.expiresAt = this.o.clock() + this.o.pendingTtlMs;
+    const name = p.work.createName ?? p.work.ev.customerSpoken ?? '';
+    return [this.r('ask_nickname', { name })];
+  }
+
   private reask(p: Pending): Reply[] {
     const w = p.work;
     const customers = this.o.ledger.customers();
-    const aliases = (w.candidates ?? []).map((id) => aliasesFor(customers.find((c) => c.id === id)?.aliases ?? [], this.o.lang)[0]);
     p.expiresAt = this.o.clock() + this.o.pendingTtlMs;
-    if (aliases.every((a): a is string => !!a)) {
-      return [this.r('ask_which', { name: w.ev.customerSpoken ?? '', options: aliases.join(` ${say(this.o.lang, 'or')} `) })];
+    const options = this.formatAmbiguousOptions(w.candidates ?? [], customers);
+    if (options) {
+      return [this.r('ask_which', { name: w.ev.customerSpoken ?? '', options })];
     }
     return [this.r('ask_which_ordinal', { name: w.ev.customerSpoken ?? '' })];
   }

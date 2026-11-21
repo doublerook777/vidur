@@ -4,6 +4,7 @@ export interface KnownCustomer {
   id: string;
   name: string;
   aliases: string[];
+  nickname?: string;
 }
 
 export type NameMatch =
@@ -36,11 +37,21 @@ export function matchName(spoken: string, customers: KnownCustomer[], context = 
   const key = nameKey(spoken);
   if (!key) return { kind: 'none' };
   const first = (c: KnownCustomer): string => nameKey(c.name.split(/\s+/)[0] ?? c.name);
-  let hits = customers.filter((c) => nameKey(c.name) === key || first(c) === key || c.aliases.some((a) => nameKey(a) === key));
+  let hits = customers.filter(
+    (c) =>
+      nameKey(c.name) === key ||
+      first(c) === key ||
+      (c.nickname ? nameKey(c.nickname) === key : false) ||
+      c.aliases.some((a) => nameKey(a) === key),
+  );
   if (hits.length > 1) {
-    // Try to pick one with an alias said anywhere in the utterance.
+    // Try to pick one with an alias or nickname said anywhere in the utterance.
     const ctxKeys = new Set(windows(tokensOf(context + ' ' + spoken)).map(nameKey));
-    const byAlias = hits.filter((c) => c.aliases.some((a) => ctxKeys.has(nameKey(a))));
+    const byAlias = hits.filter(
+      (c) =>
+        c.aliases.some((a) => ctxKeys.has(nameKey(a))) ||
+        (c.nickname ? ctxKeys.has(nameKey(c.nickname)) || ctxKeys.has(nameKey(`${c.name} ${c.nickname}`)) : false),
+    );
     if (byAlias.length === 1) hits = byAlias;
   }
   if (hits.length === 1) return { kind: 'exact', customerId: hits[0]!.id };
@@ -58,15 +69,26 @@ export function matchName(spoken: string, customers: KnownCustomer[], context = 
 export function findByAlias(text: string, customers: KnownCustomer[]): KnownCustomer[] {
   const ws = windows(tokensOf(text));
   const exact = new Set(ws.map(nameKey));
-  const hits = customers.filter((c) => c.aliases.some((a) => exact.has(nameKey(a))));
+  const hits = customers.filter(
+    (c) =>
+      c.aliases.some((a) => exact.has(nameKey(a))) ||
+      (c.nickname ? exact.has(nameKey(c.nickname)) || exact.has(nameKey(`${c.name} ${c.nickname}`)) : false),
+  );
   if (hits.length) return hits;
   // Speech-to-text spells the same words differently in each script ("दूध वाले", "ದೂದ್ ವಾಲೆ", "doodh valle"), so allow one slip.
   const loose = ws.map(looseKey).filter((k) => k.length >= 5);
-  return customers.filter((c) =>
-    c.aliases.some((a) => {
-      const k = looseKey(a);
-      return k.length >= 5 && loose.some((l) => l === k || editDistance(l, k) <= 1);
-    }),
+  return customers.filter(
+    (c) =>
+      c.aliases.some((a) => {
+        const k = looseKey(a);
+        return k.length >= 5 && loose.some((l) => l === k || editDistance(l, k) <= 1);
+      }) ||
+      (c.nickname
+        ? ((): boolean => {
+            const k = looseKey(c.nickname!);
+            return k.length >= 5 && loose.some((l) => l === k || editDistance(l, k) <= 1);
+          })()
+        : false),
   );
 }
 
