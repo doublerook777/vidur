@@ -7,31 +7,23 @@
 
 export type LedgerEventType =
   | 'customer_created'
-  | 'customer_updated'
   | 'entry_posted'
   | 'entry_reversed'
   | 'note_added'
   | 'consent_set'
   | 'reminder_sent'
-  | 'customer_alias_added';
+  | 'customer_alias_added'
+  | 'customer_updated';
 
 export interface CustomerCreatedEvent {
   type: 'customer_created';
   id: string;
   customerId: string;
   name: string;
-  nickname?: string;
-  phone?: string;
   aliases: string[];
-  recordedAt: number;
-}
-
-export interface CustomerUpdatedEvent {
-  type: 'customer_updated';
-  id: string;
-  customerId: string;
-  name?: string;
+  /** Tells two customers with the same name apart, for example "dairy" in "Ramesh (dairy)". Optional so old events replay unchanged. */
   nickname?: string;
+  /** Digits only, as the shopkeeper typed them (country code optional). Optional so old events replay unchanged. */
   phone?: string;
   recordedAt: number;
 }
@@ -93,15 +85,29 @@ export interface CustomerAliasAddedEvent {
   recordedAt: number;
 }
 
+/**
+ * Edits a customer after creation. Only the fields present change; the latest event wins.
+ * An empty string clears `nickname` or `phone`. `name` is never cleared.
+ */
+export interface CustomerUpdatedEvent {
+  type: 'customer_updated';
+  id: string;
+  customerId: string;
+  name?: string;
+  nickname?: string;
+  phone?: string;
+  recordedAt: number;
+}
+
 export type LedgerEvent =
   | CustomerCreatedEvent
-  | CustomerUpdatedEvent
   | EntryPostedEvent
   | EntryReversedEvent
   | NoteAddedEvent
   | ConsentSetEvent
   | ReminderSentEvent
-  | CustomerAliasAddedEvent;
+  | CustomerAliasAddedEvent
+  | CustomerUpdatedEvent;
 
 export interface LedgerStore {
   append(event: LedgerEvent): Promise<void>;
@@ -128,9 +134,9 @@ export class MemoryStore implements LedgerStore {
 export interface Customer {
   id: string;
   name: string;
+  aliases: string[];
   nickname?: string;
   phone?: string;
-  aliases: string[];
 }
 
 export interface ActiveEntry {

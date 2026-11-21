@@ -6,6 +6,7 @@ export {
   type Customer,
   type CustomerAliasAddedEvent,
   type CustomerCreatedEvent,
+  type CustomerUpdatedEvent,
   type EntryKind,
   type EntryPostedEvent,
   type EntryReversedEvent,

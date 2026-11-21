@@ -78,7 +78,7 @@ const ORDINAL_FIRST = /^(pehla|pehle|pahla|pahle|first|1|one|पहला|पह
 const ORDINAL_SECOND = /^(doosra|dusra|doosre|dusre|second|2|two|दूसरा|दूसरे|ಎರಡನೆ|ಎರಡನೇ)/i;
 
 const SKIP_WORDS = new Set([
-  'skip', 'chhod', 'chhodo', 'chhodie', 'chhod_do', 'chod', 'chodiye', 'bittubidi', 'bittu', 'bidi',
+  'skip', 'chhod', 'chhodo', 'chhodie', 'chhod_do', 'chod', 'chodiye', 'bittubidi',
   'छोड़', 'छोड़िए', 'छोड़ो', 'चोड़', 'चोड़दो', 'चोड़ दो', 'छोड़ दो', 'ಬಿಟ್ಟುಬಿಡಿ', 'ಬಿಡು', 'ಬೇಡ',
 ]);
 
@@ -93,7 +93,8 @@ function extractNickname(text: string, baseName?: string): string | undefined {
   let t = text.trim();
   if (!t) return undefined;
   if (baseName) {
-    const re = new RegExp(`^${baseName}\\s+(?:ka\\s+|ki\\s+|ke\\s+)?`, 'iu');
+    const escaped = baseName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`^${escaped}\\s+(?:ka\\s+|ki\\s+|ke\\s+)?`, 'iu');
     t = t.replace(re, '').trim();
   }
   t = t.replace(/^(?:nickname|उपनाम|निकनेम)\s+/iu, '').trim();

@@ -636,6 +636,26 @@ describe('a spoken correction never becomes a customer (the first usability test
   });
 
   describe('F3: nickname flow for duplicate customer accounts', () => {
+    it('a nickname that holds a word like bidi is a nickname, not a skip', async () => {
+      const { ledger, d, say1 } = await setup('en');
+      await ledger.createCustomer('Ramesh');
+      d.start();
+      await say1('new customer Ramesh 500 credit');
+      const rs = await say1('bidi shop');
+      expect(keys(rs)).toEqual(['new_customer', 'credit_saved']);
+      expect(ledger.customers().some((c) => c.nickname === 'bidi shop')).toBe(true);
+    });
+
+    it('a name with regex characters in it does not crash the nickname answer', async () => {
+      const { ledger, d, say1 } = await setup('en');
+      await ledger.createCustomer('Ra(mesh');
+      d.start();
+      await say1('new customer Ra(mesh 500 credit');
+      if (d.pendingKind() === 'nickname') {
+        await expect(say1('dairy')).resolves.toBeDefined();
+      }
+    });
+
     it('nickname given in en: creates customer with nickname and posts credit', async () => {
       const { ledger, d, say1 } = await setup('en');
       const r1 = await ledger.createCustomer('Ramesh');
