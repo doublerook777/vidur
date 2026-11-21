@@ -39,7 +39,7 @@ Rules that never bend are in `CLAUDE.md` (integer paise, fixed reply templates, 
 | I4 | P2 | open | unassigned | Real low-end Android check | Only tested on one mid-range phone. Needs a person with a low-end phone. |
 | I5 | P2 | open | C | Hosted copy on mobile data | Not yet timed from a phone. Phase 3. |
 | I6 | P2 | open | unassigned | Stale mock server processes | pids 89168, 97102, 97684 may still run on one machine: `kill 89168 97102 97684`. |
-| I7 | P2 | open | C | Add a gzipped JS size budget to CI or the baseline | 58.5 KB at last count. Set the budget with about 20% headroom after Phase 0. |
+| I7 | P2 | open | C | Add a gzipped JS size budget to CI or the baseline | Baseline 2026-11-21: 69,455 bytes gzipped across all three bundles. Proposed budget 83,000 bytes (20% headroom). |
 
 ## Done
 

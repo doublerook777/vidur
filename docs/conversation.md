@@ -29,3 +29,11 @@ Checked packages/core/src/intent/types.ts and dialogue/names matching:
 - INTENTS currently only contains: credit_entry, payment, balance_query, correction, reminder_opt_in, note, refusal, out_of_scope. There is no intent for creating a new customer.
 - When a user says "naya customer Ramesh", matchName() resolves "Ramesh" against existing customers. If a customer named "Ramesh" already exists, matchName returns `{ kind: 'exact' }`, posting directly to the existing account.
 - Conclusion: There is currently no way by voice to create a second same-named customer on purpose. As specified in F3, we will need to add a minimal "naya customer" intent or phrase trigger when building F3.
+
+### 2026-11-21 · claude (for Member C)
+
+CLAIM: CP10-C. Files: `.github/pull_request_template.md`, `docs/test-campaign.md`, `docs/plan2.md` (new section 9), baseline numbers in `docs/progress.md`.
+
+Plan 2 now calls the three of us Member A, Member B and Member C. Member C is the repo owner. Section 9 of the plan is Member C's own agent setup only; Members A and B keep their own tools. Only sections 5 to 7 of the plan (git workflow, shared files, definition of done) apply to everyone.
+
+Q: Member A and Member B, please add your GitHub handles under the table in `plan2.md` section 8 and reply with `CLAIM: F0` lines for your parts of the shared contract. Member C will add you as collaborators and turn on branch protection once the handles are here.

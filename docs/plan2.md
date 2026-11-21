@@ -368,3 +368,30 @@ Only Member C deploys, from a clean `main`: all checks above green, then trigger
 | A | Member A | Supervisor (Antigravity), pi (NVIDIA free), qwen |
 | B | _fill in_ | |
 | C | you (repo owner) | |
+
+## 9. How Member C uses cheaper agents (Member C's own setup)
+
+This section describes how **Member C** saves Claude tokens. Members A and B run their own agent setups and tools; nothing here binds them. The only things that bind everyone are sections 5 to 7: the git workflow, the shared files and the definition of done. Whoever or whatever writes the code, the same checks apply.
+
+Tools on Member C's machine: `pi` with an NVIDIA Nemotron model, and `agy` (Antigravity) with Gemini 3.8 Flash. Both run one prompt and exit (`pi -p "..."`, `agy -p "..." --model gemini-3.8-flash-medium`). Both are hosted models.
+
+**Principle:** give cheap models work where a command tells us whether the result is right. Claude handles anything where a mistake breaks the money or privacy rules.
+
+| Task | Done by | Check before it is committed |
+|---|---|---|
+| Money parsing, dialogue engine, name matching, the core of F3, F4, F5, B2 | Claude | Scripted dialogue tests, compliance and red-team suites |
+| Reviews of PRs, compliance and privacy checks, planning | Claude | n/a |
+| Hindi, English and Kannada template drafts | `agy` | Native-speaker review for Kannada; `templates.test.ts` |
+| Extra utterances for the golden, held-out and red-team sets (F7) | `agy` | The schema and validation tests in `eval/*`; every line read by a human |
+| UI screens (F1, F2 search box, nickname prompt, countdown, B1) | `pi` | `ui.test.ts`, browser checks, Claude reviews the diff |
+| Unit tests for finished code | `pi` | Tests must fail when the code is broken on purpose |
+| Test log entries, screenshots, PR descriptions, web research, load-test script | `pi` | Output is checked against real numbers or sources |
+
+**Rules**
+
+1. Each delegated task has a written spec: files it may touch, acceptance commands, what it must not do.
+2. A delegated agent works on its own branch or worktree and never pushes to `main`.
+3. No secrets, access codes or real customer data are given to a hosted model. Only code and synthetic data.
+4. The person running the agent runs the acceptance commands and reads the diff before committing. If a task fails the check twice, Claude takes it over.
+5. Reuse an idle `pi` until it is about 70% full, and keep each one visible in the `pi-agents` tab.
+6. Agent signatures in `conversation.md` name the person: `pi (for Member C)`, `agy (for Member C)`.

@@ -73,6 +73,9 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 
 ### Plan 2: Member C
 
+- 2026-11-21, baseline on `main` before any Plan 2 code (CP10-C): `typecheck`, `lint`, `build` exit 0; `npm test` 31 files / 1,482 tests pass; browser e2e (mock Gnani, fake mic) 77/77; gzipped JS across all three bundles in `apps/web/dist/assets` is 69,455 bytes (about 68 KB), so the proposed budget with 20% headroom is 83,000 bytes.
+- 2026-11-21: added `.github/pull_request_template.md`, `docs/test-campaign.md` and plan2 section 9 (Member C's own agent setup). Still open for CP10-C: collaborators and branch protection (need Members A and B's GitHub handles).
+
 ### 2026-11-21 (setup, claude for the team)
 
 - Moved this file from `references/` into `docs/` so we can share it. Added `docs/bugs&improvements.md`, `docs/conversation.md` and `docs/plan2.md`. Rechecked B1 in mock mode at 390 and 360 px: the Kannada "paid today" label still overlaps the Add entry button. Kannada strings were reviewed with a native speaker (reported by the team).
