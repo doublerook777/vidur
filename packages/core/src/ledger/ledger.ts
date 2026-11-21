@@ -89,8 +89,18 @@ export class Ledger {
     this.events.push(event);
   }
 
-  async createCustomer(name: string, aliases: string[] = [], nickname?: string, phone?: string): Promise<Customer> {
+  async createCustomer(
+    name: string,
+    aliases: string[] = [],
+    extraOrNickname?: { nickname?: string; phone?: string } | string,
+    phoneArg?: string,
+  ): Promise<Customer> {
+    const extra = typeof extraOrNickname === 'string'
+      ? { nickname: extraOrNickname, phone: phoneArg }
+      : (extraOrNickname ?? {});
     const customerId = this.newId();
+    const nickname = extra.nickname?.trim() || undefined;
+    const phone = extra.phone?.trim() || undefined;
     const event: CustomerCreatedEvent = {
       type: 'customer_created',
       id: this.newId(),
@@ -102,24 +112,26 @@ export class Ledger {
       recordedAt: this.clock(),
     };
     await this.append(event);
-    const customer: Customer = { id: customerId, name, aliases: [...aliases] };
-    if (nickname !== undefined) customer.nickname = nickname;
-    if (phone !== undefined) customer.phone = phone;
-    return customer;
+    return {
+      id: customerId,
+      name,
+      aliases: [...aliases],
+      ...(nickname !== undefined ? { nickname } : {}),
+      ...(phone !== undefined ? { phone } : {}),
+    };
   }
 
-  async updateCustomer(customerId: string, patch: { name?: string; nickname?: string; phone?: string }): Promise<void> {
-    const target = this.customer(customerId);
-    if (!target) {
-      throw new Error(`updateCustomer: no customer with id ${customerId}`);
-    }
+  /** Changes a customer's name, nickname or phone. Pass an empty string to clear a nickname or phone. Unknown customers are ignored. */
+  async updateCustomer(customerId: string, changes: { name?: string; nickname?: string; phone?: string }): Promise<void> {
+    if (!this.customer(customerId)) return;
+    const name = changes.name?.trim();
     const event: CustomerUpdatedEvent = {
       type: 'customer_updated',
       id: this.newId(),
       customerId,
-      ...(patch.name !== undefined ? { name: patch.name } : {}),
-      ...(patch.nickname !== undefined ? { nickname: patch.nickname } : {}),
-      ...(patch.phone !== undefined ? { phone: patch.phone } : {}),
+      ...(name ? { name } : {}),
+      ...(changes.nickname !== undefined ? { nickname: changes.nickname.trim() } : {}),
+      ...(changes.phone !== undefined ? { phone: changes.phone.trim() } : {}),
       recordedAt: this.clock(),
     };
     await this.append(event);
@@ -211,19 +223,27 @@ export class Ledger {
     const byId = new Map<string, Customer>();
     for (const e of this.events) {
       if (e.type === 'customer_created') {
-        const c: Customer = { id: e.customerId, name: e.name, aliases: [...e.aliases] };
-        if (e.nickname !== undefined) c.nickname = e.nickname;
-        if (e.phone !== undefined) c.phone = e.phone;
-        byId.set(e.customerId, c);
+        byId.set(e.customerId, {
+          id: e.customerId,
+          name: e.name,
+          aliases: [...e.aliases],
+          ...(e.nickname ? { nickname: e.nickname } : {}),
+          ...(e.phone ? { phone: e.phone } : {}),
+        });
       } else if (e.type === 'customer_alias_added') {
         const c = byId.get(e.customerId);
         if (c && !c.aliases.includes(e.alias)) c.aliases.push(e.alias);
       } else if (e.type === 'customer_updated') {
         const c = byId.get(e.customerId);
-        if (c) {
-          if (e.name !== undefined) c.name = e.name;
-          if (e.nickname !== undefined) c.nickname = e.nickname;
-          if (e.phone !== undefined) c.phone = e.phone;
+        if (!c) continue;
+        if (e.name) c.name = e.name;
+        if (e.nickname !== undefined) {
+          if (e.nickname) c.nickname = e.nickname;
+          else delete c.nickname;
+        }
+        if (e.phone !== undefined) {
+          if (e.phone) c.phone = e.phone;
+          else delete c.phone;
         }
       }
     }

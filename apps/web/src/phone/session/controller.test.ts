@@ -312,4 +312,15 @@ describe('adding and removing entries by hand, and tapping answers', () => {
     await new Promise((r) => setTimeout(r, 150));
     expect(session!.state.history.length).toBe(before);
   });
+
+  it('updateCustomer sets a nickname and phone that show up on the customer row (F0)', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, true);
+    const id = session!.state.customers[0]!.id;
+    session!.actions.updateCustomer(id, { nickname: 'dairy', phone: '9876543210' });
+    await until(() => session!.state.customers.find((c) => c.id === id)?.nickname === 'dairy');
+    expect(session!.state.customers.find((c) => c.id === id)?.phone).toBe('9876543210');
+    session!.actions.updateCustomer(id, { nickname: '' });
+    await until(() => session!.state.customers.find((c) => c.id === id)?.nickname === undefined);
+  });
 });

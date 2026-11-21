@@ -21,7 +21,9 @@ export interface CustomerCreatedEvent {
   customerId: string;
   name: string;
   aliases: string[];
+  /** Tells two customers with the same name apart, for example "dairy" in "Ramesh (dairy)". Optional so old events replay unchanged. */
   nickname?: string;
+  /** Digits only, as the shopkeeper typed them (country code optional). Optional so old events replay unchanged. */
   phone?: string;
   recordedAt: number;
 }
@@ -83,6 +85,10 @@ export interface CustomerAliasAddedEvent {
   recordedAt: number;
 }
 
+/**
+ * Edits a customer after creation. Only the fields present change; the latest event wins.
+ * An empty string clears `nickname` or `phone`. `name` is never cleared.
+ */
 export interface CustomerUpdatedEvent {
   type: 'customer_updated';
   id: string;

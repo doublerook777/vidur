@@ -349,7 +349,8 @@ describe('Ledger', () => {
     expect(fetched?.name).toBe('Ramesh Kumar');
     expect(fetched?.nickname).toBe('main branch');
 
-    await expect(ledger.updateCustomer('non-existent', { name: 'Nobody' })).rejects.toThrow();
+    await ledger.updateCustomer('non-existent', { name: 'Nobody' });
+    expect(ledger.customer('non-existent')).toBeNull();
   });
 });
 

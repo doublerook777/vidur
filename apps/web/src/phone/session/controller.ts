@@ -341,21 +341,20 @@ export class PhoneSession {
     dismissToast: () => this.dismissToast(),
     answer: (a) => void this.answer(a),
     cancelAnswer: () => this.cancelAnswer(),
+    updateCustomer: (id, changes) => void this.ledger.updateCustomer(id, changes).then(() => this.refresh()),
+    // Not built yet. Each stays a no-op until its work package lands (see docs/plan2.md): F1 profile and PIN, F5 summary, F6 WhatsApp.
+    saveProfile: () => undefined,
+    setPin: () => undefined,
+    clearPin: () => undefined,
+    unlock: () => undefined,
+    remindOnWhatsApp: () => undefined,
+    speakSummary: () => undefined,
     retry: () => {
       this.store.update({ error: null });
       this.gateway.close();
       this.connect();
     },
     finishOnboarding: (o) => void this.finishOnboarding(o),
-    saveProfile: () => undefined,
-    setPin: () => undefined,
-    clearPin: () => undefined,
-    unlock: async () => true,
-    updateCustomer: (id, patch) => {
-      void this.ledger.updateCustomer(id, patch).then(() => this.refresh());
-    },
-    remindOnWhatsApp: () => undefined,
-    speakSummary: () => undefined,
   };
 
   /** Called from the first mic press, which is a user gesture, so the browser allows audio to start. */
