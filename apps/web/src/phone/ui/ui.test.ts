@@ -65,6 +65,16 @@ describe('manual new customer', () => {
   });
 });
 
+describe('name on the customer detail screen', () => {
+  it('shows the name with an edit button, in every language', () => {
+    for (const lang of ['en', 'hi', 'kn'] as const) {
+      const html = renderToString(h(CustomerDetail, { vm: mockCustomerDetailVM, actions: mockActions, lang }));
+      expect(html).toContain(`${LABELS[lang].nameLabel}: ${mockCustomerDetailVM.customer.name}`);
+      expect(html).toContain(LABELS[lang].editName);
+    }
+  });
+});
+
 describe('nickname on the customer detail screen', () => {
   const withNick = { ...mockCustomerDetailVM, customer: { ...mockCustomerDetailVM.customer, nickname: 'dairy' } };
   const without = { ...mockCustomerDetailVM, customer: { ...mockCustomerDetailVM.customer, nickname: undefined } };

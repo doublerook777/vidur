@@ -97,6 +97,8 @@ export interface CustomerDetailVM {
   reminderBlockedReason: 'no_consent' | 'too_soon' | 'nothing_due' | null;
   /** Nicknames already used by other customers with this same name, so the screen can refuse a repeat. */
   takenNicknames?: string[];
+  /** The other customers' names and nicknames, so renaming can warn about a namesake and refuse an exact repeat. */
+  otherCustomers?: { name: string; nickname?: string }[];
 }
 
 export interface SettingsVM {

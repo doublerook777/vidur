@@ -56,5 +56,9 @@ export function customerDetail(ledger: Ledger, id: string, now: number): Custome
       .customers()
       .filter((c) => c.id !== id && nameKey(c.name) === nameKey(row.name) && c.nickname)
       .map((c) => c.nickname!),
+    otherCustomers: ledger
+      .customers()
+      .filter((c) => c.id !== id)
+      .map((c) => ({ name: c.name, ...(c.nickname ? { nickname: c.nickname } : {}) })),
   };
 }

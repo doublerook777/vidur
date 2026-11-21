@@ -28,3 +28,31 @@ describe('customer detail: nicknames already taken by namesakes', () => {
     expect(customerDetail(l, c.id, 2_000)!.customer.nickname).toBeUndefined();
   });
 });
+
+describe('customer detail: renaming', () => {
+  it('lists the other customers, never the one being shown', async () => {
+    const l = await ledger();
+    const a = await l.createCustomer('Ramesh', [], { nickname: 'dairy' });
+    await l.createCustomer('Sunita');
+    expect(customerDetail(l, a.id, 2_000)!.otherCustomers).toEqual([{ name: 'Sunita' }]);
+  });
+
+  it('a new name shows everywhere the customer is shown: detail, entries and balance stay with the same customer', async () => {
+    const l = await ledger();
+    const c = await l.createCustomer('Ramseh');
+    await l.postEntry({ customerId: c.id, kind: 'credit', paise: 12_300 });
+    await l.updateCustomer(c.id, { name: '  Ramesh  ' });
+    const d = customerDetail(l, c.id, 2_000)!;
+    expect(d.customer.name).toBe('Ramesh');
+    expect(d.customer.balancePaise).toBe(12_300);
+    expect(d.entries).toHaveLength(1);
+  });
+
+  it('an empty name is ignored, the old one stays', async () => {
+    const l = await ledger();
+    const c = await l.createCustomer('Ramesh');
+    await l.updateCustomer(c.id, { name: '   ' });
+    expect(customerDetail(l, c.id, 2_000)!.customer.name).toBe('Ramesh');
+  });
+});
+
