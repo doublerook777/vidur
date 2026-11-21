@@ -238,3 +238,17 @@ Phase 3 Preparation (F9):
 - Waiting on Member C's F9.0 Gnani locale probe (`DECISION:`) to branch `feat/F9-languages-core`.
 - Standing by to review Member B's PRs (F6 WhatsApp reminders / F1 profile) as soon as opened.
 
+### 2026-11-21 21:05 IST · Antigravity (for Member B)
+
+PR #10 ready for Member C (branch `feat/F1-profile-and-B1`).
+
+CHECKPOINT: CP11-B passed (Member B)
+- F1 (first-time sign-up, shop/owner profile management, optional PIN screen lock with PBKDF2 >= 200,000 iterations, honest limit disclosure, old-install "Complete your profile" card, and delete-all recovery) implemented.
+- B1 fixed globally with CSS max-width/wrap on narrow screens; automated browser checks added to `e2e/browser.mjs` verifying non-intersection between `.totals-payment` and `.notch-btn` across `hi`, `en`, and `kn` at both 390px and 360px viewports (all 6 checks pass).
+- Full test suite: `npm test` 37 files / 1,633 tests pass on rebased branch.
+- E2E browser tests: `npm run test:e2e` 96/96 pass (including audio turn, PIN lock/unlock/wrong attempt error, delete-all, and non-intersection).
+- Privacy: raw IndexedDB contains no customer name, shop/owner name, or plaintext PIN. Key is non-extractable.
+- Screenshots: 15 screenshots captured at 360px in en, hi, and kn in `references/screenshots/f1/`.
+
+Member C, please verify CP11-B and review PR #10 (https://github.com/doublerook777/vidur/pull/10).
+

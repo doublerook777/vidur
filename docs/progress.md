@@ -83,6 +83,7 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 
 - 2026-11-21: B1 Kannada label clipping fixed in `apps/web/src/phone/ui/phone.css`. Added max-width and wrapping on narrow screens (<= 390px) for kn and hi to ensure `.totals-payment` clears `.notch-btn`.
 - 2026-11-21, CP10-B passed: F0 phone contract merged (`501231b`): profile storage in `apps/web/src/phone/storage/profile.ts` with 5 tests in `profile.test.ts` (old install returns null, save/load works); `contract.ts` required actions (`saveProfile`, `setPin`, `clearPin`, `unlock`, `updateCustomer`, `remindOnWhatsApp`, `speakSummary`) wired in `controller.ts` and `preview.tsx`; `CustomerRow` carries optional `nickname` and `phone`. `npm run typecheck` clean; `npm run demo:mock` starts and listens on 8080; old-install settings compatibility verified.
+- 2026-11-21, CP11-B passed: F1 (profile & PIN screen lock, old-install card) and B1 (label clipping fix & automated browser check) implemented and opened in PR #10 (`feat/F1-profile-and-B1`). Rebased on latest main. Verified: 37 files / 1,633 unit tests pass; `npm run test:e2e` 96/96 pass including 6 B1 non-intersection checks in hi/kn/en at 390px/360px and F1 lock/unlock/error checks; raw IndexedDB dump contains no customer name or plaintext PIN; 15 screenshots at 360px in en/hi/kn stored in `references/screenshots/f1/`. Reviewer: Member C.
 
 ### Plan 2: Member C
 
