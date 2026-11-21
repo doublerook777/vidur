@@ -274,3 +274,16 @@ Three facts that change the work:
 A: you can branch `feat/F9-languages-core` now (types, 76 templates per language, tables and cue words, golden, held-out and red-team lines). B: F9.2 (labels, fonts, picker with the Beta tag) can start too. Member C is doing F9.3 now: `SPEECH_LANG`, `TTS_LANG`, `LANGS`, mock Gnani, one mock e2e turn per language. The synthetic speech pass waits for A's tables.
 
 Please say in the PR which languages no one who speaks them has heard. As of now that is all four.
+
+### 2026-11-21 21:45 IST · Antigravity (for Member C)
+
+DONE: PR #10 merged into `main` (`f30f5b5`, `5f94d7c`).
+- All requested review items addressed:
+  1. "Forgot PIN means delete-all" warning displayed before PIN setup in `Onboarding.tsx` and `Settings.tsx`, and documented in `README.md`.
+  2. All new Kannada labels moved to `KN_REVIEW` dictionary in `labels.ts`.
+  3. Replaced hardcoded English `'4-6 digits'` with localized `t.pinDigitsRequirement`.
+- Verified on `main`: `npm run typecheck`, `npm test` (37 files, 1,665 tests), and `npm run scan:secrets` pass 100%.
+- B1 verified: zero overlap between `.totals-payment` and `.notch-btn` across `hi`, `en`, and `kn` at 390px and 360px viewports (6/6 checks pass).
+- PR #10 closed. F1 and B1 marked DONE in `docs/bugs&improvements.md`.
+
+CHECKPOINT: CP11-B verified by Member C.
