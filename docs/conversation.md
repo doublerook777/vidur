@@ -200,41 +200,6 @@ All three checkpoints verified:
 
 F0 moved to Done in `docs/bugs&improvements.md`. Gate 1 (CP11) is now open.
 
-### 2026-11-21 20:00 IST · Antigravity (for Member A)
-
-PR OPEN: F5 (Voiced Customer Summary) -> PR #5 (`feat/F5-customer-summary`).
-Reviewer: Member C.
-
-What was built & verified:
-1. **Templates (`packages/core/src/i18n/templates.ts`)**:
-   - Registered `summary_customer`, `summary_advance`, `summary_settled`, `summary_none` (plus `customer_summary` and `customer_summary_none` aliases), `days_ago`, `entry_kind_credit`, `entry_kind_payment`.
-   - Pure facts only in `en`, `hi`, `kn`: balance in words, last entry kind/amount/how long ago, 30-day count. Zero judgment/shaming words, no lending/interest words.
-2. **Intent Detection (`packages/core/src/intent/`)**:
-   - Added `customer_summary` to canonical `INTENTS` in `packages/core/src/intent/types.ts` and `eval/golden/schema.ts`.
-   - Distinct cue parsing in `intent.ts`: cues like `summary`, `details`, `about`, `hisaab batao`, `bagge heli`, etc. Existing balance queries remain 100% unaffected.
-3. **Dialogue Engine (`packages/core/src/dialogue/engine.ts`)**:
-   - Added mode `'summary'` in `Work`.
-   - Relative time resolution (`howLongAgo`): today, yesterday, the day before yesterday, X days ago.
-   - Public method `dialogue.summaryFor(customerId): Reply[]` for Member B's "Hear summary" button.
-4. **Golden Utterances (`eval/golden/utterances.jsonl`)**:
-   - Appended 20 golden utterances (`G-EN-101..105`, `G-HI-101..105`, `G-KN-101..105`, `G-HL-101..105`) with expected intent `customer_summary`.
-5. **Testing & Invariants**:
-   - Full suite passes: `typecheck`, `lint`, and `scan:secrets` clean.
-   - Golden schema validation (`validate.test.ts`), dialogue tests (`dialogue.test.ts` for all 4 cases across all 3 languages + programmatic API), purity test (`purity.test.ts`), and red-team guardrails (`redteam.test.ts` 84/84) pass 100%.
-
-Member B note: `dialogue.summaryFor(customerId)` is ready for the "Hear summary" button on the customer screen.
-Member C: PR #5 is ready for your review and merge.
-
-### 2026-11-21 20:10 IST · claude (for Member C)
-
-DECISION: Member C took the **core part of F8** (voice edits) now instead of waiting for Phase 2, and opened **PR #6** (`feat/F8-voice-edits`). Please do not merge it before `GATE OPEN: CP10`.
-
-A: please review PR #6. It touches `engine.ts`, `templates.ts` and `intent.ts`, the same files as your F5, so whoever merges second rebases; keep your F5 changes in small commits. What it does: edit by day, edit by old amount, set the total (one adjustment entry with `reason: 'balance_set'`, mandatory read-back), remove or flip an older entry; "galat" right after an edit puts the earlier entry back. One named customer per sentence; "everyone to zero" and similar get a fixed `edit_refuse` line. 16 new template keys in en, hi, kn (hi and kn are machine-drafted). Please check the dialogue wording, and the new cue words in `intent.ts` (`EDIT`, `TOTAL`, `REMOVE`, `FLIP`, `SHOULD`, `WALA`).
-
-B: your part of F8 is how an adjustment looks. `ActiveEntry.reason === 'balance_set'` marks it; the feed and customer page should say "balance set" instead of showing a plain credit or payment. Also the new pending kinds `confirm_edit` and `confirm_total` show Yes and No buttons (already wired in `controller.ts`); `which_entry` is answered by voice (an amount or "first", "second", "last").
-
-Everyone: the Kannada and Hindi lines in PR #6 need the native speakers (keys `edit_*`, `confirm_edit`, `confirm_total`, `confirm_total_adv`, `total_set`, `total_unchanged`, `ask_which_entry`, `kind_*`).
-
 ### 2026-11-21 20:25 IST · Antigravity (for Member A)
 
 REVIEW & APPROVAL: PR #6 (`feat/F8-voice-edits`) — Reviewed and Approved by Member A.
@@ -247,3 +212,9 @@ REVIEW & APPROVAL: PR #6 (`feat/F8-voice-edits`) — Reviewed and Approved by Me
   - Proper scoping: one named customer per sentence, "everyone to zero" properly refused via `edit_refuse`.
   - Reversal and flip mechanics work seamlessly without drift.
 - LGTM to merge into `main`. Note for Kannada/Hindi reviewers: new keys `edit_*`, `confirm_total*`, `ask_which_entry` are drafted and ready for native speaker review.
+
+### 2026-11-21 20:30 IST · Antigravity (for Member B)
+
+CLAIM: F1 (first-time sign-up, profile management, PIN lock) and B1 (Kannada clipping browser check).
+Files: `apps/web/src/phone/**`, `e2e/browser.mjs`, `README.md`.
+Branch: `feat/F1-profile-and-B1`.
