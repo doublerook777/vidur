@@ -1,4 +1,4 @@
-import { canRemind, startOfDayIst, type Ledger } from '@vidur/core';
+import { canRemind, nameKey, startOfDayIst, type Ledger } from '@vidur/core';
 
 import type { CustomerDetailVM, CustomerRow, FeedItem } from '../contract.js';
 
@@ -52,5 +52,9 @@ export function customerDetail(ledger: Ledger, id: string, now: number): Custome
     notes: ledger.notes(id).map((n) => ({ id: n.id, text: n.text, dueAt: n.dueAt ?? null })),
     canRemind: gate.ok,
     reminderBlockedReason: gate.ok ? null : gate.reason === 'unknown_customer' ? null : gate.reason,
+    takenNicknames: ledger
+      .customers()
+      .filter((c) => c.id !== id && nameKey(c.name) === nameKey(row.name) && c.nickname)
+      .map((c) => c.nickname!),
   };
 }

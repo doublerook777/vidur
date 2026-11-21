@@ -1,3 +1,6 @@
+import { useState } from 'preact/hooks';
+import { nameKey } from '@vidur/core';
+
 import type { CustomerDetailVM } from '../contract.js';
 import { formatRupees } from './format.js';
 import { LABELS } from './labels.js';
@@ -22,15 +25,74 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
           ? t.reminderNothingDue
           : null;
 
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(vm.customer.nickname ?? '');
+  const trimmed = draft.trim();
+  const taken = trimmed !== '' && (vm.takenNicknames ?? []).some((n) => nameKey(n) === nameKey(trimmed));
+  const saveNickname = (): void => {
+    if (taken) return;
+    // An empty string clears the nickname.
+    actions.updateCustomer(vm.customer.id, { nickname: trimmed });
+    setEditing(false);
+  };
+
   return (
     <main class="screen screen-customer-detail" data-feature="customer-detail">
       <header class="screen-header">
         <button type="button" class="icon-btn" aria-label="Back" onClick={() => actions.navigate('customers')}>
           <IconBack size={24} />
         </button>
-        <h1 class="screen-title">{vm.customer.name}</h1>
+        <h1 class="screen-title">{vm.customer.nickname ? `${vm.customer.name} (${vm.customer.nickname})` : vm.customer.name}</h1>
         <AiBadge vm={{}} actions={actions} lang={lang} />
       </header>
+
+      <section class="detail-nickname" aria-label={t.nickname}>
+        {editing ? (
+          <>
+            <label class="keypad-new-name-label">
+              <span class="keypad-new-name-title">{t.nickname}</span>
+              <input
+                type="text"
+                class="keypad-new-name detail-nickname-input"
+                value={draft}
+                onInput={(e) => setDraft((e.target as HTMLInputElement).value)}
+                autocomplete="off"
+                autoFocus
+              />
+            </label>
+            {taken && <p class="keypad-hint" role="alert">{t.nicknameTaken}</p>}
+            <div class="detail-nickname-actions">
+              <button type="button" class="btn btn-small" disabled={taken} onClick={saveNickname}>
+                {t.save}
+              </button>
+              <button
+                type="button"
+                class="btn btn-small"
+                onClick={() => {
+                  setDraft(vm.customer.nickname ?? '');
+                  setEditing(false);
+                }}
+              >
+                {t.cancelEdit}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div class="detail-nickname-row">
+            <span class="detail-nickname-value">{vm.customer.nickname ? `${t.nickname}: ${vm.customer.nickname}` : t.noNickname}</span>
+            <button
+              type="button"
+              class="btn btn-small"
+              onClick={() => {
+                setDraft(vm.customer.nickname ?? '');
+                setEditing(true);
+              }}
+            >
+              {t.editNickname}
+            </button>
+          </div>
+        )}
+      </section>
 
       <section class="balance-card" aria-label={t.balanceDue}>
         <span class="balance-label">{t.balanceDue}</span>

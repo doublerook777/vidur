@@ -12,6 +12,11 @@ export const KN_REVIEW: readonly string[] = [
   'viewNotes',
   'newCustomer',
   'newNickname',
+  'nickname',
+  'noNickname',
+  'editNickname',
+  'nicknameTaken',
+  'cancelEdit',
   'nicknameHint',
   'phaseThinking',
   'phaseNeedsAnswer',
@@ -88,6 +93,11 @@ export type LabelKey =
   | 'backspace'
   | 'newName'
   | 'newNickname'
+  | 'nickname'
+  | 'noNickname'
+  | 'editNickname'
+  | 'nicknameTaken'
+  | 'cancelEdit'
   | 'nicknameHint'
   | 'chooseCustomer'
   | 'amount'
@@ -189,6 +199,11 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     backspace: 'Delete digit',
     newName: 'New name',
     newNickname: 'Nickname (optional)',
+    nickname: 'Nickname',
+    noNickname: 'No nickname',
+    editNickname: 'Edit nickname',
+    nicknameTaken: 'Another customer with this name already has this nickname.',
+    cancelEdit: 'Cancel',
     nicknameHint: 'A customer with this name exists. Add a nickname, like dairy or school, to tell them apart.',
     chooseCustomer: 'Choose customer',
     amount: 'Amount',
@@ -289,6 +304,11 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     backspace: 'अंक हटाएँ',
     newName: 'नया नाम',
     newNickname: 'निकनेम (वैकल्पिक)',
+    nickname: 'निकनेम',
+    noNickname: 'कोई निकनेम नहीं',
+    editNickname: 'निकनेम बदलें',
+    nicknameTaken: 'इसी नाम के दूसरे ग्राहक का निकनेम यही है।',
+    cancelEdit: 'रद्द करें',
     nicknameHint: 'इस नाम का ग्राहक पहले से है। फ़र्क़ करने के लिए निकनेम जोड़ें, जैसे डेयरी या स्कूल।',
     chooseCustomer: 'ग्राहक चुनें',
     amount: 'रकम',
@@ -389,6 +409,11 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     backspace: 'ಅಂಕಿ ಅಳಿಸಿ',
     newName: 'ಹೊಸ ಹೆಸರು',
     newNickname: 'ಉಪನಾಮ (ಐಚ್ಛಿಕ)',
+    nickname: 'ಉಪನಾಮ',
+    noNickname: 'ಉಪನಾಮ ಇಲ್ಲ',
+    editNickname: 'ಉಪನಾಮ ಬದಲಿಸಿ',
+    nicknameTaken: 'ಇದೇ ಹೆಸರಿನ ಇನ್ನೊಬ್ಬ ಗ್ರಾಹಕರಿಗೆ ಈ ಉಪನಾಮ ಈಗಾಗಲೇ ಇದೆ.',
+    cancelEdit: 'ರದ್ದು ಮಾಡಿ',
     nicknameHint: 'ಈ ಹೆಸರಿನ ಗ್ರಾಹಕರು ಈಗಾಗಲೇ ಇದ್ದಾರೆ. ಬೇರೆ ಮಾಡಲು ಉಪನಾಮ ಸೇರಿಸಿ, ಉದಾಹರಣೆ ಡೇರಿ ಅಥವಾ ಸ್ಕೂಲ್.',
     chooseCustomer: 'ಗ್ರಾಹಕರನ್ನು ಆರಿಸಿ',
     amount: 'ಮೊತ್ತ',

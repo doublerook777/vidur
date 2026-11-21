@@ -554,9 +554,10 @@ export class PhoneSession {
     let id = i.customerId;
     // The shopkeeper typed the name themselves, so that is the "yes" a spoken new name has to ask for.
     if (!id && i.newName?.trim()) {
-      // A nickname typed here is stored the same way the spoken one is: on the customer, and as an alias the voice can match.
+      // The voice matches a customer's nickname directly, so it is stored only as the nickname. As an alias too it would
+      // keep matching after the nickname is edited.
       const nick = i.newNickname?.trim();
-      id = (await this.ledger.createCustomer(i.newName.trim(), nick ? [nick] : [], nick ? { nickname: nick } : undefined)).id;
+      id = (await this.ledger.createCustomer(i.newName.trim(), [], nick ? { nickname: nick } : undefined)).id;
     }
     if (!id || !Number.isInteger(i.paise) || i.paise <= 0) return;
     const now = this.now();
