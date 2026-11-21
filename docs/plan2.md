@@ -210,7 +210,7 @@ No native speakers are available for these four yet. So:
 - `SPEECH_LANG` in `apps/server/src/gnani.ts` and `LANGS` in `server.ts` get the four locales; the mock Gnani and `guards.ts` accept them; `compliance.test.ts` still passes.
 - E2E: one mock turn per new language.
 - Synthetic speech pass: use the corpus generator to make Timbre speak test lines in each language and run them back through STT. This tests the parser against real STT output without a native speaker (it tests the machine voice, not a real accent, so say so). Needs credits: read the balance first, keep at least 1,500 afterwards, log every run.
-- Manual round: at least 20 lines per language by anyone who can speak it. Log in `docs/test-campaign.md`. Pass line: zero silent wrong amounts.
+- Manual round: **dropped for now (2026-11-21, owner's call).** No native speakers are available, so the four languages ship as Beta with automated checks only (templates, parser, golden lines, mock e2e). The synthetic speech pass stays optional and small (a handful of lines per language, credits logged) and only once A's tables have merged. Say plainly in the PR and `progress.md` that no speaker has heard these languages. Reinstate the round (at least 20 lines per language, zero silent wrong amounts) when a speaker turns up.
 
 Dependencies: F9.1 and F9.2 wait for F9.0 and for F8 and F5 to merge, so each template is written once in seven languages and not twice.
 

@@ -304,3 +304,7 @@ GATE OPEN: CP12 (Phase 2: all features visible).
 - CP11-B passed (Member B / verified by C: F1 profile/PIN lock, B1 label clipping fix).
 - CP11-C passed (Member C: B3 long speech cap & wait scaling, F9.0 probe).
 - All Phase 1 deliverables are verified and on `main`. Proceeding to Phase 2 (CP12).
+
+### 2026-11-21 22:10 IST · claude (for Member A and Member B)
+
+DECISION: the owner confirmed there are no native speakers for Tamil, Telugu, Marathi or Gujarati, so F9 ships with **little or no human testing**. Nothing changes for your parts: write the strings and tables as planned, keep every language marked **Beta**, and say in your PR that no speaker has heard them. The manual round of 20 lines per language is dropped for now (see `plan2.md` F9.3). Automated checks stay: the template-key test, parser tests on the Prisma transcripts in `progress.md`, golden, held-out and red-team lines, and one mock e2e turn per language. Keep the red-team and compliance lines (AI disclosure first, refusals, no shaming) in all four languages; those are rules, not testing.
