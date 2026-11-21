@@ -184,6 +184,61 @@ No calendar dates are promised. Phases are in order; inside a phase people work 
 
 Dependencies: F1 to F6 all need F0. B (F3 screens) needs A's `nickname` pending kind, and B (F4 countdown) needs A's `questionSpoken()`; A merges those engine pieces first and posts `DONE:` in `conversation.md`, and B starts that screen then. F5's button needs A's intent. F6 is independent of A once F0 has merged.
 
+### Phase gates: every person's checkpoint must pass before the next phase starts
+
+A phase is finished only when **all three** checkpoints for it are ticked, with evidence. Nobody starts the next phase's work on `main` until the gate is open. (Preparing a branch locally is fine; merging is not.) If one person is blocked, the other two help or review rather than moving ahead.
+
+Each checkpoint has the same id as the project checkpoint plus the person's letter, for example `CP11-B`.
+
+**How a gate is closed**
+
+1. Each person ticks their own checkpoint: they add a line under their own heading in `progress.md` Log with the evidence (commands run and results, PR numbers, screenshot paths), and post `CHECKPOINT: CP11-B passed` in `conversation.md`.
+2. A person other than the owner checks the evidence is real (runs the command, opens the PR). The reviewer in the table below is the one who verifies.
+3. When all three are verified, Person C sets the project checkpoint (CP10 to CP14) in the `progress.md` table to Passed with the date, and posts `GATE OPEN: CP11` in `conversation.md`. Only then does the next phase start.
+4. A checkpoint that fails is not skipped. Add a tracker row, fix it, and verify again. A waiver is allowed only with a `DECISION:` message from all three people, and it goes in the `Waivers` section of `progress.md`.
+
+**Phase 0 gate: CP10 (setup done, contract merged)**
+
+| CP | Person | Must be true | Evidence | Verified by |
+|---|---|---|---|---|
+| CP10-A | A | F0 core part merged: optional `nickname` and `phone` on customers, `customer_updated` event, `nickname` pending kind. The "naya customer" check for F3 is written up in `conversation.md`. | PR number; the ledger replay test over old events passes; `npm test` green on `main` | C |
+| CP10-B | B | F0 phone part merged: `profile` meta type, the new actions and view-model fields compile, nothing visible changes yet. Fresh `main` runs in mock mode. | PR number; `npm run typecheck` and `npm run demo:mock` work; old-install settings still load | A |
+| CP10-C | C | Repo is ready for three people: collaborators added, branch protection on `main` (PR and green CI required), PR template added, baseline recorded (test count, e2e result, gzipped JS size), `docs/test-campaign.md` created. Tracker rows match section 2 of this plan. | Settings page screenshot or `gh api` output, baseline numbers in `progress.md` | A |
+
+**Phase 1 gate: CP11 (engine and first screens)**
+
+| CP | Person | Must be true | Evidence | Verified by |
+|---|---|---|---|---|
+| CP11-A | A | F4 engine (`PENDING_TTL_MS`, `questionSpoken()`), F3 nickname flow, and the pure `searchCustomers` function merged, with scripted dialogue tests in hi, en and kn. | PR numbers; the new test names; compliance and red-team tests green | C |
+| CP11-B | B | F1 sign-up and profile (including the PIN lock and the old-install card) and B1 merged; B1 has a browser check for hi, en and kn that fails without the fix. | PR numbers; browser e2e green; screenshots at 360 px in three languages; raw IndexedDB check still shows nothing readable | C |
+| CP11-C | C | B3 merged (press cap, scaled wait) with mock-Gnani tests for short, 20 s and 45 s. F7 round 1 run on the current app: log filled, every `W` has a tracker row. | PR number; `docs/test-campaign.md` round 1 table; credit log entry | A |
+
+**Phase 2 gate: CP12 (all features visible)**
+
+| CP | Person | Must be true | Evidence | Verified by |
+|---|---|---|---|---|
+| CP12-A | A | F5 intent and template and B2 older-entry corrections merged; golden set grew with the new intents; Kannada text reviewed by the native speaker. | PR numbers; golden, held-out and red-team suites green; reviewer's sign-off in `conversation.md` | C |
+| CP12-B | B | F2 search screen, F3 and F4 screens (nickname prompt, countdown), F5 button and F6 WhatsApp reminders merged. | PR numbers; screenshots in three languages, light and dark; the browser check on the `wa.me` link digits and text; reminder buttons disabled in every blocked state | A |
+| CP12-C | C | A browser check exists for every feature F1 to F6 and passes; every `W` from round 1 is fixed or has an owner and a date; each fixed line was added to a golden, held-out or red-team set. | `npm run test:e2e` output; the fixed rows in the tracker with PR numbers | B |
+
+**Phase 3 gate: CP13 (integration passed)**
+
+| CP | Person | Must be true | Evidence | Verified by |
+|---|---|---|---|---|
+| CP13-A | A | Full regression: `npm test`, golden, held-out and red-team, compliance all green on `main`; no open P0 or P1 bug in A's area. | Command output pasted or linked in `progress.md` | C |
+| CP13-B | B | Whole app walked through by hand in hi, en, kn on a real phone: sign-up, add by voice, nickname, search, summary, WhatsApp reminder, PIN lock, delete all. No open P0 or P1 bug in B's area. | A checklist in `progress.md` with pass or fail per step | A |
+| CP13-C | C | F7 round 2 regression pass done: **zero silent wrong amounts**; load test (I3) and mobile-data and cold-start timing (I2, I5) recorded. | `docs/test-campaign.md` round 2 table; numbers in `progress.md`; credit log | B |
+
+**Phase 4 gate: CP14 (released)**
+
+| CP | Person | Must be true | Evidence | Verified by |
+|---|---|---|---|---|
+| CP14-A | A | A tagged release on `main` with release notes of what changed for users. | Tag name and notes link | B |
+| CP14-B | B | Hosted copy used on a phone over mobile data: a real turn works in each language, and the new screens render at 360 px. | Short note in `progress.md` | C |
+| CP14-C | C | Deployed to Render by hand from a clean `main`; `/healthz` ok; one real turn through the hosted copy; secret scan clean over history. | `progress.md` entry with the time and results | A |
+
+The tracker rows in `bugs&improvements.md` move to Done only when the PR that closes them has merged **and** the checkpoint that covers them has passed.
+
 ## 5. Git workflow
 
 The repo is public. Nothing secret, no real customer data and no transcripts go in any commit.
@@ -255,7 +310,7 @@ Only Person C deploys, from a clean `main`: all checks above green, then trigger
 
 - Update it after every finished task and whenever something blocks you.
 - The **Log** section gets one short dated entry per task, written under your own heading (`### Person A`, `### Person B`, `### Person C`) so two people do not append at the same line and conflict. Say what changed, how it was checked and what is left. No access codes, no names of testers, no real data.
-- **Current state** and the checkpoint table are changed by whoever finishes the checkpoint. Add checkpoints for this plan: **CP10 contract merged**, **CP11 core features**, **CP12 screens**, **CP13 integration passed**, **CP14 released**. Record evidence (commands run and numbers), not just "done".
+- **Current state** and the checkpoint table are changed by Person C when a gate closes (see "Phase gates" in section 4). Each person records their own checkpoint (`CP11-B` and so on) under their own Log heading with evidence: commands run and numbers, not just "done".
 - The **credit log** is updated by whoever spends Gnani credits, in the same commit window as the run.
 - Replace the old hackathon "Current state" block with a Plan 2 one in Phase 0. The 2026-11 history below it stays as history.
 

@@ -6,7 +6,7 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 
 - **Phase:** Plan 2 (improvements after submission). The hackathon submission went in before the deadline; its history is kept below. Work is described in `docs/plan2.md` and tracked in `docs/bugs&improvements.md`. Messages between us and our agents go in `docs/conversation.md`.
 - **Live copy:** https://vidur-xu96.onrender.com (Render free plan, deploys by hand; the access code is in Render's dashboard, never in the repo).
-- **Active phase of Plan 2:** Phase 0 (setup). Nothing is built yet.
+- **Active phase of Plan 2:** Phase 0 (setup). Nothing is built yet. A phase ends only when all three people's checkpoints (for example CP10-A, CP10-B, CP10-C) are verified; see "Phase gates" in `docs/plan2.md`.
 - **Last checkpoint passed:** CP9 (hackathon deliverables, submitted). Plan 2 checkpoints are CP10 to CP14 below.
 - **Next actions:**
   1. Fill in who is Person A, B and C in `docs/plan2.md` section 8.
@@ -29,11 +29,11 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 | CP7 | Compliance | Passed | 2026-11-11 | `docs/COMPLIANCE.md` maps every rule to a proof; 15 repo-level compliance tests; red-team 83/83; secret scan clean over 41 commits of history; live AI disclosure first turn in Hindi, Kannada, English (`e2e/disclosure.mjs`) |
 | CP8 | Deployment | Passed except the phone on mobile data and a cold-start measurement | 2026-11-12 | Hosted on Render's free plan at https://vidur-xu96.onrender.com (blueprint `render.yaml`, Docker image test-built locally first; keys and the access code typed into Render's dashboard by the user, never in the repo). Checked from here: `/healthz` 200 in 80 ms (warm); hosted mode needs the code; no code and a wrong code get `bad_access_code`, the right one `ready` with `degraded:false` and the LLM on; a foreign origin gets 403; showcase loads in 0.3 to 0.5 s with no console errors and no horizontal scroll at 1366 and 390; real speech turn through the hosted copy with a fake mic: AI disclosure spoken first, "Ramesh ka teen sau chalis rupaye udhaar" heard correctly, which-Ramesh question asked, release to first audio 751 ms; a silent press says it heard nothing. Not done: the user's phone over mobile data, and the cold-start time after sleeping (the free plan sleeps after about 15 minutes idle; `npm run keepwarm -- <url>` or opening it early). |
 | CP9 | Deliverables | In progress | | Done: README, architecture and system-flow diagrams, deck (7 slides) and `references/slides.md`, framed and unframed screenshots in en and kn, demo video script. Not done: the video itself, team details on slide 1, public repo, submission form. |
-| CP10 | Plan 2: contract merged | Not started | | F0 merged to `main`; replay test on old events passes |
-| CP11 | Plan 2: core features | Not started | | F2 function, F3 flow, F4 engine, F5 intent, B2 merged with scripted dialogue tests; compliance and red-team green |
-| CP12 | Plan 2: screens | Not started | | F1, F2, F3, F4, F5, F6, B1 visible in the phone app in hi, en, kn; browser e2e green |
-| CP13 | Plan 2: integration passed | Not started | | F7 round 2 regression pass: zero silent wrong amounts; load test and mobile-data timing recorded |
-| CP14 | Plan 2: released | Not started | | Deployed to Render by hand, `/healthz` ok, one real turn through the hosted copy |
+| CP10 | Plan 2 gate 0: setup and contract | Not started | | CP10-A, CP10-B, CP10-C all verified (see `plan2.md` Phase gates): F0 merged, repo ready for three people, baseline recorded |
+| CP11 | Plan 2 gate 1: engine and first screens | Not started | | CP11-A (F4, F3, search function), CP11-B (F1, B1), CP11-C (B3, F7 round 1) |
+| CP12 | Plan 2 gate 2: all features visible | Not started | | CP12-A (F5, B2), CP12-B (F2, F3, F4 screens, F5 button, F6), CP12-C (browser checks, round 1 fixes) |
+| CP13 | Plan 2 gate 3: integration passed | Not started | | CP13-A (full regression), CP13-B (hand walkthrough on a phone), CP13-C (F7 round 2: zero silent wrong amounts, load and timing) |
+| CP14 | Plan 2 gate 4: released | Not started | | CP14-A (tagged release), CP14-B (phone over mobile data), CP14-C (deployed, `/healthz`, one real turn) |
 
 ## Open user decisions
 
