@@ -430,13 +430,13 @@ Only Member C deploys, from a clean `main`: all checks above green, then trigger
 | "Set the total" could be abused or misheard | Read-back every time, one named customer, target of zero or more, red-team lines in F8. |
 | Template file grows to seven languages | Templates for F5 and F8 are written once, after both merge; a test fails on any missing key. |
 | Credit burn from F7 | Floor of 1,500 credits, logged runs, mock mode for everything that does not need real speech. |
-| The three members and who is A, B and C | Fill in the table below in Phase 0. A is set. Member C still needs the GitHub handles of A and B recorded; the git log shows commits under two other names (Ayush and Lokesh), so say who is who. |
+| The three members and who is A, B and C | Settled 2026-11-21: the table below. |
 
-| Letter | Member | Agents they run |
-|---|---|---|
-| A | Member A | Supervisor (Antigravity), pi (NVIDIA free), qwen |
-| B | _fill in_ | |
-| C | you (repo owner) | |
+| Letter | Member | GitHub | Agents they run |
+|---|---|---|---|
+| A | Ayush | `ayush25-droid` | Supervisor (Antigravity), pi (NVIDIA free), qwen |
+| B | Lokesh | `loki376-web` | not recorded yet |
+| C | repo owner | `doublerook777` | see section 9 |
 
 ## 9. How Member C uses cheaper agents (Member C's own setup)
 

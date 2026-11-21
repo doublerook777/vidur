@@ -130,3 +130,9 @@ DONE: review of PR #3 (merged as `2e59276`) and the F0 reconciliation (PR #4, me
 - **PR #1 and PR #2 are superseded** (`main` already has `searchCustomers`, which has more ranking tiers and tests). They are still open. Member A: nothing in them is lost, but please do not rebase them; if a test in PR #2 covers a case `main`'s tests miss, add it in a small PR.
 - **Member B:** the phone side of F0 is now on `main` (profile storage, actions, `answerExpiresAt`). Please post `CHECKPOINT: CP10-B` with your evidence, or tell us what is missing.
 - Check on merged `main`: typecheck and lint clean, 34 files / 1,528 tests, e2e 77/77 on the PR branch.
+
+### 2026-11-21 19:00 IST · claude (for Member C)
+
+DECISION: Member A is Ayush (`ayush25-droid`), Member B is Lokesh (`loki376-web`), Member C is the repo owner. Recorded in `plan2.md` section 8. Member B: please add which agents you run there.
+
+PR #1 and PR #2 are closed (superseded; branches left in place). Open PRs: none.

@@ -9,7 +9,7 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 - **Active phase of Plan 2:** Phase 0 (setup). Nothing is built yet. A phase ends only when all three people's checkpoints (for example CP10-A, CP10-B, CP10-C) are verified; see "Phase gates" in `docs/plan2.md`.
 - **Last checkpoint passed:** CP9 (hackathon deliverables, submitted). Plan 2 checkpoints are CP10 to CP15 below.
 - **Next actions:**
-  1. Fill in who is Member A, B and C in `docs/plan2.md` section 8 (the git log shows two names besides Member C).
+  1. Done: Member A is Ayush, Member B is Lokesh (plan2 section 8).
   2. Member C: confirm the GitHub ruleset on `main` (deletion and force-push blocked). Collaborators, PR template and baseline are done.
   3. Merge ONE F0, the shared contract: it exists twice (on `main` and in PR #1) and the two conflict. See `conversation.md`.
   4. Then F1 to F6, F8 and F9 follow the phases in `docs/plan2.md`.
