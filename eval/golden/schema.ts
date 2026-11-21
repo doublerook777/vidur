@@ -35,6 +35,7 @@ export const INTENTS = [
   'credit_entry',
   'payment',
   'balance_query',
+  'customer_summary',
   'correction',
   'reminder_opt_in',
   'note',

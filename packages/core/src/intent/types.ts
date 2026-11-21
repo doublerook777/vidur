@@ -1,6 +1,6 @@
 import type { KnownCustomer } from '../names/index.js';
 
-export const INTENTS = ['credit_entry', 'payment', 'balance_query', 'correction', 'reminder_opt_in', 'note', 'refusal', 'out_of_scope'] as const;
+export const INTENTS = ['credit_entry', 'payment', 'balance_query', 'customer_summary', 'correction', 'reminder_opt_in', 'note', 'refusal', 'out_of_scope'] as const;
 export type Intent = (typeof INTENTS)[number];
 export type RefusalKind = 'threat' | 'interest' | 'lending' | 'judgment';
 export type EventTense = 'past' | 'future' | 'unknown';
