@@ -215,7 +215,7 @@ describe('questions, timeouts and interruptions', () => {
     await ledger.createCustomer('Sunita');
     d.start();
     await say1('Ramesh ka 340');
-    tick(31_000);
+    tick(61_000);
     const rs = await say1('Sunita ka 50 udhaar');
     expect(keys(rs)).toContain('pending_expired');
     expect(ledger.activeEntries().map((e) => e.paise)).toEqual([paise(50)]);
@@ -444,7 +444,7 @@ describe('a new name is never created without a yes', () => {
     const { ledger, d, say1, tick } = await setup();
     d.start();
     await say1('Kiran ka 300 udhaar');
-    tick(31_000);
+    tick(61_000);
     const rs = await say1('Aaj kitna udhaar gaya?');
     expect(keys(rs)).toContain('pending_expired');
     expect(ledger.customers()).toHaveLength(0);
@@ -518,5 +518,114 @@ describe('a spoken correction never becomes a customer (the first usability test
     expect(keys(await say1('nahi Sunita ka 500 udhaar'))).toEqual(['credit_saved']);
     expect(ledger.balance(m.id)).toBe(paise(300));
     expect(ledger.balance(s.id)).toBe(paise(500));
+  });
+
+  describe('F4 60s window and questionSpoken()', () => {
+    it('is still open at 59s and answers successfully', async () => {
+      const { ledger, d, say1, tick } = await setup();
+      const r = await ledger.createCustomer('Ramesh');
+      d.start();
+      await say1('Ramesh ka 500'); // asks direction
+      expect(d.pendingKind()).toBe('direction');
+      tick(59_000); // 59s elapsed: window still open
+      const rs = await say1('udhaar');
+      expect(keys(rs)).toEqual(['credit_saved']);
+      expect(ledger.balance(r.id)).toBe(paise(500));
+      expect(d.hasPending()).toBe(false);
+    });
+
+    it('expires at 61s and saves nothing', async () => {
+      const { ledger, d, say1, tick } = await setup();
+      const r = await ledger.createCustomer('Ramesh');
+      d.start();
+      await say1('Ramesh ka 500'); // asks direction
+      expect(d.pendingKind()).toBe('direction');
+      tick(61_000); // 61s elapsed: window expired
+      const rs = await say1('aaj kitna udhaar gaya?');
+      expect(keys(rs)).toContain('pending_expired');
+      expect(ledger.balance(r.id)).toBe(0);
+      expect(d.hasPending()).toBe(false);
+    });
+
+    it('questionSpoken() starts the 60s clock from when audio finishes playing', async () => {
+      const { ledger, d, say1, tick } = await setup();
+      const r = await ledger.createCustomer('Ramesh');
+      d.start();
+      await say1('Ramesh ka 500'); // asks direction
+      // 5 seconds of audio played
+      tick(5_000);
+      d.questionSpoken(); // controller notifies audio finished
+      // 59 seconds after audio finished (total 64s since asked)
+      tick(59_000);
+      const rs = await say1('udhaar');
+      expect(keys(rs)).toEqual(['credit_saved']);
+      expect(ledger.balance(r.id)).toBe(paise(500));
+    });
+
+    it('barge-in resets the 60s TTL', async () => {
+      const { ledger, d, say1, tick } = await setup();
+      await ledger.createCustomer('Ramesh', ['doodh']);
+      await ledger.createCustomer('Ramesh', ['auto']);
+      d.start();
+      await say1('Ramesh ka 300 udhaar'); // ambiguous: asks which
+      expect(d.pendingKind()).toBe('which');
+      tick(40_000);
+      // user barges in with an ambiguous reply again
+      await say1('Ramesh');
+      // 40s later (total 80s from start, but 40s from barge-in)
+      tick(40_000);
+      const rs = await say1('doodh wale');
+      expect(keys(rs)).toEqual(['credit_saved']);
+    });
+
+    it('nothing saved on expiry for every pending kind', async () => {
+      const { ledger, d, say1, tick } = await setup();
+      d.start();
+
+      // 1. direction
+      const c1 = await ledger.createCustomer('Anita');
+      await say1('Anita 100');
+      expect(d.pendingKind()).toBe('direction');
+      tick(61_000);
+      expect(keys(await say1('hisaab'))).toContain('pending_expired');
+      expect(ledger.balance(c1.id)).toBe(0);
+
+      // 2. amount
+      await say1('Anita ka udhaar');
+      expect(d.pendingKind()).toBe('amount');
+      tick(61_000);
+      expect(keys(await say1('hisaab'))).toContain('pending_expired');
+      expect(ledger.balance(c1.id)).toBe(0);
+
+      // 3. confirm_amount (high amount)
+      await say1('Anita ka pachaas hazaar rupaye udhaar');
+      expect(d.pendingKind()).toBe('confirm_amount');
+      tick(61_000);
+      expect(keys(await say1('hisaab'))).toContain('pending_expired');
+      expect(ledger.balance(c1.id)).toBe(0);
+
+      // 4. new_customer
+      await say1('Pooja ka 200 udhaar');
+      expect(d.pendingKind()).toBe('new_customer');
+      tick(61_000);
+      expect(keys(await say1('hisaab'))).toContain('pending_expired');
+      expect(ledger.customers().some((x) => x.name === 'Pooja')).toBe(false);
+
+      // 5. consent
+      await say1('Anita ko reminder bhejo');
+      // consent question asked
+      expect(d.pendingKind()).toBe('consent');
+      tick(61_000);
+      expect(keys(await say1('hisaab'))).toContain('pending_expired');
+
+      // 6. which
+      await ledger.createCustomer('Mohan', ['auto']);
+      await ledger.createCustomer('Mohan', ['dairy']);
+      await say1('Mohan ka 100 udhaar');
+      expect(d.pendingKind()).toBe('which');
+      tick(61_000);
+      expect(keys(await say1('hisaab'))).toContain('pending_expired');
+      expect(ledger.activeEntries().filter((e) => e.paise === paise(100))).toHaveLength(0);
+    });
   });
 });

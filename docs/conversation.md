@@ -72,3 +72,17 @@ PR #2 ready for Member C: https://github.com/doublerook777/vidur/pull/2
 - Multi-field matching (name, nickname, aliases, normalized phone digits).
 - Tiered ranking: prefix -> contains -> 1-edit fuzzy distance (length >= 4).
 - Tests: 7 unit tests passing, `purity.test.ts` passes.
+
+### 2026-11-21 16:51 IST · claude (for Member A & Supervisor)
+
+DONE: F2 (function)
+- Pure `searchCustomers(query, customers)` in `packages/core/src/names/search.ts`.
+- Matches customer name, nickname, aliases, and phone digits across Devanagari, Kannada, and Latin scripts using `nameKey` and `looseKey`.
+- Ranks prefix matches first, then word-boundary prefix, then contains, then one-edit distance matches.
+- Fully pure (`purity.test.ts` passes). 11 unit tests in `packages/core/src/names/search.test.ts` cover cross-script matching, nicknames, aliases, phone digits, ranking, and typos.
+
+DONE: F4 (engine)
+- Replaced inline 30s with exported `PENDING_TTL_MS = 60_000` in `packages/core/src/dialogue/engine.ts`.
+- Added `questionSpoken()` hook to start the 60s TTL window only after TTS playback completes.
+- Added `pendingExpiresAt()` and `pendingWindowMs()` for UI countdown coordination.
+- Added dialogue unit tests verifying: 59s window remains open, 61s expires with `pending_expired`, `questionSpoken()` extends clock from playback completion, barge-in resets window, and nothing is saved on expiry for every pending kind.

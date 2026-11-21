@@ -8,6 +8,8 @@ import { CONFIRM_BELOW, parseAmount } from '../numbers/index.js';
 import { canRemind } from '../reminders/index.js';
 import { amountToSpoken } from '../speak/index.js';
 
+export const PENDING_TTL_MS = 60_000;
+
 export interface ShareReminder {
   type: 'share_reminder';
   customerId: string;
@@ -80,7 +82,7 @@ export class Dialogue {
   private readonly o: Required<Pick<DialogueOptions, 'pendingTtlMs' | 'undoWindowMs'>> & DialogueOptions;
 
   constructor(options: DialogueOptions) {
-    this.o = { pendingTtlMs: 30_000, undoWindowMs: 15 * 60_000, ...options };
+    this.o = { pendingTtlMs: PENDING_TTL_MS, undoWindowMs: 15 * 60_000, ...options };
   }
 
   get lang(): SpeechLang {
@@ -99,6 +101,24 @@ export class Dialogue {
   /** What the open question is about, so a screen can offer Yes and No buttons for the yes/no kinds. */
   pendingKind(): PendingKind | null {
     return this.pending?.kind ?? null;
+  }
+
+  pendingExpiresAt(): number | null {
+    return this.pending?.expiresAt ?? null;
+  }
+
+  pendingWindowMs(): number {
+    return this.o.pendingTtlMs;
+  }
+
+  /**
+   * Called when the TTS audio for the open question has finished playing.
+   * Resets the TTL clock from this moment so long speech does not eat the answer window.
+   */
+  questionSpoken(): void {
+    if (this.pending) {
+      this.pending.expiresAt = this.o.clock() + this.o.pendingTtlMs;
+    }
   }
 
   /** The first thing the agent says in a session. */

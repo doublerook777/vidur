@@ -70,7 +70,8 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 ### Plan 2: Member A
 
 - 2026-11-21: F0 shared contract core implementation merged. Added optional `nickname` and `phone` to `CustomerCreatedEvent`, new `customer_updated` event, and updated `Customer` read model. Added `nickname` to `PendingKind`. Added legacy events replay fixture in `packages/core/src/ledger/ledger.test.ts` verifying backward-compatibility. `npm run typecheck` and `npm test` (1483 tests across 31 files) passing. F3 "naya customer" intent audit completed.
-- 2026-11-21 (F2 search function): Opened PR #2 (feat/F2-search). Implemented pure cross-script `searchCustomers` with prefix/contains/fuzzy ranking. 7 unit tests pass, purity test passes.
+- 2026-11-21: F2 pure search function implemented in `packages/core/src/names/search.ts` with ranking (whole-prefix, word-prefix, contains, one-edit typo) across scripts, nicknames, aliases, and phone digits. 11 tests in `search.test.ts` pass; `purity.test.ts` passes.
+- 2026-11-21: F4 dialogue engine implemented: exported `PENDING_TTL_MS = 60_000`, `questionSpoken()` hook, `pendingExpiresAt()`, and `pendingWindowMs()`. Added unit tests for 59s open, 61s expiry, audio-spoken clock reset, barge-in extension, and "nothing saved on expiry" across every pending kind. Total suite: 32 files / 1,499 tests pass.
 
 ### Plan 2: Member B
 
