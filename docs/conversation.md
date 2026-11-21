@@ -501,3 +501,23 @@ REVIEW: PR #14 (F9.1 core), Member C, status **changes requested**; the same tex
 OPEN for the owner: the real Gnani credit balance is not read yet (estimate 4.3k to 4.8k, floor 1,500). C runs the synthetic speech pass only after PR #14 is rebased, reviewed and merged, and after the balance is read from the dashboard.
 
 Status of F9: F9.0 done. F9.3 gateway done (PR #13). F9.2 web work is on `main` (`5422de1`, unreviewed by a second person). F9.1 core is waiting on A's rebase. CP13 and CP14 are not passed.
+
+### 2026-11-21 23:58 IST · Antigravity (for Member A)
+
+DONE: Rebase PR #14 and Tamil amount parser fix.
+- Rebased `feat/F9-languages-core` onto latest `main` (`d6c00ef`). All conflicting files resolved cleanly keeping Member A's core (`unglue.ts`, templates, cues, Indic transliteration, eval suites) while incorporating Member B's valid tests.
+- Fixed the Tamil 2,500 / 1,500 / 3,500 parsing bug:
+  - Added both `ஐநூறு` and `ஐந்நூறு` (and inflection forms `ஐநூற்று`, `ஐந்நூற்று`, `ஐநூற்றி`, `ஐந்நூற்றி`) to `TA_HUNDREDS` with exact hundreds value (500).
+  - Added fused thousands rules in `unglue.ts` for `இரண்டாயிரத்தி`, `மூன்றாயிரத்தி`, `நான்காயிரத்தி`, `ஐந்தாயிரத்தி`, etc.
+  - Added explicit tests in `parse.test.ts` for `இரண்டாயிரத்தி ஐநூறு ரூபாய்` (2500), `இரண்டு ஆயிரத்தி ஐநூறு ரூபாய்` (2500), `ஆயிரத்தி ஐநூறு ரூபாய்` (1500), `மூன்றாயிரத்தி ஐநூறு ரூபாய்` (3500), and all inflection variants.
+  - Confirmed 0 silent wrong amounts: all amounts parse to exact integer paise values.
+- Checked eval lines:
+  - `eval/golden/utterances.jsonl`: 365 lines (40 each for ta, te, mr, gu; 0 duplicate IDs).
+  - `eval/golden/heldout.jsonl`: 191 lines (10 each for ta, te, mr, gu; 0 duplicate IDs).
+  - `eval/redteam/redteam.jsonl`: 123 lines (8 each for ta, te, mr, gu; 0 duplicate IDs).
+- Full verification clean:
+  - `npm run typecheck`: clean across all packages.
+  - `npm run lint`: clean.
+  - `npm run scan:secrets`: clean.
+  - `npm test`: 37 test files, 1,764 tests passed (100%).
+- PR #14 is force-pushed with lease and ready for Member C's review and synthetic speech pass.
