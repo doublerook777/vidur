@@ -4,15 +4,16 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 
 ## Current state
 
-- **Deadline:** Fri 13 Nov 2026, 11:59 IST (internal target Fri 09:00). Today is Thu 12 Nov.
-- **Active phase:** Phase 9 (deliverables). Everything is on `main` and pushed to the private repo `origin` (SSH, `doublerook777/vidur`). Hosted copy is live at https://vidur-xu96.onrender.com (access code is in Render's dashboard and the user's notes, never in the repo).
-- **Last checkpoint passed:** CP8 (CP9 in progress)
-- **Blocked on:** nothing. `LLM_MODEL` is `openai/gpt-oss-20b`.
-- **Next action (all the user's, nothing is waiting on code):**
-  1. Record the 3-minute demo video from `references/demo-video-script.md` (one take, real voice, local copy). Check the Gnani balance first: keep at least 1,500 credits after the last take, at most 3 takes (one run is 100 to 200 credits). Do not upload it until the user says where.
-  2. Fill team name, team ID and college on slide 1 of `references/Vidur-deck.pptx`. The user edited their own copy elsewhere (slide 5 title "Key features"), so the file in `references/` is older than theirs. The brief says the deck is "up to 6 slides"; the deck has 7 (the guide marks slide 7 optional). Offered to cut to 6, no answer yet. Slide 6 still shows the old limits strip; the corrected text is in `references/slides.md`.
-  3. Make the repo public (needs the user's yes; the brief asks for a public repo) and submit before Fri 13 Nov 11:59 IST.
-  4. Open the hosted copy on a phone over mobile data and time a cold start (the free plan sleeps after about 15 minutes).
+- **Phase:** Plan 2 (improvements after submission). The hackathon submission went in before the deadline; its history is kept below. Work is described in `docs/plan2.md` and tracked in `docs/bugs&improvements.md`. Messages between us and our agents go in `docs/conversation.md`.
+- **Live copy:** https://vidur-xu96.onrender.com (Render free plan, deploys by hand; the access code is in Render's dashboard, never in the repo).
+- **Active phase of Plan 2:** Phase 0 (setup). Nothing is built yet.
+- **Last checkpoint passed:** CP9 (hackathon deliverables, submitted). Plan 2 checkpoints are CP10 to CP14 below.
+- **Next actions:**
+  1. Fill in who is Person A, B and C in `docs/plan2.md` section 8.
+  2. Add collaborators, branch protection and a PR template to the repo (Person C).
+  3. Merge F0, the shared contract (Persons A and B), then start F1 to F6 in parallel.
+  4. Record a baseline: test counts, e2e result and gzipped JS size (Person C).
+- **Known open bugs:** B1 (Kannada label clipped, reproduced 2026-11-21), B2 (corrections only reach the last entry), B3 (long speech uncapped). See the tracker.
 
 ## Checkpoints
 
@@ -28,6 +29,11 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 | CP7 | Compliance | Passed | 2026-11-11 | `docs/COMPLIANCE.md` maps every rule to a proof; 15 repo-level compliance tests; red-team 83/83; secret scan clean over 41 commits of history; live AI disclosure first turn in Hindi, Kannada, English (`e2e/disclosure.mjs`) |
 | CP8 | Deployment | Passed except the phone on mobile data and a cold-start measurement | 2026-11-12 | Hosted on Render's free plan at https://vidur-xu96.onrender.com (blueprint `render.yaml`, Docker image test-built locally first; keys and the access code typed into Render's dashboard by the user, never in the repo). Checked from here: `/healthz` 200 in 80 ms (warm); hosted mode needs the code; no code and a wrong code get `bad_access_code`, the right one `ready` with `degraded:false` and the LLM on; a foreign origin gets 403; showcase loads in 0.3 to 0.5 s with no console errors and no horizontal scroll at 1366 and 390; real speech turn through the hosted copy with a fake mic: AI disclosure spoken first, "Ramesh ka teen sau chalis rupaye udhaar" heard correctly, which-Ramesh question asked, release to first audio 751 ms; a silent press says it heard nothing. Not done: the user's phone over mobile data, and the cold-start time after sleeping (the free plan sleeps after about 15 minutes idle; `npm run keepwarm -- <url>` or opening it early). |
 | CP9 | Deliverables | In progress | | Done: README, architecture and system-flow diagrams, deck (7 slides) and `references/slides.md`, framed and unframed screenshots in en and kn, demo video script. Not done: the video itself, team details on slide 1, public repo, submission form. |
+| CP10 | Plan 2: contract merged | Not started | | F0 merged to `main`; replay test on old events passes |
+| CP11 | Plan 2: core features | Not started | | F2 function, F3 flow, F4 engine, F5 intent, B2 merged with scripted dialogue tests; compliance and red-team green |
+| CP12 | Plan 2: screens | Not started | | F1, F2, F3, F4, F5, F6, B1 visible in the phone app in hi, en, kn; browser e2e green |
+| CP13 | Plan 2: integration passed | Not started | | F7 round 2 regression pass: zero silent wrong amounts; load test and mobile-data timing recorded |
+| CP14 | Plan 2: released | Not started | | Deployed to Render by hand, `/healthz` ok, one real turn through the hosted copy |
 
 ## Open user decisions
 
@@ -58,6 +64,20 @@ Opening balance: 5,000 of 5,000 base credits (Gnani dashboard, 2026-11-11, from 
 None.
 
 ## Log
+
+Plan 2 entries go here, one short dated entry per finished task, under your own heading so two people never append at the same line. The 2026-11 hackathon history follows below them.
+
+### Plan 2: Person A
+
+### Plan 2: Person B
+
+### Plan 2: Person C
+
+### 2026-11-21 (setup, claude for the team)
+
+- Moved this file from `references/` into `docs/` so we can share it. Added `docs/bugs&improvements.md`, `docs/conversation.md` and `docs/plan2.md`. Rechecked B1 in mock mode at 390 and 360 px: the Kannada "paid today" label still overlaps the Add entry button. Kannada strings were reviewed with a native speaker (reported by the team).
+
+## History: hackathon build and submission
 
 ### 2026-11-11
 
