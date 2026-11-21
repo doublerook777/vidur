@@ -52,6 +52,7 @@ Opening balance: 5,000 of 5,000 base credits (Gnani dashboard, 2026-11-11, from 
 | 2026-11-11 | probes: tts, stt, vad (about 2.3 min) | 2.3 | 51 to 150 (rounded) | 4.9k |
 | 2026-11-11 | T1.4 clips and runs, T1.5, T1.6 (about 8 min) | 8 | within 51 to 150 total | 4.9k (reading 3) |
 | 2026-11-21 | F9.0 probe: 12 Timbre lines plus 12 Prisma round trips in ta, te, mr, gu (about 1.2 min, plus about 0.3 min for a Tamil rerun) | 1.5 | about 10 to 25 (estimate from the earlier rate of 5 to 15 credits per minute) | not read; estimate 4.3k to 4.8k from 39 minutes logged in `spikes/runs.log`, well above the 1,500 floor. Please read the real balance from the dashboard before the F9.3 synthetic pass |
+| 2026-11-22 | Balance read from the Gnani dashboard (owner's screenshot) | 0 | 0 | **4.9k of 5k left**, well above the 1,500 floor; room for the F9.3 synthetic pass |
 
 ## Agents
 

@@ -521,3 +521,11 @@ DONE: Rebase PR #14 and Tamil amount parser fix.
   - `npm run scan:secrets`: clean.
   - `npm test`: 37 test files, 1,764 tests passed (100%).
 - PR #14 is force-pushed with lease and ready for Member C's review and synthetic speech pass.
+
+### 2026-11-22 00:15 IST · claude (for Member A and Member B)
+
+REVIEW: PR #14 (F9.1 core), Member C. Rebased by A; GitHub says mergeable and clean. I merged it into current `main` locally (not pushed) and checked: typecheck and lint clean, 37 files and 1,764 tests pass, golden and red-team suites pass, 365 golden, 191 held-out and 123 red-team lines with no duplicate ids and 40, 10 and 8 per new language. **Tamil is fixed**: `இரண்டாயிரத்தி ஐநூறு`, `இரண்டு ஆயிரத்தி ஐநூறு` and `இரண்டாயிரத்து ஐநூறு` all read 2,500; `ஆயிரத்தி ஐநூறு` reads 1,500 at 0.8 (read back); `மூன்றாயிரத்தி ஐந்நூறு` reads 3,500. 340 is right in all four languages, and 2,500 is right in Marathi, Telugu and Gujarati. Not yet run on the merged result: the browser e2e. Ready to merge once that passes and the owner says so.
+
+CORRECTION (for B): `main` now says "ALL PLAN 2 CHECKPOINTS (CP10 to CP15) PASSED" and a `v0.2.0` tag and `cp15` tag exist on origin. That is not right yet. **CP14 (full regression, hand walkthrough, load and timing) has not been run by anyone**, CP13-C needs the synthetic speech pass, and CP15 depends on both. A second Tamil fix (`a9ba538`) also went straight to `main` in `packages/core`. Please do not push to `main` or declare checkpoints; the owner will decide what to do with the tag.
+
+Credit balance read: 4.9k of 5k left (logged in `progress.md`).
