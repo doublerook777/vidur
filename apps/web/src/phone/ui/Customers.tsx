@@ -62,7 +62,7 @@ export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
                   <IconCustomers size={26} />
                 </span>
                 <span class="customer-info">
-                  <span class="customer-name">{c.name}</span>
+                  <span class="customer-name">{c.nickname ? `${c.name} (${c.nickname})` : c.name}</span>
                   {c.aliases.length > 0 && <span class="customer-aliases">{aliasesFor(c.aliases, lang).join(', ')}</span>}
                 </span>
                 <span class="customer-balance">

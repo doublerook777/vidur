@@ -1,5 +1,5 @@
 import { resolveDate, type Tense as DateTense } from '../dates/index.js';
-import { findByAlias, matchName, toLatin } from '../names/index.js';
+import { belongsTo, findByAlias, matchName, toLatin } from '../names/index.js';
 import { CONFIRM_BELOW, parseAmount, type AmountMatch } from '../numbers/index.js';
 import { lookup, norm } from '../numbers/lexicon.js';
 import { unglue } from '../numbers/unglue.js';
@@ -76,7 +76,7 @@ const PAYMENT_EDIT = W('payment payments received receipt');
 const NEGATIVE = W('minus negative advance एडवांस माइनस ಮುಂಗಡ ಮೈನಸ್');
 
 const STOP = W(
-  'ka ki ke ko ne se me mein pe par ko hai hain ho tha thi the to ye wo woh yeh vo bhi hi bas mera meri mere mujhe hum aap please pls kya kab kaun kuch sab aaj kal parso ' +
+  'ji sahab saab sahib जी साहब साहिब ಜೀ ka ki ke ko ne se me mein pe par ko hai hain ho tha thi the to ye wo woh yeh vo bhi hi bas mera meri mere mujhe hum aap please pls kya kab kaun kuch sab aaj kal parso ' +
     'aaj_ka a an the is are was of on in for with from by and or but that this it he she his her their him them my me i we you ' +
     'likh likho likhna karo kar kardo karna do de dena dedo dijiye diya diye bhejo bhej bhijwa send note ' +
     'rupaye rupaya rupees rupee rupye rupiye rupay rupai ruppee rupyee rs inr paise paisa amount ' +
@@ -169,23 +169,57 @@ function splitClauses(text: string, amounts: AmountMatch[]): Clause[] {
   return out;
 }
 
-/** Heuristic for a customer name when the ledger doesn't help: the first word that is not a cue, number or filler. */
+/** A word that can be part of a customer's name: not a cue, a number, or filler. */
+function isNameWord(t: { w: string; n: string }): boolean {
+  return !STOP.has(t.n) && !isCue(t.n) && !NEW_CUST.has(t.n) && !KHATA_CUST.has(t.n) && !isNumberish(t.w) && !/^\p{N}/u.test(t.w) && t.n.length > 1;
+}
+
+/** Up to three name words in a row around `idx`: "Ayush Aditya", "Dr Sharma", "Ramesh Kumar". */
+function nameAround(tokens: { w: string; n: string }[], idx: number): string {
+  let a = idx;
+  let b = idx;
+  while (b - a + 1 < 3 && b + 1 < tokens.length && isNameWord(tokens[b + 1]!)) b++;
+  while (b - a + 1 < 3 && a - 1 >= 0 && isNameWord(tokens[a - 1]!)) a--;
+  return tokens.slice(a, b + 1).map((t) => t.w).join(' ');
+}
+
+/** Heuristic for a customer name when the ledger doesn't help: the name words around the first one that is not a cue, number or filler. */
 function guessName(tokens: { w: string; n: string }[]): string | undefined {
-  const cand = (t: { w: string; n: string }): boolean =>
-    !STOP.has(t.n) &&
-    !isCue(t.n) &&
-    !NEW_CUST.has(t.n) &&
-    !KHATA_CUST.has(t.n) &&
-    !isNumberish(t.w) &&
-    !/^\p{N}/u.test(t.w) &&
-    t.n.length > 1;
   // Prefer the word right before a possessive or case marker.
   for (let i = 1; i < tokens.length; i++) {
     const t = tokens[i]!;
-    if ((MARK_POSS.has(t.n) || MARK_KO.has(t.n) || MARK_NE.has(t.n)) && cand(tokens[i - 1]!)) return tokens[i - 1]!.w;
+    if ((MARK_POSS.has(t.n) || MARK_KO.has(t.n) || MARK_NE.has(t.n)) && isNameWord(tokens[i - 1]!)) return nameAround(tokens, i - 1);
   }
-  for (const t of tokens) if (cand(t)) return t.w;
-  return undefined;
+  const first = tokens.findIndex((t) => isNameWord(t));
+  return first >= 0 ? nameAround(tokens, first) : undefined;
+}
+
+/**
+ * A known customer's spoken name, as a whole: "ayush aditya" when that is the full name of a customer, else the one word that
+ * matched. When more name words follow and they are not part of that customer, the whole phrase is returned, so a different
+ * person ("Ayush Kumar") is asked about instead of being filed under "Ayush Aditya".
+ */
+function knownNameAround(tokens: { w: string; n: string }[], idx: number, text: string, customers: NonNullable<InterpretContext['customers']>): string {
+  for (let n = 3; n >= 2; n--) {
+    for (let a = Math.max(0, idx - n + 1); a <= idx; a++) {
+      const b = a + n - 1;
+      if (b >= tokens.length) continue;
+      const win = tokens.slice(a, b + 1);
+      if (!win.every(isNameWord)) continue;
+      const phrase = win.map((t) => t.w).join(' ');
+      const m = matchName(phrase, customers, text);
+      if (m.kind === 'exact' || m.kind === 'ambiguous') return phrase;
+    }
+  }
+  const single = tokens[idx]!;
+  const next = tokens[idx + 1];
+  if (next && isNameWord(next)) {
+    const m = matchName(single.w, customers, text);
+    const ids = m.kind === 'exact' ? [m.customerId] : m.kind === 'ambiguous' || m.kind === 'near' ? m.customerIds : [];
+    const owners = customers.filter((c) => ids.includes(c.id));
+    if (owners.length && !owners.some((c) => belongsTo(next.w, c))) return nameAround(tokens, idx);
+  }
+  return single.w;
 }
 
 /** The one customer a sentence names: a known one (any script), or a name tied to the sentence by "ka", "ko" or "ne". */
@@ -312,13 +346,21 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
     for (const t of toks) {
       if (STOP.has(t.n) || isCue(t.n) || isNumberish(t.w)) continue;
       const m = matchName(t.w, customers, text);
-      if (m.kind === 'exact' || m.kind === 'ambiguous' || m.kind === 'near') { customer = t.w; customerKnown = true; break; }
+      if (m.kind === 'exact' || m.kind === 'ambiguous' || m.kind === 'near') { customer = knownNameAround(toks, toks.indexOf(t), text, customers); customerKnown = true; break; }
     }
     if (!customer && byAlias.length) { customer = byAlias[0]!.name; customerKnown = true; }
   }
   customer ??= guessName(toks);
   // A name the shopkeeper clearly attached to the sentence ("Suresh ka ...") even though the ledger doesn't have it yet.
-  const guessedWithMarker = !customerKnown && customer !== undefined && toks.some((t, i) => i > 0 && toks[i - 1]!.w === customer && (MARK_POSS.has(t.n) || MARK_KO.has(t.n) || MARK_NE.has(t.n)));
+  // A name of several words ends at its last word; markers like "ka" and "ne" come right after that word.
+  const customerEnd = (): number => {
+    if (!customer) return -1;
+    const words = customer.split(/\s+/);
+    const at = toks.findIndex((t, i) => words.every((w, k) => toks[i + k]?.w === w));
+    return at < 0 ? -1 : at + words.length - 1;
+  };
+  const endIdx = customerEnd();
+  const guessedWithMarker = !customerKnown && customer !== undefined && toks.some((t, i) => i > 0 && i - 1 === endIdx && (MARK_POSS.has(t.n) || MARK_KO.has(t.n) || MARK_NE.has(t.n)));
   const customerInherited = !customer && inherited !== undefined;
   const who = customer ?? inherited;
 
@@ -346,7 +388,7 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
   else if (has(GIVE_KN_SHOP)) direction = 'credit';
   else if (has(GIVE)) {
     const gi = toks.findIndex((t) => GIVE.has(t.n));
-    const ci = customer ? toks.findIndex((t) => t.w === customer) : -1;
+    const ci = endIdx;
     const markerAfterName = ci >= 0 ? toks[ci + 1]?.n : undefined;
     const markerAfterName2 = ci >= 0 ? toks[ci + 2]?.n : undefined;
     const marks = [markerAfterName, markerAfterName2].filter((x): x is string => !!x);

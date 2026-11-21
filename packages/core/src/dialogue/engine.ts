@@ -4,7 +4,7 @@ import { LARGE_PAISE } from '../intent/intent.js';
 import { detectDirection, directionByShape, guessCustomerName, interpret, isOptInStatement, residualWords, yesNo } from '../intent/index.js';
 import type { Interpretation, ParsedEvent } from '../intent/index.js';
 import type { ActiveEntry, Ledger } from '../ledger/index.js';
-import { aliasesFor, findByAlias, matchName, nameKey, type KnownCustomer } from '../names/index.js';
+import { aliasesFor, findByAlias, findByDistinguishingWords, matchName, nameKey, type KnownCustomer } from '../names/index.js';
 import { CONFIRM_BELOW, parseAmount } from '../numbers/index.js';
 import { canRemind } from '../reminders/index.js';
 import { amountToSpoken } from '../speak/index.js';
@@ -434,14 +434,17 @@ export class Dialogue {
   }
 
   private formatAmbiguousOptions(candidateIds: string[], customers: KnownCustomer[]): string | undefined {
+    // Each namesake is named by its nickname, its alias, or its full name ("Ramesh auto wala"). Only when two of them would
+    // still sound the same is the question asked by "first or second".
     const labels = candidateIds.map((id) => {
       const c = customers.find((cust) => cust.id === id);
       if (!c) return undefined;
       if (c.nickname) return `${c.name} ${c.nickname}`;
       const alias = aliasesFor(c.aliases, this.o.lang)[0];
-      return alias ?? undefined;
+      return alias ?? c.name;
     });
-    if (labels.every((l): l is string => !!l)) {
+    const distinct = new Set(labels.map((l) => (l ? nameKey(l) : ''))).size === labels.length;
+    if (distinct && labels.every((l): l is string => !!l)) {
       const joiner = ` ${say(this.o.lang, 'or')} `;
       return labels.join(joiner);
     }
@@ -801,6 +804,10 @@ export class Dialogue {
         const cands = (w.candidates ?? []).map((id) => customers.find((c) => c.id === id)).filter((c): c is NonNullable<typeof c> => !!c);
         const byAlias = findByAlias(text, cands);
         let pick = byAlias.length === 1 ? byAlias[0] : undefined;
+        if (!pick) {
+          const byWords = findByDistinguishingWords(text, cands);
+          if (byWords.length === 1) pick = byWords[0];
+        }
         const first = text.trim();
         if (!pick && ORDINAL_FIRST.test(first)) pick = cands[0];
         if (!pick && ORDINAL_SECOND.test(first)) pick = cands[1];

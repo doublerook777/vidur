@@ -11,6 +11,8 @@ export const KN_REVIEW: readonly string[] = [
   'cancelInput',
   'viewNotes',
   'newCustomer',
+  'newNickname',
+  'nicknameHint',
   'phaseThinking',
   'phaseNeedsAnswer',
   'mockMode',
@@ -85,6 +87,8 @@ export type LabelKey =
   | 'save'
   | 'backspace'
   | 'newName'
+  | 'newNickname'
+  | 'nicknameHint'
   | 'chooseCustomer'
   | 'amount'
   | 'offlineBanner'
@@ -184,6 +188,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     save: 'Save',
     backspace: 'Delete digit',
     newName: 'New name',
+    newNickname: 'Nickname (optional)',
+    nicknameHint: 'A customer with this name exists. Add a nickname, like dairy or school, to tell them apart.',
     chooseCustomer: 'Choose customer',
     amount: 'Amount',
     offlineBanner: 'No internet. Entries stay on this phone.',
@@ -282,6 +288,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     save: 'सेव करें',
     backspace: 'अंक हटाएँ',
     newName: 'नया नाम',
+    newNickname: 'निकनेम (वैकल्पिक)',
+    nicknameHint: 'इस नाम का ग्राहक पहले से है। फ़र्क़ करने के लिए निकनेम जोड़ें, जैसे डेयरी या स्कूल।',
     chooseCustomer: 'ग्राहक चुनें',
     amount: 'रकम',
     offlineBanner: 'इंटरनेट नहीं। एंट्री इसी फ़ोन पर रहेंगी।',
@@ -380,6 +388,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     save: 'ಉಳಿಸಿ',
     backspace: 'ಅಂಕಿ ಅಳಿಸಿ',
     newName: 'ಹೊಸ ಹೆಸರು',
+    newNickname: 'ಉಪನಾಮ (ಐಚ್ಛಿಕ)',
+    nicknameHint: 'ಈ ಹೆಸರಿನ ಗ್ರಾಹಕರು ಈಗಾಗಲೇ ಇದ್ದಾರೆ. ಬೇರೆ ಮಾಡಲು ಉಪನಾಮ ಸೇರಿಸಿ, ಉದಾಹರಣೆ ಡೇರಿ ಅಥವಾ ಸ್ಕೂಲ್.',
     chooseCustomer: 'ಗ್ರಾಹಕರನ್ನು ಆರಿಸಿ',
     amount: 'ಮೊತ್ತ',
     offlineBanner: 'ಇಂಟರ್ನೆಟ್ ಇಲ್ಲ. ನಮೂದು ಈ ಫೋನ್‌ನಲ್ಲೇ ಇರುತ್ತದೆ.',

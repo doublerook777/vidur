@@ -379,6 +379,7 @@
 .see-all:focus-visible,
 .toast-action:focus-visible,
 .keypad-new-name:focus-visible,
+.keypad-new-nickname:focus-visible,
 .when-input:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
@@ -902,6 +903,7 @@
 .keypad-customer-btn { min-height: 44px; }
 .keypad-customer-btn-active { background: var(--color-card); color: var(--color-card-text); border-color: var(--color-card); }
 .keypad-new-name-label { display: flex; align-items: center; gap: var(--space-3); }
+.keypad-hint { margin: 0; color: var(--color-text-dim); font-size: var(--font-sm); }
 .keypad-new-name-title { flex: none; color: var(--color-text-dim); font-size: var(--font-sm); font-weight: 700; }
 .keypad-new-name, .when-input {
   flex: 1;
