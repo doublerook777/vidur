@@ -43,6 +43,32 @@ export const KN_REVIEW: readonly string[] = [
   'voiceHint',
   'aiVoice',
   'addForCustomer',
+  // F1 profile and PIN screen lock
+  'ownerName',
+  'enterShopName',
+  'enterOwnerName',
+  'pin',
+  'pinOptional',
+  'pinScreenLockNotice',
+  'forgotPin',
+  'forgotPinConfirm',
+  'forgotPinWarning',
+  'pinDigitsRequirement',
+  'setPin',
+  'changePin',
+  'removePin',
+  'unlock',
+  'enterPin',
+  'wrongPin',
+  'tooManyAttempts',
+  'completeProfileTitle',
+  'completeProfileSub',
+  'completeProfileBtn',
+  'dismiss',
+  'profileTitle',
+  'profileSaved',
+  'pinActive',
+  'noPinSet',
 ];
 
 export type LabelKey =
@@ -162,6 +188,8 @@ export type LabelKey =
   | 'pinScreenLockNotice'
   | 'forgotPin'
   | 'forgotPinConfirm'
+  | 'forgotPinWarning'
+  | 'pinDigitsRequirement'
   | 'setPin'
   | 'changePin'
   | 'removePin'
@@ -297,6 +325,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     pinScreenLockNotice: 'Screen lock only. All ledger data is already encrypted on this phone.',
     forgotPin: 'Forgot PIN?',
     forgotPinConfirm: 'Forgot PIN? The only recovery is deleting all data on this phone. Delete everything?',
+    forgotPinWarning: 'Forgot PIN: the only recovery is deleting all data on this phone.',
+    pinDigitsRequirement: '4-6 digits',
     setPin: 'Set PIN',
     changePin: 'Change PIN',
     removePin: 'Remove PIN',
@@ -431,6 +461,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     pinScreenLockNotice: 'केवल स्क्रीन लॉक है। आपका डेटा इस फोन पर पहले से एन्क्रिप्टेड है।',
     forgotPin: 'पिन भूल गए?',
     forgotPinConfirm: 'पिन भूल गए? एकमात्र उपाय इस फोन का सारा डेटा हटाना है। क्या सब कुछ हटाएं?',
+    forgotPinWarning: 'पिन भूल गए तो एकमात्र उपाय इस फोन का सारा डेटा हटाना है।',
+    pinDigitsRequirement: '4-6 अंक',
     setPin: 'पिन सेट करें',
     changePin: 'पिन बदलें',
     removePin: 'पिन हटाएं',
@@ -565,6 +597,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     pinScreenLockNotice: 'ಕೇವಲ ಸ್ಕ್ರೀನ್ ಲಾಕ್ ಆಗಿದೆ. ಡೇಟಾ ಈಗಾಗಲೇ ಈ ಫೋನ್‌ನಲ್ಲಿ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಆಗಿದೆ.',
     forgotPin: 'ಪಿನ್ ಮರೆತಿರಾ?',
     forgotPinConfirm: 'ಪಿನ್ ಮರೆತಿರಾ? ಎಲ್ಲ ಡೇಟಾ ಅಳಿಸುವುದು ಮಾತ್ರ ಪರಿಹಾರ. ಎಲ್ಲವನ್ನೂ ಅಳಿಸುವುದೇ?',
+    forgotPinWarning: 'ಪಿನ್ ಮರೆತರೆ, ಈ ಫೋನ್‌ನಲ್ಲಿರುವ ಎಲ್ಲಾ ಡೇಟಾವನ್ನು ಅಳಿಸುವುದು ಮಾತ್ರ ಪರಿಹಾರ.',
+    pinDigitsRequirement: '4-6 ಅಂಕಿಗಳು',
     setPin: 'ಪಿನ್ ಹೊಂದಿಸಿ',
     changePin: 'ಪಿನ್ ಬದಲಾಯಿಸಿ',
     removePin: 'ಪಿನ್ ತೆಗೆಯಿರಿ',

@@ -103,6 +103,7 @@ export function Onboarding({ vm, actions, lang }: ScreenProps<OnboardingVM>) {
             onInput={(e) => setPin((e.target as HTMLInputElement).value.replace(/\D/g, '').slice(0, 6))}
           />
           <p class="field-hint">{t.pinScreenLockNotice}</p>
+          <p class="field-hint field-hint-warning">{t.forgotPinWarning}</p>
         </div>
       </section>
 
