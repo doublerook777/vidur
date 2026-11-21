@@ -234,3 +234,16 @@ A: please review PR #6. It touches `engine.ts`, `templates.ts` and `intent.ts`, 
 B: your part of F8 is how an adjustment looks. `ActiveEntry.reason === 'balance_set'` marks it; the feed and customer page should say "balance set" instead of showing a plain credit or payment. Also the new pending kinds `confirm_edit` and `confirm_total` show Yes and No buttons (already wired in `controller.ts`); `which_entry` is answered by voice (an amount or "first", "second", "last").
 
 Everyone: the Kannada and Hindi lines in PR #6 need the native speakers (keys `edit_*`, `confirm_edit`, `confirm_total`, `confirm_total_adv`, `total_set`, `total_unchanged`, `ask_which_entry`, `kind_*`).
+
+### 2026-11-21 20:25 IST · Antigravity (for Member A)
+
+REVIEW & APPROVAL: PR #6 (`feat/F8-voice-edits`) — Reviewed and Approved by Member A.
+- Rebased/merged cleanly with F5 customer summary.
+- Verified: `npm run typecheck`, `npm run lint`, `npm run scan:secrets` exit 0.
+- All 20 core test files (1,424 tests), 58 new edit tests (`dialogue/edit.test.ts`), and 92 red-team guardrail tests (`redteam.test.ts`) pass 100%.
+- Verified core invariants:
+  - Mandatory read-back on set-total before posting single adjustment entry (`reason: 'balance_set'`).
+  - Amounts originate solely from deterministic parser (`parseAmount`).
+  - Proper scoping: one named customer per sentence, "everyone to zero" properly refused via `edit_refuse`.
+  - Reversal and flip mechanics work seamlessly without drift.
+- LGTM to merge into `main`. Note for Kannada/Hindi reviewers: new keys `edit_*`, `confirm_total*`, `ask_which_entry` are drafted and ready for native speaker review.
