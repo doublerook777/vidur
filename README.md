@@ -43,12 +43,12 @@ Vidur takes the other path. It is fast, because speaking is faster than typing. 
 
 - **Hold to talk, in seven languages.** Credit and payment entries, spoken the way people talk in Hindi, English, Kannada, Tamil, Telugu, Marathi, and Gujarati, including code-mixed speech and Indian number forms: *dedh sau* (150), *sawa do sau* (225), *dhai hazaar* (2,500), *three forty*, native digits, and Dravidian/Devanagari number words.
 - **Reads back the result,** with the customer's balance, in the shopkeeper's language. The first line of every session is a spoken AI disclosure.
-- **Answers questions by voice:** a customer's total, voiced ledger summary, or how much credit went out today.
-- **Voice and manual edits:** edit or reverse previous entries, "change Anil's total to 1000" with mandatory read-back, and 10-second instant undo.
+- **Answers questions by voice:** a customer's total, how much credit went out today, or the whole picture (*"aaj ka pura hisab batao"*: today's credit and payments, and the overall totals).
+- **Voice and manual edits:** edit or reverse previous entries, "change Anil's total to 1000" with mandatory read-back, and 10-second instant undo. A correction in the same breath as the entry just made (*"Kiran ji ne 200 udhaar liye, nahi 100"*) changes that entry instead of adding another one.
 - **Barge-in:** talk over the app while it is speaking and it stops at once.
-- **Asks when unsure:** *which* Ramesh? credit or payment? is this ₹1,20,000 right? A question stays open for 60 seconds with a visual countdown and nothing awaiting an answer is saved.
-- **Customer search & nicknames:** instant search by name, nickname or phone, and automatic nickname prompting for same-named customers.
-- **WhatsApp reminders, opt-in:** polite reminder links generated for WhatsApp (`wa.me`) with a 2-day rate limit and consent tracking.
+- **Asks when unsure:** *which* Ramesh? credit or payment? is this ₹1,20,000 right? A question stays open for 60 seconds with a visual countdown, and nothing awaiting an answer is saved.
+- **Customer search & nicknames:** instant search by name, nickname or phone, and nickname prompting for same-named customers. Every nickname shows in brackets after the name, *Ramesh (dairy)*, whether it was typed or spoken.
+- **WhatsApp reminders, opt-in:** a polite reminder prepared for WhatsApp (`wa.me`) or the share sheet. The app asks *"Did you send it?"*, and only a yes starts the 2-day wait before the next one, so a cancelled share costs nothing. Customers show *Sent … · next …*.
 - **Local profile & PIN lock:** shop name and owner name customization, with an optional local 4-6 digit screen lock.
 - **Notes, not payments:** "Mohan kal paanch sau dega" (Mohan will pay 500 tomorrow) is saved as a note and never counts toward the balance.
 - **Refuses what it should:** threats, shaming, interest and lending are declined politely.
@@ -114,15 +114,16 @@ npm run typecheck && npm run lint && npm run build
 | `npm run demo:mock` | the whole app with scripted speech and no keys |
 | `npm run setup` / `doctor` / `start` | set up your key, check it, run the app |
 | `npm run tunnel` | reach the app from a phone, with an access code |
-| `npm test` | unit, integration, red-team and compliance tests (about 1,500) |
+| `npm test` | unit, integration, red-team and compliance tests (about 1,800) |
 | `npm run test:e2e` | real browser, fake microphone, mock speech service |
 | `npm run test:live` | one real-speech turn in a real browser (spends a few credits) |
 | `npm run keepwarm -- <url>` | keeps a free host awake for a demo |
+| `npm run check:size` | fails if the phone app's gzipped JavaScript passes its budget (112,000 B); run after a build |
 | `npm run scan:secrets` | looks for keys in the working tree (`-- --history` scans every commit) |
 
 ## Things to say
 
-Open the app, pick a language, choose **start with demo data** (12 synthetic customers: Ramesh (twice), Sunita, Kavita, Mohan, Suresh, Anil, Geeta, Pooja, Vijay, Neha and Dinesh), then **hold the big button**, speak, and let go.
+Open the app, pick a language, choose **start with demo data** (12 synthetic customers: Ramesh (twice), Sunita, Kavita, Mohan, Suresh, Anil, Geeta, Pooja, Vijay, Neha and Dinesh; all have agreed to reminders except Mohan, Geeta and Neha), then **hold the big button**, speak, and let go.
 
 ### Record and ask
 
@@ -134,6 +135,7 @@ Open the app, pick a language, choose **start with demo data** (12 synthetic cus
 | "Sunita ko dhai hazaar udhaar" | reads *dhai hazaar* as ₹2,500 |
 | "Kavita ne kal 150 diye" | saves a payment dated yesterday |
 | "Aaj kitna udhaar gaya?" | total credit given today, from the ledger |
+| "Aaj ka pura hisab batao" | today's credit and payments, plus the overall totals (no customer needed) |
 | "Mohan ka total kitna hai?" | Mohan's balance |
 | "How much credit did I give today?" | the same, in English |
 | "How much does Mohan owe?" | Mohan's balance, in English |
@@ -154,6 +156,7 @@ Open the app, pick a language, choose **start with demo data** (12 synthetic cus
 | Say or do | What happens |
 |---|---|
 | "nahi, 500" | the last entry becomes ₹500 |
+| "Kiran ji ne 200 udhaar liye, nahi 100" (right after saving) | the entry just made becomes ₹100, no second entry |
 | "galat" or "cancel karo" | the last entry is undone |
 | Tap **Undo** within 10 seconds | the entry is removed |
 | Press the button while it is speaking | it stops at once |
@@ -163,7 +166,7 @@ Open the app, pick a language, choose **start with demo data** (12 synthetic cus
 | Say | What happens |
 |---|---|
 | "Mohan kal paanch sau dega" | saved as a **note**, never as a payment |
-| "Mohan ko reminder bhejo", then "haan" | asks whether Mohan agreed to reminders. After a yes it prepares a polite reminder and you tap share. It never sends anything itself |
+| "Mohan ko reminder bhejo", then "haan" | asks whether Mohan agreed to reminders. After a yes it prepares a polite reminder and you tap share. It never sends anything itself, and it asks *Did you send it?* before it counts as sent |
 
 ### Things it should refuse
 
@@ -236,8 +239,8 @@ If the parser cannot read a sentence, the phone may send a `parse` message. The 
 |---|---|---|
 | `packages/core` | Parser, dialogue engine, ledger, templates, name matching, dates, reminder gate | Pure TypeScript. A test fails if it imports anything from Node, the network or the DOM. It runs in the browser and in tests. |
 | `apps/server` | The gateway | Holds the API keys, proxies the Prisma and Timbre sockets, enforces guards, proxies the optional LLM. Stores nothing and logs no transcripts. A mock Gnani lives in `src/mock-gnani/`. |
-| `apps/web` | The phone app and the showcase | Preact, about 58.5 KB of JavaScript gzipped. Screens in `src/phone/ui` are pure views over a view model. `src/phone/session/controller.ts` wires audio, gateway, dialogue and vault together. |
-| `eval/` | Evidence | Golden and held-out utterance sets, an 83-line red-team set, a noisy-audio corpus generator and a scorer. |
+| `apps/web` | The phone app and the showcase | Preact, about 109 KB of JavaScript gzipped (a budget of 112 KB is enforced in CI). Screens in `src/phone/ui` are pure views over a view model. `src/phone/session/controller.ts` wires audio, gateway, dialogue and vault together. |
+| `eval/` | Evidence | Golden and held-out utterance sets, a 123-line red-team set, a noisy-audio corpus generator and a scorer. |
 | `e2e/` | Real-browser checks | Playwright with a fake microphone against the mock speech service. |
 
 ### Server modes
@@ -254,9 +257,9 @@ These are the decisions that shape the code. Each is covered by tests.
 
 - **Money is integer paise and never comes from a language model.** The deterministic parser decides every amount. The optional LLM may propose an interpretation, but its amount is accepted only if the parser independently finds it in the transcript; otherwise it is discarded and the app asks.
 - **Never silently wrong.** Amounts of ₹10,000 and up, doubtful amounts and garbled transcripts are read back first. In the 240-recording noisy test, 0 amounts were saved wrong without a question.
-- **Nothing is saved while a question is open.** Questions expire after 30 seconds.
+- **Nothing is saved while a question is open.** Questions expire after 60 seconds.
 - **Our own code decides.** The orchestration (streaming, parsing, deciding) is ours. Prisma and Timbre are called directly. No hosted agent platform is in the loop.
-- **Replies are fixed, polite wording** in three reply languages, so what the app says is predictable and reviewable. A test scans every template for pressure and threat words.
+- **Replies are fixed, polite wording** in seven reply languages, so what the app says is predictable and reviewable. A test scans every template for pressure and threat words.
 - **Push to talk, with `commit`, not voice-activity detection.** Measured: it beats the best VAD setting by about 350 ms and never cuts a sentence at a pause.
 - **STT runs as `format=codemix`, one locale per connection.** The STT's own digits are not trusted for money, so our parser reads number words.
 
@@ -266,8 +269,8 @@ Each rule below is enforced in code and proved by a test. `apps/server/src/compl
 
 - **The agent says it is an AI in its first turn,** in the user's language. Every reply leaves through one function that puts the disclosure first until it has been said.
 - **No voice cloning.** Only stock Timbre voices are requested.
-- **Reminders are opt-in,** at most one per 2 days, in fixed polite wording, and the app only prepares the text for the shopkeeper to share.
-- **No lending, interest, credit judgments or threats,** checked before anything else runs. 83 red-team utterances leave the ledger byte-identical.
+- **Reminders are opt-in,** at most one per 2 days (counted from a send you confirmed), in fixed polite wording, and the app only prepares the text for the shopkeeper to share.
+- **No lending, interest, credit judgments or threats,** checked before anything else runs. 123 red-team utterances leave the ledger byte-identical.
 - **Prompt injection cannot change the ledger,** because the parser decides and the LLM only proposes.
 - **On-device, encrypted data:** AES-GCM with a non-extractable WebCrypto key. Transcripts are purged after 24 hours. "Delete all data" in Settings removes everything.
 - **The server stores nothing** and its logger refuses fields that look like content, so names and transcripts never reach a log.
@@ -317,7 +320,7 @@ npm run test:e2e                                         # real browser, fake mi
 node e2e/disclosure.mjs                                  # real Gnani: first spoken line in hi, kn, en (a few credits)
 ```
 
-CI runs the secret scan, typecheck, lint, tests and build on every push.
+CI runs the secret scan, typecheck, lint, tests, build and the bundle-size check on every push.
 
 The accuracy numbers come from a noisy-audio corpus: golden utterances spoken by several Timbre voices in Hindi, Hinglish, English and Kannada, mixed with noise at clean, 15, 10 and 5 dB, and recognized by Prisma. `eval/run/run.ts` and the corpus generator spend Gnani credits and refuse to run without `--yes`.
 
@@ -329,8 +332,8 @@ The accuracy numbers come from a noisy-audio corpus: golden utterances spoken by
 | Gateway overhead per hop | about 1.4 ms (p50) |
 | Barge-in: button press to silence | one audio render quantum, about 3 ms |
 | 240 noisy recordings (Hindi, Hinglish, English, Kannada; clean and 15, 10, 5 dB) | direction right 99.5%, amount right 94.7% (saved directly or after a read-back), **0 silently wrong amounts** |
-| Phone app JavaScript | 58.5 KB gzipped |
-| Tests | about 1,500, plus 36 real-browser checks, 83 red-team utterances and the compliance checks |
+| Phone app JavaScript | 108.8 KB gzipped (budget 112 KB, checked in CI) |
+| Tests | about 1,800, plus 126 real-browser checks, 123 red-team utterances and the compliance checks |
 
 The recordings were made by Timbre and recognized by Prisma, which flatters accuracy. A live test with a real voice and room noise is the check that matters. The raw results are in `eval/results/`.
 
@@ -344,6 +347,8 @@ The live demo at <https://vidur-xu96.onrender.com> runs this way. `render.yaml` 
 - The encryption key cannot be read out of the browser, but script running in the same page could still use it.
 - **PIN screen lock is not a second encryption layer:** the vault key is a non-extractable WebCrypto key, so the optional PIN is a **screen lock** to prevent casual physical access. Someone with access to the unlocked phone's browser profile data is not stopped by the PIN alone. If you forget the PIN, the only recovery is deleting all data on this phone.
 - The shopkeeper records a customer's reminder consent on the customer's behalf; the app cannot verify it.
-- Kannada reply wording was written without a native speaker and needs a review.
-- Not built: Counter Mode (hands-free wake phrase), Two Ears (two recognizers cross-checking), an Android package, and the seven other Indian languages.
+- Kannada reply wording and the newest Hindi lines (the overall summary and the reminder labels) were written without a native speaker. All Tamil, Telugu, Marathi and Gujarati text is Beta and has not been reviewed by a speaker either.
+- Two Kannada cases need a native speaker's decision: a noisy mishearing that is saved without a question, and the word for credit that is refused as lending.
+- The reminder wait is 2 days, and the app cannot tell whether you really sent a message: it trusts your answer to *Did you send it?*.
+- Not built: Counter Mode (hands-free wake phrase), Two Ears (two recognizers cross-checking), an Android package, and Bengali, Malayalam and Punjabi (their number tables exist, nothing else).
 - With an LLM key set, the transcript sentence (and nothing else) is sent to the LLM provider. With no key, nothing leaves for a language model.
