@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { WebSocketServer, type RawData, type WebSocket } from 'ws';
 
 import type { Config } from './config.js';
-import { GnaniError, SttLink, TtsLink, type Lang } from './gnani.js';
+import { GnaniError, SPEECH_LANG, SttLink, TtsLink, type Lang } from './gnani.js';
 import { Guards } from './guards.js';
 import type { Logger } from './logger.js';
 
@@ -43,7 +43,7 @@ const CLIENT_CODE: Record<string, { code: string; recoverable: boolean }> = {
   timeout: { code: 'stt_timeout', recoverable: true },
 };
 
-const LANGS = new Set(['hi', 'en', 'kn']);
+const LANGS = new Set<string>(Object.keys(SPEECH_LANG));
 const isLang = (x: unknown): x is Lang => typeof x === 'string' && LANGS.has(x);
 
 export async function createGateway(deps: GatewayDeps): Promise<Gateway> {
