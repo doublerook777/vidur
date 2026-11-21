@@ -163,3 +163,23 @@
 {"id": "G-HL-042", "lang": "hinglish", "text": "Ramesh udhaar 340 hai", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
 {"id": "G-HL-043", "lang": "hinglish", "text": "Kavya ka 2 packet chawal udhaar", "expected": {"intent": "credit_entry", "customer": "Kavya", "item": "rice"}}
 {"id": "G-HL-044", "lang": "hinglish", "text": "Ramesh sawa do sau udhaar", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Ramesh"}}
+{"id": "G-EN-101", "lang": "en", "text": "Tell me about Ramesh", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
+{"id": "G-EN-102", "lang": "en", "text": "Ramesh summary please", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
+{"id": "G-EN-103", "lang": "en", "text": "Give me Sunita's summary", "expected": {"intent": "customer_summary", "customer": "Sunita"}}
+{"id": "G-EN-104", "lang": "en", "text": "Show Kavya's account details", "expected": {"intent": "customer_summary", "customer": "Kavya"}}
+{"id": "G-EN-105", "lang": "en", "text": "Tell me about Mohan's account", "expected": {"intent": "customer_summary", "customer": "Mohan"}}
+{"id": "G-HI-101", "lang": "hi", "text": "रमेश का हिसाब बताओ", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
+{"id": "G-HI-102", "lang": "hi", "text": "सुनीता के बारे में बताओ", "expected": {"intent": "customer_summary", "customer": "Sunita"}}
+{"id": "G-HI-103", "lang": "hi", "text": "कविता का विवरण बताओ", "expected": {"intent": "customer_summary", "customer": "Kavya"}}
+{"id": "G-HI-104", "lang": "hi", "text": "मोहन का हिसाब दिखाइए", "expected": {"intent": "customer_summary", "customer": "Mohan"}}
+{"id": "G-HI-105", "lang": "hi", "text": "अजय का खाता समरी", "expected": {"intent": "customer_summary", "customer": "Ajay"}}
+{"id": "G-KN-101", "lang": "kn", "text": "ರಮೇಶ್ ಬಗ್ಗೆ ಹೇಳಿ", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
+{"id": "G-KN-102", "lang": "kn", "text": "ಸುನಿತಾ ಅವರ ಸಾರಾಂಶ ಹೇಳಿ", "expected": {"intent": "customer_summary", "customer": "Sunita"}}
+{"id": "G-KN-103", "lang": "kn", "text": "ಕಾವ್ಯಾ ಅವರ ವಿವರ ಕೊಡಿ", "expected": {"intent": "customer_summary", "customer": "Kavya"}}
+{"id": "G-KN-104", "lang": "kn", "text": "ಮೋಹನ್ ಬಗ್ಗೆ ತಿಳಿಸಿ", "expected": {"intent": "customer_summary", "customer": "Mohan"}}
+{"id": "G-KN-105", "lang": "kn", "text": "ಅಜಯ್ ಖಾತೆಯ ಸಾರಾಂಶ", "expected": {"intent": "customer_summary", "customer": "Ajay"}}
+{"id": "G-HL-101", "lang": "hinglish", "text": "Ramesh ka hisaab batao", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
+{"id": "G-HL-102", "lang": "hinglish", "text": "Sunita ke baare mein batao", "expected": {"intent": "customer_summary", "customer": "Sunita"}}
+{"id": "G-HL-103", "lang": "hinglish", "text": "Kavya ki summary dikhao", "expected": {"intent": "customer_summary", "customer": "Kavya"}}
+{"id": "G-HL-104", "lang": "hinglish", "text": "Mohan ka account summary batao", "expected": {"intent": "customer_summary", "customer": "Mohan"}}
+{"id": "G-HL-105", "lang": "hinglish", "text": "Ajay ka hisaab dikhao", "expected": {"intent": "customer_summary", "customer": "Ajay"}}
