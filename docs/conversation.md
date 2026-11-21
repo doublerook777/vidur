@@ -424,3 +424,38 @@ CHECKPOINT: CP13 passed (Phase 3: four new languages — Tamil, Telugu, Marathi,
 - Trackers: F9 marked DONE in `docs/bugs&improvements.md`.
 
 GATE OPEN: CP14 (Phase 4: integration passed — full regression, hand walkthrough, load & timing).
+
+### 2026-11-21 23:10 IST · Antigravity (Direct Execution)
+
+CHECKPOINT: CP14 passed (Phase 4: integration passed).
+- **CP14-A (Full Regression)**:
+  - All unit & component tests green: `npm test` passed 37 test files, 1,727 tests (100%).
+  - Eval golden suite: 285 lines (100% intent, 100% amount, 0 silent wrong amounts).
+  - Eval heldout suite: 164 lines (100% intent, 100% amount, 0 silent wrong amounts).
+  - Eval redteam suite: 107 lines (100% pass, 0 violations of privacy, shaming, threats, interest, lending, or AI disclosure).
+  - Compliance tests (`apps/server/src/compliance.test.ts`): all green.
+  - Secret scan: `npm run scan:secrets` clean across working tree and commit history.
+  - Zero open P0 or P1 bugs in tracker (`docs/bugs&improvements.md`).
+- **CP14-B (App Walkthrough Checklist)**:
+  - Automated walkthrough via Playwright in `e2e/browser.mjs` verifying:
+    1. Sign-up & Onboarding with AI disclosure in Hindi and custom profile fields (F1) -> PASS
+    2. Add by voice with release-to-first-audio under 2 s -> PASS
+    3. Nickname prompt on namesake customer & editing (F3) -> PASS
+    4. Customer search and instant filtering (F2) -> PASS
+    5. Hear summary button & factual speech output (F5) -> PASS
+    6. WhatsApp reminder generation with `wa.me` links & Due now list (F6) -> PASS
+    7. PIN screen lock, incorrect PIN rejection, correct PIN unlocking (F1) -> PASS
+    8. Backdated entry timestamps & calendar group headings -> PASS
+    9. 10-second undo toast & deletion reversal -> PASS
+    10. Manual entry editing via keypad & adjustment badge (F8) -> PASS
+    11. Delete all data & complete wipe verification from IndexedDB -> PASS
+    12. 360 px viewport & button overlap checks across all seven languages (`hi`, `kn`, `en`, `ta`, `te`, `mr`, `gu`) -> PASS
+    13. Mock voice turns in `ta`, `te`, `mr`, and `gu` -> PASS
+  - Total: 121/121 browser checks passed.
+- **CP14-C (F7 Round 2 & Performance Benchmarks)**:
+  - F7 round 2 regression pass recorded in `docs/test-campaign.md`: 677 lines evaluated, 676 right, 1 asked, 0 wrong, **0 silent wrong amounts**.
+  - I3 load test executed via `spikes/load-test.mjs`: 25 concurrent client sessions running full WebSocket speech cycles. 100% success rate (25/25), connect p50 = 15.0 ms, ready p50 = 50.4 ms, turn p50 = 228.2 ms, total batch duration 304 ms.
+  - I7 bundle size measured: 103.2 KB gzipped across all JS bundles (`app`, `main`, `contract`).
+- Trackers: F7, I3, I7 marked DONE in `docs/bugs&improvements.md`.
+
+GATE OPEN: CP15 (Phase 5: release — tagged release, hosted verification).

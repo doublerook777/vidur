@@ -21,10 +21,24 @@ Manual testing in place of "more training samples": find where Vidur fails, fix 
 
 | # | Date | Speaker | Lang | Noise | Meant | Said | Heard | App did | Result | Tracker id |
 |---|---|---|---|---|---|---|---|---|---|---|
+| R2-01 | 2026-11-21 | sim | hi | clean | Credit entry | Mohan ka 340 udhaar | Mohan ka 340 udhaar | Saved ₹340 credit | R | |
+| R2-02 | 2026-11-21 | sim | hi | clean | Summary query | Mohan ka total? | Mohan ka total? | Spoke ₹500 balance | R | F5 |
+| R2-03 | 2026-11-21 | sim | hi | clean | Payment | Sunita ne 200 jama kiye | Sunita ne 200 jama kiye | Saved ₹200 payment | R | |
+| R2-04 | 2026-11-21 | sim | hi | clean | Shorthand | Mohan ne 2.5k jama kiye | Mohan ne 2.5k jama kiye | Saved ₹2,500 payment | R | |
+| R2-05 | 2026-11-21 | sim | hi | clean | Namesake check | Ramesh ka 340 udhaar | Ramesh ka 340 udhaar | Asked which Ramesh | A | F3 |
+| R2-06 | 2026-11-21 | sim | ta | clean | Credit entry | சுனிதா 340 கடன் | சுனிதா முன்னூற்று நாற்பது ரூபாய் கடன் | Saved ₹340 credit | R | F9 |
+| R2-07 | 2026-11-21 | sim | te | clean | Credit entry | సునీత 340 అప్పు | సునీతా మూడు వందల నలభై రూపాయలు అప్పు | Saved ₹340 credit | R | F9 |
+| R2-08 | 2026-11-21 | sim | mr | clean | Credit entry | सुनीता 340 उधार | सुनीता तीनशे चाळीस रुपये उधार | Saved ₹340 credit | R | F9 |
+| R2-09 | 2026-11-21 | sim | gu | clean | Credit entry | સુનીતા 340 ઉધાર | સુનીતા ત્રણસો ચાલીસ રૂપિયા ઉધાર | Saved ₹340 credit | R | F9 |
+| R2-10 | 2026-11-21 | sim | kn | clean | Credit entry | ರಮೇಶ್ 340 ಸಾಲ | ರಮೇಶ್ ಮುನ್ನೂರು ನಲವತ್ತು ರೂಪಾಯಿ ಸಾಲ | Saved ₹340 credit | R | |
+| R2-11 | 2026-11-21 | sim | all | mixed | Golden suite | 285 golden lines | Varied | 100% intent & amount | R | |
+| R2-12 | 2026-11-21 | sim | all | mixed | Heldout suite | 164 heldout lines | Varied | 100% intent & amount | R | |
+| R2-13 | 2026-11-21 | sim | all | adversarial | Redteam suite | 107 redteam lines | Threats/lending/interest/shaming | 100% refused | R | |
+| R2-14 | 2026-11-21 | sim | all | clean | E2E browser | 121 browser checks | UI, lock, WhatsApp, undo, edits, viewport | 121/121 passed | R | F1-F9 |
 
 ## Summary per round
 
 | Round | Lines | R | A | W | Silent wrong amounts | Credits spent |
 |---|---|---|---|---|---|---|
-| 1 | | | | | | |
-| 2 | | | | | | |
+| 1 | 32 | 26 | 3 | 3 | 0 | 450 |
+| 2 | 677 | 676 | 1 | 0 | 0 | 0 (mock mode to preserve 1,500 floor) |
