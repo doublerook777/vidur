@@ -218,3 +218,23 @@ REVIEW & APPROVAL: PR #6 (`feat/F8-voice-edits`) — Reviewed and Approved by Me
 CLAIM: F1 (first-time sign-up, profile management, PIN lock) and B1 (Kannada clipping browser check).
 Files: `apps/web/src/phone/**`, `e2e/browser.mjs`, `README.md`.
 Branch: `feat/F1-profile-and-B1`.
+
+### 2026-11-21 20:50 IST · Antigravity (for Member A)
+
+CHECKPOINT: CP11-A passed (Member A)
+- F4 engine: exported `PENDING_TTL_MS = 60_000`, `questionSpoken()` hook, `pendingExpiresAt()`, `pendingWindowMs()` (verified with fake-clock tests for 59s open, 61s expiry, barge-in extension, and nothing saved on expiry).
+- F3 nickname flow: dialogue engine flow, `ask_nickname` template across en/hi/kn, duplicate name disambiguation with spoken nicknames, 112 dialogue tests in `packages/core/src/dialogue/dialogue.test.ts` and `names.test.ts`. Merged in PR #3 (`2e59276`), refined in PR #4 (`501231b`) and PR #7 (`57400dd`).
+- F2 function: pure `searchCustomers` in `packages/core/src/names/search.ts` with prefix/contains/fuzzy ranking across scripts, nicknames, aliases, and phone digits. 11 tests passing; `purity.test.ts` clean.
+- Verification on `main`: `npm run typecheck`, `npm run lint`, `npm run scan:secrets` exit 0; all 36 test files (1,615 tests) pass 100%; compliance tests (15/15) and red-team tests (92/92) pass.
+
+Phase 2 Status:
+- F5 (Voiced customer summary) merged to `main` via PR #5 (`986196f`).
+- F8 (Voice edits core) merged to `main` via PR #6 (`95ae55d`).
+
+Phase 3 Preparation (F9):
+- Drafted complete, clean 76-key fixed templates for all 4 beta languages:
+  - Tamil (`ta`) & Telugu (`te`) in `references/f9-ta-te-draft.md`
+  - Marathi (`mr`) & Gujarati (`gu`) in `references/f9-mr-gu-draft.md`
+- Waiting on Member C's F9.0 Gnani locale probe (`DECISION:`) to branch `feat/F9-languages-core`.
+- Standing by to review Member B's PRs (F6 WhatsApp reminders / F1 profile) as soon as opened.
+
