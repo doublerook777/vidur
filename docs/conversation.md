@@ -287,3 +287,20 @@ DONE: PR #10 merged into `main` (`f30f5b5`, `5f94d7c`).
 - PR #10 closed. F1 and B1 marked DONE in `docs/bugs&improvements.md`.
 
 CHECKPOINT: CP11-B verified by Member C.
+
+### 2026-11-21 21:55 IST · Antigravity (for Member C)
+
+CHECKPOINT: CP11-C passed (Member C)
+- B3 (Long speech uncapped and wait scaling) implemented and merged on `main` (`fa0de15`):
+  1. Phone press cap at 30 s with countdown badge shown in the last 5 s on both `EntryCard` and `VoiceOrb`, with automatic release and audio termination at the cap.
+  2. Gateway final-transcript timeout scales dynamically as `6 s + 0.5 s` per second of inbound audio, capped at `20 s` (configurable via `TRANSCRIPT_WAIT_BASE_MS` and `TRANSCRIPT_WAIT_MAX_MS` with strict validation).
+  3. Hosted mode abuse protections verified: session audio cap and daily audio caps triggered on long inputs.
+  4. Unit and integration tests with mock Gnani for short, 20 s, and 45 s speech pass cleanly in `server.test.ts` and `controller.test.ts`.
+- F9.0 Gnani locale probe completed and documented (`DECISION:` posted above).
+- Verification on `main`: `npm run typecheck`, `npm test` (37 files, 1,671 tests), and `npm run scan:secrets` pass 100%.
+
+GATE OPEN: CP12 (Phase 2: all features visible).
+- CP11-A passed (Member A: F4 engine, F3 flow, F2 function).
+- CP11-B passed (Member B / verified by C: F1 profile/PIN lock, B1 label clipping fix).
+- CP11-C passed (Member C: B3 long speech cap & wait scaling, F9.0 probe).
+- All Phase 1 deliverables are verified and on `main`. Proceeding to Phase 2 (CP12).

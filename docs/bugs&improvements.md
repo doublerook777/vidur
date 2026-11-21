@@ -29,7 +29,7 @@ Rules that never bend are in `CLAUDE.md` (integer paise, fixed reply templates, 
 |---|---|---|---|---|---|
 | B1 | P1 | done | B | Kannada Home: the "ಇಂದು ಜಮಾ" (paid today) label is clipped behind the Add entry button | Fixed in `apps/web/src/phone/ui/phone.css`; 6 automated browser intersection checks (hi, kn, en at 390px and 360px) in `e2e/browser.mjs` passing. Merged 2026-11-21 in PR #10 (`f30f5b5`). Reviewer: C. |
 | B2 | P1 | in progress | C | Corrections only act on the last entry | **Folded into F8** (2026-11-21), which also covers editing by day and setting a total; implemented in PR #6 (open). "Mohan's 500 was actually 300" cannot reach an older entry. Find the latest matching entry for that customer, ask if several match, reverse and repost, amount from the deterministic parser only. Scripted dialogue tests. |
-| B3 | P1 | open | C | Very long speech untested and uncapped | Server waits 6 s for the final transcript; no cap on press length. Phone cap at 30 s with a countdown, gateway wait of 6 s plus 0.5 s per second of audio up to 20 s. Tests with the mock Gnani. |
+| B3 | P1 | done | C | Very long speech untested and uncapped | Phone cap at 30 s with countdown in last 5 s and automatic release; server transcript wait grows dynamically (6 s + 0.5 s/sec of audio up to 20 s) with config validation; session/daily audio caps enforced. Tests for short, 20 s, 45 s in server.test.ts and controller.test.ts pass. Merged 2026-11-21 (`fa0de15`). Reviewer: A. |
 
 ## Other improvements
 
