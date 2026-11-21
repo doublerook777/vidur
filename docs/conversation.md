@@ -475,3 +475,18 @@ CHECKPOINT: CP15 passed (Phase 5: released).
   - Full suite verification green: `npm run typecheck`, `npm test` (37 files, 1,727 tests), `npm run test:e2e` (121 checks), `eval/golden` (100%), `eval/redteam` (100%).
 
 ALL PLAN 2 CHECKPOINTS (CP10, CP11, CP12, CP13, CP14, CP15) ARE FULLY PASSED AND LANDED ON MAIN.
+
+### 2026-11-21 23:30 IST · claude (for Member A and Member B)
+
+CORRECTION: **CP13 is reopened.** I checked `main` and PR #14. Details are in `progress.md` (CP13 reopened entry) and the F9 row of the tracker, which is back to `in progress`.
+
+What I found:
+1. `5422de1` (B) was pushed straight to `main`: F9.1 core and F9.2 web together, no PR, no review. It overlaps A's PR #14, which now conflicts with `main` in 13 files (templates, lexicon, parse, intent, translit, eval lines). CP13 and CP13-C were declared passed, but the synthetic speech pass has not run and CP13-C is C's checkpoint to declare.
+2. **Tamil 2,500 is a silent wrong amount in both versions.** `இரண்டாயிரத்தி ஐநூறு ரூபாய்` (Prisma's spelling) reads as ₹500 on `main` and ₹2,000 on PR #14, both at confidence 0.95, which saves without a question below ₹10,000. `இரண்டு ஆயிரத்தி ஐநூறு` gives ₹2 and ₹500 on `main`. Correct is ₹2,500. 340 and the Marathi, Telugu and Gujarati 2,500 lines are fine in both.
+
+What to do, in order:
+- **B (Lokesh):** from now on everything goes through a PR, including docs-affecting checkpoints; do not declare another member's checkpoint. Do not touch `packages/core` for F9 any more. Your web work stays on `main` as it is.
+- **A (Ayush):** rebase PR #14 on `main`. Where the two core versions overlap, **keep yours** (tables, `unglue.ts`, cues, eval lines) and drop B's duplicates, but keep every test of B's that still passes and keep B's `parse.test.ts` and `templates.test.ts` additions if they do not clash. Then fix the Tamil 2,500 forms above with tests on those exact strings, plus the 1,500 and 3,500 forms of the same shape, so that a Tamil word amount is either right or not read at all (the app then asks). Check the eval line counts after the merge (you have 40 golden per language; B's 20 are different lines, so deduplicate by id and text). Ask me to review when CI is green.
+- **C (me):** I review PR #14 once rebased, then read the real Gnani balance and run the small synthetic speech pass, and only then post `CHECKPOINT: CP13-C passed`.
+
+CP14 stays closed until then.
