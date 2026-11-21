@@ -4,6 +4,7 @@ import {
   type CustomerCreatedEvent,
   type CustomerUpdatedEvent,
   type EntryKind,
+  type EntryReason,
   type EntryPostedEvent,
   type LedgerEvent,
   type LedgerStore,
@@ -56,6 +57,7 @@ function toActiveEntry(e: EntryPostedEvent): ActiveEntry {
     recordedAt: e.recordedAt,
   };
   if (e.item !== undefined) entry.item = e.item;
+  if (e.reason !== undefined) entry.reason = e.reason;
   return entry;
 }
 
@@ -149,8 +151,9 @@ export class Ledger {
     paise: number;
     at?: number;
     item?: string;
+    reason?: EntryReason;
   }): Promise<ActiveEntry> {
-    const { customerId, kind, paise, at, item } = input;
+    const { customerId, kind, paise, at, item, reason } = input;
     if (!Number.isInteger(paise) || paise <= 0) {
       throw new Error(`paise must be a positive integer, got ${String(paise)}`);
     }
@@ -164,6 +167,7 @@ export class Ledger {
       at: at ?? now,
       recordedAt: now,
       ...(item !== undefined ? { item } : {}),
+      ...(reason !== undefined ? { reason } : {}),
     };
     await this.append(event);
     return toActiveEntry(event);
