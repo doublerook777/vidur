@@ -141,6 +141,7 @@ add('थाऊजेंड', { kind: 'mult', value: 1000 });
 // Spellings of the Hindi fractions that Prisma produces.
 add('सावा', { kind: 'frac', word: 'sawa' });
 add('साडे', { kind: 'frac', word: 'saade' });
+add('सादे', { kind: 'frac', word: 'saade' }); // Prisma wrote साढ़े as सादे; without it "सादे तीन सौ" read as 300, silently
 add('डेड', { kind: 'frac', word: 'dedh' });
 
 // ---- Tamil extras ----

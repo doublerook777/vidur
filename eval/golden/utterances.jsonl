@@ -363,3 +363,5 @@
 {"id":"G-GU-038","lang":"gu","text":"મોહન 100 જમા","expected":{"intent":"payment","amount":100,"customer":"Mohan"}}
 {"id":"G-GU-039","lang":"gu","text":"અજય 500 ઉધાર","expected":{"intent":"credit_entry","amount":500,"customer":"Ajay"}}
 {"id":"G-GU-040","lang":"gu","text":"સુનીતા 1000 ઉધાર","expected":{"intent":"credit_entry","amount":1000,"customer":"Sunita"}}
+{"id":"G-HI-901","lang":"hi","text":"कविता का सादे तीन सौ रुपये उधार।","expected":{"intent":"credit_entry","amount":350,"customer":"Kavita"}}
+{"id":"G-KN-901","lang":"kn","text":"ಮೋಹನ್ ನಾಲ್ಕುನೂರು ಹತ್ತು ರೂಪಾಯಿ ಉದ್ಧಾರ.","expected":{"intent":"credit_entry","amount":410,"customer":"Mohan"}}
