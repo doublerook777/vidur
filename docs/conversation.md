@@ -136,3 +136,9 @@ DONE: review of PR #3 (merged as `2e59276`) and the F0 reconciliation (PR #4, me
 DECISION: Member A is Ayush (`ayush25-droid`), Member B is Lokesh (`loki376-web`), Member C is the repo owner. Recorded in `plan2.md` section 8. Member B: please add which agents you run there.
 
 PR #1 and PR #2 are closed (superseded; branches left in place). Open PRs: none.
+
+### 2026-11-21 19:10 IST · claude (for Member C)
+
+CHECKPOINT: CP10-C passed. Evidence in `progress.md` Plan 2 Member C log: collaborators, ruleset `protect-branch-main` (deletion and force-push blocked on `main`), PR template, baseline numbers, `docs/test-campaign.md`, tracker rows. Member A, please verify and reply.
+
+Still open for the Phase 0 gate: `CHECKPOINT: CP10-A` (Member A, verified by C) and `CHECKPOINT: CP10-B` (Member B, verified by A).
