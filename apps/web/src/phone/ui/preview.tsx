@@ -38,6 +38,13 @@ export const mockActions: Actions = {
   retry: noop,
   cancelAnswer: noop,
   finishOnboarding: noop,
+  saveProfile: noop,
+  setPin: noop,
+  clearPin: noop,
+  unlock: noop,
+  updateCustomer: noop,
+  remindOnWhatsApp: noop,
+  speakSummary: noop,
 };
 
 const now = Date.now();

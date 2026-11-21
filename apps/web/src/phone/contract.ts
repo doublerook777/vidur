@@ -13,6 +13,10 @@ export interface CustomerRow {
   id: string;
   name: string;
   aliases: string[];
+  /** Tells same-named customers apart, shown as "Name (nickname)". F3. */
+  nickname?: string;
+  /** Digits only, for the WhatsApp reminder link. F6. */
+  phone?: string;
   /** Integer paise. Positive means the customer owes money. */
   balancePaise: number;
   lastActivityAt: number | null;
@@ -46,6 +50,10 @@ export interface EntryCardVM {
   answers?: 'yes_no';
   /** Set after a note was saved: the customer whose notes the card links to. */
   noteCustomerId?: string;
+  /** Epoch ms when the open question stops waiting; drives the countdown on the Yes and No buttons. F4. */
+  answerExpiresAt?: number;
+  /** Length of the whole window in ms, so the countdown can show how much is left. F4. */
+  answerWindowMs?: number;
 }
 
 export interface ErrorVM {
@@ -131,6 +139,20 @@ export interface Actions {
   cancelAnswer(): void;
   retry(): void;
   finishOnboarding(opts: { lang: Lang; demoData: boolean }): void;
+  /** F1: saves the shop and owner name. */
+  saveProfile(input: { shopName: string; ownerName: string }): void;
+  /** F1: sets or changes the PIN screen lock. */
+  setPin(pin: string): void;
+  /** F1: removes the PIN screen lock. */
+  clearPin(): void;
+  /** F1: tries a PIN on the lock screen. */
+  unlock(pin: string): void;
+  /** F2/F3/F6: changes a customer's name, nickname or phone. An empty string clears a nickname or phone. */
+  updateCustomer(customerId: string, changes: { name?: string; nickname?: string; phone?: string }): void;
+  /** F6: opens WhatsApp with the prepared reminder, if the reminder gate allows it. */
+  remindOnWhatsApp(customerId: string): void;
+  /** F5: speaks and shows the fixed-template summary for one customer. */
+  speakSummary(customerId: string): void;
 }
 
 /** Every interactive element carries data-feature="<id>", so the showcase can explain it. */
