@@ -339,7 +339,8 @@ describe('privacy: nothing a shopkeeper says reaches the logs', () => {
     await new Promise((r) => setTimeout(r, 100));
     const all = logs.join('\n');
     expect(all.length).toBeGreaterThan(0);
-    for (const secret of ['रमेश', 'Sunita', 'Ramesh', '340', 'चालीस', 'उधार']) expect(all).not.toContain(secret);
+    const scrubbedTimestamps = all.replace(/"t":\d+/g, '').replace(/"port":\d+/g, '');
+    for (const secret of ['रमेश', 'Sunita', 'Ramesh', '340', 'चालीस', 'उधार']) expect(scrubbedTimestamps).not.toContain(secret);
     expect(logs.every((l) => !/"(transcript|text|name|customer|amount)"/.test(l))).toBe(true);
   });
 });
