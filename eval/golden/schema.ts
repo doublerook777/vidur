@@ -30,7 +30,7 @@
  *                        amount or the target total; the customer is the one named.
  */
 
-export const LANGS = ['hi', 'en', 'kn', 'hinglish'] as const;
+export const LANGS = ['hi', 'en', 'kn', 'hinglish', 'ta', 'te', 'mr', 'gu'] as const;
 export type Lang = (typeof LANGS)[number];
 
 export const INTENTS = [
@@ -71,7 +71,7 @@ export interface GoldenUtterance {
   expected: Expected;
 }
 
-const ID_RE = /^G-(HI|EN|KN|HL)-\d{3}$/;
+const ID_RE = /^G-(HI|EN|KN|HL|TA|TE|MR|GU)-\d{3}$/;
 const WEEKDAY_RE = /^weekday:(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$/;
 
 export interface ValidationResult {

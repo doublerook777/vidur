@@ -1,6 +1,6 @@
 import { useRef, useState } from 'preact/hooks';
 
-import type { FeedItem } from '../contract.js';
+import type { FeedItem, Lang } from '../contract.js';
 import { dayKey, formatDay, formatDayLong, formatRupees, formatTime, formatWhen } from './format.js';
 import { LABELS } from './labels.js';
 import type { ScreenProps } from './types.js';
@@ -18,7 +18,7 @@ export interface FeedVM {
 }
 
 /** One entry: who, what, the time, the amount; and a way to remove it. */
-export function EntryRow({ item, undoable, now, lang, actions, showDate = true }: { item: FeedItem; undoable: boolean; now: number; lang: 'hi' | 'en' | 'kn'; actions: ScreenProps<FeedVM>['actions']; showDate?: boolean }) {
+export function EntryRow({ item, undoable, now, lang, actions, showDate = true }: { item: FeedItem; undoable: boolean; now: number; lang: Lang; actions: ScreenProps<FeedVM>['actions']; showDate?: boolean }) {
   const t = LABELS[lang];
   const [open, setOpen] = useState(false);
   const [asking, setAsking] = useState(false);
@@ -115,7 +115,7 @@ export function EntryRow({ item, undoable, now, lang, actions, showDate = true }
   );
 }
 
-function dayHeading(at: number, now: number, lang: 'hi' | 'en' | 'kn'): string {
+function dayHeading(at: number, now: number, lang: Lang): string {
   const t = LABELS[lang];
   const k = dayKey(at);
   if (k === dayKey(now)) return t.todayWord;

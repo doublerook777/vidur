@@ -7,9 +7,17 @@ import type { ScreenProps } from './types.js';
 import { AiBadge } from './AiBadge.js';
 import { BottomNav } from './BottomNav.js';
 
-const LANG_LABEL: Record<Lang, string> = { hi: 'हिंदी', en: 'English', kn: 'ಕನ್ನಡ' };
+const LANG_LABEL: Record<Lang, string> = {
+  hi: 'हिंदी',
+  en: 'English',
+  kn: 'ಕನ್ನಡ',
+  ta: 'தமிழ் (Beta)',
+  te: 'తెలుగు (Beta)',
+  mr: 'मराठी (Beta)',
+  gu: 'ગુજરાતી (Beta)',
+};
 const THEMES: Theme[] = ['light', 'dark'];
-const LANGS: Lang[] = ['hi', 'en', 'kn'];
+const LANGS: Lang[] = ['hi', 'en', 'kn', 'ta', 'te', 'mr', 'gu'];
 
 export function Settings({ vm, actions, lang }: ScreenProps<SettingsVM>) {
   const t = LABELS[lang];

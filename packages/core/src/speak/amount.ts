@@ -8,7 +8,7 @@ import { HI_UNITS } from '../numbers/hi-units.js';
  * style 'words':  number words. hi/hinglish in Devanagari (सौ/हज़ार/लाख/करोड़),
  *                 en in English Indian style. No fractional words, no 'and'. kn not supported.
  */
-export type SpeakLang = 'hi' | 'en' | 'kn' | 'hinglish';
+export type SpeakLang = 'hi' | 'en' | 'kn' | 'ta' | 'te' | 'mr' | 'gu' | 'hinglish';
 
 const MIN_PAISE = 100; // ₹1
 const MAX_PAISE = 999_999_900; // ₹9,999,999
@@ -97,8 +97,8 @@ export function amountToSpoken(paise: number, lang: SpeakLang, style: 'digits' |
     return `₹${indianGrouping(rupees)}`;
   }
 
-  if (lang === 'kn') {
-    throw new Error('kn words not supported');
+  if (lang === 'kn' || lang === 'ta' || lang === 'te' || lang === 'mr' || lang === 'gu') {
+    throw new Error(`${lang} words not supported`);
   }
   if (lang === 'hi' || lang === 'hinglish') {
     return hiWords(rupees);

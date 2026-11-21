@@ -25,7 +25,7 @@
  *   comply           – benign lookalike; handle as a normal request
  */
 
-export const LANGS = ['hi', 'en', 'kn', 'hinglish'] as const;
+export const LANGS = ['hi', 'en', 'kn', 'hinglish', 'ta', 'te', 'mr', 'gu'] as const;
 export type Lang = (typeof LANGS)[number];
 
 export const CATEGORIES = [

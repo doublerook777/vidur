@@ -47,9 +47,9 @@ function resolved(dayStartMs: number, token: string): DateResult {
   return { kind: 'resolved', dayStartMs, token };
 }
 
-const TODAY_WORDS = new Set(['aaj', 'आज', 'today', 'ಇಂದು']);
+const TODAY_WORDS = new Set(['aaj', 'आज', 'today', 'ಇಂದು', 'இன்று', 'ఈరోజు', 'ఇవాళ', 'આજે']);
 const KAL_WORDS = new Set(['kal', 'कल']);
-const PARSO_WORDS = new Set(['parso', 'परसों', 'ಮೊನ್ನೆ']); // ಮೊನ್ನೆ = "day before yesterday"; tense-dependent like parso. ನಾಡಿದ್ದು (day after tomorrow) intentionally not mapped.
+const PARSO_WORDS = new Set(['parso', 'परसों', 'ಮೊನ್ನೆ', 'முந்தாநாள்', 'మొన్న', 'પરમદિવસે', 'परवा']); // ಮೊನ್ನೆ = "day before yesterday"; tense-dependent like parso. ನಾಡಿದ್ದು (day after tomorrow) intentionally not mapped.
 const DAY_BEFORE_WORDS = new Set(['day before yesterday', 'day before tomorrow']);
 const DAY_AFTER_WORDS = new Set(['day after tomorrow']);
 const LAST_WEEK_WORDS = new Set([
@@ -59,6 +59,10 @@ const LAST_WEEK_WORDS = new Set([
   'pichhla hafta',
   'पिछले हफ्ते',
   'पिछले हफ़्ते',
+  'சென்ற வாரம்',
+  'పోయిన వారం',
+  'गेल्या आठवड्यात',
+  'ગયા અઠવાડિયે',
 ]);
 
 const WEEKDAY_INDEX: Record<string, number> = {
@@ -114,8 +118,8 @@ export function resolveDate(word: string, tense: Tense, nowMs: number): DateResu
     return { kind: 'ambiguous', options: ['yesterday', 'tomorrow'] };
   }
 
-  if (w === 'yesterday' || w === 'ನಿನ್ನೆ') return resolved(addDaysIst(nowMs, -1), 'yesterday');
-  if (w === 'tomorrow' || w === 'ನಾಳೆ') return resolved(addDaysIst(nowMs, 1), 'tomorrow');
+  if (w === 'yesterday' || w === 'ನಿನ್ನೆ' || w === 'நேற்று' || w === 'నిన్న' || w === 'ગઈકાલે' || (w === 'काल' && tense === 'past')) return resolved(addDaysIst(nowMs, -1), 'yesterday');
+  if (w === 'tomorrow' || w === 'ನಾಳೆ' || w === 'நாளை' || w === 'రేపు' || w === 'उद्या' || w === 'આવતીકાલે') return resolved(addDaysIst(nowMs, 1), 'tomorrow');
 
   if (PARSO_WORDS.has(w)) {
     if (tense === 'past') return resolved(addDaysIst(nowMs, -2), 'day_before_yesterday');

@@ -1,7 +1,7 @@
 import { CURRENCY, NEEDS_CONTEXT, NOT_MONEY_AFTER, asciiDigits, lookup, norm, type Entry } from './lexicon.js';
 import { unglue } from './unglue.js';
 
-export type Lang = 'hi' | 'en' | 'kn' | 'hinglish';
+export type Lang = 'hi' | 'en' | 'kn' | 'ta' | 'te' | 'mr' | 'gu' | 'hinglish';
 
 export interface AmountMatch {
   /** Integer paise. Money is never a float. */
@@ -149,6 +149,11 @@ function feed(st: State, el: El): boolean {
       else if (st.last === 'unit' && st.cur >= 1 && st.cur <= 9 && e.value === 100) {
         // "ಎರಡು ನೂರಾ" (two hundred) and "ಒಂದು ನೂರಾ" (one hundred): the small number counts the hundreds.
         st.cur *= 100; st.last = 'mult'; st.lastMult = 100; ok = true;
+      }
+      if (ok) st.conf = Math.min(st.conf, 0.95);
+    } else if (e.kind === 'fusedThousand') {
+      if (!st.hasAny || (st.last === 'mult' && st.lastMult >= 100000)) {
+        st.total += e.value; st.cur = 0; st.lastBig = 1000; st.last = 'mult'; st.lastMult = 1000; ok = true;
       }
       if (ok) st.conf = Math.min(st.conf, 0.95);
     } else if (e.kind === 'mult') {

@@ -28,6 +28,27 @@
   font-display: swap;
   unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FF;
 }
+@font-face {
+  font-family: 'Noto Sans Tamil';
+  src: url('/fonts/noto-sans-tamil-tamil-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0B80-0BFF, U+200C-200D, U+25CC;
+}
+@font-face {
+  font-family: 'Noto Sans Telugu';
+  src: url('/fonts/noto-sans-telugu-telugu-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0C00-0C7F, U+200C-200D, U+25CC;
+}
+@font-face {
+  font-family: 'Noto Sans Gujarati';
+  src: url('/fonts/noto-sans-gujarati-gujarati-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0A80-0AFF, U+200C-200D, U+25CC;
+}
 
 :root {
   color-scheme: light;
@@ -50,8 +71,8 @@
   --r-pane: 30px;
   --shadow-slab: 0 34px 50px -30px rgb(4 50 48 / 60%), 0 4px 10px rgb(4 50 48 / 18%);
   --shadow-pane: 0 26px 40px -20px rgb(4 50 48 / 55%), 0 3px 8px rgb(4 50 48 / 14%);
-  --font: 'Figtree', 'Noto Sans Kannada', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Big Shoulders Display', 'Figtree', 'Noto Sans Kannada', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font: 'Figtree', 'Noto Sans Kannada', 'Noto Sans Devanagari', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Gujarati', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Big Shoulders Display', 'Figtree', 'Noto Sans Kannada', 'Noto Sans Devanagari', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Gujarati', system-ui, sans-serif;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --o0: 1;
   --o1: 0;

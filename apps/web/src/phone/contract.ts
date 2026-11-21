@@ -2,7 +2,7 @@
  * The contract between the phone app, its screens, and the showcase page.
  * Screens are pure: they render a view model and call callbacks. They never touch audio, storage or the network.
  */
-export type Lang = 'hi' | 'en' | 'kn';
+export type Lang = 'hi' | 'en' | 'kn' | 'ta' | 'te' | 'mr' | 'gu';
 export type Theme = 'light' | 'dark';
 export type FrameKind = 'notch' | 'no-notch' | 'punch-hole';
 

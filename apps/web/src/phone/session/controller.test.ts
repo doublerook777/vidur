@@ -178,8 +178,8 @@ describe('PhoneSession end to end with the real gateway, the mock Gnani and fake
     vi.unstubAllGlobals();
   });
 
-  it('a fresh install starts in the phone\'s own language: English, Kannada, and Hindi for anything else', async () => {
-    for (const [tag, lang] of [['en-IN', 'en'], ['kn-IN', 'kn'], ['hi-IN', 'hi'], ['ta-IN', 'hi']] as const) {
+  it('a fresh install starts in the phone\'s own language: English, Kannada, Tamil, Telugu, Marathi, Gujarati, and Hindi for anything else', async () => {
+    for (const [tag, lang] of [['en-IN', 'en'], ['kn-IN', 'kn'], ['hi-IN', 'hi'], ['ta-IN', 'ta'], ['te-IN', 'te'], ['mr-IN', 'mr'], ['gu-IN', 'gu'], ['fr-FR', 'hi']] as const) {
       vi.stubGlobal('navigator', { language: tag });
       await boot();
       expect(session!.state.lang).toBe(lang);

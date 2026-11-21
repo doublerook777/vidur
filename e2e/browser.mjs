@@ -152,10 +152,10 @@ try {
   const small = await page.evaluate(() => [...document.querySelectorAll('button, [role=button]')].map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0 && (r.height < 44 || r.width < 44)).length);
   check('every visible button is at least 44 px in both directions', small === 0, `${small} too small`);
 
-  // B1: Kannada, Hindi and English "paid today" label does not intersect Add entry button
+  // B1: All seven languages: "paid today" label does not intersect Add entry button
   for (const width of [390, 360]) {
     await page.setViewportSize({ width, height: 844 });
-    for (const l of ['hi', 'kn', 'en']) {
+    for (const l of ['hi', 'kn', 'en', 'ta', 'te', 'mr', 'gu']) {
       await page.evaluate((lang) => window.__vidur.actions.setLang(lang), l);
       await sleep(150);
       const overlap = await page.evaluate(() => {
@@ -477,6 +477,24 @@ try {
   await sleep(200);
   check('"Add entry" in the banner opens the keypad', (await page.locator('[data-feature="keypad"]').count()) > 0);
   await page.evaluate(() => window.__vidur.actions.navigate('home'));
+
+  // CP13: mock turns in Tamil, Telugu, Marathi, Gujarati
+  for (const [l, text, expectedCustomer, expectedRupees] of [
+    ['ta', 'சுனிதா முன்னூற்று நாற்பது ரூபாய் கடன்', 'Sunita', 340],
+    ['te', 'సునీతా మూడు వందల నలభై రూపాయలు అప్పు', 'Sunita', 340],
+    ['mr', 'सुनीता तीनशे चाळीस रुपये उधार', 'Sunita', 340],
+    ['gu', 'સુનીતા ત્રણસો ચાલીસ રૂપિયા ઉધાર', 'Sunita', 340],
+  ]) {
+    await page.evaluate((lang) => window.__vidur.actions.setLang(lang), l);
+    await sleep(150);
+    const beforeLen = await state(page, 's.history.length');
+    await page.evaluate(({ text, l }) => window.__vidur.onTranscript({ text, lang: l, sttMs: 0, audioMs: 0 }), { text, l });
+    await sleep(350);
+    const afterLen = await state(page, 's.history.length');
+    const first = await state(page, 's.history[0]');
+    check(`CP13: ${l} mock turn records ₹${expectedRupees} credit for ${expectedCustomer}`, afterLen === beforeLen + 1 && first.customerName === expectedCustomer && first.paise === expectedRupees * 100 && first.kind === 'credit');
+  }
+  await page.evaluate(() => window.__vidur.actions.setLang('hi'));
 
   // ---------------------------------------------------------------- offline keypad
   server.kill();

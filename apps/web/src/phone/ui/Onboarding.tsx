@@ -10,7 +10,15 @@ export interface OnboardingVM {
   lang: Lang;
 }
 
-const LANG_LABEL: Record<Lang, string> = { hi: 'हिंदी', en: 'English', kn: 'ಕನ್ನಡ' };
+const LANG_LABEL: Record<Lang, string> = {
+  hi: 'हिंदी',
+  en: 'English',
+  kn: 'ಕನ್ನಡ',
+  ta: 'தமிழ் (Beta)',
+  te: 'తెలుగు (Beta)',
+  mr: 'मराठी (Beta)',
+  gu: 'ગુજરાતી (Beta)',
+};
 
 export function Onboarding({ vm, actions, lang }: ScreenProps<OnboardingVM>) {
   const t = LABELS[lang];
@@ -19,8 +27,36 @@ export function Onboarding({ vm, actions, lang }: ScreenProps<OnboardingVM>) {
   const [pin, setPin] = useState('');
 
   const handleFinish = (demoData: boolean) => {
-    const sName = shopName.trim() || (lang === 'hi' ? 'किराना स्टोर' : lang === 'kn' ? 'ಕಿರಾಣಿ ಅಂಗಡಿ' : 'Kirana Store');
-    const oName = ownerName.trim() || (lang === 'hi' ? 'दुकानदार' : lang === 'kn' ? 'ಅಂಗಡಿಯವರು' : 'Owner');
+    const sName =
+      shopName.trim() ||
+      (lang === 'hi'
+        ? 'किराना स्टोर'
+        : lang === 'kn'
+          ? 'ಕಿರಾಣಿ ಅಂಗಡಿ'
+          : lang === 'ta'
+            ? 'மளிகைக் கடை'
+            : lang === 'te'
+              ? 'కిరాణా కొట్టు'
+              : lang === 'mr'
+                ? 'किराणा दुकान'
+                : lang === 'gu'
+                  ? 'કરિયાણાની દુકાન'
+                  : 'Kirana Store');
+    const oName =
+      ownerName.trim() ||
+      (lang === 'hi'
+        ? 'दुकानदार'
+        : lang === 'kn'
+          ? 'ಅಂಗಡಿಯವರು'
+          : lang === 'ta'
+            ? 'உரிமையாளர்'
+            : lang === 'te'
+              ? 'యజమాని'
+              : lang === 'mr'
+                ? 'दुकानदार'
+                : lang === 'gu'
+                  ? 'દુકાનદાર'
+                  : 'Owner');
     const validPin = /^\d{4,6}$/.test(pin.trim()) ? pin.trim() : undefined;
     actions.finishOnboarding({
       lang: vm.lang,

@@ -93,6 +93,10 @@ export interface SessionOptions {
 function deviceLang(): Lang {
   const tag = typeof navigator === 'undefined' ? '' : (navigator.language || '').toLowerCase();
   if (tag.startsWith('kn')) return 'kn';
+  if (tag.startsWith('ta')) return 'ta';
+  if (tag.startsWith('te')) return 'te';
+  if (tag.startsWith('mr')) return 'mr';
+  if (tag.startsWith('gu')) return 'gu';
   if (tag.startsWith('en')) return 'en';
   return 'hi';
 }
@@ -571,7 +575,15 @@ export class PhoneSession {
   /** Tapping Yes or No does exactly what saying it does: the words go through the same dialogue. */
   private async answer(a: 'yes' | 'no'): Promise<void> {
     if (!this.isYesNo()) return;
-    const words: Record<Lang, [string, string]> = { hi: ['हाँ', 'नहीं'], en: ['yes', 'no'], kn: ['ಹೌದು', 'ಇಲ್ಲ'] };
+    const words: Record<Lang, [string, string]> = {
+      hi: ['हाँ', 'नहीं'],
+      en: ['yes', 'no'],
+      kn: ['ಹೌದು', 'ಇಲ್ಲ'],
+      ta: ['ஆம்', 'இல்லை'],
+      te: ['అవును', 'కాదు'],
+      mr: ['हो', 'नाही'],
+      gu: ['હા', 'ના'],
+    };
     const text = words[this.state.lang][a === 'yes' ? 0 : 1];
     this.bargeIn();
     await this.onTranscript({ text, lang: this.state.lang, sttMs: 0, audioMs: 0 });

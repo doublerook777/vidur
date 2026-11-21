@@ -85,7 +85,7 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-theme]')) 
 for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-lang]')) {
   btn.addEventListener('click', () => {
     const v = btn.dataset['lang'];
-    if (v === 'hi' || v === 'en' || v === 'kn') applyLang(v);
+    if (v === 'hi' || v === 'en' || v === 'kn' || v === 'ta' || v === 'te' || v === 'mr' || v === 'gu') applyLang(v);
   });
 }
 

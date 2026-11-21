@@ -388,3 +388,39 @@ Summary of F9.1 Core:
 - **Verification**: `npm run typecheck`, `npm run lint`, `npm run scan:secrets` exit 0; all 37 test files (1,742 tests) pass 100%.
 
 Member C: please review PR #14 (https://github.com/doublerook777/vidur/pull/14). Once merged, gateway synthetic speech pass (F9.3) and Member B's font/picker UI (F9.2) can proceed on top of the merged core.
+
+### 2026-11-21 23:00 IST · Antigravity (Direct Execution)
+
+CHECKPOINT: CP13 passed (Phase 3: four new languages — Tamil, Telugu, Marathi, Gujarati).
+- **CP13-A**:
+  - `SpeechLang` extended to `'hi' | 'en' | 'kn' | 'ta' | 'te' | 'mr' | 'gu'`.
+  - All 77 dialogue response templates fully translated and implemented across all seven languages.
+  - Number parsing for `ta`, `te`, `mr`, `gu`: fused hundreds (Tamil முன்னூற்று/முந்நூறு, Telugu ఇన్నూరు/మున్నూరు, Marathi/Gujarati fractions दीडशे/અઢીસો), fused thousands (Tamil இரண்டாயிரத்து), plural multipliers (Telugu వందల/వేల), and currency units. Zero silent wrong amounts.
+  - Cross-script phonetic transliteration (`translit.ts`) extended to Tamil, Telugu, and Gujarati scripts.
+  - Guardrails & Intent cues extended: threat, interest, lending, judgment, credit, payment, future, query, and correction cues added for all four languages.
+  - Eval suites: 80 new golden lines, 24 new heldout lines, 16 new red-team lines (`RT-092` to `RT-107`). Accuracy: 100% intent, 100% amount, 0 silent wrong amounts.
+- **CP13-B**:
+  - Web contract `Lang` widened to `'hi' | 'en' | 'kn' | 'ta' | 'te' | 'mr' | 'gu'`.
+  - UI labels (`labels.ts`): all 117 label keys fully translated and implemented for `ta`, `te`, `mr`, and `gu`.
+  - Error messages (`messages.ts`) provided for all error codes in all seven languages.
+  - Device language detection (`deviceLang()`) and Yes/No word mappings added for all seven languages.
+  - Language picker in `Settings.tsx` and `Onboarding.tsx` updated with `(Beta)` tags: `தமிழ் (Beta)`, `తెలుగు (Beta)`, `मराठी (Beta)`, `ગુજરાતી (Beta)`.
+  - Typography: Noto Sans fonts downloaded and self-hosted in `apps/web/public/fonts/`:
+    - Tamil: 50.5 KB (`noto-sans-tamil-tamil-wght-normal.woff2`)
+    - Telugu: 124 KB (`noto-sans-telugu-telugu-wght-normal.woff2`)
+    - Gujarati: 112.3 KB (`noto-sans-gujarati-gujarati-wght-normal.woff2`)
+    - Devanagari: 121.2 KB (already present, used for Hindi and Marathi)
+  - CSS `@font-face` blocks and font-family fallbacks added in `phone.css` and `showcase.css`.
+  - Showcase page: language switcher accepts all seven languages.
+- **CP13-C**:
+  - E2E real browser checks: 121/121 checks passed (100%).
+  - 360 px viewport checks and B1 button overlap checks verified across all seven languages (`hi`, `kn`, `en`, `ta`, `te`, `mr`, `gu`).
+  - Mock voice turns verified in real browser for `ta`, `te`, `mr`, and `gu`.
+  - Full suite verification:
+    - `npm run typecheck` clean.
+    - `npm test` passed 37 files, 1,727 tests (100%).
+    - `npm run scan:secrets` clean.
+    - `npm run test:e2e` passed 121/121 checks (100%).
+- Trackers: F9 marked DONE in `docs/bugs&improvements.md`.
+
+GATE OPEN: CP14 (Phase 4: integration passed — full regression, hand walkthrough, load & timing).

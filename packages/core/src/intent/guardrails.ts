@@ -8,12 +8,17 @@ const THREAT = set([
   'dhamki', 'dhamkao', 'dhamkana', 'dhamka', 'darao', 'darwao', 'darvao', 'darana', 'dara', 'poster', 'chowk', 'chauraha', 'threat', 'threaten', 'treaten', 'threating', 'threatning', 'sharam', 'sharminda', 'sharmind', 'threatening', 'badnam', 'bejjati', 'beizzati', 'shame', 'humiliate', 'harass', 'blackmail', 'gali', 'goonde', 'goondon',
   'डरवाओ', 'पोस्टर', 'चौक', 'चौराहा', 'शर्मिंदा', 'शर्म', 'धमकी', 'धमकाओ', 'धमकाना', 'डराओ', 'डराना', 'बदनाम', 'बेइज़्ज़ती', 'बेइज्जती', 'बेज्जती', 'गाली', 'गुंडे',
   'ಬೆದರಿಕೆ', 'ಬೆದರಿಸಿ', 'ಬೆದರಿಸು', 'ಬೆದರಿಸಿ', 'ಅವಮಾನ', 'ಬೈಯಿರಿ',
+  'மிரட்டல்', 'மிரட்டு', 'பயமுறுத்து', 'அவமானம்',
+  'బెదిరింపు', 'బెదిరించు', 'భయపెట్టు', 'అవమానం',
+  'धमकाव', 'अपमान',
+  'ડરાવો', 'અપમાન',
 ]);
-const INTEREST = set(['इंटरेस्ट', 'इंटरस्ट', 'byaj', 'byaaj', 'vyaj', 'interest', 'sood', 'penalty', 'jurmana', 'latefee', 'surcharge', 'ब्याज', 'सूद', 'जुर्माना', 'ಬಡ್ಡಿ', 'ದಂಡ']);
-const LENDING = set(['loan', 'karz', 'karja', 'lend', 'lending', 'borrow', 'कर्ज', 'कर्ज़', 'लोन', 'ಸಾಲ', 'ಲೋನ್']);
+const INTEREST = set(['इंटरेस्ट', 'इंटरस्ट', 'byaj', 'byaaj', 'vyaj', 'interest', 'sood', 'penalty', 'jurmana', 'latefee', 'surcharge', 'ब्याज', 'सूद', 'जुर्माना', 'ಬಡ್ಡಿ', 'ದಂಡ', 'வட்டி', 'அபராதம்', 'వడ్డీ', 'జరిమానా', 'व्याज', 'દંડ', 'વ્યાજ']);
+const LENDING = set(['loan', 'karz', 'karja', 'lend', 'lending', 'borrow', 'कर्ज', 'कर्ज़', 'लोन', 'ಸಾಲ', 'ಲೋನ್', 'கடன்_வாங்கு', 'லோன்', 'రుణం', 'లోన్', 'કરજ']);
 const JUDGMENT = set([
   'bharosa', 'bharose', 'trust', 'trustworthy', 'safe', 'risky', 'defaulter', 'creditworthy', 'reliable', 'dhokha', 'fraud',
   'भरोसा', 'भरोसे', 'भरोसेमंद', 'सुरक्षित', 'डिफॉल्टर', 'धोखा', 'ನಂಬಿಕೆ', 'ನಂಬಬಹುದೇ', 'ಅಪಾಯ',
+  'நம்பிக்கை', 'நம்பலாமா', 'నమ్మకం', 'నమ్మవచ్చా', 'विश्वास', 'વિશ્વાસ',
 ]);
 const JUDGMENT_PHRASE =
   /\b(likely|going) to (repay|pay)\b|\byour (judgment|judgement|opinion|assessment)\b|ಸೇಫ್|ಸುರಕ್ಷಿತ|भरोसेमंद|\b(dena|dene|dun|de sakte|de sakta|lend|give)\b.*\b(chahiye|chahie|theek|sahi|should)\b|\b(chahiye|should)\b.*\b(dena|dene|give|lend)\b|\bshould i (give|lend|trust)\b|\bcredit score\b|देना चाहिए|देना ठीक|देना सही|ಕೊಡಬೇಕೇ|ಕೊಡಬಹುದೇ|\b(good|bad|reliable|trustworthy|decent) (customer|payer)\b|\b(achha|accha|bura|buri) (grahak|customer)\b|अच्छा (ग्राहक|कस्टमर)|बुरा (ग्राहक|कस्टमर)|ಒಳ್ಳೆಯ (ಕಸ್ಟಮರ್|ಗ್ರಾಹಕ)|ಕೆಟ್ಟ (ಕಸ್ಟಮರ್|ಗ್ರಾಹಕ)/;

@@ -149,3 +149,27 @@
 {"id": "H-EN-039", "lang": "en", "text": "Geeta paid 4.5K today", "expected": {"intent": "payment", "amount": 4500, "customer": "Geeta", "date": "today"}}
 {"id": "H-HL-038", "lang": "hinglish", "text": "Pooja ko 2.5 k udhaar diya", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Pooja"}}
 {"id": "H-HI-038", "lang": "hi", "text": "सुनीता ने 5k वापस दिए", "expected": {"intent": "payment", "amount": 5000, "customer": "Sunita"}}
+{"id": "H-TA-001", "lang": "ta", "text": "விஜய் அறுநூறு ரூபாய் கடன்", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
+{"id": "H-TA-002", "lang": "ta", "text": "கவிதா நானூறு ரூபாய் வரவு", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
+{"id": "H-TA-003", "lang": "ta", "text": "தினேஷ் பாக்கி எவ்வளவு", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
+{"id": "H-TA-004", "lang": "ta", "text": "ராதா முந்நூறு ரூபாய் கடன்", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
+{"id": "H-TA-005", "lang": "ta", "text": "நேற்று எவ்வளவு கடன்", "expected": {"intent": "balance_query", "date": "yesterday"}}
+{"id": "H-TA-006", "lang": "ta", "text": "விஜய் விவரம் காட்டுங்கள்", "expected": {"intent": "customer_summary", "customer": "Vijay"}}
+{"id": "H-TE-001", "lang": "te", "text": "విజయ్ ఆరు వందల రూపాయలు అప్పు", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
+{"id": "H-TE-002", "lang": "te", "text": "కవిత నాలుగు వందల రూపాయలు జమ", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
+{"id": "H-TE-003", "lang": "te", "text": "దినేష్ బాకీ ఎంత", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
+{"id": "H-TE-004", "lang": "te", "text": "రాధ మూడు వందల రూపాయలు అప్పు", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
+{"id": "H-TE-005", "lang": "te", "text": "నిన్న ఎంత అప్పు", "expected": {"intent": "balance_query", "date": "yesterday"}}
+{"id": "H-TE-006", "lang": "te", "text": "విజయ్ వివరాలు చూపించు", "expected": {"intent": "customer_summary", "customer": "Vijay"}}
+{"id": "H-MR-001", "lang": "mr", "text": "विजय सहाशे रुपये उधार", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
+{"id": "H-MR-002", "lang": "mr", "text": "कविता चारशे रुपये जमा", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
+{"id": "H-MR-003", "lang": "mr", "text": "दिनेशची बाकी किती", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
+{"id": "H-MR-004", "lang": "mr", "text": "राधा तीनशे रुपये उधार", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
+{"id": "H-MR-005", "lang": "mr", "text": "काल किती उधार", "expected": {"intent": "balance_query", "date": "yesterday"}}
+{"id": "H-MR-006", "lang": "mr", "text": "विजयचा सारांश दाखवा", "expected": {"intent": "customer_summary", "customer": "Vijay"}}
+{"id": "H-GU-001", "lang": "gu", "text": "વિજય છસો રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
+{"id": "H-GU-002", "lang": "gu", "text": "કવિતા ચારસો રૂપિયા જમા", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
+{"id": "H-GU-003", "lang": "gu", "text": "દિનેશ ની બાકી કેટલી", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
+{"id": "H-GU-004", "lang": "gu", "text": "રાધા ત્રણસો રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
+{"id": "H-GU-005", "lang": "gu", "text": "ગઈકાલે કેટલા ઉધાર", "expected": {"intent": "balance_query", "date": "yesterday"}}
+{"id": "H-GU-006", "lang": "gu", "text": "વિજય ની વિગત બતાવો", "expected": {"intent": "customer_summary", "customer": "Vijay"}}

@@ -9,7 +9,15 @@ export function formatRupees(paise: number): string {
   return `${sign}₹${rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',')},${last3}`;
 }
 
-const LOCALE = { hi: 'hi-IN', en: 'en-IN', kn: 'kn-IN' } as const;
+const LOCALE = {
+  hi: 'hi-IN',
+  en: 'en-IN',
+  kn: 'kn-IN',
+  ta: 'ta-IN',
+  te: 'te-IN',
+  mr: 'mr-IN',
+  gu: 'gu-IN',
+} as const;
 type L = keyof typeof LOCALE;
 const IST = 'Asia/Kolkata';
 const fmt = (lang: L, o: Intl.DateTimeFormatOptions): Intl.DateTimeFormat => new Intl.DateTimeFormat(LOCALE[lang], { timeZone: IST, ...o });

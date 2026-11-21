@@ -14,6 +14,7 @@ import te from './tables/te.json' with { type: 'json' };
 export type Entry =
   | { kind: 'unit'; value: number } // 0..99
   | { kind: 'fusedHundred'; value: number } // Kannada ಮುನ್ನೂರು = 300
+  | { kind: 'fusedThousand'; value: number } // Tamil இரண்டாயிரம் = 2000
   | { kind: 'mult'; value: 100 | 1000 | 100000 | 10000000 }
   | { kind: 'frac'; word: 'dedh' | 'dhai' | 'sawa' | 'paune' | 'saade' }
   | { kind: 'half'; value: number }; // Kannada ಮೂರೂವರೆ = 3.5, used before ನೂರು or ಸಾವಿರ
@@ -80,7 +81,12 @@ load(hi as Table, { skipUnits: true });
 // is spoken. Multi-word rows are skipped by add(), so only the single-word rows count (0 to 20 and the tens).
 // The fused forms (ಇಪ್ಪತ್ತೊಂದು) are generated below.
 load(kn as Table);
-for (const t of [mr, gu, pa, bn, ta, te, ml]) {
+load(ta as Table);
+load(te as Table);
+load(mr as Table);
+load(gu as Table);
+
+for (const t of [pa, bn, ml]) {
   // Draft languages (F13, P1): digits only for now, so their numerals at least convert.
   for (const [d, v] of Object.entries((t as Table).digits)) digitMap.set(d, v);
 }
@@ -137,6 +143,74 @@ add('सावा', { kind: 'frac', word: 'sawa' });
 add('साडे', { kind: 'frac', word: 'saade' });
 add('डेड', { kind: 'frac', word: 'dedh' });
 
+// ---- Tamil extras ----
+const TA_HUNDREDS: [string, number][] = [
+  ['நூறு', 1], ['நூற்று', 1], ['இருநூறு', 2], ['இருநூற்று', 2],
+  ['முன்னூறு', 3], ['முன்னூற்று', 3], ['முந்நூறு', 3], ['முந்நூற்று', 3], ['நானூறு', 4], ['நானூற்று', 4],
+  ['ஐநூறு', 5], ['ஐந்நூறு', 5], ['ஐநூற்று', 5], ['ஐந்நூற்று', 5],
+  ['அறுநூறு', 6], ['அறுநூற்று', 6], ['எழுநூறு', 7], ['எழுநூற்று', 7],
+  ['எண்நூறு', 8], ['எண்ணூறு', 8], ['எண்நூற்று', 8], ['எண்ணூற்று', 8],
+  ['தொள்ளாயிரம்', 9], ['தொள்ளாயிரத்து', 9],
+];
+for (const [w, n] of TA_HUNDREDS) add(w, { kind: 'fusedHundred', value: n * 100 });
+
+const TA_THOUSANDS: [string, number][] = [
+  ['இரண்டாயிரம்', 2], ['இரண்டாயிரத்து', 2], ['மூவாயிரம்', 3], ['மூவாயிரத்து', 3],
+  ['நாலாயிரம்', 4], ['நாலாயிரத்து', 4], ['ஐயாயிரம்', 5], ['ஐயாயிரத்து', 5],
+  ['ஆறாயிரம்', 6], ['ஆறாயிரத்து', 6], ['ஏழாயிரம்', 7], ['ஏழாயிரத்து', 7],
+  ['எட்டாயிரம்', 8], ['எட்டாயிரத்து', 8], ['ஒன்பதாயிரம்', 9], ['ஒன்பதாயிரத்து', 9],
+];
+for (const [w, n] of TA_THOUSANDS) add(w, { kind: 'fusedThousand', value: n * 1000 });
+add('ஆயிரத்து', { kind: 'mult', value: 1000 });
+add('லட்சத்து', { kind: 'mult', value: 100000 });
+add('இலட்சம்', { kind: 'mult', value: 100000 });
+
+const TA_TENS: [string, number][] = [
+  ['இருபத்தி', 20], ['இருபத்து', 20],
+  ['முப்பத்தி', 30], ['முப்பத்து', 30],
+  ['நாற்பத்தி', 40], ['நாற்பத்து', 40],
+  ['ஐம்பத்தி', 50], ['ஐம்பத்து', 50],
+  ['அறுபத்தி', 60], ['அறுபத்து', 60],
+  ['எழுபத்தி', 70], ['எழுபத்து', 70],
+  ['எண்பத்தி', 80], ['எண்பத்து', 80],
+  ['தொண்ணூத்தி', 90], ['தொண்ணூத்து', 90],
+];
+for (const [w, n] of TA_TENS) add(w, { kind: 'unit', value: n });
+
+// ---- Telugu extras ----
+add('వందల', { kind: 'mult', value: 100 });
+add('వందలు', { kind: 'mult', value: 100 });
+add('నూట', { kind: 'fusedHundred', value: 100 });
+add('వేల', { kind: 'mult', value: 1000 });
+add('లక్షల', { kind: 'mult', value: 100000 });
+add('ఇన్నూరు', { kind: 'fusedHundred', value: 200 });
+add('మున్నూరు', { kind: 'fusedHundred', value: 300 });
+
+// ---- Marathi extras ----
+const MR_HUNDREDS: [string, number][] = [
+  ['एकशे', 1], ['दोनशे', 2], ['तीनशे', 3], ['चारशे', 4], ['पाचशे', 5],
+  ['सहाशे', 6], ['सातशे', 7], ['आठशे', 8], ['नऊशे', 9],
+];
+for (const [w, n] of MR_HUNDREDS) add(w, { kind: 'fusedHundred', value: n * 100 });
+add('दीडशे', { kind: 'fusedHundred', value: 150 });
+add('अडीचशे', { kind: 'fusedHundred', value: 250 });
+
+// ---- Gujarati extras ----
+const GU_HUNDREDS: [string, number][] = [
+  ['એકસો', 1], ['બસો', 2], ['ત્રણસો', 3], ['ચારસો', 4], ['પાંચસો', 5], ['પાચસો', 5],
+  ['છસો', 6], ['સાતસો', 7], ['આઠસો', 8], ['નવસો', 9],
+];
+for (const [w, n] of GU_HUNDREDS) add(w, { kind: 'fusedHundred', value: n * 100 });
+add('દોઢસો', { kind: 'fusedHundred', value: 150 });
+add('અઢીસો', { kind: 'fusedHundred', value: 250 });
+// Prisma spellings of 40-48 with "લ" instead of "ળ"
+for (const [w, v] of [
+  ['ચાલીસ', 40], ['એકતાલીસ', 41], ['બેતાલીસ', 42], ['તેતાલીસ', 43], ['ચુંમાલીસ', 44],
+  ['પિસ્તાલીસ', 45], ['છેતાલીસ', 46], ['સુડતાલીસ', 47], ['અડતાલીસ', 48],
+] as const) {
+  add(w, { kind: 'unit', value: v });
+}
+
 export function lookup(word: string): Entry | undefined {
   return lexicon.get(norm(word));
 }
@@ -153,10 +227,17 @@ export function lexiconSize(): number {
 }
 
 /** Words that look like numbers but must not count on their own. */
-export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath', 'दो', 'एक', 'ಒಂದು', 'वन', 'टू', 'एट'].map(norm));
+export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath', 'दो', 'एक', 'ಒಂದು', 'वन', 'टू', 'एट', 'ఒకటి', 'ఒక', 'ஒன்று', 'ஒரு', 'બે'].map(norm));
 
 export const CURRENCY = new Set(
-  ['rupaye', 'rupaya', 'rupiya', 'rupiye', 'rupees', 'rupee', 'rs', 'inr', '₹', 'रुपये', 'रुपया', 'रुपए', 'रुपैया', 'रू', 'ರೂಪಾಯಿ', 'ರೂ'].map(norm),
+  [
+    'rupaye', 'rupaya', 'rupiya', 'rupiye', 'rupees', 'rupee', 'rs', 'inr', '₹',
+    'रुपये', 'रुपया', 'रुपए', 'रुपैया', 'रू',
+    'ರೂಪಾಯಿ', 'ರೂ',
+    'ரூபாய்', 'ரூபா', 'ரூ',
+    'రూపాయలు', 'రూపాయి', 'రూ',
+    'રૂપિયા', 'રૂપિયો', 'રૂ',
+  ].map(norm),
 );
 
 /** A number followed by one of these is a quantity, date or time, not money. */
