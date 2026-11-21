@@ -165,6 +165,17 @@ describe('mock preview renders every screen', () => {
   });
 });
 
+describe('F1 forgot PIN warning', () => {
+  it('warns that delete-all is the only recovery before the PIN is set in Onboarding and Settings', () => {
+    for (const lang of ['en', 'hi', 'kn'] as const) {
+      const onb = renderToString(h(Onboarding, { vm: mockOnboardingVM, actions: mockActions, lang }));
+      expect(onb).toContain(LABELS[lang].forgotPinWarning);
+      const settings = renderToString(h(Settings, { vm: mockSettingsVM, actions: mockActions, lang }));
+      expect(settings).toContain(LABELS[lang].forgotPinWarning);
+    }
+  });
+});
+
 
 describe('editing an entry: hidden sections stay hidden', () => {
   it('the stylesheet hides the customer list and time buttons that carry the hidden attribute', async () => {

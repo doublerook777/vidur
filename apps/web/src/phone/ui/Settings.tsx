@@ -31,7 +31,7 @@ export function Settings({ vm, actions, lang }: ScreenProps<SettingsVM>) {
   const handleSetPin = (e: Event) => {
     e.preventDefault();
     if (!/^\d{4,6}$/.test(newPin.trim())) {
-      setPinMsg('4-6 digits');
+      setPinMsg(t.pinDigitsRequirement);
       return;
     }
     actions.setPin(newPin.trim());
@@ -94,6 +94,7 @@ export function Settings({ vm, actions, lang }: ScreenProps<SettingsVM>) {
           <span>{vm.hasPin ? t.pinActive : t.noPinSet}</span>
         </p>
         <p class="field-hint">{t.pinScreenLockNotice}</p>
+        <p class="field-hint field-hint-warning">{t.forgotPinWarning}</p>
 
         <form onSubmit={handleSetPin} class="settings-form">
           <div class="settings-field">
