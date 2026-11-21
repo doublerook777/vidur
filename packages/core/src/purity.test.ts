@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 function walk(dir: string): string[] {
@@ -10,7 +11,7 @@ function walk(dir: string): string[] {
 }
 
 describe('core stays pure', () => {
-  const files = walk(new URL('.', import.meta.url).pathname).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'));
+  const files = walk(fileURLToPath(new URL('.', import.meta.url))).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'));
   it('has source files to check', () => expect(files.length).toBeGreaterThan(20));
   it('imports no Node, network or DOM modules and touches no globals for them', () => {
     const banned = [

@@ -235,6 +235,122 @@ describe('Ledger', () => {
     expect(top.map((x) => x.name)).toEqual(['Beta', 'Gamma']);
     expect(top[0]?.balancePaise).toBe(900);
   });
+
+  it('replays a fixture of old events with identical balances and customer states', async () => {
+    const oldEvents: LedgerEvent[] = [
+      {
+        type: 'customer_created',
+        id: 'old-1',
+        customerId: 'cust-1',
+        name: 'Ramesh',
+        aliases: ['doodh wale'],
+        recordedAt: 1000,
+      },
+      {
+        type: 'customer_created',
+        id: 'old-2',
+        customerId: 'cust-2',
+        name: 'Suresh',
+        aliases: [],
+        recordedAt: 1010,
+      },
+      {
+        type: 'entry_posted',
+        id: 'old-3',
+        customerId: 'cust-1',
+        kind: 'credit',
+        paise: 50000,
+        at: 1000,
+        recordedAt: 1000,
+      },
+      {
+        type: 'entry_posted',
+        id: 'old-4',
+        customerId: 'cust-1',
+        kind: 'payment',
+        paise: 20000,
+        at: 1005,
+        recordedAt: 1005,
+      },
+      {
+        type: 'entry_posted',
+        id: 'old-5',
+        customerId: 'cust-2',
+        kind: 'credit',
+        paise: 15000,
+        at: 1010,
+        recordedAt: 1010,
+      },
+      {
+        type: 'customer_alias_added',
+        id: 'old-6',
+        customerId: 'cust-2',
+        alias: 'tailor',
+        recordedAt: 1020,
+      },
+      {
+        type: 'note_added',
+        id: 'old-7',
+        customerId: 'cust-1',
+        text: 'will pay on Friday',
+        recordedAt: 1025,
+      },
+      {
+        type: 'consent_set',
+        id: 'old-8',
+        customerId: 'cust-1',
+        optIn: true,
+        recordedAt: 1030,
+      },
+    ];
+
+    const store = new MemoryStore();
+    for (const e of oldEvents) {
+      await store.append(e);
+    }
+
+    const ledger = await Ledger.load(store, clock, newId);
+    expect(ledger.balance('cust-1')).toBe(30000);
+    expect(ledger.balance('cust-2')).toBe(15000);
+
+    const cust1 = ledger.customer('cust-1');
+    expect(cust1).toBeDefined();
+    expect(cust1?.name).toBe('Ramesh');
+    expect(cust1?.aliases).toEqual(['doodh wale']);
+    expect(cust1?.nickname).toBeUndefined();
+    expect(cust1?.phone).toBeUndefined();
+
+    const cust2 = ledger.customer('cust-2');
+    expect(cust2).toBeDefined();
+    expect(cust2?.name).toBe('Suresh');
+    expect(cust2?.aliases).toEqual(['tailor']);
+    expect(cust2?.nickname).toBeUndefined();
+    expect(cust2?.phone).toBeUndefined();
+  });
+
+  it('supports nickname, phone, and customer_updated events', async () => {
+    const ledger = await load();
+    const c = await ledger.createCustomer('Ramesh', ['doodh wale'], 'dairy', '9876543210');
+    expect(c.nickname).toBe('dairy');
+    expect(c.phone).toBe('9876543210');
+
+    let fetched = ledger.customer(c.id);
+    expect(fetched?.nickname).toBe('dairy');
+    expect(fetched?.phone).toBe('9876543210');
+
+    await ledger.updateCustomer(c.id, { nickname: 'main branch', phone: '9999999999' });
+    fetched = ledger.customer(c.id);
+    expect(fetched?.nickname).toBe('main branch');
+    expect(fetched?.phone).toBe('9999999999');
+    expect(fetched?.name).toBe('Ramesh');
+
+    await ledger.updateCustomer(c.id, { name: 'Ramesh Kumar' });
+    fetched = ledger.customer(c.id);
+    expect(fetched?.name).toBe('Ramesh Kumar');
+    expect(fetched?.nickname).toBe('main branch');
+
+    await expect(ledger.updateCustomer('non-existent', { name: 'Nobody' })).rejects.toThrow();
+  });
 });
 
 describe('reversing returns an id that can itself be reversed (a removal can be taken back)', () => {

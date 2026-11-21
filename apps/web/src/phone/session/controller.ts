@@ -347,6 +347,15 @@ export class PhoneSession {
       this.connect();
     },
     finishOnboarding: (o) => void this.finishOnboarding(o),
+    saveProfile: () => undefined,
+    setPin: () => undefined,
+    clearPin: () => undefined,
+    unlock: async () => true,
+    updateCustomer: (id, patch) => {
+      void this.ledger.updateCustomer(id, patch).then(() => this.refresh());
+    },
+    remindOnWhatsApp: () => undefined,
+    speakSummary: () => undefined,
   };
 
   /** Called from the first mic press, which is a user gesture, so the browser allows audio to start. */

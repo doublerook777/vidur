@@ -2,6 +2,7 @@ import {
   type ActiveEntry,
   type Customer,
   type CustomerCreatedEvent,
+  type CustomerUpdatedEvent,
   type EntryKind,
   type EntryPostedEvent,
   type LedgerEvent,
@@ -88,7 +89,7 @@ export class Ledger {
     this.events.push(event);
   }
 
-  async createCustomer(name: string, aliases: string[] = []): Promise<Customer> {
+  async createCustomer(name: string, aliases: string[] = [], nickname?: string, phone?: string): Promise<Customer> {
     const customerId = this.newId();
     const event: CustomerCreatedEvent = {
       type: 'customer_created',
@@ -96,10 +97,32 @@ export class Ledger {
       customerId,
       name,
       aliases: [...aliases],
+      ...(nickname !== undefined ? { nickname } : {}),
+      ...(phone !== undefined ? { phone } : {}),
       recordedAt: this.clock(),
     };
     await this.append(event);
-    return { id: customerId, name, aliases: [...aliases] };
+    const customer: Customer = { id: customerId, name, aliases: [...aliases] };
+    if (nickname !== undefined) customer.nickname = nickname;
+    if (phone !== undefined) customer.phone = phone;
+    return customer;
+  }
+
+  async updateCustomer(customerId: string, patch: { name?: string; nickname?: string; phone?: string }): Promise<void> {
+    const target = this.customer(customerId);
+    if (!target) {
+      throw new Error(`updateCustomer: no customer with id ${customerId}`);
+    }
+    const event: CustomerUpdatedEvent = {
+      type: 'customer_updated',
+      id: this.newId(),
+      customerId,
+      ...(patch.name !== undefined ? { name: patch.name } : {}),
+      ...(patch.nickname !== undefined ? { nickname: patch.nickname } : {}),
+      ...(patch.phone !== undefined ? { phone: patch.phone } : {}),
+      recordedAt: this.clock(),
+    };
+    await this.append(event);
   }
 
   async addAlias(customerId: string, alias: string): Promise<void> {
@@ -188,10 +211,20 @@ export class Ledger {
     const byId = new Map<string, Customer>();
     for (const e of this.events) {
       if (e.type === 'customer_created') {
-        byId.set(e.customerId, { id: e.customerId, name: e.name, aliases: [...e.aliases] });
+        const c: Customer = { id: e.customerId, name: e.name, aliases: [...e.aliases] };
+        if (e.nickname !== undefined) c.nickname = e.nickname;
+        if (e.phone !== undefined) c.phone = e.phone;
+        byId.set(e.customerId, c);
       } else if (e.type === 'customer_alias_added') {
         const c = byId.get(e.customerId);
         if (c && !c.aliases.includes(e.alias)) c.aliases.push(e.alias);
+      } else if (e.type === 'customer_updated') {
+        const c = byId.get(e.customerId);
+        if (c) {
+          if (e.name !== undefined) c.name = e.name;
+          if (e.nickname !== undefined) c.nickname = e.nickname;
+          if (e.phone !== undefined) c.phone = e.phone;
+        }
       }
     }
     return [...byId.values()];

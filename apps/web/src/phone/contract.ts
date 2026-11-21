@@ -13,10 +13,24 @@ export interface CustomerRow {
   id: string;
   name: string;
   aliases: string[];
+  nickname?: string;
+  phone?: string;
   /** Integer paise. Positive means the customer owes money. */
   balancePaise: number;
   lastActivityAt: number | null;
   reminderOptIn: boolean;
+}
+
+export interface Profile {
+  version: 1;
+  ownerName: string;
+  shopName: string;
+  createdAt: number;
+  pin?: {
+    salt: string;
+    hash: string;
+    iterations: number;
+  };
 }
 
 export interface FeedItem {
@@ -46,6 +60,10 @@ export interface EntryCardVM {
   answers?: 'yes_no';
   /** Set after a note was saved: the customer whose notes the card links to. */
   noteCustomerId?: string;
+  /** Epoch ms when the open question window expires (for countdown UI). */
+  answerExpiresAt?: number;
+  /** Total window duration in ms. */
+  answerWindowMs?: number;
 }
 
 export interface ErrorVM {
@@ -131,6 +149,13 @@ export interface Actions {
   cancelAnswer(): void;
   retry(): void;
   finishOnboarding(opts: { lang: Lang; demoData: boolean }): void;
+  saveProfile(profile: { ownerName: string; shopName: string }): void;
+  setPin(pin: string): void;
+  clearPin(): void;
+  unlock(pin: string): Promise<boolean>;
+  updateCustomer(customerId: string, patch: { name?: string; nickname?: string; phone?: string }): void;
+  remindOnWhatsApp(customerId: string): void;
+  speakSummary(customerId: string): void;
 }
 
 /** Every interactive element carries data-feature="<id>", so the showcase can explain it. */
