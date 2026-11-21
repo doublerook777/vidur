@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { CONFIRM_BELOW, parseAmount } from './parse.js';
+import { CONFIRM_BELOW, parseAmount, type Lang } from './parse.js';
 import { NEEDS_CONTEXT, norm } from './lexicon.js';
 
 // Words that are also ordinary words (Hindi "do" and English "do") only count next to a currency word.
@@ -257,3 +257,15 @@ describe('k and L written after a number (2.5k, 2K, 1.5L)', () => {
   });
 });
 
+
+describe('three and a half written as one word (real Prisma output, F9)', () => {
+  const cases: [Lang, string, number][] = [
+    ['mr', 'रमेश साडेतीन हजार रुपये उधार.', 350000],
+    ['mr', 'साडेचार हजार रुपये', 450000],
+    ['gu', 'રમેશ, સાડાત્રણ હજાર રૂપિયા ઉધાર।', 350000],
+    ['gu', 'રમેશ, સાડા ત્રણ હજાર રૂપિયા ઉધાર।', 350000],
+  ];
+  it.each(cases)('%s: %s', (lang, text, paise) => {
+    expect(parseAmount(text, lang)[0]?.paise).toBe(paise);
+  });
+});

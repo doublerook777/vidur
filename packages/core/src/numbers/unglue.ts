@@ -34,6 +34,9 @@ const TA_THOUSANDS: [RegExp, string][] = [
   [new RegExp(`${L}ஒன்பதாயிரம்${R}`, 'gu'), 'ஒன்பது ஆயிரம்'],
 ];
 
+const MR_HALF_NUM = 'तीन|चार|पाच|सहा|सात|आठ|नऊ|दहा|अकरा|बारा';
+const GU_HALF_NUM = 'ત્રણ|ચાર|પાંચ|છ|સાત|આઠ|નવ|દસ|અગિયાર|બાર';
+
 const RULES: [RegExp, string][] = [
   ...TA_THOUSANDS,
   // "saudhar" is "sau udhar" said fast: the two u sounds become one.
@@ -42,6 +45,9 @@ const RULES: [RegExp, string][] = [
   [new RegExp(`${L}(${NUM})(${MULT})${R}`, 'giu'), '$1 $2'],
   [new RegExp(`${L}(${HI_NUM})?(${HI_MULT})(${HI_DIR})${R}`, 'gu'), '$1 $2 $3'],
   [new RegExp(`${L}(${HI_NUM})(${HI_MULT})${R}`, 'gu'), '$1 $2'],
+  // Marathi and Gujarati say "three and a half" as one word: Prisma writes साडेतीन, સાડાત્રણ. Put the space back.
+  [new RegExp(`${L}साडे(${MR_HALF_NUM})${R}`, 'gu'), 'साडे $1'],
+  [new RegExp(`${L}સાડા(${GU_HALF_NUM})${R}`, 'gu'), 'સાડા $1'],
 ];
 
 export function unglue(text: string): string {
