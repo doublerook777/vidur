@@ -152,7 +152,31 @@ export type LabelKey =
   | 'aiVoice'
   | 'entryAdded'
   | 'noEntriesDay'
-  | 'addForCustomer';
+  | 'addForCustomer'
+  // F1 profile and PIN screen lock
+  | 'ownerName'
+  | 'enterShopName'
+  | 'enterOwnerName'
+  | 'pin'
+  | 'pinOptional'
+  | 'pinScreenLockNotice'
+  | 'forgotPin'
+  | 'forgotPinConfirm'
+  | 'setPin'
+  | 'changePin'
+  | 'removePin'
+  | 'unlock'
+  | 'enterPin'
+  | 'wrongPin'
+  | 'tooManyAttempts'
+  | 'completeProfileTitle'
+  | 'completeProfileSub'
+  | 'completeProfileBtn'
+  | 'dismiss'
+  | 'profileTitle'
+  | 'profileSaved'
+  | 'pinActive'
+  | 'noPinSet';
 
 export const LABELS: Record<Lang, Record<LabelKey, string>> = {
   en: {
@@ -264,6 +288,30 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     entryAdded: 'Entry added',
     noEntriesDay: 'Nothing here',
     addForCustomer: 'Add entry',
+    // F1 profile and PIN
+    ownerName: 'Owner name',
+    enterShopName: 'Shop name',
+    enterOwnerName: 'Your name',
+    pin: 'PIN',
+    pinOptional: 'PIN (optional, 4-6 digits)',
+    pinScreenLockNotice: 'Screen lock only. All ledger data is already encrypted on this phone.',
+    forgotPin: 'Forgot PIN?',
+    forgotPinConfirm: 'Forgot PIN? The only recovery is deleting all data on this phone. Delete everything?',
+    setPin: 'Set PIN',
+    changePin: 'Change PIN',
+    removePin: 'Remove PIN',
+    unlock: 'Unlock',
+    enterPin: 'Enter PIN to unlock',
+    wrongPin: 'Incorrect PIN',
+    tooManyAttempts: 'Too many wrong attempts. Please wait.',
+    completeProfileTitle: 'Complete your profile',
+    completeProfileSub: 'Add your shop and owner name for your records.',
+    completeProfileBtn: 'Set up profile',
+    dismiss: 'Dismiss',
+    profileTitle: 'Profile',
+    profileSaved: 'Profile saved',
+    pinActive: 'PIN lock active',
+    noPinSet: 'No PIN set',
   },
   hi: {
     aiBadge: 'AI',
@@ -374,6 +422,30 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     entryAdded: 'एंट्री जुड़ गई',
     noEntriesDay: 'यहाँ कुछ नहीं',
     addForCustomer: 'एंट्री जोड़ें',
+    // F1 profile and PIN
+    ownerName: 'मालिक का नाम',
+    enterShopName: 'दुकान का नाम',
+    enterOwnerName: 'आपका नाम',
+    pin: 'पिन',
+    pinOptional: 'पिन (वैकल्पिक, 4-6 अंक)',
+    pinScreenLockNotice: 'केवल स्क्रीन लॉक है। आपका डेटा इस फोन पर पहले से एन्क्रिप्टेड है।',
+    forgotPin: 'पिन भूल गए?',
+    forgotPinConfirm: 'पिन भूल गए? एकमात्र उपाय इस फोन का सारा डेटा हटाना है। क्या सब कुछ हटाएं?',
+    setPin: 'पिन सेट करें',
+    changePin: 'पिन बदलें',
+    removePin: 'पिन हटाएं',
+    unlock: 'अनलॉक करें',
+    enterPin: 'अनलॉक करने के लिए पिन डालें',
+    wrongPin: 'गलत पिन',
+    tooManyAttempts: 'कई बार गलत प्रयास। कृपया प्रतीक्षा करें।',
+    completeProfileTitle: 'अपनी प्रोफ़ाइल पूरी करें',
+    completeProfileSub: 'दुकान और मालिक का नाम जोड़ें।',
+    completeProfileBtn: 'प्रोफ़ाइल सेट करें',
+    dismiss: 'हटाएं',
+    profileTitle: 'प्रोफ़ाइल',
+    profileSaved: 'प्रोफ़ाइल सुरक्षित हुई',
+    pinActive: 'पिन लॉक सक्रिय है',
+    noPinSet: 'कोई पिन सेट नहीं है',
   },
   kn: {
     aiBadge: 'AI',
@@ -484,6 +556,30 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     entryAdded: 'ನಮೂದು ಸೇರಿದೆ',
     noEntriesDay: 'ಇಲ್ಲಿ ಏನೂ ಇಲ್ಲ',
     addForCustomer: 'ನಮೂದು ಸೇರಿಸಿ',
+    // F1 profile and PIN
+    ownerName: 'ಮಾಲೀಕರ ಹೆಸರು',
+    enterShopName: 'ಅಂಗಡಿಯ ಹೆಸರು',
+    enterOwnerName: 'ನಿಮ್ಮ ಹೆಸರು',
+    pin: 'ಪಿನ್',
+    pinOptional: 'ಪಿನ್ (ಐಚ್ಛಿಕ, 4-6 ಅಂಕಿಗಳು)',
+    pinScreenLockNotice: 'ಕೇವಲ ಸ್ಕ್ರೀನ್ ಲಾಕ್ ಆಗಿದೆ. ಡೇಟಾ ಈಗಾಗಲೇ ಈ ಫೋನ್‌ನಲ್ಲಿ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಆಗಿದೆ.',
+    forgotPin: 'ಪಿನ್ ಮರೆತಿರಾ?',
+    forgotPinConfirm: 'ಪಿನ್ ಮರೆತಿರಾ? ಎಲ್ಲ ಡೇಟಾ ಅಳಿಸುವುದು ಮಾತ್ರ ಪರಿಹಾರ. ಎಲ್ಲವನ್ನೂ ಅಳಿಸುವುದೇ?',
+    setPin: 'ಪಿನ್ ಹೊಂದಿಸಿ',
+    changePin: 'ಪಿನ್ ಬದಲಾಯಿಸಿ',
+    removePin: 'ಪಿನ್ ತೆಗೆಯಿರಿ',
+    unlock: 'ಅನ್‌ಲಾಕ್ ಮಾಡಿ',
+    enterPin: 'ಅನ್‌ಲಾಕ್ ಮಾಡಲು ಪಿನ್ ನಮೂದಿಸಿ',
+    wrongPin: 'ತಪ್ಪು ಪಿನ್',
+    tooManyAttempts: 'ಹೆಚ್ಚು ತಪ್ಪು ಪ್ರಯತ್ನಗಳು. ದಯವಿಟ್ಟು ಕಾಯಿರಿ.',
+    completeProfileTitle: 'ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ',
+    completeProfileSub: 'ಅಂಗಡಿ ಮತ್ತು ಮಾಲೀಕರ ಹೆಸರನ್ನು ಸೇರಿಸಿ.',
+    completeProfileBtn: 'ಪ್ರೊಫೈಲ್ ಹೊಂದಿಸಿ',
+    dismiss: 'ವಜಾಗೊಳಿಸಿ',
+    profileTitle: 'ಪ್ರೊಫೈಲ್',
+    profileSaved: 'ಪ್ರೊಫೈಲ್ ಉಳಿಸಲಾಗಿದೆ',
+    pinActive: 'ಪಿನ್ ಲಾಕ್ ಸಕ್ರಿಯವಾಗಿದೆ',
+    noPinSet: 'ಯಾವುದೇ ಪಿನ್ ಹೊಂದಿಸಿಲ್ಲ',
   },
 };
 

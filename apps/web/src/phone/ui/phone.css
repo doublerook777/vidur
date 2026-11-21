@@ -472,14 +472,13 @@
 .totals-payment .totals-value { font-size: 28px; color: var(--color-card-text); }
 .totals-payment .totals-label { order: 1; }
 
-/* On narrow phones (360/390px) the notch button overlaps the paid row’s right
-   side: in Kannada and Hindi the label/value run under it. Wrap the row and
-   cap its width so every line clears the button (English fits on one line). */
+/* On narrow phones (360/390px) the notch button overlaps the paid row's right
+   side. Wrap the row and cap its width so every line clears the button in all
+   languages (kn, hi, en). */
 @media (max-width: 390px) {
-  :lang(kn) .totals-payment,
-  :lang(hi) .totals-payment {
+  .totals-payment {
     flex-wrap: wrap;
-    max-width: 130px;
+    max-width: 125px;
   }
 }
 
@@ -951,3 +950,232 @@
 
 /* the screen inside the phone is the only thing that scrolls */
 html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: var(--color-bg); }
+
+/* ---- F1 profile and PIN screen lock ---- */
+
+.screen-lock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-6) var(--space-4);
+  background: var(--color-bg);
+  min-height: 100%;
+}
+.lock-card {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4);
+  background: var(--color-raised);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.lock-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  background: var(--color-card);
+  color: var(--color-card-text);
+  margin-bottom: var(--space-2);
+}
+.lock-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-xl);
+  font-weight: 800;
+  color: var(--color-text);
+}
+.lock-sub {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--color-text-dim);
+}
+.lock-error {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
+.lock-lockout {
+  background: rgba(255, 193, 7, 0.15);
+  color: var(--color-text);
+}
+.lock-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+.lock-input {
+  width: 160px;
+  height: 52px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 12px;
+  text-align: center;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding-left: 12px;
+}
+.lock-input:focus {
+  outline: none;
+  border-color: var(--color-card);
+}
+.btn-unlock {
+  width: 100%;
+  min-height: 48px;
+}
+.lock-notice {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  line-height: 1.4;
+  margin: var(--space-2) 0 0;
+}
+.lock-forgot-btn {
+  margin-top: var(--space-2);
+  color: var(--color-text-dim);
+  font-size: var(--font-sm);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2);
+}
+.lock-forgot-confirm {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.lock-forgot-text {
+  font-size: var(--font-sm);
+  color: var(--color-text);
+  margin: 0;
+}
+.lock-forgot-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Onboarding profile inputs */
+.onboarding-profile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  width: 100%;
+}
+.onboarding-field, .settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  text-align: left;
+}
+.field-label {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--color-text-dim);
+}
+.field-hint {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  line-height: 1.4;
+  margin: 2px 0 0;
+}
+.input-text {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+.input-text:focus {
+  outline: none;
+  border-color: var(--color-card);
+}
+
+/* Complete Profile Card on Home */
+.complete-profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-raised);
+  border-left: 4px solid var(--color-card);
+  box-shadow: var(--shadow-card);
+}
+.complete-profile-title {
+  margin: 0;
+  font-size: var(--font-md);
+  font-weight: 800;
+  color: var(--color-text);
+}
+.complete-profile-sub {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--color-text-dim);
+}
+.complete-profile-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+.btn-sm {
+  min-height: 38px;
+  padding: 0 var(--space-3);
+  font-size: var(--font-sm);
+}
+
+/* Settings Profile & PIN sections */
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.settings-form-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.settings-feedback {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--color-card);
+}
+.settings-status-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--space-1);
+}
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.status-active { background: #28a745; }
+.status-inactive { background: #6c757d; }
+

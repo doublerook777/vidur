@@ -87,6 +87,8 @@ export interface HomeVM {
   peopleToday: number;
   feed: FeedItem[];
   error: ErrorVM | null;
+  /** Set for existing installs that have no profile yet: shows a one-time card on Home. F1. */
+  showCompleteProfile?: boolean;
 }
 
 export interface CustomerDetailVM {
@@ -105,6 +107,8 @@ export interface SettingsVM {
   lang: Lang;
   theme: Theme;
   shopName: string;
+  ownerName?: string;
+  hasPin?: boolean;
   encrypted: boolean;
   retentionHours: number;
 }
@@ -162,7 +166,7 @@ export interface Actions {
   /** Drops the open question, nothing saved, so the person can say the whole thing again. */
   cancelAnswer(): void;
   retry(): void;
-  finishOnboarding(opts: { lang: Lang; demoData: boolean }): void;
+  finishOnboarding(opts: { lang: Lang; demoData: boolean; profile?: { shopName: string; ownerName: string; pin?: string } }): void;
   /** F1: saves the shop and owner name. */
   saveProfile(input: { shopName: string; ownerName: string }): void;
   /** F1: sets or changes the PIN screen lock. */
@@ -171,6 +175,8 @@ export interface Actions {
   clearPin(): void;
   /** F1: tries a PIN on the lock screen. */
   unlock(pin: string): void;
+  /** F1: dismisses the one-time "Complete your profile" card on Home. */
+  dismissCompleteProfile?(): void;
   /** F2/F3/F6: changes a customer's name, nickname or phone. An empty string clears a nickname or phone. */
   updateCustomer(customerId: string, changes: { name?: string; nickname?: string; phone?: string }): void;
   /** F6: opens WhatsApp with the prepared reminder, if the reminder gate allows it. */
@@ -183,7 +189,7 @@ export interface Actions {
 export const FEATURE_IDS = [
   'mic-button', 'ai-badge', 'totals', 'feed', 'entry-card', 'undo', 'customer-list', 'customer-detail', 'balance', 'reminder-gate', 'consent-toggle',
   'language-switch', 'theme-switch', 'delete-all', 'keypad', 'offline-banner', 'onboarding-disclosure', 'encrypted-badge', 'disambiguation', 'confirm-amount', 'state-indicator',
-  'timestamp', 'add-entry', 'remove-entry', 'answer-buttons', 'history',
+  'timestamp', 'add-entry', 'remove-entry', 'answer-buttons', 'history', 'lock-screen', 'complete-profile',
 ] as const;
 export type FeatureId = (typeof FEATURE_IDS)[number];
 

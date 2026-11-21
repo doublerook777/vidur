@@ -16,6 +16,7 @@ import { Toast } from './phone/ui/Toast.js';
 import { Home } from './phone/ui/Home.js';
 import { Keypad } from './phone/ui/Keypad.js';
 import { Onboarding } from './phone/ui/Onboarding.js';
+import { LockScreen } from './phone/ui/LockScreen.js';
 import { Reminders } from './phone/ui/Reminders.js';
 import { Settings } from './phone/ui/Settings.js';
 
@@ -43,7 +44,7 @@ function useStore(session: PhoneSession): SessionState {
 function homeVM(s: SessionState): HomeVM {
   return {
     phase: s.phase, shopName: s.shopName, now: Date.now(), online: s.online, mockMode: s.mockMode, card: s.card, creditTodayPaise: s.credit, paymentTodayPaise: s.payment,
-    peopleToday: s.people, feed: s.feed, error: s.error,
+    peopleToday: s.people, feed: s.feed, error: s.error, showCompleteProfile: s.showCompleteProfile,
   };
 }
 
@@ -65,7 +66,26 @@ function App({ session }: { session: PhoneSession }) {
     else void navigator.clipboard?.writeText(r.text).catch(() => undefined);
   }, [s.shareReminder, session]);
 
-  const settings: SettingsVM = { lang: s.lang, theme: s.theme, shopName: s.shopName, encrypted: true, retentionHours: 24 };
+  const settings: SettingsVM = {
+    lang: s.lang,
+    theme: s.theme,
+    shopName: s.shopName,
+    ownerName: s.profile?.ownerName,
+    hasPin: Boolean(s.profile?.pin),
+    encrypted: true,
+    retentionHours: 24,
+  };
+
+  if (s.locked) {
+    return (
+      <LockScreen
+        vm={{ shopName: s.shopName, lockUntil: s.lockUntil, wrongAttempts: s.wrongAttempts, error: s.lockError }}
+        actions={a}
+        lang={s.lang}
+      />
+    );
+  }
+
   const screen = ((): preact.JSX.Element => {
   switch (s.screen) {
     case 'onboarding':

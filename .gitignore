@@ -8,6 +8,7 @@ coverage/
 eval/audio/
 eval/results/raw/
 *.wav
+!e2e/fixtures/*.wav
 *.pcm
 *.tsbuildinfo
 spikes/runs.log

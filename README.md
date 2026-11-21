@@ -340,6 +340,7 @@ The live demo at <https://vidur-xu96.onrender.com> runs this way. `render.yaml` 
 
 - The accuracy numbers come from synthetic speech. A test with real voices and a real room is the check that matters.
 - The encryption key cannot be read out of the browser, but script running in the same page could still use it.
+- **PIN screen lock is not a second encryption layer:** the vault key is a non-extractable WebCrypto key, so the optional PIN is a **screen lock** to prevent casual physical access. Someone with access to the unlocked phone's browser profile data is not stopped by the PIN alone.
 - The shopkeeper records a customer's reminder consent on the customer's behalf; the app cannot verify it.
 - Kannada reply wording was written without a native speaker and needs a review.
 - Not built: Counter Mode (hands-free wake phrase), Two Ears (two recognizers cross-checking), an Android package, and the seven other Indian languages.
