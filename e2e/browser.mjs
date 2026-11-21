@@ -213,7 +213,7 @@ try {
   const customersBefore = await state(page, 's.customers.length');
   await page.evaluate(() => window.__vidur.onTranscript({ text: 'Kiran ka 100 udhaar', lang: 'hi', sttMs: 0, audioMs: 0 }));
   await waitState(page, "s.card?.state === 'needs_answer'", 4000);
-  check('a new name shows Yes and No buttons', (await page.locator('.answer-btn').count()) === 2);
+  check('a new name shows Yes and No buttons with countdown (F4)', (await page.locator('.answer-btn').count()) === 2 && (await page.locator('.answer-progress-bar').count()) === 1);
   await page.locator('.answer-no').click();
   await waitState(page, "s.card?.state === 'needs_answer' && !s.card.answers", 4000);
   check('tapping No creates nobody', (await state(page, 's.customers.length')) === customersBefore);
@@ -379,6 +379,19 @@ try {
   await page.locator('.detail-name-save').click();
   await sleep(300);
   check('the original name can be put back', await state(page, `s.customers.find((c) => c.id === ${JSON.stringify(nickId)}).name === ${JSON.stringify(oldName)}`));
+
+  // F5: Hear summary button
+  check('the customer screen has a "Hear summary" button (F5)', (await page.locator('[data-feature="hear-summary"]').count()) === 1);
+
+  // F6: Customer phone and WhatsApp reminder
+  check('the customer screen has an "Edit phone" button (F6)', (await page.locator('[data-feature="edit-phone"]').count()) === 1);
+  await page.locator('[data-feature="edit-phone"]').click();
+  await page.locator('[data-feature="phone-input"]').fill('9876543210');
+  await page.locator('.detail-phone-save').click();
+  await sleep(250);
+  check('customer phone is saved and shown (F6)', /9876543210/.test(await page.locator('.detail-nickname').nth(2).innerText()));
+  check('customer screen has Remind on WhatsApp button (F6)', (await page.locator('[data-feature="remind-whatsapp"]').count()) === 1);
+
   // An entry can be changed by hand from its menu, and the change can be taken back.
   await page.evaluate(() => window.__vidur.actions.navigate('history'));
   await sleep(250);
@@ -406,6 +419,33 @@ try {
   const fmtIN = (p) => { const r = String(Math.round(p / 100)); return '₹' + (r.length <= 3 ? r : r.slice(0, -3).replace(/\B(?=(\d{2})+$)/g, ',') + ',' + r.slice(-3)); };
   check('the customers screen shows total credit and total paid, and what is still due', sum.credit > 0 && sum.text.includes(fmtIN(sum.credit)) && sum.text.includes(fmtIN(sum.payment)) && sum.text.includes(fmtIN(Math.max(0, sum.credit - sum.payment))), sum.text);
   check('still due equals the sum of every customer balance', sum.credit - sum.payment === sum.rows);
+
+  // F2: Customer search
+  check('the customers screen has a search box (F2)', (await page.locator('[data-feature="customer-search"]').count()) === 1);
+  const totalBeforeSearch = await page.locator('.customer-row').count();
+  await page.locator('[data-feature="customer-search"]').fill('Mohan');
+  await sleep(150);
+  const filteredCount = await page.locator('.customer-row').count();
+  check('customer search filters the list (F2)', filteredCount >= 1 && filteredCount < totalBeforeSearch);
+  await page.locator('.search-clear-btn').click();
+  await sleep(150);
+  check('clearing search restores all customers (F2)', (await page.locator('.customer-row').count()) === totalBeforeSearch);
+
+  // F6: Reminders Due now
+  await page.evaluate(() => window.__vidur.actions.navigate('reminders'));
+  await sleep(250);
+  check('reminders screen has Due Now or reminders list (F6)', (await page.locator('.reminder-list').count()) === 1);
+
+  // F8: Balance set adjustment tag
+  await page.evaluate(async () => {
+    const c = window.__vidur.state.customers[0];
+    await window.__vidur.debug.ledger.postEntry({ customerId: c.id, kind: 'credit', paise: 10000, at: Date.now(), reason: 'balance_set' });
+    window.__vidur.refresh();
+  });
+  await page.evaluate(() => window.__vidur.actions.navigate('home'));
+  await sleep(250);
+  check('balance set entry shows adjustment tag in feed (F8)', (await page.locator('[data-feature="balance-set-tag"]').count()) >= 1);
+
   // Amounts written as 2.5k are 2,500 rupees, saved without a question about the amount.
   await page.evaluate(() => window.__vidur.actions.navigate('home'));
   await sleep(150);

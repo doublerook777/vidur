@@ -1199,3 +1199,207 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: 
 .status-active { background: #28a745; }
 .status-inactive { background: #6c757d; }
 
+/* ---- Phase 2: Search, Countdown, Summary, WhatsApp, Adjustments ---- */
+
+/* Customer & Keypad Search (F2) */
+.customer-search-box, .keypad-customer-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.customer-search-input, .keypad-customer-search-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  padding-right: 36px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-sm);
+  caret-color: var(--color-card);
+  transition: border-color 0.15s ease;
+}
+.customer-search-input:focus-visible, .keypad-customer-search-input:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.search-clear-btn {
+  position: absolute;
+  right: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--color-text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  padding: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+.customer-search-empty, .keypad-customer-empty {
+  margin: 0;
+  padding: var(--space-3) var(--space-2);
+  color: var(--color-text-dim);
+  font-size: var(--font-sm);
+  text-align: center;
+}
+
+/* Countdown bar & label (F4) */
+.answer-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+.answer-progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.answer-progress-bar {
+  height: 100%;
+  background: var(--color-card);
+  border-radius: var(--radius-full);
+  transition: width 0.2s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .answer-progress-bar {
+    transition: none;
+  }
+}
+.answer-countdown {
+  font-size: var(--font-xs);
+  opacity: 0.85;
+  margin-left: var(--space-1);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hear Summary Button (F5) */
+.btn-hear-summary {
+  margin-top: var(--space-2);
+  background: rgba(255, 255, 255, 0.15);
+  color: inherit;
+  border-color: rgba(255, 255, 255, 0.35);
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--font-sm);
+}
+.btn-hear-summary:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Customer Phone (F6) */
+.detail-phone-input:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Reminders & WhatsApp (F6) */
+.reminder-buttons-row {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+}
+.btn-remind-wa, .btn-remind-share {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--touch);
+}
+.btn-remind-wa, .btn-due-now-wa {
+  background: #25d366;
+  color: #ffffff;
+  border-color: #25d366;
+  font-weight: 700;
+}
+.btn-remind-wa:disabled, .btn-due-now-wa:disabled, .btn-reminder-wa:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-reminder-wa {
+  background: #25d366;
+  color: #ffffff;
+  border-color: #25d366;
+  padding: 0 var(--space-2);
+}
+
+/* Reminders Due Now (F6) */
+.reminders-due-now {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-raised);
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--space-3);
+}
+.due-now-title {
+  font-size: var(--font-xs);
+  font-weight: 800;
+  color: var(--color-amber);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+.due-now-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.due-now-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.due-now-item:last-child {
+  border-bottom: 0;
+}
+.due-now-info {
+  display: flex;
+  flex-direction: column;
+}
+.due-now-name {
+  font-weight: 800;
+}
+.due-now-balance {
+  font-family: var(--font-display);
+  font-size: var(--font-lg);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-dim);
+}
+
+/* Balance Set Adjustment Tag (F8) */
+.feed-item-adjustment-tag {
+  display: inline-block;
+  font-size: var(--font-xs);
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+  margin-left: var(--space-2);
+  vertical-align: middle;
+}
+
+

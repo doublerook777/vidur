@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'preact/hooks';
 import type { EntryCardVM } from '../contract.js';
 import { formatRupees } from './format.js';
 import { LABELS } from './labels.js';
@@ -6,6 +7,30 @@ import type { ScreenProps } from './types.js';
 
 export function EntryCard({ vm, actions, lang }: ScreenProps<EntryCardVM>) {
   const t = LABELS[lang];
+  const initialLeftMs = vm.answerExpiresAt && vm.answerWindowMs ? Math.max(0, vm.answerExpiresAt - Date.now()) : null;
+  const initialSec = initialLeftMs !== null ? Math.ceil(initialLeftMs / 1000) : null;
+  const initialPercent = initialLeftMs !== null && vm.answerWindowMs ? Math.min(100, Math.max(0, Math.round((initialLeftMs / vm.answerWindowMs) * 100))) : null;
+
+  const [remainingSec, setRemainingSec] = useState<number | null>(initialSec);
+  const [percent, setPercent] = useState<number | null>(initialPercent);
+
+  useEffect(() => {
+    if (!vm.answerExpiresAt || !vm.answerWindowMs) {
+      setRemainingSec(null);
+      setPercent(null);
+      return;
+    }
+    const tick = () => {
+      const now = Date.now();
+      const leftMs = Math.max(0, vm.answerExpiresAt! - now);
+      const sec = Math.ceil(leftMs / 1000);
+      setRemainingSec(sec);
+      setPercent(Math.min(100, Math.max(0, Math.round((leftMs / vm.answerWindowMs!) * 100))));
+    };
+    tick();
+    const timer = setInterval(tick, 200);
+    return () => clearInterval(timer);
+  }, [vm.answerExpiresAt, vm.answerWindowMs]);
   return (
     <section class={`entry-card entry-card-${vm.state}`} data-feature="entry-card" aria-live="polite">
       {vm.state === 'listening' && (
@@ -42,15 +67,24 @@ export function EntryCard({ vm, actions, lang }: ScreenProps<EntryCardVM>) {
         </div>
       )}
       {vm.state === 'needs_answer' && vm.answers === 'yes_no' && (
-        <div class="answer-row" data-feature="answer-buttons" role="group" aria-label={t.aiQuestion}>
-          <button type="button" class="btn answer-btn answer-yes" onClick={() => actions.answer('yes')}>
-            <IconCheck size={20} />
-            <span>{t.answerYes}</span>
-          </button>
-          <button type="button" class="btn answer-btn answer-no" onClick={() => actions.answer('no')}>
-            <IconX size={20} />
-            <span>{t.answerNo}</span>
-          </button>
+        <div class="answer-wrapper" data-feature="answer-buttons">
+          {percent !== null && (
+            <div class="answer-progress-track" aria-hidden="true">
+              <div class="answer-progress-bar" style={{ width: `${percent}%` }} />
+            </div>
+          )}
+          <div class="answer-row" role="group" aria-label={t.aiQuestion}>
+            <button type="button" class="btn answer-btn answer-yes" onClick={() => actions.answer('yes')}>
+              <IconCheck size={20} />
+              <span>{t.answerYes}</span>
+              {remainingSec !== null && <span class="answer-countdown" data-feature="answer-countdown">({remainingSec}s)</span>}
+            </button>
+            <button type="button" class="btn answer-btn answer-no" onClick={() => actions.answer('no')}>
+              <IconX size={20} />
+              <span>{t.answerNo}</span>
+              {remainingSec !== null && <span class="answer-countdown" data-feature="answer-countdown">({remainingSec}s)</span>}
+            </button>
+          </div>
         </div>
       )}
       {vm.heard && vm.state === 'heard' && (

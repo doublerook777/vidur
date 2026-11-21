@@ -69,6 +69,15 @@ export const KN_REVIEW: readonly string[] = [
   'profileSaved',
   'pinActive',
   'noPinSet',
+  'searchPlaceholder',
+  'noSearchResults',
+  'hearSummary',
+  'balanceSetTag',
+  'dueNow',
+  'remindWhatsApp',
+  'phoneLabel',
+  'editPhone',
+  'invalidPhone',
 ];
 
 export type LabelKey =
@@ -204,7 +213,17 @@ export type LabelKey =
   | 'profileTitle'
   | 'profileSaved'
   | 'pinActive'
-  | 'noPinSet';
+  | 'noPinSet'
+  // F2, F5, F6, F8 Phase 2 features
+  | 'searchPlaceholder'
+  | 'noSearchResults'
+  | 'hearSummary'
+  | 'balanceSetTag'
+  | 'dueNow'
+  | 'remindWhatsApp'
+  | 'phoneLabel'
+  | 'editPhone'
+  | 'invalidPhone';
 
 export const LABELS: Record<Lang, Record<LabelKey, string>> = {
   en: {
@@ -342,6 +361,15 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     profileSaved: 'Profile saved',
     pinActive: 'PIN lock active',
     noPinSet: 'No PIN set',
+    searchPlaceholder: 'Search customer or phone',
+    noSearchResults: 'No matching customers',
+    hearSummary: 'Hear summary',
+    balanceSetTag: 'Adjustment',
+    dueNow: 'Due now',
+    remindWhatsApp: 'Remind on WhatsApp',
+    phoneLabel: 'Phone',
+    editPhone: 'Edit phone',
+    invalidPhone: 'Enter a valid 10-digit number',
   },
   hi: {
     aiBadge: 'AI',
@@ -478,6 +506,15 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     profileSaved: 'प्रोफ़ाइल सुरक्षित हुई',
     pinActive: 'पिन लॉक सक्रिय है',
     noPinSet: 'कोई पिन सेट नहीं है',
+    searchPlaceholder: 'ग्राहक या फ़ोन नंबर खोजें',
+    noSearchResults: 'कोई ग्राहक नहीं मिला',
+    hearSummary: 'हिसाब सुनें',
+    balanceSetTag: 'समायोजन',
+    dueNow: 'अभी देय',
+    remindWhatsApp: 'WhatsApp पर याद दिलाएं',
+    phoneLabel: 'फ़ोन',
+    editPhone: 'फ़ोन बदलें',
+    invalidPhone: '10 अंकों का मान्य नंबर दर्ज करें',
   },
   kn: {
     aiBadge: 'AI',
@@ -614,6 +651,15 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     profileSaved: 'ಪ್ರೊಫೈಲ್ ಉಳಿಸಲಾಗಿದೆ',
     pinActive: 'ಪಿನ್ ಲಾಕ್ ಸಕ್ರಿಯವಾಗಿದೆ',
     noPinSet: 'ಯಾವುದೇ ಪಿನ್ ಹೊಂದಿಸಿಲ್ಲ',
+    searchPlaceholder: 'ಗ್ರಾಹಕರು ಅಥವಾ ಫೋನ್ ಹುಡುಕಿ',
+    noSearchResults: 'ಯಾವುದೇ ಗ್ರಾಹಕರು ಸಿಗಲಿಲ್ಲ',
+    hearSummary: 'ಲೆಕ್ಕ ಆಲಿಸಿ',
+    balanceSetTag: 'ಹೊಂದಾಣಿಕೆ',
+    dueNow: 'ಈಗ ಬಾಕಿ',
+    remindWhatsApp: 'WhatsApp ನಲ್ಲಿ ನೆನಪಿಸಿ',
+    phoneLabel: 'ಫೋನ್',
+    editPhone: 'ಫೋನ್ ಬದಲಾಯಿಸಿ',
+    invalidPhone: 'ಮಾನ್ಯವಾದ 10 ಅಂಕಿಗಳ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ',
   },
 };
 

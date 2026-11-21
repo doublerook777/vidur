@@ -1,4 +1,4 @@
-import { Dialogue, Ledger, amountToSpoken, canRemind, groundLlmOutput, say, seedDemoLedger, type LlmParser, type Reply } from '@vidur/core';
+import { Dialogue, Ledger, PENDING_TTL_MS, amountToSpoken, canRemind, groundLlmOutput, say, seedDemoLedger, type LlmParser, type Reply } from '@vidur/core';
 
 import { bytesToPcm16 } from '../audio/pcm.js';
 import type { Actions, AddPreset, CustomerDetailVM, CustomerRow, EntryCardVM, ErrorVM, FeedItem, Lang, Phase, Screen, Theme, ToastVM } from '../contract.js';
@@ -169,7 +169,21 @@ export class PhoneSession {
       this.speaking = busy;
       if (this.pressing) return;
       if (busy) this.setPhase('speaking');
-      else if (this.active.size === 0 && this.state.phase === 'speaking') this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
+      else if (this.active.size === 0 && this.state.phase === 'speaking') {
+        if (this.dialogue.hasPending()) {
+          this.dialogue.questionSpoken();
+          if (this.state.card) {
+            this.store.update({
+              card: {
+                ...this.state.card,
+                answerExpiresAt: this.now() + PENDING_TTL_MS,
+                answerWindowMs: PENDING_TTL_MS,
+              },
+            });
+          }
+        }
+        this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
+      }
     };
     this.purgeTimer = setInterval(() => void this.o.vault.purgeTranscripts(this.now()), 60 * 60 * 1000);
     this.refresh();
@@ -218,7 +232,21 @@ export class PhoneSession {
         onTtsEnd: (id) => {
           if (!this.active.delete(id)) return;
           // Still playing from the buffer? Then onBusy(false) will finish the state.
-          if (this.active.size === 0 && !this.pressing && !this.speaking) this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
+          if (this.active.size === 0 && !this.pressing && !this.speaking) {
+            if (this.dialogue.hasPending()) {
+              this.dialogue.questionSpoken();
+              if (this.state.card) {
+                this.store.update({
+                  card: {
+                    ...this.state.card,
+                    answerExpiresAt: this.now() + PENDING_TTL_MS,
+                    answerWindowMs: PENDING_TTL_MS,
+                  },
+                });
+              }
+            }
+            this.setPhase(this.dialogue.hasPending() ? 'needs_answer' : 'idle');
+          }
         },
         onAudio: (b) => {
           if (this.active.size === 0) return; // late audio of an interrupted sentence
@@ -267,7 +295,7 @@ export class PhoneSession {
     const t = todayTotals(this.ledger, now);
     const open = this.state.openCustomerId;
     const all = ledgerTotals(this.ledger);
-    this.store.update({ credit: t.credit, payment: t.payment, people: t.people, allCredit: all.credit, allPayment: all.payment, feed: feed(this.ledger, now), history: feed(this.ledger, now, 500), customers: customerRows(this.ledger), detail: open ? customerDetail(this.ledger, open, now) : null });
+    this.store.update({ credit: t.credit, payment: t.payment, people: t.people, allCredit: all.credit, allPayment: all.payment, feed: feed(this.ledger, now), history: feed(this.ledger, now, 500), customers: customerRows(this.ledger, now), detail: open ? customerDetail(this.ledger, open, now) : null });
     if (this.undoTimer) clearTimeout(this.undoTimer);
     if (this.state.feed[0]?.undoableUntil) this.undoTimer = setTimeout(() => this.refresh(), UNDO_MS + 50); // the undo button disappears on its own
   }
@@ -298,6 +326,10 @@ export class PhoneSession {
       card: {
         state: this.dialogue.hasPending() ? 'needs_answer' : saved ? 'saved' : 'heard',
         ...(this.isYesNo() ? { answers: 'yes_no' as const } : {}),
+        ...(this.dialogue.hasPending() ? {
+          answerExpiresAt: this.now() + PENDING_TTL_MS,
+          answerWindowMs: PENDING_TTL_MS,
+        } : {}),
         ...(heard ? { heard } : {}),
         agentLine: lines.join(' '),
         ...(saved ? { paise: saved.paise, kind: saved.kind } : {}),
@@ -382,9 +414,8 @@ export class PhoneSession {
     clearPin: () => void this.doClearPin(),
     unlock: (pin) => void this.doUnlock(pin),
     dismissCompleteProfile: () => this.store.update({ showCompleteProfile: false }),
-    // Not built yet: F5 summary, F6 WhatsApp.
-    remindOnWhatsApp: () => undefined,
-    speakSummary: () => undefined,
+    remindOnWhatsApp: (id) => void this.remindOnWhatsApp(id),
+    speakSummary: (id) => this.speakSummary(id),
     retry: () => {
       this.store.update({ error: null });
       this.gateway.close();
@@ -659,6 +690,38 @@ export class PhoneSession {
   private async saveSettings(): Promise<void> {
     const s = this.state;
     await this.o.vault.putMeta('settings', { lang: s.lang, theme: s.theme, shopName: s.shopName, onboarded: s.onboarded });
+  }
+
+  private speakSummary(id: string): void {
+    const replies = this.dialogue.summaryFor(id);
+    if (!replies.length) return;
+    this.bargeIn();
+    const fullText = replies.map((r) => r.text).join(' ');
+    this.store.update({ card: { state: 'heard', agentLine: fullText } });
+    this.speak(replies);
+  }
+
+  private async remindOnWhatsApp(id: string): Promise<void> {
+    const gate = canRemind(this.ledger, id, this.now());
+    if (!gate.ok) return;
+    const c = this.ledger.customer(id);
+    if (!c) return;
+    const amount = amountToSpoken(this.ledger.balance(id), this.state.lang, 'digits');
+    const text = say(this.state.lang, 'reminder_text', { name: c.name, amount });
+    await this.ledger.recordReminder(id);
+    this.refresh();
+
+    const rawPhone = c.phone?.trim();
+    if (rawPhone) {
+      const digits = rawPhone.replace(/\D/g, '');
+      const normalized = digits.length === 10 ? `91${digits}` : digits;
+      const url = `https://wa.me/${normalized}?text=${encodeURIComponent(text)}`;
+      if (typeof window !== 'undefined') {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    } else {
+      this.store.update({ shareReminder: { customerId: id, text } });
+    }
   }
 
   private async prepareReminder(id: string): Promise<void> {

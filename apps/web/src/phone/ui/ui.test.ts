@@ -18,10 +18,13 @@ import { Onboarding } from './Onboarding.js';
 import { LockScreen } from './LockScreen.js';
 import { Keypad } from './Keypad.js';
 import { StateIndicator } from './StateIndicator.js';
+import { EntryCard } from './EntryCard.js';
+import { Feed } from './Feed.js';
 import {
   mockActions,
   mockCustomersVM,
   mockCustomerDetailVM,
+  mockBlockedCustomerDetailVM,
   mockHomeVM,
   mockKeypadVM,
   mockOfflineHomeVM,
@@ -183,5 +186,83 @@ describe('editing an entry: hidden sections stay hidden', () => {
     const css = readFileSync(new URL('./phone.css', import.meta.url), 'utf8');
     expect(css).toMatch(/\.keypad-customer\[hidden\][^{]*\{\s*display:\s*none/);
     expect(css).toMatch(/\.when-row\[hidden\]/);
+  });
+});
+
+describe('Phase 2 (CP12-B) UI components', () => {
+  it('F2 customer search input is rendered on Customers and Keypad screens', () => {
+    const cust = renderToString(h(Customers, { vm: mockCustomersVM, actions: mockActions, lang: 'en' }));
+    expect(cust).toContain('data-feature="customer-search"');
+
+    const kp = renderToString(h(Keypad, { vm: mockKeypadVM, actions: mockActions, lang: 'en' }));
+    expect(kp).toContain('data-feature="keypad-customer-search"');
+  });
+
+  it('F4 countdown bar and label render on EntryCard for yes_no answer state', () => {
+    const cardHtml = renderToString(
+      h(EntryCard, {
+        vm: {
+          state: 'needs_answer',
+          answers: 'yes_no',
+          agentLine: 'Confirm?',
+          answerExpiresAt: Date.now() + 30_000,
+          answerWindowMs: 60_000,
+        },
+        actions: mockActions,
+        lang: 'en',
+      })
+    );
+    expect(cardHtml).toContain('class="answer-progress-bar"');
+    expect(cardHtml).toContain('data-feature="answer-countdown"');
+    expect(cardHtml).toContain('(30s)');
+  });
+
+  it('F5 Hear summary button is rendered on CustomerDetail', () => {
+    const detail = renderToString(h(CustomerDetail, { vm: mockCustomerDetailVM, actions: mockActions, lang: 'en' }));
+    expect(detail).toContain('data-feature="hear-summary"');
+    expect(detail).toContain(LABELS.en.hearSummary);
+  });
+
+  it('F6 Remind on WhatsApp button is rendered and gated properly', () => {
+    const allowed = renderToString(h(CustomerDetail, { vm: mockCustomerDetailVM, actions: mockActions, lang: 'en' }));
+    expect(allowed).toContain('data-feature="remind-whatsapp"');
+    expect(allowed).not.toMatch(/data-feature="remind-whatsapp"[^>]*disabled/);
+
+    const blocked = renderToString(h(CustomerDetail, { vm: mockBlockedCustomerDetailVM, actions: mockActions, lang: 'en' }));
+    expect(blocked).toContain('data-feature="remind-whatsapp"');
+    expect(blocked).toMatch(/data-feature="remind-whatsapp"[^>]*disabled/);
+  });
+
+  it('F6 Due now section renders on Reminders when a customer owes and canRemind', () => {
+    const rem = renderToString(h(Reminders, { vm: mockRemindersVM, actions: mockActions, lang: 'en' }));
+    expect(rem).toContain('data-feature="reminders-due-now"');
+    expect(rem).toContain('data-feature="due-now-wa"');
+    expect(rem).toContain('Ramesh');
+  });
+
+  it('F8 Adjustment tag renders for balance_set entries in Feed', () => {
+    const feedHtml = renderToString(
+      h(Feed, {
+        vm: {
+          items: [
+            {
+              id: 'bs1',
+              customerName: 'Anil',
+              kind: 'credit',
+              paise: 5000,
+              at: Date.now(),
+              recordedAt: Date.now(),
+              reason: 'balance_set',
+              undoableUntil: null,
+            },
+          ],
+          showUndoForId: null,
+        },
+        actions: mockActions,
+        lang: 'en',
+      })
+    );
+    expect(feedHtml).toContain('data-feature="balance-set-tag"');
+    expect(feedHtml).toContain(LABELS.en.balanceSetTag);
   });
 });

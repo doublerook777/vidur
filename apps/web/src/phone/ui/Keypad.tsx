@@ -5,7 +5,7 @@ import { formatRupees, fromLocalInput, toLocalInput } from './format.js';
 import { LABELS } from './labels.js';
 import { IconArrowDown, IconArrowUp, IconBack, IconBackspace } from './icons.js';
 import type { ScreenProps } from './types.js';
-import { nameKey } from '@vidur/core';
+import { nameKey, searchCustomers } from '@vidur/core';
 import { AiBadge } from './AiBadge.js';
 
 export interface KeypadVM {
@@ -29,6 +29,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
   const [customerId, setCustomerId] = useState<string | null>(vm.preset?.customerId ?? null);
   const [newName, setNewName] = useState('');
   const [newNickname, setNewNickname] = useState('');
+  const [customerQuery, setCustomerQuery] = useState('');
   // Changing an entry starts from the time it already has.
   const [when, setWhen] = useState<When>(editing ? 'pick' : 'now');
   const [picked, setPicked] = useState(toLocalInput(editing ? editing.at : now));
@@ -115,24 +116,45 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
       <section class="keypad-customer" aria-label={t.chooseCustomer} hidden={editing !== null}>
         {newFirst && nameBox}
         {newFirst && nicknameBox}
-        <ul class="keypad-customer-list">
-          {vm.customers.map((c) => (
-            <li key={c.id}>
-              <button
-                type="button"
-                class={`btn keypad-customer-btn${customerId === c.id ? ' keypad-customer-btn-active' : ''}`}
-                aria-pressed={customerId === c.id}
-                onClick={() => {
-                  setCustomerId(customerId === c.id ? null : c.id);
-                  setNewName('');
-                  setNewNickname('');
-                }}
-              >
-                {c.nickname ? `${c.name} (${c.nickname})` : c.name}
-              </button>
-            </li>
-          ))}
-        </ul>
+        {vm.customers.length > 0 && (
+          <div class="keypad-customer-search-box">
+            <input
+              type="search"
+              class="keypad-customer-search-input"
+              data-feature="keypad-customer-search"
+              placeholder={t.searchPlaceholder}
+              aria-label={t.searchPlaceholder}
+              value={customerQuery}
+              onInput={(e) => setCustomerQuery((e.target as HTMLInputElement).value)}
+            />
+          </div>
+        )}
+        {(() => {
+          const displayed = customerQuery.trim() ? searchCustomers(customerQuery, vm.customers) : vm.customers;
+          if (displayed.length === 0 && customerQuery.trim()) {
+            return <p class="keypad-customer-empty">{t.noSearchResults}</p>;
+          }
+          return (
+            <ul class="keypad-customer-list">
+              {displayed.map((c) => (
+                <li key={c.id}>
+                  <button
+                    type="button"
+                    class={`btn keypad-customer-btn${customerId === c.id ? ' keypad-customer-btn-active' : ''}`}
+                    aria-pressed={customerId === c.id}
+                    onClick={() => {
+                      setCustomerId(customerId === c.id ? null : c.id);
+                      setNewName('');
+                      setNewNickname('');
+                    }}
+                  >
+                    {c.nickname ? `${c.name} (${c.nickname})` : c.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          );
+        })()}
         {!newFirst && nameBox}
         {!newFirst && nicknameBox}
       </section>

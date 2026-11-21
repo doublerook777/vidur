@@ -529,5 +529,71 @@ describe('adding and removing entries by hand, and tapping answers', () => {
       expect(session!.state.card?.countdownSec).toBeUndefined();
       await until(() => session!.state.phase === 'idle');
     });
+
+    it('F5 speakSummary speaks customer summary and updates the card', async () => {
+      const { speaker } = await boot();
+      await onboard(speaker, false);
+      const c = await session!.debug.ledger.createCustomer('Ramesh', []);
+      await session!.debug.ledger.postEntry({ customerId: c.id, kind: 'credit', paise: 5000, at: Date.now() });
+
+      session!.actions.speakSummary(c.id);
+      await until(() => session!.state.card?.agentLine !== undefined && session!.state.card.agentLine.length > 0);
+      expect(session!.state.card?.agentLine).toContain('Ramesh');
+      expect(session!.state.card?.agentLine).toContain('50');
+      await until(() => speaker.bytes > 0);
+    });
+
+    it('F6 remindOnWhatsApp opens wa.me URL when phone is present and gate passes', async () => {
+      const { speaker } = await boot();
+      await onboard(speaker, false);
+      const c = await session!.debug.ledger.createCustomer('Suresh', [], { phone: '9876543210' });
+      await session!.debug.ledger.setConsent(c.id, true);
+      await session!.debug.ledger.postEntry({ customerId: c.id, kind: 'credit', paise: 7500, at: Date.now() });
+
+      const openedUrls: string[] = [];
+      const origWindow = globalThis.window;
+      globalThis.window = {
+        open: (url?: string | URL) => {
+          if (url) openedUrls.push(String(url));
+          return null;
+        },
+      } as unknown as Window & typeof globalThis;
+
+      try {
+        session!.actions.remindOnWhatsApp(c.id);
+        await until(() => openedUrls.length > 0);
+        expect(openedUrls[0]).toContain('https://wa.me/919876543210?text=');
+        expect(openedUrls[0]).toContain(encodeURIComponent('Suresh'));
+        expect(session!.debug.ledger.lastReminderAt(c.id)).not.toBeNull();
+      } finally {
+        globalThis.window = origWindow;
+      }
+    });
+
+    it('F6 remindOnWhatsApp does not send if reminder gate blocks', async () => {
+      const { speaker } = await boot();
+      await onboard(speaker, false);
+      // No consent -> gate blocks
+      const c = await session!.debug.ledger.createCustomer('Gita', [], { phone: '9876543210' });
+      await session!.debug.ledger.postEntry({ customerId: c.id, kind: 'credit', paise: 5000, at: Date.now() });
+
+      const openedUrls: string[] = [];
+      const origWindow = globalThis.window;
+      globalThis.window = {
+        open: (url?: string | URL) => {
+          if (url) openedUrls.push(String(url));
+          return null;
+        },
+      } as unknown as Window & typeof globalThis;
+
+      try {
+        session!.actions.remindOnWhatsApp(c.id);
+        await new Promise((r) => setTimeout(r, 100));
+        expect(openedUrls).toHaveLength(0);
+        expect(session!.debug.ledger.lastReminderAt(c.id)).toBeNull();
+      } finally {
+        globalThis.window = origWindow;
+      }
+    });
   });
 });

@@ -53,10 +53,10 @@ export const mockActions: Actions = {
 const now = Date.now();
 
 export const mockCustomers: CustomerRow[] = [
-  { id: 'c1', name: 'Ramesh', aliases: ['Ramesh bhai'], balancePaise: 34000, lastActivityAt: now - 36e5, reminderOptIn: true },
-  { id: 'c2', name: 'Sunita', aliases: [], balancePaise: 125000, lastActivityAt: now - 72e5, reminderOptIn: false },
-  { id: 'c3', name: 'Kavya', aliases: ['Kavya atta wali'], balancePaise: -5000, lastActivityAt: now - 9e5, reminderOptIn: true },
-  { id: 'c4', name: 'Mohan', aliases: [], balancePaise: 0, lastActivityAt: null, reminderOptIn: false },
+  { id: 'c1', name: 'Ramesh', aliases: ['Ramesh bhai'], balancePaise: 34000, lastActivityAt: now - 36e5, reminderOptIn: true, canRemind: true },
+  { id: 'c2', name: 'Sunita', aliases: [], balancePaise: 125000, lastActivityAt: now - 72e5, reminderOptIn: false, canRemind: false },
+  { id: 'c3', name: 'Kavya', aliases: ['Kavya atta wali'], balancePaise: -5000, lastActivityAt: now - 9e5, reminderOptIn: true, canRemind: false },
+  { id: 'c4', name: 'Mohan', aliases: [], balancePaise: 0, lastActivityAt: null, reminderOptIn: false, canRemind: false },
 ];
 
 export const mockFeed: FeedItem[] = [

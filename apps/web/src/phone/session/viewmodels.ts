@@ -4,11 +4,11 @@ import type { CustomerDetailVM, CustomerRow, FeedItem } from '../contract.js';
 
 export const UNDO_MS = 10_000;
 
-export function customerRows(ledger: Ledger): CustomerRow[] {
+export function customerRows(ledger: Ledger, now = Date.now()): CustomerRow[] {
   const last = new Map<string, number>();
   for (const e of ledger.activeEntries()) last.set(e.customerId, Math.max(last.get(e.customerId) ?? 0, e.at));
   return ledger.customers().map((c) => ({
-    id: c.id, name: c.name, aliases: c.aliases, ...(c.nickname ? { nickname: c.nickname } : {}), ...(c.phone ? { phone: c.phone } : {}), balancePaise: ledger.balance(c.id), lastActivityAt: last.get(c.id) ?? null, reminderOptIn: ledger.consent(c.id),
+    id: c.id, name: c.name, aliases: c.aliases, ...(c.nickname ? { nickname: c.nickname } : {}), ...(c.phone ? { phone: c.phone } : {}), balancePaise: ledger.balance(c.id), lastActivityAt: last.get(c.id) ?? null, reminderOptIn: ledger.consent(c.id), canRemind: canRemind(ledger, c.id, now).ok,
   })).sort((a, b) => b.balancePaise - a.balancePaise || a.name.localeCompare(b.name));
 }
 
@@ -35,6 +35,7 @@ export function feed(ledger: Ledger, now: number, limit = 20): FeedItem[] {
   const entries = [...ledger.activeEntries()].sort((a, b) => b.recordedAt - a.recordedAt || (a.id < b.id ? 1 : -1)).slice(0, limit);
   return entries.map((e, i) => ({
     id: e.id, customerName: names.get(e.customerId) ?? '', kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt,
+    reason: e.reason,
     undoableUntil: i === 0 && now - e.recordedAt < UNDO_MS ? e.recordedAt + UNDO_MS : null,
   }));
 }
@@ -47,7 +48,7 @@ export function customerDetail(ledger: Ledger, id: string, now: number): Custome
   return {
     customer: row,
     entries: ledger.activeEntries(id).sort((a, b) => b.at - a.at).map((e) => ({
-      id: e.id, kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt, undoableUntil: newest?.id === e.id && now - e.recordedAt < UNDO_MS ? e.recordedAt + UNDO_MS : null,
+      id: e.id, kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt, reason: e.reason, undoableUntil: newest?.id === e.id && now - e.recordedAt < UNDO_MS ? e.recordedAt + UNDO_MS : null,
     })),
     notes: ledger.notes(id).map((n) => ({ id: n.id, text: n.text, dueAt: n.dueAt ?? null })),
     canRemind: gate.ok,

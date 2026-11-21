@@ -50,6 +50,28 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
     setRenaming(false);
   };
 
+  const [editingPhone, setEditingPhone] = useState(false);
+  const [phoneDraft, setPhoneDraft] = useState(vm.customer.phone ?? '');
+  const [phoneError, setPhoneError] = useState(false);
+
+  const savePhone = (): void => {
+    const raw = phoneDraft.trim();
+    if (!raw) {
+      actions.updateCustomer(vm.customer.id, { phone: '' });
+      setEditingPhone(false);
+      setPhoneError(false);
+      return;
+    }
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length < 10 || digits.length > 15) {
+      setPhoneError(true);
+      return;
+    }
+    actions.updateCustomer(vm.customer.id, { phone: digits });
+    setEditingPhone(false);
+    setPhoneError(false);
+  };
+
   return (
     <main class="screen screen-customer-detail" data-feature="customer-detail">
       <header class="screen-header">
@@ -157,6 +179,61 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
         )}
       </section>
 
+      <section class="detail-nickname" aria-label={t.phoneLabel}>
+        {editingPhone ? (
+          <>
+            <label class="keypad-new-name-label">
+              <span class="keypad-new-name-title">{t.phoneLabel}</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                class="keypad-new-name detail-phone-input"
+                data-feature="phone-input"
+                value={phoneDraft}
+                onInput={(e) => {
+                  setPhoneDraft((e.target as HTMLInputElement).value);
+                  setPhoneError(false);
+                }}
+                autocomplete="tel"
+                autoFocus
+              />
+            </label>
+            {phoneError && <p class="keypad-hint" role="alert">{t.invalidPhone}</p>}
+            <div class="detail-nickname-actions">
+              <button type="button" class="btn btn-small detail-phone-save" onClick={savePhone}>
+                {t.save}
+              </button>
+              <button
+                type="button"
+                class="btn btn-small"
+                onClick={() => {
+                  setPhoneDraft(vm.customer.phone ?? '');
+                  setEditingPhone(false);
+                  setPhoneError(false);
+                }}
+              >
+                {t.cancelEdit}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div class="detail-nickname-row">
+            <span class="detail-nickname-value">{vm.customer.phone ? `${t.phoneLabel}: ${vm.customer.phone}` : `${t.phoneLabel}: —`}</span>
+            <button
+              type="button"
+              class="btn btn-small detail-phone-edit"
+              data-feature="edit-phone"
+              onClick={() => {
+                setPhoneDraft(vm.customer.phone ?? '');
+                setEditingPhone(true);
+              }}
+            >
+              {t.editPhone}
+            </button>
+          </div>
+        )}
+      </section>
+
       <section class="balance-card" aria-label={t.balanceDue}>
         <span class="balance-label">{t.balanceDue}</span>
         <span class="balance-value" data-feature="balance">
@@ -166,6 +243,14 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
           <DirectionIcon size={20} />
           <span class="balance-direction-word">{directionWord}</span>
         </span>
+        <button
+          type="button"
+          class="btn btn-hear-summary"
+          data-feature="hear-summary"
+          onClick={() => actions.speakSummary(vm.customer.id)}
+        >
+          <span>{t.hearSummary}</span>
+        </button>
       </section>
 
       <section class="detail-entries" aria-label={t.entriesTitle}>
@@ -183,7 +268,7 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
             {vm.entries.map((e) => (
               <EntryRow
                 key={e.id}
-                item={{ id: e.id, customerName: vm.customer.name, kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt, undoableUntil: e.undoableUntil }}
+                item={{ id: e.id, customerName: vm.customer.name, kind: e.kind, paise: e.paise, at: e.at, recordedAt: e.recordedAt, reason: e.reason, undoableUntil: e.undoableUntil }}
                 undoable={e.undoableUntil !== null && e.undoableUntil > now}
                 now={now}
                 lang={lang}
@@ -210,15 +295,27 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
       </section>
 
       <section class="detail-reminder" data-feature="reminder-gate" aria-label={t.remind}>
-        <button
-          type="button"
-          class="btn btn-remind"
-          disabled={!vm.canRemind}
-          onClick={() => actions.prepareReminder(vm.customer.id)}
-        >
-          <IconReminders size={22} />
-          <span>{t.remind}</span>
-        </button>
+        <div class="reminder-buttons-row">
+          <button
+            type="button"
+            class="btn btn-remind btn-remind-wa"
+            data-feature="remind-whatsapp"
+            disabled={!vm.canRemind}
+            onClick={() => actions.remindOnWhatsApp(vm.customer.id)}
+          >
+            <IconReminders size={22} />
+            <span>{t.remindWhatsApp}</span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-remind btn-remind-share"
+            data-feature="remind-share"
+            disabled={!vm.canRemind}
+            onClick={() => actions.prepareReminder(vm.customer.id)}
+          >
+            <span>{t.remind}</span>
+          </button>
+        </div>
         {blockedReason && <p class="detail-reminder-blocked">{blockedReason}</p>}
         <label class="consent-row">
           <span class="consent-label">{t.reminderOptIn}</span>

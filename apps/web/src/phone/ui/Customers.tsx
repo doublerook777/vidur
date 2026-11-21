@@ -1,7 +1,8 @@
+import { useState } from 'preact/hooks';
 import type { CustomerRow } from '../contract.js';
 import { formatRupees } from './format.js';
 import { LABELS } from './labels.js';
-import { aliasesFor } from '@vidur/core';
+import { aliasesFor, searchCustomers } from '@vidur/core';
 
 import { IconArrowDown, IconArrowUp, IconCustomers, IconPlus } from './icons.js';
 import type { ScreenProps } from './types.js';
@@ -17,6 +18,9 @@ export interface CustomersVM {
 
 export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
   const t = LABELS[lang];
+  const [query, setQuery] = useState('');
+  const displayed = query.trim() ? searchCustomers(query, vm.customers) : vm.customers;
+
   return (
     <main class="screen screen-customers">
       <header class="screen-header">
@@ -50,33 +54,54 @@ export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
         <span>{t.newCustomer}</span>
       </button>
 
-      <ul class="customer-list" data-feature="customer-list" aria-label={t.customersTitle}>
-        {vm.customers.map((c) => {
-          const positive = c.balancePaise >= 0;
-          const DirectionIcon = positive ? IconArrowUp : IconArrowDown;
-          const directionWord = positive ? t.credit : t.payment;
-          return (
-            <li key={c.id}>
-              <button type="button" class="customer-row" onClick={() => actions.openCustomer(c.id)}>
-                <span class="customer-avatar" aria-hidden="true">
-                  <IconCustomers size={26} />
-                </span>
-                <span class="customer-info">
-                  <span class="customer-name">{c.nickname ? `${c.name} (${c.nickname})` : c.name}</span>
-                  {c.aliases.length > 0 && <span class="customer-aliases">{aliasesFor(c.aliases, lang).join(', ')}</span>}
-                </span>
-                <span class="customer-balance">
-                  <span class="customer-balance-direction">
-                    <DirectionIcon size={16} />
-                    <span class="customer-balance-word">{directionWord}</span>
+      <div class="customer-search-box">
+        <input
+          type="search"
+          class="customer-search-input"
+          data-feature="customer-search"
+          placeholder={t.searchPlaceholder}
+          aria-label={t.searchPlaceholder}
+          value={query}
+          onInput={(e) => setQuery((e.target as HTMLInputElement).value)}
+        />
+        {query && (
+          <button type="button" class="search-clear-btn" aria-label="Clear search" onClick={() => setQuery('')}>
+            ✕
+          </button>
+        )}
+      </div>
+
+      {displayed.length === 0 ? (
+        <p class="customer-search-empty">{t.noSearchResults}</p>
+      ) : (
+        <ul class="customer-list" data-feature="customer-list" aria-label={t.customersTitle}>
+          {displayed.map((c) => {
+            const positive = c.balancePaise >= 0;
+            const DirectionIcon = positive ? IconArrowUp : IconArrowDown;
+            const directionWord = positive ? t.credit : t.payment;
+            return (
+              <li key={c.id}>
+                <button type="button" class="customer-row" onClick={() => actions.openCustomer(c.id)}>
+                  <span class="customer-avatar" aria-hidden="true">
+                    <IconCustomers size={26} />
                   </span>
-                  <span class="customer-balance-value">{formatRupees(Math.abs(c.balancePaise))}</span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+                  <span class="customer-info">
+                    <span class="customer-name">{c.nickname ? `${c.name} (${c.nickname})` : c.name}</span>
+                    {c.aliases.length > 0 && <span class="customer-aliases">{aliasesFor(c.aliases, lang).join(', ')}</span>}
+                  </span>
+                  <span class="customer-balance">
+                    <span class="customer-balance-direction">
+                      <DirectionIcon size={16} />
+                      <span class="customer-balance-word">{directionWord}</span>
+                    </span>
+                    <span class="customer-balance-value">{formatRupees(Math.abs(c.balancePaise))}</span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
       <BottomNav vm={{ current: 'customers' }} actions={actions} lang={lang} />
     </main>

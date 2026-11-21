@@ -21,6 +21,7 @@ export interface CustomerRow {
   balancePaise: number;
   lastActivityAt: number | null;
   reminderOptIn: boolean;
+  canRemind?: boolean;
 }
 
 export interface Profile {
@@ -48,6 +49,8 @@ export interface FeedItem {
   undoableUntil: number | null;
   /** Said by the shopkeeper, only kept in memory and purged after 24 hours. Optional. */
   heard?: string;
+  /** Set for set-total adjustment entries (F8). */
+  reason?: string;
 }
 
 export interface EntryCardVM {
@@ -95,7 +98,7 @@ export interface HomeVM {
 
 export interface CustomerDetailVM {
   customer: CustomerRow;
-  entries: { id: string; kind: 'credit' | 'payment'; paise: number; at: number; recordedAt: number; undoableUntil: number | null }[];
+  entries: { id: string; kind: 'credit' | 'payment'; paise: number; at: number; recordedAt: number; reason?: string; undoableUntil: number | null }[];
   notes: { id: string; text: string; dueAt: number | null }[];
   canRemind: boolean;
   reminderBlockedReason: 'no_consent' | 'too_soon' | 'nothing_due' | null;

@@ -35,7 +35,14 @@ export function EntryRow({ item, undoable, now, lang, actions, showDate = true }
           <Icon size={22} />
         </span>
         <span class="feed-item-body">
-          <span class="feed-item-name">{item.customerName}</span>
+          <span class="feed-item-name">
+            {item.customerName}
+            {item.reason === 'balance_set' ? (
+              <span class="feed-item-adjustment-tag" data-feature="balance-set-tag">
+                {t.balanceSetTag}
+              </span>
+            ) : null}
+          </span>
           <span class="feed-item-when" data-feature="timestamp">
             <span class="feed-item-kind-word">{word}</span>
             <span aria-hidden="true"> · </span>
