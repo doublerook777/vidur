@@ -54,7 +54,16 @@ interface Work {
   asked: number;
 }
 
-export type PendingKind = 'direction' | 'amount' | 'confirm_amount' | 'which' | 'near' | 'customer' | 'consent' | 'new_customer';
+export type PendingKind =
+  | 'direction'
+  | 'amount'
+  | 'confirm_amount'
+  | 'which'
+  | 'near'
+  | 'customer'
+  | 'consent'
+  | 'new_customer'
+  | 'nickname';
 interface Pending {
   kind: PendingKind;
   expiresAt: number;

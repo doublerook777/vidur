@@ -7,6 +7,7 @@
 
 export type LedgerEventType =
   | 'customer_created'
+  | 'customer_updated'
   | 'entry_posted'
   | 'entry_reversed'
   | 'note_added'
@@ -19,7 +20,19 @@ export interface CustomerCreatedEvent {
   id: string;
   customerId: string;
   name: string;
+  nickname?: string;
+  phone?: string;
   aliases: string[];
+  recordedAt: number;
+}
+
+export interface CustomerUpdatedEvent {
+  type: 'customer_updated';
+  id: string;
+  customerId: string;
+  name?: string;
+  nickname?: string;
+  phone?: string;
   recordedAt: number;
 }
 
@@ -82,6 +95,7 @@ export interface CustomerAliasAddedEvent {
 
 export type LedgerEvent =
   | CustomerCreatedEvent
+  | CustomerUpdatedEvent
   | EntryPostedEvent
   | EntryReversedEvent
   | NoteAddedEvent
@@ -114,6 +128,8 @@ export class MemoryStore implements LedgerStore {
 export interface Customer {
   id: string;
   name: string;
+  nickname?: string;
+  phone?: string;
   aliases: string[];
 }
 

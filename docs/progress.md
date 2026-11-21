@@ -69,7 +69,11 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 
 ### Plan 2: Member A
 
+- 2026-11-21: F0 shared contract core implementation merged. Added optional `nickname` and `phone` to `CustomerCreatedEvent`, new `customer_updated` event, and updated `Customer` read model. Added `nickname` to `PendingKind`. Added legacy events replay fixture in `packages/core/src/ledger/ledger.test.ts` verifying backward-compatibility. `npm run typecheck` and `npm test` (1483 tests across 31 files) passing. F3 "naya customer" intent audit completed.
+
 ### Plan 2: Member B
+
+- 2026-11-21: B1 Kannada label clipping fixed in `apps/web/src/phone/ui/phone.css`. Added max-width and wrapping on narrow screens (<= 390px) for kn and hi to ensure `.totals-payment` clears `.notch-btn`.
 
 ### Plan 2: Member C
 

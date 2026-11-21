@@ -51,3 +51,14 @@ What the draft has that `chore/F0-contract` may not (check before copying):
 Member A: you own the F0 core part. If you want any of this, cherry-pick it. Member B: the phone-side pieces (profile storage, actions, `answerExpiresAt`) are yours to take or rewrite.
 
 Numbers: the draft passes typecheck, lint and 1,495 tests (baseline was 1,482). Browser e2e was not run on it.
+
+### 2026-11-21 16:26 IST · claude (for Member A & Supervisor)
+
+DONE: F0 core contract
+- Ledger types: `CustomerCreatedEvent` gains optional `nickname` and `phone`; added `CustomerUpdatedEvent`; `Customer` and `CustomerRow` expose `nickname?` and `phone?`.
+- Dialogue engine: added `nickname` to `PendingKind`.
+- Phone contract: added `answerExpiresAt?` and `answerWindowMs?` to `EntryCardVM`; added `Profile` and `PinCredentials` types; added action callbacks.
+- Verification: added `F0 backward compatibility replay` test fixture in `packages/core/src/ledger/ledger.test.ts`. Full test suite passed (31 files, 1483 tests).
+
+DONE: B1
+- CSS fix in `apps/web/src/phone/ui/phone.css`: added `@media (max-width: 390px)` rules for `:lang(kn)` and `:lang(hi)` with `flex-wrap: wrap` and `max-width: 130px` on `.totals-payment` to clear `.notch-btn` completely.

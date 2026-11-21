@@ -252,3 +252,67 @@ describe('reversing returns an id that can itself be reversed (a removal can be 
     expect(l.activeEntries(c.id).map((x) => x.id)).toEqual([e.id]);
   });
 });
+
+describe('F0 backward compatibility replay', () => {
+  it('replays legacy F0 events (customer_created with no nickname/phone) into identical state', async () => {
+    const LEGACY_EVENTS: LedgerEvent[] = [
+      {
+        type: 'customer_created',
+        id: 'evt-cust-1',
+        customerId: 'cust-1',
+        name: 'Ramesh',
+        aliases: ['ramesh'],
+        recordedAt: 1000,
+      },
+      {
+        type: 'entry_posted',
+        id: 'evt-entry-1',
+        customerId: 'cust-1',
+        kind: 'credit',
+        paise: 34000,
+        at: 2000,
+        recordedAt: 2000,
+      },
+      {
+        type: 'entry_posted',
+        id: 'evt-entry-2',
+        customerId: 'cust-1',
+        kind: 'payment',
+        paise: 10000,
+        at: 3000,
+        recordedAt: 3000,
+      },
+      {
+        type: 'entry_reversed',
+        id: 'evt-rev-1',
+        targetId: 'evt-entry-1',
+        recordedAt: 4000,
+      },
+    ];
+
+    const store = freshStore();
+    for (const event of LEGACY_EVENTS) await store.append(event);
+
+    // Replay: project state purely from the legacy event log, no new events appended.
+    const ledger = await Ledger.load(store, clock, newId);
+
+    expect(ledger.customers()).toEqual([
+      { id: 'cust-1', name: 'Ramesh', aliases: ['ramesh'] },
+    ]);
+    expect(ledger.customer('cust-1')?.name).toBe('Ramesh');
+    expect(ledger.balance('cust-1')).toBe(-10000);
+    expect(ledger.balance('cust-2')).toBe(0);
+    expect(ledger.activeEntries('cust-1')).toEqual([
+      {
+        id: 'evt-entry-2',
+        customerId: 'cust-1',
+        kind: 'payment',
+        paise: 10000,
+        at: 3000,
+        recordedAt: 3000,
+      },
+    ]);
+    expect(ledger.activeEntries()).toHaveLength(1);
+    expect(ledger.lastEntry()?.id).toBe('evt-entry-2');
+  });
+});

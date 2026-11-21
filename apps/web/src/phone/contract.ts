@@ -12,6 +12,8 @@ export type Phase = 'idle' | 'listening' | 'thinking' | 'speaking' | 'needs_answ
 export interface CustomerRow {
   id: string;
   name: string;
+  nickname?: string;
+  phone?: string;
   aliases: string[];
   /** Integer paise. Positive means the customer owes money. */
   balancePaise: number;
@@ -46,6 +48,24 @@ export interface EntryCardVM {
   answers?: 'yes_no';
   /** Set after a note was saved: the customer whose notes the card links to. */
   noteCustomerId?: string;
+  /** Epoch ms when the open question expires. */
+  answerExpiresAt?: number;
+  /** Duration of the answer window in ms (for countdown rendering). */
+  answerWindowMs?: number;
+}
+
+export interface PinCredentials {
+  salt: string;
+  hash: string;
+  iterations: number;
+}
+
+export interface Profile {
+  version: 1;
+  ownerName: string;
+  shopName: string;
+  createdAt: number;
+  pin?: PinCredentials;
 }
 
 export interface ErrorVM {
@@ -131,6 +151,14 @@ export interface Actions {
   cancelAnswer(): void;
   retry(): void;
   finishOnboarding(opts: { lang: Lang; demoData: boolean }): void;
+  // F0 contract additions:
+  saveProfile?(profile: { ownerName: string; shopName: string }): void;
+  setPin?(pin: string): Promise<void>;
+  clearPin?(): Promise<void>;
+  unlock?(pin: string): Promise<boolean>;
+  updateCustomer?(id: string, patch: { name?: string; nickname?: string; phone?: string }): void;
+  remindOnWhatsApp?(customerId: string): void;
+  speakSummary?(customerId: string): void;
 }
 
 /** Every interactive element carries data-feature="<id>", so the showcase can explain it. */
