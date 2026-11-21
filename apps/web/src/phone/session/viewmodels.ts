@@ -8,7 +8,7 @@ export function customerRows(ledger: Ledger): CustomerRow[] {
   const last = new Map<string, number>();
   for (const e of ledger.activeEntries()) last.set(e.customerId, Math.max(last.get(e.customerId) ?? 0, e.at));
   return ledger.customers().map((c) => ({
-    id: c.id, name: c.name, aliases: c.aliases, balancePaise: ledger.balance(c.id), lastActivityAt: last.get(c.id) ?? null, reminderOptIn: ledger.consent(c.id),
+    id: c.id, name: c.name, aliases: c.aliases, ...(c.nickname ? { nickname: c.nickname } : {}), ...(c.phone ? { phone: c.phone } : {}), balancePaise: ledger.balance(c.id), lastActivityAt: last.get(c.id) ?? null, reminderOptIn: ledger.consent(c.id),
   })).sort((a, b) => b.balancePaise - a.balancePaise || a.name.localeCompare(b.name));
 }
 
