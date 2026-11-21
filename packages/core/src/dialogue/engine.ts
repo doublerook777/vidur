@@ -1,8 +1,9 @@
 import { addDaysIst, resolveDate, startOfDayIst } from '../dates/index.js';
 import { say, type Key, type P, type SpeechLang } from '../i18n/index.js';
+import { LARGE_PAISE } from '../intent/intent.js';
 import { detectDirection, directionByShape, guessCustomerName, interpret, isOptInStatement, residualWords, yesNo } from '../intent/index.js';
 import type { Interpretation, ParsedEvent } from '../intent/index.js';
-import type { Ledger } from '../ledger/index.js';
+import type { ActiveEntry, Ledger } from '../ledger/index.js';
 import { aliasesFor, findByAlias, matchName, nameKey, type KnownCustomer } from '../names/index.js';
 import { CONFIRM_BELOW, parseAmount } from '../numbers/index.js';
 import { canRemind } from '../reminders/index.js';
@@ -39,7 +40,7 @@ export interface DialogueOptions {
   undoWindowMs?: number;
 }
 
-type Mode = 'entry' | 'note' | 'query' | 'reminder' | 'consent' | 'move' | 'replace_amount';
+type Mode = 'entry' | 'note' | 'query' | 'reminder' | 'consent' | 'move' | 'replace_amount' | 'edit';
 
 interface Work {
   mode: Mode;
@@ -54,6 +55,11 @@ interface Work {
   amountOk?: boolean;
   /** A correction that changed the direction too ("nahi, 500 jama"): speak the full result, not just "replaced". */
   flipped?: boolean;
+  /** F8: the entries an edit could mean (when asking which), and the one chosen. */
+  entryIds?: string[];
+  targetEntryId?: string;
+  /** F8: the shopkeeper said yes to the read-back of an edit or a new total. */
+  confirmed?: boolean;
   asked: number;
 }
 
@@ -66,7 +72,10 @@ export type PendingKind =
   | 'customer'
   | 'consent'
   | 'new_customer'
-  | 'nickname';
+  | 'nickname'
+  | 'which_entry'
+  | 'confirm_edit'
+  | 'confirm_total';
 interface Pending {
   kind: PendingKind;
   expiresAt: number;
@@ -75,6 +84,8 @@ interface Pending {
 
 const DAY = 24 * 60 * 60 * 1000;
 const ORDINAL_FIRST = /^(pehla|pehle|pahla|pahle|first|1|one|पहला|पहले|ಮೊದಲ|ಮೊದಲನೆ)/i;
+const ORDINAL_THIRD = /^(teesra|tisra|teesre|third|3|three|तीसरा|तीसरे|ಮೂರನೆ|ಮೂರನೇ)/i;
+const ORDINAL_LAST = /^(last|latest|aakhri|akhri|aakhiri|आखिरी|आख़िरी|ಕೊನೆಯ|ಕೊನೆಯದು)/i;
 const ORDINAL_SECOND = /^(doosra|dusra|doosre|dusre|second|2|two|दूसरा|दूसरे|ಎರಡನೆ|ಎರಡನೇ)/i;
 
 const SKIP_WORDS = new Set([
@@ -101,9 +112,17 @@ function extractNickname(text: string, baseName?: string): string | undefined {
   return t.length > 0 ? t : undefined;
 }
 
+/** What the last voice edit changed, so "galat" right after it puts the earlier entry back. */
+interface LastEdit {
+  at: number;
+  reversalIds: string[];
+  postedId?: string;
+}
+
 export class Dialogue {
   private disclosed = false;
   private pending: Pending | null = null;
+  private lastEdit: LastEdit | null = null;
   private readonly o: Required<Pick<DialogueOptions, 'pendingTtlMs' | 'undoWindowMs'>> & DialogueOptions;
 
   constructor(options: DialogueOptions) {
@@ -258,7 +277,7 @@ export class Dialogue {
 
   private workFor(ev: ParsedEvent, rest: ParsedEvent[]): Work {
     const mode: Mode =
-      ev.intent === 'credit_entry' || ev.intent === 'payment' ? 'entry' : ev.intent === 'note' ? 'note' : ev.intent === 'balance_query' ? 'query' : ev.intent === 'reminder_opt_in' ? (isOptInStatement(ev.text) ? 'consent' : 'reminder') : 'entry';
+      ev.intent === 'edit_entry' ? 'edit' : ev.intent === 'credit_entry' || ev.intent === 'payment' ? 'entry' : ev.intent === 'note' ? 'note' : ev.intent === 'balance_query' ? 'query' : ev.intent === 'reminder_opt_in' ? (isOptInStatement(ev.text) ? 'consent' : 'reminder') : 'entry';
     return { mode, ev, rest, asked: 0 };
   }
 
@@ -276,6 +295,11 @@ export class Dialogue {
         return [this.r('out_of_scope')];
       case 'correction':
         return this.correction(w);
+      case 'edit_entry':
+        // One named customer, one change. Anything else gets a fixed line and nothing is touched.
+        if (ev.edit?.op === 'refuse') return [this.r(ev.edit.reason === 'advance' ? 'edit_no_advance' : 'edit_refuse')];
+        if (!ev.customerSpoken && !w.customerId) return [this.r('edit_refuse')];
+        break;
       default:
         break;
     }
@@ -285,6 +309,19 @@ export class Dialogue {
 
     const resolved = this.resolveCustomer(w);
     if (resolved) return resolved;
+
+    if (w.mode === 'edit') return this.editEntry(w);
+
+    // "Mohan ka 500 nahi 300" with no direction, when Mohan has a live 500 entry: this is a change to that entry, so it is
+    // read back before anything is touched. Without such an entry it stays a new entry.
+    if (w.mode === 'entry' && w.customerId && !w.replaceEntryId && ev.selfCorrected && ev.priorAmountPaise !== undefined && ev.needs.includes('direction')) {
+      const prior = ev.priorAmountPaise;
+      if (L.activeEntries(w.customerId).some((e) => e.paise === prior)) {
+        w.mode = 'edit';
+        w.ev = { ...ev, intent: 'edit_entry', needs: [], edit: { op: 'set_amount', oldPaise: prior, implicit: true } };
+        return this.editEntry(w);
+      }
+    }
 
     if (w.mode === 'query') return this.balanceReply(w);
     if (w.mode === 'consent') {
@@ -360,7 +397,7 @@ export class Dialogue {
       return this.ask(w, 'near', this.r('confirm_near', { name }));
     }
     // A new name. Nothing is ever created without the shopkeeper saying yes: a misheard word must not become a khata.
-    if (w.mode === 'query' || w.mode === 'reminder' || w.mode === 'consent') return [this.r('unknown_customer', { name: spoken })];
+    if (w.mode === 'query' || w.mode === 'reminder' || w.mode === 'consent' || w.mode === 'edit') return [this.r('unknown_customer', { name: spoken })];
     return this.ask(w, 'new_customer', this.r('confirm_new_customer', { name: spoken }));
   }
 
@@ -396,6 +433,7 @@ export class Dialogue {
     const L = this.o.ledger;
     const ev = w.ev;
     const out: Reply[] = [];
+    this.lastEdit = null;
     let customerId = w.customerId;
     if (!customerId && w.createName) {
       const aliases = w.createNickname ? [w.createNickname] : [];
@@ -480,9 +518,117 @@ export class Dialogue {
     return [this.r('reminder_ready', { name }, { type: 'share_reminder', customerId: id, text })];
   }
 
+  // ---------------------------------------------------------------- F8: edit any customer's ledger
+
+  /** The customer's live entries that fit what was said: the old amount, the kind and the day. Oldest first. */
+  private matchEntries(customerId: string, ev: ParsedEvent): ActiveEntry[] {
+    const edit = ev.edit!;
+    const now = this.o.clock();
+    let found = this.o.ledger.activeEntries(customerId);
+    if (edit.oldPaise !== undefined) found = found.filter((e) => e.paise === edit.oldPaise);
+    if (edit.kind) found = found.filter((e) => e.kind === edit.kind);
+    if (ev.dateToken) {
+      const from = this.dayStart(ev.dateToken, now);
+      if (from === undefined) return [];
+      const to = ev.dateToken === 'last_week' ? startOfDayIst(now) : from + DAY;
+      found = found.filter((e) => e.at >= from && e.at < to);
+    }
+    return found.sort((a, b) => a.at - b.at || a.recordedAt - b.recordedAt);
+  }
+
+  private kindWord(kind: 'credit' | 'payment'): string {
+    return say(this.o.lang, kind === 'credit' ? 'kind_credit' : 'kind_payment');
+  }
+
+  /** "₹200 credit or ₹50 payment yesterday", oldest first. */
+  private entryOptions(entries: ActiveEntry[]): string {
+    const today = startOfDayIst(this.o.clock());
+    const labels = entries.map((e) => {
+      const day = startOfDayIst(e.at);
+      const when = day === today ? '' : day === addDaysIst(today, -1) ? ` ${say(this.o.lang, 'when_yesterday')}` : '';
+      return `${this.money(e.paise)} ${this.kindWord(e.kind)}${when}`;
+    });
+    return labels.join(` ${say(this.o.lang, 'or')} `);
+  }
+
+  private async editEntry(w: Work): Promise<Reply[]> {
+    const L = this.o.ledger;
+    const ev = w.ev;
+    const edit = ev.edit!;
+    const id = w.customerId!;
+    const name = L.customer(id)?.name ?? '';
+    if (edit.op === 'set_total') return this.setTotal(w, name);
+
+    let target = w.targetEntryId ? L.activeEntries(id).find((e) => e.id === w.targetEntryId) : undefined;
+    if (!target) {
+      const cands = this.matchEntries(id, ev);
+      if (cands.length === 0) return [this.r('edit_not_found', { name })];
+      if (cands.length > 3) return [this.r('edit_too_many', { name })];
+      if (cands.length > 1) {
+        w.entryIds = cands.map((e) => e.id);
+        return this.ask(w, 'which_entry', this.r('ask_which_entry', { name, options: this.entryOptions(cands) }));
+      }
+      target = cands[0]!;
+      w.targetEntryId = target.id;
+    }
+
+    const now = this.o.clock();
+    const keep = { customerId: id, at: target.at, ...(target.item !== undefined ? { item: target.item } : {}), ...(target.reason !== undefined ? { reason: target.reason } : {}) };
+    let out: Reply[];
+    if (edit.op === 'remove') {
+      const reversalId = await L.reverse(target.id);
+      this.lastEdit = { at: now, reversalIds: [reversalId] };
+      out = [this.r('edit_removed', { name, amount: this.money(target.paise), kind: this.kindWord(target.kind) })];
+    } else if (edit.op === 'flip') {
+      const kind = edit.to ?? (target.kind === 'credit' ? 'payment' : 'credit');
+      const reversalId = await L.reverse(target.id);
+      const posted = await L.postEntry({ ...keep, kind, paise: target.paise });
+      this.lastEdit = { at: now, reversalIds: [reversalId], postedId: posted.id };
+      out = [this.r('edit_flipped', { name, amount: this.money(target.paise), kind: this.kindWord(kind) })];
+    } else {
+      // set_amount
+      if (ev.amountPaise === undefined) return this.ask(w, 'amount', this.r('ask_amount'));
+      const readBack = edit.implicit || ev.amountPaise >= LARGE_PAISE || (ev.amountConfidence ?? 1) < CONFIRM_BELOW;
+      if (!w.confirmed && readBack) {
+        return this.ask(w, 'confirm_edit', this.r('confirm_edit', { name, old: this.money(target.paise), amount: this.money(ev.amountPaise) }));
+      }
+      const reversalId = await L.reverse(target.id);
+      const posted = await L.postEntry({ ...keep, kind: target.kind, paise: ev.amountPaise });
+      this.lastEdit = { at: now, reversalIds: [reversalId], postedId: posted.id };
+      out = [this.r('edit_changed', { name, old: this.money(target.paise), amount: this.money(ev.amountPaise) })];
+    }
+    return [...out, ...this.balanceReply(w)];
+  }
+
+  /** "Anil ka total 1000 karo": one adjustment entry for the difference, always read back first. */
+  private async setTotal(w: Work, name: string): Promise<Reply[]> {
+    const L = this.o.ledger;
+    const ev = w.ev;
+    const id = w.customerId!;
+    if (ev.amountPaise === undefined) return this.ask(w, 'amount', this.r('ask_amount'));
+    const targetPaise = ev.amountPaise;
+    const current = L.balance(id);
+    const diff = targetPaise - current;
+    if (diff === 0) return [this.r('total_unchanged', { name, amount: this.money(targetPaise) })];
+    const kind = diff > 0 ? 'credit' : 'payment';
+    const params = { name, current: this.money(Math.abs(current)), target: this.money(targetPaise), diff: this.money(Math.abs(diff)), kind: this.kindWord(kind) };
+    if (!w.confirmed) return this.ask(w, 'confirm_total', this.r(current < 0 ? 'confirm_total_adv' : 'confirm_total', params));
+    this.lastEdit = null;
+    await L.postEntry({ customerId: id, kind, paise: Math.abs(diff), reason: 'balance_set' });
+    return [this.r('total_set', params)];
+  }
+
   private async correction(w: Work): Promise<Reply[]> {
     const L = this.o.ledger;
     const ev = w.ev;
+    // "Galat" right after a voice edit puts the earlier entry back instead of removing the new one.
+    if (this.lastEdit && (ev.correction?.kind ?? 'undo') === 'undo' && this.o.clock() - this.lastEdit.at <= this.o.undoWindowMs) {
+      const edit = this.lastEdit;
+      this.lastEdit = null;
+      if (edit.postedId) await L.reverse(edit.postedId);
+      for (const rid of edit.reversalIds) await L.reverse(rid);
+      return [this.r('edit_undone')];
+    }
     const last = L.lastEntry();
     if (!last) return [this.r('nothing_to_undo')];
     if (this.o.clock() - last.recordedAt > this.o.undoWindowMs) return [this.r('undo_too_old')];
@@ -532,7 +678,7 @@ export class Dialogue {
     if (peek) {
       const full = (peek.intent === 'credit_entry' || peek.intent === 'payment') && peek.customerSpoken && peek.amountPaise !== undefined && !peek.needs.includes('direction') && residualWords(text) >= 2;
       if (full) return undefined;
-      const yesNoKind = p.kind === 'confirm_amount' || p.kind === 'near' || p.kind === 'consent' || p.kind === 'new_customer' || p.kind === 'nickname';
+      const yesNoKind = p.kind === 'confirm_amount' || p.kind === 'near' || p.kind === 'consent' || p.kind === 'new_customer' || p.kind === 'nickname' || p.kind === 'confirm_edit' || p.kind === 'confirm_total';
       if (!yesNoKind && peek.intent === 'correction' && peek.correction?.kind === 'undo') {
         clear();
         return [this.r('dropped_pending')];
@@ -666,6 +812,56 @@ export class Dialogue {
         }
         w.createNickname = nick;
         return proceed();
+      }
+      case 'which_entry': {
+        const entries = this.o.ledger.activeEntries(w.customerId);
+        const cands = (w.entryIds ?? []).map((eid) => entries.find((e) => e.id === eid)).filter((e): e is ActiveEntry => !!e);
+        const amounts = parseAmount(text);
+        let pick: ActiveEntry | undefined;
+        if (amounts.length === 1) {
+          const byAmount = cands.filter((e) => e.paise === amounts[0]!.paise);
+          if (byAmount.length === 1) pick = byAmount[0];
+        } else if (amounts.length === 0) {
+          const words = text.trim().split(/\s+/);
+          const said = (re: RegExp): boolean => words.some((word) => re.test(word));
+          // "the second one" holds "one", so the later ordinals are tried before the first.
+          if (said(ORDINAL_SECOND)) pick = cands[1];
+          else if (said(ORDINAL_THIRD)) pick = cands[2];
+          else if (said(ORDINAL_LAST)) pick = cands[cands.length - 1];
+          else if (said(ORDINAL_FIRST)) pick = cands[0];
+        }
+        if (!pick) {
+          w.asked += 1;
+          if (w.asked >= 2) {
+            clear();
+            return [this.r('didnt_catch'), this.r('dropped_pending')];
+          }
+          p.expiresAt = this.o.clock() + this.o.pendingTtlMs;
+          return [this.r('ask_which_entry', { name: this.nameOf(w), options: this.entryOptions(cands) })];
+        }
+        w.targetEntryId = pick.id;
+        return proceed();
+      }
+      case 'confirm_edit':
+      case 'confirm_total': {
+        const yn = yesNo(text);
+        const amounts = parseAmount(text);
+        if (amounts.length === 1 && residualWords(text) <= 1 && yn !== 'yes') {
+          // A new number instead of a yes: use it, and read back again if it still needs reading back.
+          const a = amounts[0]!;
+          w.ev = { ...w.ev, amountPaise: a.paise, amountConfidence: a.confidence };
+          w.confirmed = false;
+          return proceed();
+        }
+        if (yn === 'yes') {
+          w.confirmed = true;
+          return proceed();
+        }
+        if (yn === 'no') {
+          clear();
+          return [this.r('dropped_pending')];
+        }
+        return undefined;
       }
       case 'customer': {
         const name = guessCustomerName(text);

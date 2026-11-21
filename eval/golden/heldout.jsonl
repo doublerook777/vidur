@@ -138,3 +138,11 @@
 {"id": "H-HL-033", "lang": "hinglish", "text": "Pizza order karwa do", "expected": {"intent": "out_of_scope"}}
 {"id": "H-HL-034", "lang": "hinglish", "text": "Kal match kon jita?", "expected": {"intent": "out_of_scope"}}
 {"id": "H-HL-035", "lang": "hinglish", "text": "Ek chutkula sunao", "expected": {"intent": "out_of_scope"}}
+{"id": "H-EN-036", "lang": "en", "text": "Update Geeta's credit from yesterday to 250", "expected": {"intent": "edit_entry", "amount": 250, "customer": "Geeta", "date": "yesterday"}}
+{"id": "H-EN-037", "lang": "en", "text": "Make Pooja's total 2000", "expected": {"intent": "edit_entry", "amount": 2000, "customer": "Pooja"}}
+{"id": "H-EN-038", "lang": "en", "text": "Delete Vijay's 300 entry", "expected": {"intent": "edit_entry", "customer": "Vijay"}}
+{"id": "H-HL-036", "lang": "hinglish", "text": "Neha ka kul baaki 1500 kar do", "expected": {"intent": "edit_entry", "amount": 1500, "customer": "Neha"}}
+{"id": "H-HL-037", "lang": "hinglish", "text": "Dinesh ka 200 badal ke 150 karo", "expected": {"intent": "edit_entry", "amount": 150, "customer": "Dinesh"}}
+{"id": "H-HI-036", "lang": "hi", "text": "सुनीता का कल का उधार हटा दो", "expected": {"intent": "edit_entry", "customer": "Sunita", "date": "yesterday"}}
+{"id": "H-HI-037", "lang": "hi", "text": "रमेश का टोटल शून्य कर दो", "expected": {"intent": "edit_entry", "amount": 0, "customer": "Ramesh"}}
+{"id": "H-KN-036", "lang": "kn", "text": "ರಮೇಶ್ ಒಟ್ಟು ಬಾಕಿ ಐದು ನೂರು ಮಾಡಿ", "expected": {"intent": "edit_entry", "amount": 500, "customer": "Ramesh"}}

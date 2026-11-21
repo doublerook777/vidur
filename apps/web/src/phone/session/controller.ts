@@ -451,7 +451,7 @@ export class PhoneSession {
   /** True when the open question is a yes or no, so the screen can show two buttons. */
   private isYesNo(): boolean {
     const k = this.dialogue.pendingKind();
-    return k === 'new_customer' || k === 'confirm_amount' || k === 'near' || k === 'consent';
+    return k === 'new_customer' || k === 'confirm_amount' || k === 'near' || k === 'consent' || k === 'confirm_edit' || k === 'confirm_total';
   }
 
   /** Tapping Yes or No does exactly what saying it does: the words go through the same dialogue. */

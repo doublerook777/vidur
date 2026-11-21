@@ -26,6 +26,8 @@
  *     note             – future promise, saved as a note, never posted ("kal 500 dega")
  *     refusal          – threats, lending, interest, credit judgments
  *     out_of_scope     – anything the product does not do
+ *     edit_entry       – change an older entry or a customer's total (F8). `amount` is the new
+ *                        amount or the target total; the customer is the one named.
  */
 
 export const LANGS = ['hi', 'en', 'kn', 'hinglish'] as const;
@@ -40,6 +42,7 @@ export const INTENTS = [
   'note',
   'refusal',
   'out_of_scope',
+  'edit_entry',
 ] as const;
 export type Intent = (typeof INTENTS)[number];
 

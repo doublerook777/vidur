@@ -12,6 +12,8 @@ export const KEYS = [
   'undone', 'nothing_to_undo', 'undo_too_old', 'replaced', 'moved', 'balance_customer', 'balance_zero', 'balance_advance', 'balance_day', 'balance_day_none', 'unknown_customer',
   'refuse_threat', 'refuse_loan', 'refuse_judgment', 'out_of_scope', 'didnt_catch', 'dropped_pending', 'consent_ask', 'consent_saved', 'consent_declined',
   'reminder_ready', 'reminder_too_soon', 'reminder_text', 'when_today', 'when_yesterday', 'when_tomorrow', 'when_day_before', 'when_day_after', 'when_last_week', 'or', 'pending_expired',
+  'edit_refuse', 'edit_no_advance', 'edit_not_found', 'edit_too_many', 'ask_which_entry', 'confirm_edit', 'edit_changed', 'edit_removed', 'edit_flipped', 'edit_undone',
+  'confirm_total', 'confirm_total_adv', 'total_set', 'total_unchanged', 'kind_credit', 'kind_payment',
 ] as const;
 export type Key = (typeof KEYS)[number];
 
@@ -71,6 +73,22 @@ const en: Table = {
   when_last_week: () => 'last week',
   or: () => 'or',
   pending_expired: () => 'That was a while ago, so I did not save it.',
+  edit_refuse: () => 'I can change one customer at a time. Tell me one name and what to change.',
+  edit_no_advance: () => 'I can only set what a customer owes, zero or more. Please say an amount from zero up.',
+  edit_not_found: (p) => `I can't find that entry for ${p.name}.`,
+  edit_too_many: (p) => `${p.name} has many matching entries. Please say the day or the amount.`,
+  ask_which_entry: (p) => `Which one for ${p.name}? ${p.options}?`,
+  confirm_edit: (p) => `${p.name}: change ${p.old} to ${p.amount}. Is that right?`,
+  edit_changed: (p) => `${p.name}, ${p.old} changed to ${p.amount}.`,
+  edit_removed: (p) => `Removed ${p.name}'s ${p.amount} ${p.kind}.`,
+  edit_flipped: (p) => `${p.name}, ${p.amount} is now ${p.kind}.`,
+  edit_undone: () => 'Put the earlier entry back.',
+  confirm_total: (p) => `${p.name} owes ${p.current} now. Set it to ${p.target}? I will add ${p.diff} ${p.kind}. Say yes or no.`,
+  confirm_total_adv: (p) => `${p.name} is ${p.current} in advance now. Set it to ${p.target}? I will add ${p.diff} ${p.kind}. Say yes or no.`,
+  total_set: (p) => `Balance set. ${p.name} now owes ${p.target}. Added ${p.diff} ${p.kind}.`,
+  total_unchanged: (p) => `${p.name}'s balance is already ${p.amount}. Nothing changed.`,
+  kind_credit: () => 'credit',
+  kind_payment: () => 'payment',
 };
 
 const hi: Table = {
@@ -127,6 +145,22 @@ const hi: Table = {
   when_last_week: () => 'पिछले हफ़्ते',
   or: () => 'या',
   pending_expired: () => 'यह काफ़ी पहले की बात थी, इसलिए नहीं लिखा।',
+  edit_refuse: () => 'मैं एक बार में एक ही ग्राहक बदल सकता हूँ। एक नाम बोलिए और क्या बदलना है।',
+  edit_no_advance: () => 'मैं बाकी शून्य या उससे ज़्यादा ही रख सकता हूँ, एडवांस नहीं। शून्य से ऊपर की रकम बोलिए।',
+  edit_not_found: (p) => `${p.name} की वह एंट्री नहीं मिली।`,
+  edit_too_many: (p) => `${p.name} की कई एंट्री मिलती हैं। दिन या रकम बोलिए।`,
+  ask_which_entry: (p) => `${p.name} की कौन सी? ${p.options}?`,
+  confirm_edit: (p) => `${p.name}, ${p.old} की जगह ${p.amount}। सही है?`,
+  edit_changed: (p) => `${p.name}, ${p.old} बदलकर ${p.amount}।`,
+  edit_removed: (p) => `${p.name} का ${p.amount} ${p.kind} हटा दिया।`,
+  edit_flipped: (p) => `${p.name}, ${p.amount} अब ${p.kind} है।`,
+  edit_undone: () => 'पहले वाली एंट्री वापस रख दी।',
+  confirm_total: (p) => `${p.name} का अभी ${p.current} बाकी है। इसे ${p.target} कर दूँ? मैं ${p.diff} ${p.kind} जोड़ूँगा। हाँ या ना बोलिए।`,
+  confirm_total_adv: (p) => `${p.name} का अभी ${p.current} एडवांस है। इसे ${p.target} कर दूँ? मैं ${p.diff} ${p.kind} जोड़ूँगा। हाँ या ना बोलिए।`,
+  total_set: (p) => `बाकी सेट किया। ${p.name} का अब ${p.target} बाकी है। ${p.diff} ${p.kind} जोड़ा।`,
+  total_unchanged: (p) => `${p.name} का बाकी पहले से ${p.amount} है। कुछ नहीं बदला।`,
+  kind_credit: () => 'उधार',
+  kind_payment: () => 'जमा',
 };
 
 const kn: Table = {
@@ -183,6 +217,22 @@ const kn: Table = {
   when_last_week: () => 'ಕಳೆದ ವಾರ',
   or: () => 'ಅಥವಾ',
   pending_expired: () => 'ಇದು ಬಹಳ ಹಿಂದಿನದು, ಹಾಗಾಗಿ ಬರೆದಿಲ್ಲ.',
+  edit_refuse: () => 'ನಾನು ಒಮ್ಮೆ ಒಬ್ಬ ಗ್ರಾಹಕರನ್ನು ಮಾತ್ರ ಬದಲಿಸಬಲ್ಲೆ. ಒಂದು ಹೆಸರು ಮತ್ತು ಏನು ಬದಲಿಸಬೇಕು ಎಂದು ಹೇಳಿ.',
+  edit_no_advance: () => 'ನಾನು ಬಾಕಿಯನ್ನು ಸೊನ್ನೆ ಅಥವಾ ಹೆಚ್ಚು ಮಾತ್ರ ಇಡಬಲ್ಲೆ, ಮುಂಗಡ ಅಲ್ಲ. ಸೊನ್ನೆಗಿಂತ ಹೆಚ್ಚಿನ ಮೊತ್ತ ಹೇಳಿ.',
+  edit_not_found: (p) => `${p.name} ಅವರ ಆ ದಾಖಲೆ ಸಿಗಲಿಲ್ಲ.`,
+  edit_too_many: (p) => `${p.name} ಅವರ ಹಲವು ದಾಖಲೆಗಳು ಹೊಂದುತ್ತವೆ. ದಿನ ಅಥವಾ ಮೊತ್ತ ಹೇಳಿ.`,
+  ask_which_entry: (p) => `${p.name} ಅವರ ಯಾವುದು? ${p.options}?`,
+  confirm_edit: (p) => `${p.name}, ${p.old} ಬದಲು ${p.amount}. ಸರಿಯೇ?`,
+  edit_changed: (p) => `${p.name}, ${p.old} ಬದಲಾಗಿ ${p.amount}.`,
+  edit_removed: (p) => `${p.name} ಅವರ ${p.amount} ${p.kind} ತೆಗೆದಿದ್ದೇನೆ.`,
+  edit_flipped: (p) => `${p.name}, ${p.amount} ಈಗ ${p.kind}.`,
+  edit_undone: () => 'ಹಿಂದಿನ ದಾಖಲೆಯನ್ನು ಮರಳಿ ಇಟ್ಟಿದ್ದೇನೆ.',
+  confirm_total: (p) => `${p.name} ಅವರ ಬಾಕಿ ಈಗ ${p.current}. ಅದನ್ನು ${p.target} ಮಾಡಲೇ? ${p.diff} ${p.kind} ಸೇರಿಸುತ್ತೇನೆ. ಹೌದು ಅಥವಾ ಇಲ್ಲ ಎಂದು ಹೇಳಿ.`,
+  confirm_total_adv: (p) => `${p.name} ಅವರ ${p.current} ಮುಂಗಡ ಈಗ ಇದೆ. ಅದನ್ನು ${p.target} ಮಾಡಲೇ? ${p.diff} ${p.kind} ಸೇರಿಸುತ್ತೇನೆ. ಹೌದು ಅಥವಾ ಇಲ್ಲ ಎಂದು ಹೇಳಿ.`,
+  total_set: (p) => `ಬಾಕಿ ಹೊಂದಿಸಿದೆ. ${p.name} ಅವರ ಬಾಕಿ ಈಗ ${p.target}. ${p.diff} ${p.kind} ಸೇರಿಸಿದೆ.`,
+  total_unchanged: (p) => `${p.name} ಅವರ ಬಾಕಿ ಈಗಾಗಲೇ ${p.amount}. ಏನೂ ಬದಲಾಗಿಲ್ಲ.`,
+  kind_credit: () => 'ಉಧಾರ',
+  kind_payment: () => 'ಜಮಾ',
 };
 
 export const TEMPLATES: Record<SpeechLang, Table> = { en, hi, kn };

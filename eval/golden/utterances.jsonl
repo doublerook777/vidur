@@ -163,3 +163,17 @@
 {"id": "G-HL-042", "lang": "hinglish", "text": "Ramesh udhaar 340 hai", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh", "clarify": true}}
 {"id": "G-HL-043", "lang": "hinglish", "text": "Kavya ka 2 packet chawal udhaar", "expected": {"intent": "credit_entry", "customer": "Kavya", "item": "rice"}}
 {"id": "G-HL-044", "lang": "hinglish", "text": "Ramesh sawa do sau udhaar", "expected": {"intent": "credit_entry", "amount": 225, "customer": "Ramesh"}}
+{"id": "G-EN-042", "lang": "en", "text": "Change today's credit of Anil to 100", "expected": {"intent": "edit_entry", "amount": 100, "customer": "Anil", "date": "today"}}
+{"id": "G-EN-043", "lang": "en", "text": "Change Anil's total to 1000", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Anil"}}
+{"id": "G-EN-044", "lang": "en", "text": "Change Mohan's 500 to 300", "expected": {"intent": "edit_entry", "amount": 300, "customer": "Mohan"}}
+{"id": "G-EN-045", "lang": "en", "text": "Remove Anil's yesterday entry", "expected": {"intent": "edit_entry", "customer": "Anil", "date": "yesterday"}}
+{"id": "G-EN-046", "lang": "en", "text": "Set Sunita's total to zero", "expected": {"intent": "edit_entry", "amount": 0, "customer": "Sunita"}}
+{"id": "G-HL-045", "lang": "hinglish", "text": "Anil ka aaj ka udhaar 100 kar do", "expected": {"intent": "edit_entry", "amount": 100, "customer": "Anil", "date": "today"}}
+{"id": "G-HL-046", "lang": "hinglish", "text": "Anil ka total 1000 karo", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Anil"}}
+{"id": "G-HL-047", "lang": "hinglish", "text": "Mohan ka 500 wala 300 karo", "expected": {"intent": "edit_entry", "amount": 300, "customer": "Mohan"}}
+{"id": "G-HL-048", "lang": "hinglish", "text": "Anil ka kal ka entry hata do", "expected": {"intent": "edit_entry", "customer": "Anil", "date": "yesterday"}}
+{"id": "G-HL-049", "lang": "hinglish", "text": "Anil ka kal ka udhaar nahi jama tha", "expected": {"intent": "edit_entry", "customer": "Anil", "date": "yesterday"}}
+{"id": "G-HI-042", "lang": "hi", "text": "अनिल का आज का उधार सौ बदलो", "expected": {"intent": "edit_entry", "amount": 100, "customer": "Anil", "date": "today"}}
+{"id": "G-HI-043", "lang": "hi", "text": "अनिल का कुल एक हज़ार कर दो", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Anil"}}
+{"id": "G-KN-042", "lang": "kn", "text": "ಅನಿಲ್ ಇಂದಿನ ಉಧಾರ ನೂರು ಬದಲಿಸಿ", "expected": {"intent": "edit_entry", "amount": 100, "customer": "Anil", "date": "today"}}
+{"id": "G-KN-043", "lang": "kn", "text": "ಅನಿಲ್ ಒಟ್ಟು ಒಂದು ಸಾವಿರ ಮಾಡಿ", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Anil"}}

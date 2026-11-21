@@ -8,6 +8,7 @@ export {
   type CustomerCreatedEvent,
   type CustomerUpdatedEvent,
   type EntryKind,
+  type EntryReason,
   type EntryPostedEvent,
   type EntryReversedEvent,
   type LedgerEvent,

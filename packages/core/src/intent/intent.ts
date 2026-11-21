@@ -4,7 +4,7 @@ import { CONFIRM_BELOW, parseAmount, type AmountMatch } from '../numbers/index.j
 import { lookup, norm } from '../numbers/lexicon.js';
 import { unglue } from '../numbers/unglue.js';
 import { detectRefusal } from './guardrails.js';
-import type { EventTense as Tense, Interpretation, InterpretContext, Intent, Need, ParsedEvent } from './types.js';
+import type { EditSpec, EventTense as Tense, Interpretation, InterpretContext, Intent, Need, ParsedEvent } from './types.js';
 
 const W = (xs: string): Set<string> => new Set(xs.split(/\s+/).filter(Boolean).map(norm));
 
@@ -41,10 +41,34 @@ const CORR_CUE = W('nahi nahin nhi nhin nai no nope sorry matlab i_mean actually
 const LEAD_CUE = W('nahi nahin nhi nhin nai no nope sorry matlab i_mean actually galat wrong mistake नहीं नही नाही मतलब गलत ग़लत ಇಲ್ಲ ಅಲ್ಲ ತಪ್ಪು ಗಲತ್');
 const MARK_KO = W('ko को ಗೆ');
 const MARK_NE = W('ne ने');
-const MARK_POSS = W('ka ki ke का की के ಅವರ ಅವರಿಗೆ ಅವರು');
+const MARK_POSS = W('s ka ki ke का की के ಅವರ ಅವರಿಗೆ ಅವರು');
 const SEP = W('aur and phir then aur_phir tatha और फिर ಮತ್ತು ನಂತರ');
 const NEW_CUST = W('naya naye nayi new hosa नया नए नये नयी नई ಹೊಸ');
 const KHATA_CUST = W('customer khata grahak grahaka account ग्राहक खाता ಗ್ರಾಹಕ ಖಾತೆ');
+
+// ---- F8: editing older entries and setting a total ----
+/** "change", "badlo": the shopkeeper is asking to alter something that already exists. */
+const EDIT = W(
+  'change changed edit update modify amend badlo badal badalna badalo badaliye badal_do बदलो बदल बदलना बदलिए बदलें ' +
+    'ಬದಲಿಸಿ ಬದಲಾಯಿಸಿ ಬದಲಿಸು ಬದಲಾಯಿಸು ಸರಿಪಡಿಸಿ ತಿದ್ದಿ',
+);
+/** Words that finish "set it to X": "karo", "kar do", "set", "make". */
+const SET_VERB = W('set make karo kar kardo kar_do करो कर कर_दो ಮಾಡಿ ಮಾಡು');
+/** "Total" means what the customer owes now. */
+const TOTAL = W('total kul tot balance outstanding hisab hisaab baaki baki कुल टोटल बैलेंस हिसाब बाकी बकाया ಒಟ್ಟು ಬಾಕಿ ಲೆಕ್ಕ ಬ್ಯಾಲೆನ್ಸ್');
+/** Removing a specific entry. ("galat" alone is still the old "undo the last one".) */
+const REMOVE = W('cancel undo delete hata hatao hataiye hatado remove rad radd रद्द हटा हटाओ हटाइए हटादो ಅಳಿಸಿ ತೆಗೆ ತೆಗೆಯಿರಿ ರದ್ದು');
+const FLIP = W('flip palat palto ulta ulti पलट पलटो उल्टा उल्टी');
+const EVERYONE = W('everyone everybody all sab sabhi saare saari sabka sabke सब सभी सारे सारी सबका सबके ಎಲ್ಲರ ಎಲ್ಲರಿಗೂ ಎಲ್ಲ ಎಲ್ಲಾ');
+const ENTRY_WORD = W('entry entries record एंट्री एन्ट्री ಎಂಟ್ರಿ');
+const WALA = W('wala wali wale vala vali वाला वाली वाले');
+const SHOULD = W('should chahiye chahie hona honi hone चाहिए चाहिये होना होनी होने ಬೇಕು ಆಗಬೇಕು ಇರಬೇಕು');
+const ZERO = W('zero nil शून्य ज़ीरो जीरो ಸೊನ್ನೆ ಶೂನ್ಯ ಜೀರೋ');
+/** Speech that tries to change the rules is never an edit, even when it contains "set ... to zero". */
+const INJECTION = /ignore|forget|disregard|developer mode|jailbreak|previous (rules|instructions)|system prompt|भूल\s*जाओ|भूल\s*जा|नियम|ಮರೆತು|ನಿಯಮ|ಸಿಸ್ಟಮ್/i;
+/** Words for the kind of an entry that an edit may name; "payment" and "received" are not parsed as direction cues elsewhere. */
+const PAYMENT_EDIT = W('payment payments received receipt');
+const NEGATIVE = W('minus negative advance एडवांस माइनस ಮುಂಗಡ ಮೈನಸ್');
 
 const STOP = W(
   'ka ki ke ko ne se me mein pe par ko hai hain ho tha thi the to ye wo woh yeh vo bhi hi bas mera meri mere mujhe hum aap please pls kya kab kaun kuch sab aaj kal parso ' +
@@ -57,13 +81,13 @@ const STOP = W(
     'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपए रुपया पैसे पैसा ' +
     'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು',
 );
-const ALL_CUES = [CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST];
+const ALL_CUES = [EDIT, SET_VERB, TOTAL, REMOVE, FLIP, EVERYONE, ENTRY_WORD, WALA, SHOULD, ZERO, NEGATIVE, CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST];
 
 const DATE_WORDS: Record<string, string> = {
   aaj: 'aaj', आज: 'aaj', today: 'today', ಇಂದು: 'ಇಂದು', kal: 'kal', कल: 'kal', yesterday: 'yesterday', ನಿನ್ನೆ: 'ನಿನ್ನೆ', tomorrow: 'tomorrow', ನಾಳೆ: 'ನಾಳೆ',
   parso: 'parso', परसों: 'parso', monday: 'monday', tuesday: 'tuesday', wednesday: 'wednesday', thursday: 'thursday', friday: 'friday', saturday: 'saturday', sunday: 'sunday',
   somvar: 'somvar', mangalvar: 'mangalvar', budhvar: 'budhvar', guruvar: 'guruvar', shukravar: 'shukravar', shanivar: 'shanivar', ravivar: 'ravivar',
-  ಇವತ್ತು: 'aaj', ಪರಸೋ: 'parso', ನಾಡಿದ್ದು: 'parso', ಸೋಮವಾರ: 'somvar', ಮಂಗಳವಾರ: 'mangalvar', ಬುಧವಾರ: 'budhvar', ಗುರುವಾರ: 'guruvar', ಶುಕ್ರವಾರ: 'shukravar', ಶನಿವಾರ: 'shanivar', ಭಾನುವಾರ: 'ravivar',
+  ಇವತ್ತು: 'aaj', ಇಂದಿನ: 'ಇಂದು', ನಿನ್ನೆಯ: 'ನಿನ್ನೆ', ಪರಸೋ: 'parso', ನಾಡಿದ್ದು: 'parso', ಸೋಮವಾರ: 'somvar', ಮಂಗಳವಾರ: 'mangalvar', ಬುಧವಾರ: 'budhvar', ಗುರುವಾರ: 'guruvar', ಶುಕ್ರವಾರ: 'shukravar', ಶನಿವಾರ: 'shanivar', ಭಾನುವಾರ: 'ravivar',
   सोमवार: 'somvar', मंगलवार: 'mangalvar', बुधवार: 'budhvar', गुरुवार: 'guruvar', शुक्रवार: 'shukravar', शनिवार: 'shanivar', रविवार: 'ravivar',
 };
 
@@ -156,6 +180,108 @@ function guessName(tokens: { w: string; n: string }[]): string | undefined {
     if ((MARK_POSS.has(t.n) || MARK_KO.has(t.n) || MARK_NE.has(t.n)) && cand(tokens[i - 1]!)) return tokens[i - 1]!.w;
   }
   for (const t of tokens) if (cand(t)) return t.w;
+  return undefined;
+}
+
+/** The one customer a sentence names: a known one (any script), or a name tied to the sentence by "ka", "ko" or "ne". */
+function namedCustomer(toks: { w: string; n: string }[], text: string, customers: InterpretContext['customers']): { spoken?: string; explicit: boolean; multi: boolean } {
+  const list = customers ?? [];
+  const idSets: string[][] = [];
+  let spoken: string | undefined;
+  for (const t of toks) {
+    if (STOP.has(t.n) || isCue(t.n) || isNumberish(t.w)) continue;
+    const m = matchName(t.w, list, text);
+    if (m.kind === 'exact') idSets.push([m.customerId]);
+    else if (m.kind === 'ambiguous' || m.kind === 'near') idSets.push(m.customerIds);
+    else continue;
+    spoken ??= t.w;
+  }
+  if (!spoken) {
+    const byAlias = list.length ? findByAlias(text, list) : [];
+    if (byAlias.length) return { spoken: byAlias[0]!.name, explicit: true, multi: false };
+  }
+  if (spoken) {
+    const first = idSets[0]!;
+    return { spoken, explicit: true, multi: idSets.some((s) => !s.some((id) => first.includes(id))) };
+  }
+  const guess = guessName(toks);
+  const marked = guess !== undefined && toks.some((t, i) => i > 0 && toks[i - 1]!.w === guess && (MARK_POSS.has(t.n) || MARK_KO.has(t.n) || MARK_NE.has(t.n)));
+  return guess ? { spoken: guess, explicit: marked, multi: false } : { explicit: false, multi: false };
+}
+
+/**
+ * F8. "Change today's credit of Anil to 100", "Mohan ka 500 nahi 300", "Anil ka total 1000 karo", "remove Anil's
+ * yesterday entry". Returns one `edit_entry` event for the whole sentence, or undefined when the sentence is not an
+ * edit. Everything here is a cue word, never a model: the amount is whatever `parseAmount` found.
+ */
+function interpretEdit(text: string, amounts: AmountMatch[], ctx: InterpretContext, nowMs: number): ParsedEvent | undefined {
+  if (INJECTION.test(text)) return undefined;
+  const toks = tokensWithSpans(text);
+  const ns = toks.map((t) => t.n);
+  const has = (s: Set<string>): boolean => ns.some((n) => s.has(n));
+  const editVerb = has(EDIT);
+  const setVerb = editVerb || has(SET_VERB);
+  const total = has(TOTAL);
+  const remove = has(REMOVE);
+  const flipWord = has(FLIP);
+  const corr = has(CORR_CUE);
+  const everyone = has(EVERYONE);
+  const zero = has(ZERO) || toks.some((t) => /^[0०]$/.test(t.w));
+  const dateToken = findDate(toks, 'past', nowMs);
+
+  // Direction words, and which one comes last ("credit to payment" means payment).
+  const lastIndex = (s: Set<string>): number => ns.reduce((acc, n, i) => (s.has(n) ? i : acc), -1);
+  const payAt = Math.max(lastIndex(PAYMENT), lastIndex(PAYMENT_EDIT));
+  const creditAt = Math.max(lastIndex(CREDIT), lastIndex(TOOK));
+  const bothDirections = payAt >= 0 && creditAt >= 0;
+  const lastDirection: 'credit' | 'payment' | undefined = payAt < 0 && creditAt < 0 ? undefined : payAt > creditAt ? 'payment' : 'credit';
+  const onlyDirection = bothDirections ? undefined : lastDirection;
+
+  // "Anil ka kal ka udhaar 100 karo": a day, "ka", then the kind of entry, finished with "karo".
+  const dateKaKind = toks.some((t, i) => (DATE_WORDS[t.w.toLowerCase()] ?? DATE_WORDS[t.n]) !== undefined && MARK_POSS.has(toks[i + 1]?.n ?? '') && (CREDIT.has(toks[i + 2]?.n ?? '') || PAYMENT.has(toks[i + 2]?.n ?? '')));
+
+  const candidate = (total && setVerb) || editVerb || remove || flipWord || (dateKaKind && setVerb) || ((has(SHOULD) || has(WALA)) && amounts.length === 2);
+  if (!candidate && !(corr && dateToken && lastDirection && amounts.length === 0)) return undefined;
+
+  const who = namedCustomer(toks, text, ctx.customers);
+  const base = { tense: 'past' as Tense, text: text.trim(), customerSpoken: who.spoken, needs: [] as Need[] };
+  const make = (edit: EditSpec, extra: Partial<ParsedEvent> = {}): ParsedEvent => ({ ...base, intent: 'edit_entry', edit, ...(dateToken ? { dateToken } : {}), ...extra });
+  const refuse = (reason?: EditSpec['reason']): ParsedEvent => ({ ...base, customerSpoken: undefined, intent: 'edit_entry', edit: { op: 'refuse', ...(reason ? { reason } : {}) } });
+  const withNewAmount = (a: AmountMatch | undefined): Partial<ParsedEvent> => (a ? { amountPaise: a.paise, amountConfidence: a.confidence } : {});
+
+  // A. Set the total.
+  if (total && setVerb) {
+    if (everyone || !who.spoken || who.multi) return refuse();
+    if (has(NEGATIVE)) return refuse('advance');
+    const last = amounts[amounts.length - 1];
+    if (last) return make({ op: 'set_total' }, withNewAmount(last));
+    if (zero) return make({ op: 'set_total' }, { amountPaise: 0, amountConfidence: 1 });
+    return make({ op: 'set_total' });
+  }
+  // Anything else that changes something needs exactly one named customer.
+  if (editVerb && (everyone || !who.spoken || who.multi)) return refuse();
+  if (!who.spoken) return undefined;
+  // Two customers, or "all of Anil's entries": one customer and one change at a time.
+  if (who.multi || (remove && everyone && who.explicit)) return refuse();
+
+  // B. Remove one older entry: "remove Anil's yesterday entry", "Anil ka 500 hata do".
+  if (remove && who.explicit && !everyone && !editVerb && toks.length <= 9 && (dateToken || amounts.length === 1 || has(ENTRY_WORD))) {
+    return make({ op: 'remove', ...(amounts.length === 1 ? { oldPaise: amounts[0]!.paise } : {}), ...(onlyDirection ? { kind: onlyDirection } : {}) });
+  }
+  // C. Flip the direction of an older entry: "flip Anil's yesterday entry", "Anil ka kal ka udhaar nahi jama tha".
+  const flipByWords = flipWord || (editVerb && bothDirections && amounts.length === 0) || (corr && !!dateToken && lastDirection !== undefined && amounts.length === 0);
+  if (flipByWords && who.explicit && !everyone && !remove && amounts.length === 0) {
+    const to = lastDirection;
+    return make({ op: 'flip', ...(to ? { to, kind: to === 'payment' ? 'credit' : 'payment' } : {}) });
+  }
+  // D. Change an entry found by its old amount: "change Mohan's 500 to 300", "Mohan ka 500 wala 300 karo".
+  if ((editVerb || has(SHOULD) || has(WALA)) && amounts.length === 2 && !everyone) {
+    return make({ op: 'set_amount', oldPaise: amounts[0]!.paise, ...(onlyDirection ? { kind: onlyDirection } : {}) }, withNewAmount(amounts[1]));
+  }
+  // E. Change an entry found by day or kind: "change today's credit of Anil to 100".
+  if ((editVerb || (dateKaKind && setVerb)) && amounts.length <= 1 && !everyone && !remove) {
+    return make({ op: 'set_amount', ...(onlyDirection ? { kind: onlyDirection } : {}) }, withNewAmount(amounts[0]));
+  }
   return undefined;
 }
 
@@ -288,6 +414,8 @@ export function interpret(rawText: string, ctx: InterpretContext = {}): Interpre
     return { text, needsLlm: false, events: [{ intent: 'refusal', refusal, tense: 'unknown', needs: [], customerSpoken: who, text: text.trim() }] };
   }
   const amounts = parseAmount(text);
+  const edit = interpretEdit(text, amounts, ctx, nowMs);
+  if (edit) return { text, needsLlm: false, events: [edit] };
   const clauses = splitClauses(text, amounts);
   const events: ParsedEvent[] = [];
   let inherited: string | undefined;
@@ -298,6 +426,7 @@ export function interpret(rawText: string, ctx: InterpretContext = {}): Interpre
     const lead = tokensWithSpans(clause.text).slice(0, 2).some((t) => LEAD_CUE.has(t.n));
     const prior = events[events.length - 1];
     if (lead && prior && (prior.intent === 'credit_entry' || prior.intent === 'payment') && ev.amountPaise !== undefined && (ev.customerInherited || !ev.customerSpoken || ev.customerSpoken === prior.customerSpoken)) {
+      if (prior.amountPaise !== undefined && prior.priorAmountPaise === undefined) prior.priorAmountPaise = prior.amountPaise;
       prior.amountPaise = ev.amountPaise;
       prior.amountConfidence = ev.amountConfidence;
       prior.selfCorrected = true;
@@ -314,6 +443,7 @@ export function interpret(rawText: string, ctx: InterpretContext = {}): Interpre
     // "Ramesh ka 340, nahi nahi 430 udhaar": a correction cue with an amount and no new name replaces the previous amount.
     const prev = events[events.length - 1];
     if (prev && ev.intent === 'correction' && ev.correction?.kind === 'amount' && ev.customerInherited && (prev.intent === 'credit_entry' || prev.intent === 'payment')) {
+      if (prev.amountPaise !== undefined && prev.priorAmountPaise === undefined) prev.priorAmountPaise = prev.amountPaise;
       prev.amountPaise = ev.amountPaise;
       prev.amountConfidence = ev.amountConfidence;
       prev.selfCorrected = true;

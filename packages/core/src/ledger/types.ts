@@ -29,6 +29,7 @@ export interface CustomerCreatedEvent {
 }
 
 export type EntryKind = 'credit' | 'payment';
+export type EntryReason = 'balance_set';
 
 export interface EntryPostedEvent {
   type: 'entry_posted';
@@ -40,6 +41,11 @@ export interface EntryPostedEvent {
   at: number;
   recordedAt: number;
   item?: string;
+  /**
+   * Set on the one entry that "set Anil's total to 1000" adds, so a balance adjustment is never mistaken for a
+   * real sale or payment. Optional, so old events replay unchanged.
+   */
+  reason?: EntryReason;
 }
 
 /**
@@ -147,6 +153,7 @@ export interface ActiveEntry {
   at: number;
   recordedAt: number;
   item?: string;
+  reason?: EntryReason;
 }
 
 export interface Note {

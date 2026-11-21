@@ -8,7 +8,7 @@ const BANNED: Record<string, string[]> = {
   hi: ['पुलिस', 'कोर्ट', 'कानूनी', 'वकील', 'तुरंत', 'अभी के अभी', 'वरना', 'चेतावनी', 'आख़िरी मौक़ा', 'आखिरी मौका', 'शर्म', 'डिफॉल्टर', 'धोखा', 'धोखेबाज़', 'जुर्माना', 'बदनाम', 'ज़रूर चुकाओ', 'अभी चुकाओ'],
   kn: ['ಪೊಲೀಸ್', 'ಕೋರ್ಟ್', 'ಕಾನೂನು', 'ವಕೀಲ', 'ತಕ್ಷಣ', 'ಇಲ್ಲದಿದ್ದರೆ', 'ಎಚ್ಚರಿಕೆ', 'ಕೊನೆಯ ಅವಕಾಶ', 'ನಾಚಿಕೆ', 'ವಂಚನೆ', 'ದಂಡ', 'ಅವಮಾನ'],
 };
-const SAMPLE = { name: 'Sunita', amount: '₹500', balance: '₹500', advance: '₹100', when: 'today', options: 'a or b', credit: '₹1,240', count: '5' };
+const SAMPLE = { name: 'Sunita', amount: '₹500', balance: '₹500', advance: '₹100', when: 'today', options: 'a or b', credit: '₹1,240', count: '5', old: '₹200', current: '₹300', target: '₹1,000', diff: '₹700', kind: 'credit' };
 
 describe('no pressure or threat language in any template', () => {
   for (const lang of ['en', 'hi', 'kn'] as const) {
