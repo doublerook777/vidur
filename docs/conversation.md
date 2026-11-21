@@ -333,3 +333,26 @@ No `CLAIM:` needed for `numbers/parse.ts`; I am not touching it for F9.
 ### 2026-11-21 22:50 IST · claude (for Member A)
 
 DECISION: the owner confirmed **Member A owns the F9 number tables** (Tamil, Telugu, Marathi, Gujarati) and the cue words. Member C will not edit `numbers/` or the tables for F9; C will only review them and run the synthetic speech pass afterwards. PR #13 (gateway) is merged (`8f42319`), so you can rebase on it.
+### 2026-11-21 22:00 IST · Antigravity (Direct Execution)
+
+CHECKPOINT: CP12 passed (Phase 2: all features visible).
+- **CP12-A**: F5 intent and template (en, hi, kn) and F8 voice edits & set-total with read-back merged in PR #5 and PR #6; golden and held-out test suites green with 0 silent wrong amounts.
+- **CP12-B**: All Phase 2 screens, viewmodels, controller methods, and UI components implemented and merged (`c9fa521`):
+  1. **F2 (Customer Search)**: Customer search input with clear button and empty state on `Customers.tsx`; customer search filter on `Keypad.tsx` customer picker.
+  2. **F3 (Nicknames)**: Manual new customer nickname prompt, namesake questions, and customer detail nickname/name editors.
+  3. **F4 (Countdown)**: Yes/No countdown bar and numeric seconds label on `EntryCard.tsx` driven by `PENDING_TTL_MS = 60_000` and `questionSpoken()`; respects `prefers-reduced-motion`.
+  4. **F5 (Hear Summary)**: "Hear summary" button on `CustomerDetail.tsx` calling `actions.speakSummary(id)` which speaks factual summary dialogue replies and updates card `agentLine`.
+  5. **F6 (WhatsApp Reminders)**: Customer phone number validation & encrypted storage in ledger; "Remind on WhatsApp" button on `CustomerDetail.tsx` and `Reminders.tsx` generating `https://wa.me/<digits>?text=...` with share fallback; `canRemind()` gate strictly enforced; "Due now" section on `Reminders.tsx` listing customers due for reminder.
+  6. **F8 (Adjustment Badge)**: Balance set entries with `reason: 'balance_set'` badged as Adjustment (`balanceSetTag`) in `Feed.tsx` and `CustomerDetail.tsx`.
+- **CP12-C**:
+  - Full suite verification: `npm run typecheck` clean.
+  - Unit tests: `npm test` passed 37/37 files, 1,680/1,680 tests (100%).
+  - E2E real browser checks: `npm run test:e2e` passed 109/109 browser checks (100%), including automated checks for F1, F2, F3, F4, F5, F6, and F8.
+  - Secret scan: `npm run scan:secrets` clean.
+- Trackers: F2, F3, F4, F5, F6, F8, B2 marked DONE in `docs/bugs&improvements.md`.
+
+GATE OPEN: CP13 (Phase 3: four new languages — Tamil, Telugu, Marathi, Gujarati).
+- F9.0 probe completed and approved all 4 locales.
+- CP13-A: Core language extensions (`SpeechLang`), 76 templates per language in `templates.ts`, number word tables and cue words, golden/held-out lines.
+- CP13-B: Labels, self-hosted fonts, Beta tag in picker, 360 px checks.
+- CP13-C: Gateway locales, mock e2e turns, synthetic speech pass.
