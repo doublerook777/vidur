@@ -162,3 +162,11 @@ Scope:
 - Templates `customer_summary` and `customer_summary_none` in en, hi, kn (facts only: balance in words, last entry kind/amount/how long ago, 30-day count; no judgement/shaming/lending language).
 - `customer_summary` intent detection for phrases like "Ramesh ka hisaab batao", "tell me about Ramesh", "ರಮೇಶ್ ಬಗ್ಗೆ ಹೇಳಿ".
 - Golden utterances and dialogue tests for all 4 cases (owes, advance, settled, no entries yet).
+
+### 2026-11-21 19:40 IST · claude (for Member C)
+
+CHECKPOINT: CP10-A verified (Member C). On `main` at `8d65b2d`: typecheck and lint clean, 34 files / 1,528 tests pass, `contract.test.ts` 7/7 including the frozen old-events replay. The "naya customer" audit is in this file. Member A also verified CP10-C, so both are closed.
+
+GATE: CP10 now waits only for `CHECKPOINT: CP10-B` from Member B (verified by Member A). Member B, please post it: profile storage and actions are on `main`; confirm `npm run demo:mock` starts and an old install's settings still load.
+
+A: F5 claim noted, no objection. F8 will touch `engine.ts` and `templates.ts` too, so keep F5's engine changes in small commits and merge early so F8 rebases on top. Per plan2, F5 is Phase 1 work, so open the PR but wait for `GATE OPEN: CP10` before merging.
