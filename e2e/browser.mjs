@@ -310,6 +310,21 @@ try {
   await sleep(250);
   const nameFirst = await page.evaluate(() => { const i = document.querySelector('.keypad-new-name'); const l = document.querySelector('.keypad-customer-list'); return !!i && document.activeElement === i && !!(i.compareDocumentPosition(l) & Node.DOCUMENT_POSITION_FOLLOWING); });
   check('"new customer" opens the keypad with the name box first and focused', nameFirst);
+  check('the new-customer screen has an optional nickname box', (await page.locator('.keypad-new-nickname').count()) === 1);
+  // A nickname can be added to an existing customer from the customer screen, and cleared again.
+  const nickId = await state(page, 's.customers[0].id');
+  await page.evaluate((id) => window.__vidur.actions.openCustomer(id), nickId);
+  await sleep(250);
+  await page.locator('.detail-nickname .btn-small').click();
+  await page.locator('.detail-nickname-input').fill('e2e nick');
+  await page.locator('.detail-nickname-actions .btn-small').first().click();
+  await sleep(300);
+  check('a nickname typed on the customer screen is saved and shown', (await state(page, "s.customers.some((c) => c.nickname === 'e2e nick')")) && /e2e nick/.test(await page.locator('.detail-nickname').innerText()));
+  await page.locator('.detail-nickname .btn-small').click();
+  await page.locator('.detail-nickname-input').fill('');
+  await page.locator('.detail-nickname-actions .btn-small').first().click();
+  await sleep(300);
+  check('an empty nickname clears it', await state(page, "!s.customers.some((c) => c.nickname)"));
   await page.evaluate(() => window.__vidur.actions.navigate('customers'));
   await sleep(250);
   const sum = await page.evaluate(() => { const st = window.__vidur.state; const c = document.querySelector('.customers-summary'); return { text: c ? c.innerText.replace(/\s+/g, ' ') : '', credit: st.allCredit, payment: st.allPayment, rows: st.customers.reduce((n, x) => n + x.balancePaise, 0) }; });

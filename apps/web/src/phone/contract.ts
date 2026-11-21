@@ -95,6 +95,8 @@ export interface CustomerDetailVM {
   notes: { id: string; text: string; dueAt: number | null }[];
   canRemind: boolean;
   reminderBlockedReason: 'no_consent' | 'too_soon' | 'nothing_due' | null;
+  /** Nicknames already used by other customers with this same name, so the screen can refuse a repeat. */
+  takenNicknames?: string[];
 }
 
 export interface SettingsVM {

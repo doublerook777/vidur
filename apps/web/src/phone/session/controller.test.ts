@@ -290,7 +290,7 @@ describe('adding and removing entries by hand, and tapping answers', () => {
     await until(() => session!.state.customers.some((c) => c.name === 'Ramesh'));
     const row = session!.state.customers.find((c) => c.name === 'Ramesh')!;
     expect(row.nickname).toBe('doodh wala');
-    expect(row.aliases).toContain('doodh wala');
+    expect(row.aliases).toEqual([]);
     // a blank nickname is no nickname
     session!.actions.saveKeypadEntry({ customerId: null, newName: 'Sohan', newNickname: '   ', kind: 'credit', paise: 10_00 });
     await until(() => session!.state.customers.some((c) => c.name === 'Sohan'));

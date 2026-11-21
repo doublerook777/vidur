@@ -63,6 +63,23 @@ describe('manual new customer', () => {
   });
 });
 
+describe('nickname on the customer detail screen', () => {
+  const withNick = { ...mockCustomerDetailVM, customer: { ...mockCustomerDetailVM.customer, nickname: 'dairy' } };
+  const without = { ...mockCustomerDetailVM, customer: { ...mockCustomerDetailVM.customer, nickname: undefined } };
+  it('shows the nickname and an edit button, in every language', () => {
+    for (const lang of ['en', 'hi', 'kn'] as const) {
+      const html = renderToString(h(CustomerDetail, { vm: withNick, actions: mockActions, lang }));
+      expect(html).toContain(`${LABELS[lang].nickname}: dairy`);
+      expect(html).toContain(LABELS[lang].editNickname);
+      expect(html).toContain(`${withNick.customer.name} (dairy)`);
+    }
+  });
+  it('says "no nickname" when there is none', () => {
+    const html = renderToString(h(CustomerDetail, { vm: without, actions: mockActions, lang: 'en' }));
+    expect(html).toContain(LABELS.en.noNickname);
+  });
+});
+
 describe('phase indicators', () => {
   const phases: Phase[] = ['idle', 'listening', 'thinking', 'speaking', 'needs_answer', 'offline'];
   it.each(phases.map((p) => [p] as const))('phase %s shows its own label text', (phase) => {
