@@ -12,7 +12,7 @@ Rules that never bend are in `CLAUDE.md` (integer paise, fixed reply templates, 
 
 | ID | Pri | Status | Owner | Item | Notes |
 |---|---|---|---|---|---|
-| F0 | P1 | open | A + B | Shared contract: optional `nickname` and `phone` on customers, `customer_updated` event, `profile` in the vault, new actions and view-model fields, `nickname` pending kind | Must merge first. Needs a replay test on old events. Reviewer: C. |
+| F0 | P1 | in progress | A + B | Shared contract: optional `nickname` and `phone` on customers, `customer_updated` event, `profile` in the vault, new actions and view-model fields, `nickname` pending kind | Must merge first. Needs a replay test on old events. Reviewer: C. |
 | F1 | P1 | open | B | First-time sign-up and profile management (local only): shop name, owner name, optional PIN screen lock, edit profile, delete all | PIN is a screen lock, not extra encryption: say so in the UI. Existing installs get a "Complete your profile" card. Reviewer: C. |
 | F2 | P1 | open | A + B | Search across all customers | A: pure `searchCustomers` (name, nickname, alias, phone digits, cross-script). B: search box on Customers and the customer picker. Reviewer: C. |
 | F3 | P1 | open | A + B | Same name already exists: ask for a nickname (skippable) | A first checks how a spoken "new customer X" works today. Nickname question comes after the new-name yes. Reviewer: C. |

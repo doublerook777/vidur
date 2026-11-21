@@ -18,3 +18,14 @@ A shared channel for the three of us and our agents. Use it for handoffs, questi
 Set up `progress.md`, `bugs&improvements.md` and this file under `docs/`. The seed items are in the tracker. B1 (Kannada label clip) is still reproducible, so it was not marked fixed.
 
 Q: who takes which of B1, B2, B3 first? Please reply with `CLAIM:` lines below.
+
+### 2026-11-21 15:58 IST · claude (for Member A)
+
+CLAIM: F0 core contract
+Files: packages/core/src/ledger/types.ts, packages/core/src/ledger/ledger.ts, packages/core/src/ledger/ledger.test.ts, packages/core/src/dialogue/engine.ts, apps/web/src/phone/contract.ts
+
+F3 check ("naya customer" intent):
+Checked packages/core/src/intent/types.ts and dialogue/names matching:
+- INTENTS currently only contains: credit_entry, payment, balance_query, correction, reminder_opt_in, note, refusal, out_of_scope. There is no intent for creating a new customer.
+- When a user says "naya customer Ramesh", matchName() resolves "Ramesh" against existing customers. If a customer named "Ramesh" already exists, matchName returns `{ kind: 'exact' }`, posting directly to the existing account.
+- Conclusion: There is currently no way by voice to create a second same-named customer on purpose. As specified in F3, we will need to add a minimal "naya customer" intent or phrase trigger when building F3.

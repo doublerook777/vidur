@@ -365,6 +365,6 @@ Only Person C deploys, from a clean `main`: all checks above green, then trigger
 
 | Letter | Person | Agents they run |
 |---|---|---|
-| A | _fill in_ | |
+| A | Member A | Supervisor (Antigravity), pi (NVIDIA free), qwen |
 | B | _fill in_ | |
 | C | _fill in_ | |
