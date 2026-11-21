@@ -149,27 +149,43 @@
 {"id": "H-EN-039", "lang": "en", "text": "Geeta paid 4.5K today", "expected": {"intent": "payment", "amount": 4500, "customer": "Geeta", "date": "today"}}
 {"id": "H-HL-038", "lang": "hinglish", "text": "Pooja ko 2.5 k udhaar diya", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Pooja"}}
 {"id": "H-HI-038", "lang": "hi", "text": "सुनीता ने 5k वापस दिए", "expected": {"intent": "payment", "amount": 5000, "customer": "Sunita"}}
-{"id": "H-TA-001", "lang": "ta", "text": "விஜய் அறுநூறு ரூபாய் கடன்", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
-{"id": "H-TA-002", "lang": "ta", "text": "கவிதா நானூறு ரூபாய் வரவு", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
-{"id": "H-TA-003", "lang": "ta", "text": "தினேஷ் பாக்கி எவ்வளவு", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
-{"id": "H-TA-004", "lang": "ta", "text": "ராதா முந்நூறு ரூபாய் கடன்", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
-{"id": "H-TA-005", "lang": "ta", "text": "நேற்று எவ்வளவு கடன்", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "H-TA-006", "lang": "ta", "text": "விஜய் விவரம் காட்டுங்கள்", "expected": {"intent": "customer_summary", "customer": "Vijay"}}
-{"id": "H-TE-001", "lang": "te", "text": "విజయ్ ఆరు వందల రూపాయలు అప్పు", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
-{"id": "H-TE-002", "lang": "te", "text": "కవిత నాలుగు వందల రూపాయలు జమ", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
-{"id": "H-TE-003", "lang": "te", "text": "దినేష్ బాకీ ఎంత", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
-{"id": "H-TE-004", "lang": "te", "text": "రాధ మూడు వందల రూపాయలు అప్పు", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
-{"id": "H-TE-005", "lang": "te", "text": "నిన్న ఎంత అప్పు", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "H-TE-006", "lang": "te", "text": "విజయ్ వివరాలు చూపించు", "expected": {"intent": "customer_summary", "customer": "Vijay"}}
-{"id": "H-MR-001", "lang": "mr", "text": "विजय सहाशे रुपये उधार", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
-{"id": "H-MR-002", "lang": "mr", "text": "कविता चारशे रुपये जमा", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
-{"id": "H-MR-003", "lang": "mr", "text": "दिनेशची बाकी किती", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
-{"id": "H-MR-004", "lang": "mr", "text": "राधा तीनशे रुपये उधार", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
-{"id": "H-MR-005", "lang": "mr", "text": "काल किती उधार", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "H-MR-006", "lang": "mr", "text": "विजयचा सारांश दाखवा", "expected": {"intent": "customer_summary", "customer": "Vijay"}}
-{"id": "H-GU-001", "lang": "gu", "text": "વિજય છસો રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 600, "customer": "Vijay"}}
-{"id": "H-GU-002", "lang": "gu", "text": "કવિતા ચારસો રૂપિયા જમા", "expected": {"intent": "payment", "amount": 400, "customer": "Kavita"}}
-{"id": "H-GU-003", "lang": "gu", "text": "દિનેશ ની બાકી કેટલી", "expected": {"intent": "balance_query", "customer": "Dinesh"}}
-{"id": "H-GU-004", "lang": "gu", "text": "રાધા ત્રણસો રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 300, "customer": "Radha"}}
-{"id": "H-GU-005", "lang": "gu", "text": "ગઈકાલે કેટલા ઉધાર", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "H-GU-006", "lang": "gu", "text": "વિજય ની વિગત બતાવો", "expected": {"intent": "customer_summary", "customer": "Vijay"}}
+{"id":"H-TA-001","lang":"ta","text":"ரமேஷ் 750 கடன்","expected":{"intent":"credit_entry","amount":750,"customer":"Ramesh"}}
+{"id":"H-TA-002","lang":"ta","text":"சுனிதா நேற்று 500 வரவு","expected":{"intent":"payment","amount":500,"customer":"Sunita","date":"yesterday"}}
+{"id":"H-TA-003","lang":"ta","text":"மோகன் மொத்தம் எவ்வளவு?","expected":{"intent":"balance_query","customer":"Mohan"}}
+{"id":"H-TA-004","lang":"ta","text":"காவ்யா கணக்கு விவரம் சொல்லுங்க","expected":{"intent":"customer_summary","customer":"Kavya"}}
+{"id":"H-TA-005","lang":"ta","text":"அஜய் நாளை 1000 கொடுப்பார்","expected":{"intent":"note","amount":1000,"customer":"Ajay","date":"tomorrow"}}
+{"id":"H-TA-006","lang":"ta","text":"ரமேஷ் நினைவூட்டல்","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"H-TA-007","lang":"ta","text":"மோகன் மிரட்டு","expected":{"intent":"refusal","customer":"Mohan"}}
+{"id":"H-TA-008","lang":"ta","text":"சுனிதா மீது வட்டி","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"H-TA-009","lang":"ta","text":"இன்று வானிலை எப்படி இருக்கிறது?","expected":{"intent":"out_of_scope"}}
+{"id":"H-TA-010","lang":"ta","text":"தவறு ரத்து செய்","expected":{"intent":"correction"}}
+{"id":"H-TE-001","lang":"te","text":"రమేష్ 750 అప్పు","expected":{"intent":"credit_entry","amount":750,"customer":"Ramesh"}}
+{"id":"H-TE-002","lang":"te","text":"సునీత నిన్న 500 జమ","expected":{"intent":"payment","amount":500,"customer":"Sunita","date":"yesterday"}}
+{"id":"H-TE-003","lang":"te","text":"మోహన్ మొత్తం ఎంత?","expected":{"intent":"balance_query","customer":"Mohan"}}
+{"id":"H-TE-004","lang":"te","text":"కావ్య సారాంశం చెప్పండి","expected":{"intent":"customer_summary","customer":"Kavya"}}
+{"id":"H-TE-005","lang":"te","text":"అజయ్ రేపు 1000 ఇస్తారు","expected":{"intent":"note","amount":1000,"customer":"Ajay","date":"tomorrow"}}
+{"id":"H-TE-006","lang":"te","text":"రమేష్ రిమైండర్","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"H-TE-007","lang":"te","text":"మోహన్ బెదిరించు","expected":{"intent":"refusal","customer":"Mohan"}}
+{"id":"H-TE-008","lang":"te","text":"సునీత పై వడ్డీ","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"H-TE-009","lang":"te","text":"ఈరోజు వాతావరణం ఎలా ఉంది?","expected":{"intent":"out_of_scope"}}
+{"id":"H-TE-010","lang":"te","text":"తప్పు రద్దు చేయండి","expected":{"intent":"correction"}}
+{"id":"H-MR-001","lang":"mr","text":"रमेश 750 उधार","expected":{"intent":"credit_entry","amount":750,"customer":"Ramesh"}}
+{"id":"H-MR-002","lang":"mr","text":"सुनीता काल 500 जमा","expected":{"intent":"payment","amount":500,"customer":"Sunita","date":"yesterday"}}
+{"id":"H-MR-003","lang":"mr","text":"मोहन एकूण किती?","expected":{"intent":"balance_query","customer":"Mohan"}}
+{"id":"H-MR-004","lang":"mr","text":"काव्या तपशील सांगा","expected":{"intent":"customer_summary","customer":"Kavya"}}
+{"id":"H-MR-005","lang":"mr","text":"अजय उद्या 1000 देईल","expected":{"intent":"note","amount":1000,"customer":"Ajay","date":"tomorrow"}}
+{"id":"H-MR-006","lang":"mr","text":"रमेश आठवण","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"H-MR-007","lang":"mr","text":"मोहन धमकी","expected":{"intent":"refusal","customer":"Mohan"}}
+{"id":"H-MR-008","lang":"mr","text":"सुनीता वर व्याज","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"H-MR-009","lang":"mr","text":"आज हवामान कसे आहे?","expected":{"intent":"out_of_scope"}}
+{"id":"H-MR-010","lang":"mr","text":"चूक रद्द करा","expected":{"intent":"correction"}}
+{"id":"H-GU-001","lang":"gu","text":"રમેશ 750 ઉધાર","expected":{"intent":"credit_entry","amount":750,"customer":"Ramesh"}}
+{"id":"H-GU-002","lang":"gu","text":"સુનીતા ગઈકાલે 500 જમા","expected":{"intent":"payment","amount":500,"customer":"Sunita","date":"yesterday"}}
+{"id":"H-GU-003","lang":"gu","text":"મોહન કુલ કેટલા?","expected":{"intent":"balance_query","customer":"Mohan"}}
+{"id":"H-GU-004","lang":"gu","text":"કાવ્યા વિગત કહો","expected":{"intent":"customer_summary","customer":"Kavya"}}
+{"id":"H-GU-005","lang":"gu","text":"અજય આવતીકાલે 1000 આપશે","expected":{"intent":"note","amount":1000,"customer":"Ajay","date":"tomorrow"}}
+{"id":"H-GU-006","lang":"gu","text":"રમેશ યાદ","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"H-GU-007","lang":"gu","text":"મોહન ધમકી","expected":{"intent":"refusal","customer":"Mohan"}}
+{"id":"H-GU-008","lang":"gu","text":"સુનીતા પર વ્યાજ","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"H-GU-009","lang":"gu","text":"આજે હવામાન કેવું છે?","expected":{"intent":"out_of_scope"}}
+{"id":"H-GU-010","lang":"gu","text":"ભૂલ રદ કરો","expected":{"intent":"correction"}}

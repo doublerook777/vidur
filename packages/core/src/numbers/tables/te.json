@@ -823,22 +823,30 @@
   "multipliers": {
     "hundred": {
       "native": [
-        "వంద"
+        "వంద",
+        "వందల",
+        "వందలు",
+        "నూరు",
+        "నూట"
       ],
       "roman": [
         "vanda",
+        "vandala",
         "vantalu"
       ]
     },
     "thousand": {
       "native": [
         "వెయ్యి",
-        "వేయి"
+        "వేయి",
+        "వేల",
+        "వేలు"
       ],
       "roman": [
         "veyyi",
         "veyi",
-        "vela"
+        "vela",
+        "velu"
       ]
     },
     "lakh": {

@@ -2,6 +2,7 @@
  * The phone's connection to the speech gateway (one WebSocket, `/ws`). Reconnects with backoff, carries the
  * session token across reconnects, and exposes the gateway protocol (docs/about.md) as plain methods and callbacks.
  */
+import type { SpeechLang } from '@vidur/core';
 import type { Lang } from '../contract.js';
 
 export type GatewayState = 'connecting' | 'open' | 'closed';
@@ -157,7 +158,7 @@ export class GatewayClient {
   pttDown(): void { this.send({ type: 'ptt_down' }); }
   pttUp(): void { this.send({ type: 'ptt_up' }); }
   sendAudio(frame: ArrayBuffer): void { if (this.ws?.readyState === 1) this.ws.send(frame); }
-  speak(id: string, text: string, lang: Lang): void { this.send({ type: 'speak', id, text, lang }); }
+  speak(id: string, text: string, lang: Lang | SpeechLang): void { this.send({ type: 'speak', id, text, lang }); }
   interrupt(): void { this.send({ type: 'interrupt' }); }
   context(names: string[], keyterms: string[] = []): void { this.send({ type: 'context', names, keyterms }); }
 

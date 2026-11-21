@@ -203,83 +203,163 @@
 {"id": "G-HL-051", "lang": "hinglish", "text": "Mohan ka 1.5k udhaar", "expected": {"intent": "credit_entry", "amount": 1500, "customer": "Mohan"}}
 {"id": "G-HI-044", "lang": "hi", "text": "रमेश का 3k उधार", "expected": {"intent": "credit_entry", "amount": 3000, "customer": "Ramesh"}}
 {"id": "G-KN-044", "lang": "kn", "text": "ರಮೇಶ್ ಅವರ 2.5k ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Ramesh"}}
-{"id": "G-TA-001", "lang": "ta", "text": "ரமேஷ் முன்னூற்று நாற்பது ரூபாய் கடன்", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
-{"id": "G-TA-002", "lang": "ta", "text": "சுனிதா நூற்று ஐம்பது ரூபாய் வரவு", "expected": {"intent": "payment", "amount": 150, "customer": "Sunita"}}
-{"id": "G-TA-003", "lang": "ta", "text": "காவ்யா இருநூற்று ஐம்பது கடன்", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
-{"id": "G-TA-004", "lang": "ta", "text": "மோகன் இரண்டாயிரத்து ஐநூறு ரூபாய் செலுத்தினார்", "expected": {"intent": "payment", "amount": 2500, "customer": "Mohan"}}
-{"id": "G-TA-005", "lang": "ta", "text": "சுரேஷ் ஐந்நூறு ரூபாய் கடன்", "expected": {"intent": "credit_entry", "amount": 500, "customer": "Suresh"}}
-{"id": "G-TA-006", "lang": "ta", "text": "ரமேஷ் எவ்வளவு பாக்கி", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
-{"id": "G-TA-007", "lang": "ta", "text": "சுனிதா பாக்கி சொல்லுங்கள்", "expected": {"intent": "balance_query", "customer": "Sunita"}}
-{"id": "G-TA-008", "lang": "ta", "text": "இன்று எவ்வளவு கடன்", "expected": {"intent": "balance_query", "date": "today"}}
-{"id": "G-TA-009", "lang": "ta", "text": "நேற்று எவ்வளவு வரவு", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "G-TA-010", "lang": "ta", "text": "ரமேஷ் விவரம் சுருக்கம்", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
-{"id": "G-TA-011", "lang": "ta", "text": "இல்லை இருநூறு", "expected": {"intent": "correction", "amount": 200}}
-{"id": "G-TA-012", "lang": "ta", "text": "தவறு நீக்கு", "expected": {"intent": "correction"}}
-{"id": "G-TA-013", "lang": "ta", "text": "ரமேஷ் நினைவூட்டல் அனுப்பு", "expected": {"intent": "reminder_opt_in", "customer": "Ramesh"}}
-{"id": "G-TA-014", "lang": "ta", "text": "சுனிதா நாளை ஐந்நூறு ரூபாய் தருவார்", "expected": {"intent": "note", "amount": 500, "customer": "Sunita", "date": "tomorrow"}}
-{"id": "G-TA-015", "lang": "ta", "text": "மோகன் அடுத்த வாரம் கொடுப்பார்", "expected": {"intent": "note", "customer": "Mohan"}}
-{"id": "G-TA-016", "lang": "ta", "text": "ரமேஷ் வட்டி சேருங்கள்", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-TA-017", "lang": "ta", "text": "ரமேஷ் மிரட்டு", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-TA-018", "lang": "ta", "text": "இன்று வானிலை என்ன", "expected": {"intent": "out_of_scope"}}
-{"id": "G-TA-019", "lang": "ta", "text": "ரமேஷ் பாக்கி ஆயிரம் மாற்று", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Ramesh"}}
-{"id": "G-TA-020", "lang": "ta", "text": "அனில் நானூறு ரூபாய் கடன்", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Anil"}}
-{"id": "G-TE-001", "lang": "te", "text": "రమేష్ మూడు వందల నలభై రూపాయలు అప్పు", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
-{"id": "G-TE-002", "lang": "te", "text": "సునీత నూట యాభై రూపాయలు జమ", "expected": {"intent": "payment", "amount": 150, "customer": "Sunita"}}
-{"id": "G-TE-003", "lang": "te", "text": "కావ్య రెండు వందల యాభై అప్పు", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
-{"id": "G-TE-004", "lang": "te", "text": "మోహన్ రెండు వేల ఐదు వందల రూపాయలు చెల్లించాడు", "expected": {"intent": "payment", "amount": 2500, "customer": "Mohan"}}
-{"id": "G-TE-005", "lang": "te", "text": "సురేష్ ఐదు వందల రూపాయలు అప్పు", "expected": {"intent": "credit_entry", "amount": 500, "customer": "Suresh"}}
-{"id": "G-TE-006", "lang": "te", "text": "రమేష్ బాకీ ఎంత", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
-{"id": "G-TE-007", "lang": "te", "text": "సునీత లెక్క చెప్పు", "expected": {"intent": "customer_summary", "customer": "Sunita"}}
-{"id": "G-TE-008", "lang": "te", "text": "ఈరోజు ఎంత అప్పు", "expected": {"intent": "balance_query", "date": "today"}}
-{"id": "G-TE-009", "lang": "te", "text": "నిన్న ఎంత జమ", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "G-TE-010", "lang": "te", "text": "రమేష్ సారాంశం వివరాలు", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
-{"id": "G-TE-011", "lang": "te", "text": "కాదు రెండు వందలు", "expected": {"intent": "correction", "amount": 200}}
-{"id": "G-TE-012", "lang": "te", "text": "తప్పు రద్దు చేయి", "expected": {"intent": "correction"}}
-{"id": "G-TE-013", "lang": "te", "text": "రమేష్ కు రిమైండర్ పంపు", "expected": {"intent": "reminder_opt_in", "customer": "Ramesh"}}
-{"id": "G-TE-014", "lang": "te", "text": "సునీత రేపు ఐదు వందలు ఇస్తుంది", "expected": {"intent": "note", "amount": 500, "customer": "Sunita", "date": "tomorrow"}}
-{"id": "G-TE-015", "lang": "te", "text": "మోహన్ వచ్చే వారం కడతాడు", "expected": {"intent": "note", "customer": "Mohan"}}
-{"id": "G-TE-016", "lang": "te", "text": "రమేష్ కు వడ్డీ కలుపు", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-TE-017", "lang": "te", "text": "రమేష్ ను బెదిరించు", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-TE-018", "lang": "te", "text": "ఈరోజు వాతావరణం ఎలా ఉంది", "expected": {"intent": "out_of_scope"}}
-{"id": "G-TE-019", "lang": "te", "text": "రమేష్ బాకీ వెయ్యి మార్చు", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Ramesh"}}
-{"id": "G-TE-020", "lang": "te", "text": "అనిల్ నాలుగు వందల రూపాయలు అప్పు", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Anil"}}
-{"id": "G-MR-001", "lang": "mr", "text": "रमेश तीनशे चाळीस रुपये उधार", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
-{"id": "G-MR-002", "lang": "mr", "text": "सुनीता दीडशे रुपये जमा", "expected": {"intent": "payment", "amount": 150, "customer": "Sunita"}}
-{"id": "G-MR-003", "lang": "mr", "text": "काव्या अडीचशे रुपये उधार", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
-{"id": "G-MR-004", "lang": "mr", "text": "रमेशने दोन हजार पाचशे रुपये जमा केले", "expected": {"intent": "payment", "amount": 2500, "customer": "Ramesh"}}
-{"id": "G-MR-005", "lang": "mr", "text": "सुरेश पाचशे रुपये उधार", "expected": {"intent": "credit_entry", "amount": 500, "customer": "Suresh"}}
-{"id": "G-MR-006", "lang": "mr", "text": "रमेशची बाकी किती", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
-{"id": "G-MR-007", "lang": "mr", "text": "सुनीताचा हिशोब सांगा", "expected": {"intent": "customer_summary", "customer": "Sunita"}}
-{"id": "G-MR-008", "lang": "mr", "text": "आज किती उधार", "expected": {"intent": "balance_query", "date": "today"}}
-{"id": "G-MR-009", "lang": "mr", "text": "काल किती जमा", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "G-MR-010", "lang": "mr", "text": "रमेशचा सारांश तपशील", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
-{"id": "G-MR-011", "lang": "mr", "text": "नाही दोनशे", "expected": {"intent": "correction", "amount": 200}}
-{"id": "G-MR-012", "lang": "mr", "text": "चूक रद्द करा", "expected": {"intent": "correction"}}
-{"id": "G-MR-013", "lang": "mr", "text": "रमेशला आठवण पाठवा", "expected": {"intent": "reminder_opt_in", "customer": "Ramesh"}}
-{"id": "G-MR-014", "lang": "mr", "text": "सुनीता उद्या पाचशे रुपये देईल", "expected": {"intent": "note", "amount": 500, "customer": "Sunita", "date": "tomorrow"}}
-{"id": "G-MR-015", "lang": "mr", "text": "मोहन पुढच्या आठवड्यात देईल", "expected": {"intent": "note", "customer": "Mohan"}}
-{"id": "G-MR-016", "lang": "mr", "text": "रमेशला व्याज लावा", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-MR-017", "lang": "mr", "text": "रमेशला धमकाव", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-MR-018", "lang": "mr", "text": "आजचे हवामान कसे आहे", "expected": {"intent": "out_of_scope"}}
-{"id": "G-MR-019", "lang": "mr", "text": "रमेशची बाकी एक हजार करा", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Ramesh"}}
-{"id": "G-MR-020", "lang": "mr", "text": "अनिल चारशे रुपये उधार", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Anil"}}
-{"id": "G-GU-001", "lang": "gu", "text": "રમેશ ત્રણસો ચાલીસ રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 340, "customer": "Ramesh"}}
-{"id": "G-GU-002", "lang": "gu", "text": "સુનીતા દોઢસો રૂપિયા જમા", "expected": {"intent": "payment", "amount": 150, "customer": "Sunita"}}
-{"id": "G-GU-003", "lang": "gu", "text": "કાવ્યા અઢીસો રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 250, "customer": "Kavya"}}
-{"id": "G-GU-004", "lang": "gu", "text": "રમેશે બે હજાર પાંચસો રૂપિયા જમા કર્યા", "expected": {"intent": "payment", "amount": 2500, "customer": "Ramesh"}}
-{"id": "G-GU-005", "lang": "gu", "text": "સુરેશ પાંચસો રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 500, "customer": "Suresh"}}
-{"id": "G-GU-006", "lang": "gu", "text": "રમેશ ની બાકી કેટલી", "expected": {"intent": "balance_query", "customer": "Ramesh"}}
-{"id": "G-GU-007", "lang": "gu", "text": "સુનીતા નો હિસાબ કહો", "expected": {"intent": "customer_summary", "customer": "Sunita"}}
-{"id": "G-GU-008", "lang": "gu", "text": "આજે કેટલા ઉધાર", "expected": {"intent": "balance_query", "date": "today"}}
-{"id": "G-GU-009", "lang": "gu", "text": "ગઈકાલે કેટલા જમા", "expected": {"intent": "balance_query", "date": "yesterday"}}
-{"id": "G-GU-010", "lang": "gu", "text": "રમેશ નો સારાંશ વિગત", "expected": {"intent": "customer_summary", "customer": "Ramesh"}}
-{"id": "G-GU-011", "lang": "gu", "text": "ના બસો", "expected": {"intent": "correction", "amount": 200}}
-{"id": "G-GU-012", "lang": "gu", "text": "ખોટું રદ કરો", "expected": {"intent": "correction"}}
-{"id": "G-GU-013", "lang": "gu", "text": "રમેશ ને રીમાઇન્ડર મોકલો", "expected": {"intent": "reminder_opt_in", "customer": "Ramesh"}}
-{"id": "G-GU-014", "lang": "gu", "text": "સુનીતા કાલે પાંચસો રૂપિયા આપશે", "expected": {"intent": "note", "amount": 500, "customer": "Sunita", "date": "tomorrow"}}
-{"id": "G-GU-015", "lang": "gu", "text": "મોહન આવતા અઠવાડિયે આપશે", "expected": {"intent": "note", "customer": "Mohan"}}
-{"id": "G-GU-016", "lang": "gu", "text": "રમેશ ને વ્યાજ લગાવો", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-GU-017", "lang": "gu", "text": "રમેશ ને ડરાવો", "expected": {"intent": "refusal", "customer": "Ramesh"}}
-{"id": "G-GU-018", "lang": "gu", "text": "આજે હવામાન કેવું છે", "expected": {"intent": "out_of_scope"}}
-{"id": "G-GU-019", "lang": "gu", "text": "રમેશ ની બાકી એક હજાર કરો", "expected": {"intent": "edit_entry", "amount": 1000, "customer": "Ramesh"}}
-{"id": "G-GU-020", "lang": "gu", "text": "અનિલ ચારસો રૂપિયા ઉધાર", "expected": {"intent": "credit_entry", "amount": 400, "customer": "Anil"}}
+{"id":"G-TA-001","lang":"ta","text":"ரமேஷ் முன்னூற்று நாற்பது கடன்","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-TA-002","lang":"ta","text":"ரமேஷ் 340 கடன்","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-TA-003","lang":"ta","text":"சுனிதா இரண்டு நூறு கடன்","expected":{"intent":"credit_entry","amount":200,"customer":"Sunita"}}
+{"id":"G-TA-004","lang":"ta","text":"காவ்யா நூற்று ஐம்பது கடன்","expected":{"intent":"credit_entry","amount":150,"customer":"Kavya"}}
+{"id":"G-TA-005","lang":"ta","text":"மோகன் ஐந்நூறு கடன்","expected":{"intent":"credit_entry","amount":500,"customer":"Mohan"}}
+{"id":"G-TA-006","lang":"ta","text":"அஜய் முன்னூறு கடன்","expected":{"intent":"credit_entry","amount":300,"customer":"Ajay"}}
+{"id":"G-TA-007","lang":"ta","text":"ரமேஷ் இரண்டாயிரத்து ஐந்நூறு கடன்","expected":{"intent":"credit_entry","amount":2500,"customer":"Ramesh"}}
+{"id":"G-TA-008","lang":"ta","text":"சுனிதா நூறு கடன்","expected":{"intent":"credit_entry","amount":100,"customer":"Sunita"}}
+{"id":"G-TA-009","lang":"ta","text":"காவ்யா நானூறு கடன்","expected":{"intent":"credit_entry","amount":400,"customer":"Kavya"}}
+{"id":"G-TA-010","lang":"ta","text":"ரமேஷ் இரண்டு நூறு வரவு","expected":{"intent":"payment","amount":200,"customer":"Ramesh"}}
+{"id":"G-TA-011","lang":"ta","text":"சுனிதா 200 வரவு","expected":{"intent":"payment","amount":200,"customer":"Sunita"}}
+{"id":"G-TA-012","lang":"ta","text":"காவ்யா ஐந்நூறு செலுத்தியது","expected":{"intent":"payment","amount":500,"customer":"Kavya"}}
+{"id":"G-TA-013","lang":"ta","text":"மோகன் நேற்று இரண்டு நூறு செலுத்தியது","expected":{"intent":"payment","amount":200,"customer":"Mohan","date":"yesterday"}}
+{"id":"G-TA-014","lang":"ta","text":"ரமேஷ் இன்று நூறு வரவு","expected":{"intent":"payment","amount":100,"customer":"Ramesh","date":"today"}}
+{"id":"G-TA-015","lang":"ta","text":"சுனிதா இரண்டு ஆயிரத்தி ஐந்நூறு வரவு","expected":{"intent":"payment","amount":2500,"customer":"Sunita"}}
+{"id":"G-TA-016","lang":"ta","text":"காவ்யா ஒரு லட்சம் கடன்","expected":{"intent":"credit_entry","amount":100000,"customer":"Kavya"}}
+{"id":"G-TA-017","lang":"ta","text":"ரமேஷ் ஆயிரம் கடன்","expected":{"intent":"credit_entry","amount":1000,"customer":"Ramesh"}}
+{"id":"G-TA-018","lang":"ta","text":"மோகன் ஐம்பது கடன்","expected":{"intent":"credit_entry","amount":50,"customer":"Mohan"}}
+{"id":"G-TA-019","lang":"ta","text":"இல்லை 430","expected":{"intent":"correction","amount":430}}
+{"id":"G-TA-020","lang":"ta","text":"ரமேஷ் 340 கடன் இல்லை இல்லை 430 கடன்","expected":{"intent":"credit_entry","amount":430,"customer":"Ramesh"}}
+{"id":"G-TA-021","lang":"ta","text":"தவறு ரத்து செய்","expected":{"intent":"correction"}}
+{"id":"G-TA-022","lang":"ta","text":"இல்லை சுரேஷ்","expected":{"intent":"correction","customer":"Suresh"}}
+{"id":"G-TA-023","lang":"ta","text":"இன்று எவ்வளவு கடன்?","expected":{"intent":"balance_query","date":"today"}}
+{"id":"G-TA-024","lang":"ta","text":"ரமேஷ் மொத்தம்?","expected":{"intent":"balance_query","customer":"Ramesh"}}
+{"id":"G-TA-025","lang":"ta","text":"சுனிதா பாக்கி எவ்வளவு?","expected":{"intent":"balance_query","customer":"Sunita"}}
+{"id":"G-TA-026","lang":"ta","text":"ரமேஷ் நாளை ஐந்நூறு கொடுப்பார்","expected":{"intent":"note","amount":500,"customer":"Ramesh","date":"tomorrow"}}
+{"id":"G-TA-027","lang":"ta","text":"காவ்யா 600 கடன்","expected":{"intent":"credit_entry","amount":600,"customer":"Kavya"}}
+{"id":"G-TA-028","lang":"ta","text":"சுனிதா நினைவூட்டல்","expected":{"intent":"reminder_opt_in","customer":"Sunita"}}
+{"id":"G-TA-029","lang":"ta","text":"ரமேஷ் நினைவூட்டு","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"G-TA-030","lang":"ta","text":"ரமேஷ் மிரட்டு","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-TA-031","lang":"ta","text":"சுனிதா மீது வட்டி","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"G-TA-032","lang":"ta","text":"எனக்கு கடன் கொடு","expected":{"intent":"refusal"}}
+{"id":"G-TA-033","lang":"ta","text":"ரமேஷ் நம்பலாமா?","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-TA-034","lang":"ta","text":"ரமேஷ் கணக்கு விவரம் சொல்லுங்க","expected":{"intent":"customer_summary","customer":"Ramesh"}}
+{"id":"G-TA-035","lang":"ta","text":"சுனிதா விவரங்கள் காட்டுங்கள்","expected":{"intent":"customer_summary","customer":"Sunita"}}
+{"id":"G-TA-036","lang":"ta","text":"மோகன் பற்றி சொல்லுங்க","expected":{"intent":"customer_summary","customer":"Mohan"}}
+{"id":"G-TA-037","lang":"ta","text":"அஜய் சுருக்கம் சொல்லுங்க","expected":{"intent":"customer_summary","customer":"Ajay"}}
+{"id":"G-TA-038","lang":"ta","text":"மோகன் 100 வரவு","expected":{"intent":"payment","amount":100,"customer":"Mohan"}}
+{"id":"G-TA-039","lang":"ta","text":"அஜய் 500 கடன்","expected":{"intent":"credit_entry","amount":500,"customer":"Ajay"}}
+{"id":"G-TA-040","lang":"ta","text":"சுனிதா 1000 கடன்","expected":{"intent":"credit_entry","amount":1000,"customer":"Sunita"}}
+{"id":"G-TE-001","lang":"te","text":"రమేష్ మూడు వందల నలభై అప్పు","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-TE-002","lang":"te","text":"రమేష్ 340 అప్పు","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-TE-003","lang":"te","text":"సునీత రెండు వందలు అప్పు","expected":{"intent":"credit_entry","amount":200,"customer":"Sunita"}}
+{"id":"G-TE-004","lang":"te","text":"కావ్య నూట యాభై అప్పు","expected":{"intent":"credit_entry","amount":150,"customer":"Kavya"}}
+{"id":"G-TE-005","lang":"te","text":"మోహన్ ఐదు వందలు అప్పు","expected":{"intent":"credit_entry","amount":500,"customer":"Mohan"}}
+{"id":"G-TE-006","lang":"te","text":"అజయ్ మూడు వందలు అప్పు","expected":{"intent":"credit_entry","amount":300,"customer":"Ajay"}}
+{"id":"G-TE-007","lang":"te","text":"రమేష్ రెండు వేల ఐదు వందల అప్పు","expected":{"intent":"credit_entry","amount":2500,"customer":"Ramesh"}}
+{"id":"G-TE-008","lang":"te","text":"సునీత వంద అప్పు","expected":{"intent":"credit_entry","amount":100,"customer":"Sunita"}}
+{"id":"G-TE-009","lang":"te","text":"కావ్య నాలుగు వందలు అప్పు","expected":{"intent":"credit_entry","amount":400,"customer":"Kavya"}}
+{"id":"G-TE-010","lang":"te","text":"రమేష్ రెండు వందలు జమ","expected":{"intent":"payment","amount":200,"customer":"Ramesh"}}
+{"id":"G-TE-011","lang":"te","text":"సునీత 200 జమ","expected":{"intent":"payment","amount":200,"customer":"Sunita"}}
+{"id":"G-TE-012","lang":"te","text":"కావ్య ఐదు వందలు చెల్లింపు","expected":{"intent":"payment","amount":500,"customer":"Kavya"}}
+{"id":"G-TE-013","lang":"te","text":"మోహన్ నిన్న రెండు వందలు జమ","expected":{"intent":"payment","amount":200,"customer":"Mohan","date":"yesterday"}}
+{"id":"G-TE-014","lang":"te","text":"రమేష్ ఈరోజు వంద జమ","expected":{"intent":"payment","amount":100,"customer":"Ramesh","date":"today"}}
+{"id":"G-TE-015","lang":"te","text":"సునీత రెండు వేల ఐదు వందల వాపస్","expected":{"intent":"payment","amount":2500,"customer":"Sunita"}}
+{"id":"G-TE-016","lang":"te","text":"కావ్య ఒక లక్ష అప్పు","expected":{"intent":"credit_entry","amount":100000,"customer":"Kavya"}}
+{"id":"G-TE-017","lang":"te","text":"రమేష్ వెయ్యి అప్పు","expected":{"intent":"credit_entry","amount":1000,"customer":"Ramesh"}}
+{"id":"G-TE-018","lang":"te","text":"మోహన్ యాభై అప్పు","expected":{"intent":"credit_entry","amount":50,"customer":"Mohan"}}
+{"id":"G-TE-019","lang":"te","text":"కాదు 430","expected":{"intent":"correction","amount":430}}
+{"id":"G-TE-020","lang":"te","text":"రమేష్ 340 అప్పు కాదు కాదు 430 అప్పు","expected":{"intent":"credit_entry","amount":430,"customer":"Ramesh"}}
+{"id":"G-TE-021","lang":"te","text":"తప్పు రద్దు చేయండి","expected":{"intent":"correction"}}
+{"id":"G-TE-022","lang":"te","text":"కాదు సురేష్","expected":{"intent":"correction","customer":"Suresh"}}
+{"id":"G-TE-023","lang":"te","text":"ఈరోజు ఎంత అప్పు?","expected":{"intent":"balance_query","date":"today"}}
+{"id":"G-TE-024","lang":"te","text":"రమేష్ మొత్తం?","expected":{"intent":"balance_query","customer":"Ramesh"}}
+{"id":"G-TE-025","lang":"te","text":"సునీత బాకీ ఎంత?","expected":{"intent":"balance_query","customer":"Sunita"}}
+{"id":"G-TE-026","lang":"te","text":"రమేష్ రేపు ఐదు వందలు ఇస్తారు","expected":{"intent":"note","amount":500,"customer":"Ramesh","date":"tomorrow"}}
+{"id":"G-TE-027","lang":"te","text":"కావ్య 600 అప్పు","expected":{"intent":"credit_entry","amount":600,"customer":"Kavya"}}
+{"id":"G-TE-028","lang":"te","text":"సునీత రిమైండర్","expected":{"intent":"reminder_opt_in","customer":"Sunita"}}
+{"id":"G-TE-029","lang":"te","text":"రమేష్ గుర్తు చేయి","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"G-TE-030","lang":"te","text":"రమేష్ బెదిరించు","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-TE-031","lang":"te","text":"సునీత పై వడ్డీ","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"G-TE-032","lang":"te","text":"నాకు అప్పు ఇవ్వు","expected":{"intent":"refusal"}}
+{"id":"G-TE-033","lang":"te","text":"రమేష్ నమ్మవచ్చా?","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-TE-034","lang":"te","text":"రమేష్ సారాంశం చెప్పండి","expected":{"intent":"customer_summary","customer":"Ramesh"}}
+{"id":"G-TE-035","lang":"te","text":"సునీత వివరాలు చూపించండి","expected":{"intent":"customer_summary","customer":"Sunita"}}
+{"id":"G-TE-036","lang":"te","text":"మోహన్ గురించి చెప్పండి","expected":{"intent":"customer_summary","customer":"Mohan"}}
+{"id":"G-TE-037","lang":"te","text":"అజయ్ ఖాతా వివరాలు చెప్పండి","expected":{"intent":"customer_summary","customer":"Ajay"}}
+{"id":"G-TE-038","lang":"te","text":"మోహన్ 100 జమ","expected":{"intent":"payment","amount":100,"customer":"Mohan"}}
+{"id":"G-TE-039","lang":"te","text":"అజయ్ 500 అప్పు","expected":{"intent":"credit_entry","amount":500,"customer":"Ajay"}}
+{"id":"G-TE-040","lang":"te","text":"సునీత 1000 అప్పు","expected":{"intent":"credit_entry","amount":1000,"customer":"Sunita"}}
+{"id":"G-MR-001","lang":"mr","text":"रमेश तीनशे चाळीस उधार","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-MR-002","lang":"mr","text":"रमेश 340 उधार","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-MR-003","lang":"mr","text":"सुनीता दोनशे उधार","expected":{"intent":"credit_entry","amount":200,"customer":"Sunita"}}
+{"id":"G-MR-004","lang":"mr","text":"काव्या दीडशे उधार","expected":{"intent":"credit_entry","amount":150,"customer":"Kavya"}}
+{"id":"G-MR-005","lang":"mr","text":"मोहन पाचशे उधार","expected":{"intent":"credit_entry","amount":500,"customer":"Mohan"}}
+{"id":"G-MR-006","lang":"mr","text":"अजय तीनशे उधार","expected":{"intent":"credit_entry","amount":300,"customer":"Ajay"}}
+{"id":"G-MR-007","lang":"mr","text":"रमेश दोन हजार पाचशे उधार","expected":{"intent":"credit_entry","amount":2500,"customer":"Ramesh"}}
+{"id":"G-MR-008","lang":"mr","text":"सुनीता शंभर उधार","expected":{"intent":"credit_entry","amount":100,"customer":"Sunita"}}
+{"id":"G-MR-009","lang":"mr","text":"काव्या चारशे उधार","expected":{"intent":"credit_entry","amount":400,"customer":"Kavya"}}
+{"id":"G-MR-010","lang":"mr","text":"रमेश दोनशे जमा","expected":{"intent":"payment","amount":200,"customer":"Ramesh"}}
+{"id":"G-MR-011","lang":"mr","text":"सुनीता 200 जमा","expected":{"intent":"payment","amount":200,"customer":"Sunita"}}
+{"id":"G-MR-012","lang":"mr","text":"काव्या पाचशे भरले","expected":{"intent":"payment","amount":500,"customer":"Kavya"}}
+{"id":"G-MR-013","lang":"mr","text":"मोहन काल दोनशे भरले","expected":{"intent":"payment","amount":200,"customer":"Mohan","date":"yesterday"}}
+{"id":"G-MR-014","lang":"mr","text":"रमेश आज शंभर जमा","expected":{"intent":"payment","amount":100,"customer":"Ramesh","date":"today"}}
+{"id":"G-MR-015","lang":"mr","text":"सुनीता दोन हजार पाचशे परत","expected":{"intent":"payment","amount":2500,"customer":"Sunita"}}
+{"id":"G-MR-016","lang":"mr","text":"काव्या एक लाख उधार","expected":{"intent":"credit_entry","amount":100000,"customer":"Kavya"}}
+{"id":"G-MR-017","lang":"mr","text":"रमेश एक हजार उधार","expected":{"intent":"credit_entry","amount":1000,"customer":"Ramesh"}}
+{"id":"G-MR-018","lang":"mr","text":"मोहन पन्नास उधार","expected":{"intent":"credit_entry","amount":50,"customer":"Mohan"}}
+{"id":"G-MR-019","lang":"mr","text":"नाही 430","expected":{"intent":"correction","amount":430}}
+{"id":"G-MR-020","lang":"mr","text":"रमेश 340 उधार नाही नाही 430 उधार","expected":{"intent":"credit_entry","amount":430,"customer":"Ramesh"}}
+{"id":"G-MR-021","lang":"mr","text":"चूक रद्द करा","expected":{"intent":"correction"}}
+{"id":"G-MR-022","lang":"mr","text":"नाही सुरेश","expected":{"intent":"correction","customer":"Suresh"}}
+{"id":"G-MR-023","lang":"mr","text":"आज किती उधार?","expected":{"intent":"balance_query","date":"today"}}
+{"id":"G-MR-024","lang":"mr","text":"रमेश एकूण किती?","expected":{"intent":"balance_query","customer":"Ramesh"}}
+{"id":"G-MR-025","lang":"mr","text":"सुनीता बाकी किती?","expected":{"intent":"balance_query","customer":"Sunita"}}
+{"id":"G-MR-026","lang":"mr","text":"रमेश उद्या पाचशे देईल","expected":{"intent":"note","amount":500,"customer":"Ramesh","date":"tomorrow"}}
+{"id":"G-MR-027","lang":"mr","text":"काव्या 600 उधार","expected":{"intent":"credit_entry","amount":600,"customer":"Kavya"}}
+{"id":"G-MR-028","lang":"mr","text":"सुनीता आठवण","expected":{"intent":"reminder_opt_in","customer":"Sunita"}}
+{"id":"G-MR-029","lang":"mr","text":"रमेश रिमाइंडर","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"G-MR-030","lang":"mr","text":"रमेश धमकी","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-MR-031","lang":"mr","text":"सुनीता वर व्याज","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"G-MR-032","lang":"mr","text":"मला उधार द्या","expected":{"intent":"refusal"}}
+{"id":"G-MR-033","lang":"mr","text":"रमेश विश्वासू?","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-MR-034","lang":"mr","text":"रमेश तपशील सांगा","expected":{"intent":"customer_summary","customer":"Ramesh"}}
+{"id":"G-MR-035","lang":"mr","text":"सुनीता माहिती दाखवा","expected":{"intent":"customer_summary","customer":"Sunita"}}
+{"id":"G-MR-036","lang":"mr","text":"मोहन बद्दल सांगा","expected":{"intent":"customer_summary","customer":"Mohan"}}
+{"id":"G-MR-037","lang":"mr","text":"अजय सारांश सांगा","expected":{"intent":"customer_summary","customer":"Ajay"}}
+{"id":"G-MR-038","lang":"mr","text":"मोहन 100 जमा","expected":{"intent":"payment","amount":100,"customer":"Mohan"}}
+{"id":"G-MR-039","lang":"mr","text":"अजय 500 उधार","expected":{"intent":"credit_entry","amount":500,"customer":"Ajay"}}
+{"id":"G-MR-040","lang":"mr","text":"सुनीता 1000 उधार","expected":{"intent":"credit_entry","amount":1000,"customer":"Sunita"}}
+{"id":"G-GU-001","lang":"gu","text":"રમેશ ત્રણસો ચાલીસ ઉધાર","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-GU-002","lang":"gu","text":"રમેશ 340 ઉધાર","expected":{"intent":"credit_entry","amount":340,"customer":"Ramesh"}}
+{"id":"G-GU-003","lang":"gu","text":"સુનીતા બસો ઉધાર","expected":{"intent":"credit_entry","amount":200,"customer":"Sunita"}}
+{"id":"G-GU-004","lang":"gu","text":"કાવ્યા દોઢસો ઉધાર","expected":{"intent":"credit_entry","amount":150,"customer":"Kavya"}}
+{"id":"G-GU-005","lang":"gu","text":"મોહન પાંચસો ઉધાર","expected":{"intent":"credit_entry","amount":500,"customer":"Mohan"}}
+{"id":"G-GU-006","lang":"gu","text":"અજય ત્રણસો ઉધાર","expected":{"intent":"credit_entry","amount":300,"customer":"Ajay"}}
+{"id":"G-GU-007","lang":"gu","text":"રમેશ બે હજાર પાંચસો ઉધાર","expected":{"intent":"credit_entry","amount":2500,"customer":"Ramesh"}}
+{"id":"G-GU-008","lang":"gu","text":"સુનીતા સો ઉધાર","expected":{"intent":"credit_entry","amount":100,"customer":"Sunita"}}
+{"id":"G-GU-009","lang":"gu","text":"કાવ્યા ચારસો ઉધાર","expected":{"intent":"credit_entry","amount":400,"customer":"Kavya"}}
+{"id":"G-GU-010","lang":"gu","text":"રમેશ બસો જમા","expected":{"intent":"payment","amount":200,"customer":"Ramesh"}}
+{"id":"G-GU-011","lang":"gu","text":"સુનીતા 200 જમા","expected":{"intent":"payment","amount":200,"customer":"Sunita"}}
+{"id":"G-GU-012","lang":"gu","text":"કાવ્યા પાંચસો ચૂકવ્યા","expected":{"intent":"payment","amount":500,"customer":"Kavya"}}
+{"id":"G-GU-013","lang":"gu","text":"મોહન ગઈકાલે બસો આપ્યા","expected":{"intent":"payment","amount":200,"customer":"Mohan","date":"yesterday"}}
+{"id":"G-GU-014","lang":"gu","text":"રમેશ આજે સો જમા","expected":{"intent":"payment","amount":100,"customer":"Ramesh","date":"today"}}
+{"id":"G-GU-015","lang":"gu","text":"સુનીતા બે હજાર પાંચસો પાછા","expected":{"intent":"payment","amount":2500,"customer":"Sunita"}}
+{"id":"G-GU-016","lang":"gu","text":"કાવ્યા એક લાખ ઉધાર","expected":{"intent":"credit_entry","amount":100000,"customer":"Kavya"}}
+{"id":"G-GU-017","lang":"gu","text":"રમેશ એક હજાર ઉધાર","expected":{"intent":"credit_entry","amount":1000,"customer":"Ramesh"}}
+{"id":"G-GU-018","lang":"gu","text":"મોહન પચાસ ઉધાર","expected":{"intent":"credit_entry","amount":50,"customer":"Mohan"}}
+{"id":"G-GU-019","lang":"gu","text":"નહીં 430","expected":{"intent":"correction","amount":430}}
+{"id":"G-GU-020","lang":"gu","text":"રમેશ 340 ઉધાર નહીં નહીં 430 ઉધાર","expected":{"intent":"credit_entry","amount":430,"customer":"Ramesh"}}
+{"id":"G-GU-021","lang":"gu","text":"ભૂલ રદ કરો","expected":{"intent":"correction"}}
+{"id":"G-GU-022","lang":"gu","text":"નહીં સુરેશ","expected":{"intent":"correction","customer":"Suresh"}}
+{"id":"G-GU-023","lang":"gu","text":"આજે કેટલા ઉધાર?","expected":{"intent":"balance_query","date":"today"}}
+{"id":"G-GU-024","lang":"gu","text":"રમેશ કુલ કેટલા?","expected":{"intent":"balance_query","customer":"Ramesh"}}
+{"id":"G-GU-025","lang":"gu","text":"સુનીતા બાકી કેટલી?","expected":{"intent":"balance_query","customer":"Sunita"}}
+{"id":"G-GU-026","lang":"gu","text":"રમેશ આવતીકાલે પાંચસો આપશે","expected":{"intent":"note","amount":500,"customer":"Ramesh","date":"tomorrow"}}
+{"id":"G-GU-027","lang":"gu","text":"કાવ્યા 600 ઉધાર","expected":{"intent":"credit_entry","amount":600,"customer":"Kavya"}}
+{"id":"G-GU-028","lang":"gu","text":"સુનીતા યાદ","expected":{"intent":"reminder_opt_in","customer":"Sunita"}}
+{"id":"G-GU-029","lang":"gu","text":"રમેશ રીમાઇન્ડર","expected":{"intent":"reminder_opt_in","customer":"Ramesh"}}
+{"id":"G-GU-030","lang":"gu","text":"રમેશ ધમકી","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-GU-031","lang":"gu","text":"સુનીતા પર વ્યાજ","expected":{"intent":"refusal","customer":"Sunita"}}
+{"id":"G-GU-032","lang":"gu","text":"મને ઉધાર આપો","expected":{"intent":"refusal"}}
+{"id":"G-GU-033","lang":"gu","text":"રમેશ વિશ્વાસુ?","expected":{"intent":"refusal","customer":"Ramesh"}}
+{"id":"G-GU-034","lang":"gu","text":"રમેશ વિગત કહો","expected":{"intent":"customer_summary","customer":"Ramesh"}}
+{"id":"G-GU-035","lang":"gu","text":"સુનીતા માહિતી બતાવો","expected":{"intent":"customer_summary","customer":"Sunita"}}
+{"id":"G-GU-036","lang":"gu","text":"મોહન વિશે કહો","expected":{"intent":"customer_summary","customer":"Mohan"}}
+{"id":"G-GU-037","lang":"gu","text":"અજય સારાંશ કહો","expected":{"intent":"customer_summary","customer":"Ajay"}}
+{"id":"G-GU-038","lang":"gu","text":"મોહન 100 જમા","expected":{"intent":"payment","amount":100,"customer":"Mohan"}}
+{"id":"G-GU-039","lang":"gu","text":"અજય 500 ઉધાર","expected":{"intent":"credit_entry","amount":500,"customer":"Ajay"}}
+{"id":"G-GU-040","lang":"gu","text":"સુનીતા 1000 ઉધાર","expected":{"intent":"credit_entry","amount":1000,"customer":"Sunita"}}
