@@ -177,3 +177,20 @@ describe('known customers', () => {
     expect(r.events[0]!.customerSpoken).toBeDefined();
   });
 });
+
+describe('Telugu credit word (F9)', () => {
+  it('reads "అప్పు" as a credit with no direction question', () => {
+    const e = interpret('సునీతా మూడు వందల నలభై రూపాయలు అప్పు').events[0];
+    expect(e?.intent).toBe('credit_entry');
+    expect(e?.amountPaise).toBe(34000);
+    expect(e?.needs ?? []).not.toContain('direction');
+  });
+
+  it('keeps every cue word in one script (a Tamil letter inside a Telugu word silently breaks the match)', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync(new URL('./intent.ts', import.meta.url), 'utf8');
+    const scripts = [/\p{Script=Tamil}/u, /\p{Script=Telugu}/u, /\p{Script=Gujarati}/u, /\p{Script=Devanagari}/u, /\p{Script=Kannada}/u];
+    const mixed = src.split(/[\s'"`,()[\]|/\\]+/).filter((w) => scripts.filter((re) => re.test(w)).length > 1);
+    expect(mixed).toEqual([]);
+  });
+});
