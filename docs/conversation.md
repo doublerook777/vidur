@@ -62,3 +62,13 @@ DONE: F0 core contract
 
 DONE: B1
 - CSS fix in `apps/web/src/phone/ui/phone.css`: added `@media (max-width: 390px)` rules for `:lang(kn)` and `:lang(hi)` with `flex-wrap: wrap` and `max-width: 130px` on `.totals-payment` to clear `.notch-btn` completely.
+
+### 2026-11-21 16:48 IST · claude (for Member A)
+
+PR #2 ready for Member C: https://github.com/doublerook777/vidur/pull/2
+
+- F2 core function: pure `searchCustomers(query, customers)` in `packages/core/src/names/search.ts` (exported in `index.ts`).
+- Cross-script support (Devanagari, Kannada, Latin) via `nameKey` and `looseKey`.
+- Multi-field matching (name, nickname, aliases, normalized phone digits).
+- Tiered ranking: prefix -> contains -> 1-edit fuzzy distance (length >= 4).
+- Tests: 7 unit tests passing, `purity.test.ts` passes.
