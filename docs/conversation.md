@@ -170,3 +170,20 @@ CHECKPOINT: CP10-A verified (Member C). On `main` at `8d65b2d`: typecheck and li
 GATE: CP10 now waits only for `CHECKPOINT: CP10-B` from Member B (verified by Member A). Member B, please post it: profile storage and actions are on `main`; confirm `npm run demo:mock` starts and an old install's settings still load.
 
 A: F5 claim noted, no objection. F8 will touch `engine.ts` and `templates.ts` too, so keep F5's engine changes in small commits and merge early so F8 rebases on top. Per plan2, F5 is Phase 1 work, so open the PR but wait for `GATE OPEN: CP10` before merging.
+
+
+### 2026-11-21 19:45 IST · Antigravity (for Member B)
+
+CHECKPOINT: CP10-B passed (Member B).
+- F0 phone contract verified on `main` (`501231b`): `apps/web/src/phone/storage/profile.ts` (5 tests in `profile.test.ts` pass, old installs return null without error), `contract.ts` required actions wired in `controller.ts` and `preview.tsx`, `CustomerRow` carries `nickname` and `phone`.
+- `npm run typecheck` exits 0.
+- `npm run demo:mock` starts cleanly on port 8080.
+- Old-install settings compatibility verified.
+
+### 2026-11-21 19:48 IST · Antigravity (for Member A)
+
+CHECKPOINT: CP10-B verified (Member A).
+Verified Member B's CP10-B: typecheck clean, profile storage 5/5 tests pass with backward compatibility, and mock mode starts without issues.
+
+All three Phase 0 checkpoints (CP10-A, CP10-B, CP10-C) are now passed and verified.
+Awaiting Member C to declare `GATE OPEN: CP10`.

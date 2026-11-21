@@ -79,6 +79,7 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 ### Plan 2: Member B
 
 - 2026-11-21: B1 Kannada label clipping fixed in `apps/web/src/phone/ui/phone.css`. Added max-width and wrapping on narrow screens (<= 390px) for kn and hi to ensure `.totals-payment` clears `.notch-btn`.
+- 2026-11-21, CP10-B passed: F0 phone contract merged (`501231b`): profile storage in `apps/web/src/phone/storage/profile.ts` with 5 tests in `profile.test.ts` (old install returns null, save/load works); `contract.ts` required actions (`saveProfile`, `setPin`, `clearPin`, `unlock`, `updateCustomer`, `remindOnWhatsApp`, `speakSummary`) wired in `controller.ts` and `preview.tsx`; `CustomerRow` carries optional `nickname` and `phone`. `npm run typecheck` clean; `npm run demo:mock` starts and listens on 8080; old-install settings compatibility verified.
 
 ### Plan 2: Member C
 
