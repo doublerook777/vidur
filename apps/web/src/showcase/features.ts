@@ -70,7 +70,7 @@ export const FEATURES: Record<FeatureId, FeatureExplanation> = {
   },
   'language-switch': {
     title: 'Language switch',
-    what: 'Changes the app and the spoken replies between Hindi, English and Kannada.',
+    what: 'Changes the app and the spoken replies between Hindi, English, Kannada, and four Beta languages (Tamil, Telugu, Marathi, Gujarati).',
     why: 'The shop runs in the language you actually speak, including code-mixed sentences.',
   },
   'theme-switch': {

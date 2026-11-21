@@ -20,6 +20,8 @@ const LANG_LABEL: Record<Lang, string> = {
   gu: 'ગુજરાતી (Beta)',
 };
 
+const LANGS: Lang[] = ['hi', 'en', 'kn', 'ta', 'te', 'mr', 'gu'];
+
 export function Onboarding({ vm, actions, lang }: ScreenProps<OnboardingVM>) {
   const t = LABELS[lang];
   const [shopName, setShopName] = useState('');
@@ -86,7 +88,7 @@ export function Onboarding({ vm, actions, lang }: ScreenProps<OnboardingVM>) {
 
       <section class="onboarding-lang" aria-label={t.language}>
         <div class="settings-lang-row" role="group" aria-label={t.language} data-feature="language-switch">
-          {(['hi', 'en', 'kn'] as Lang[]).map((l) => (
+          {LANGS.map((l) => (
             <button
               key={l}
               type="button"

@@ -124,7 +124,15 @@ window.addEventListener('message', (event: MessageEvent) => {
       state.theme = p.theme;
       setPressed('[data-theme]', p.theme, 'theme');
     }
-    if (p.lang === 'hi' || p.lang === 'en' || p.lang === 'kn') {
+    if (
+      p.lang === 'hi' ||
+      p.lang === 'en' ||
+      p.lang === 'kn' ||
+      p.lang === 'ta' ||
+      p.lang === 'te' ||
+      p.lang === 'mr' ||
+      p.lang === 'gu'
+    ) {
       state.lang = p.lang;
       setPressed('[data-lang]', p.lang, 'lang');
     }

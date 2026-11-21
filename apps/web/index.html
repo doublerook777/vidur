@@ -129,6 +129,10 @@
                       <button type="button" class="control" data-lang="hi" aria-pressed="true">हिंदी</button>
                       <button type="button" class="control" data-lang="en" aria-pressed="false">English</button>
                       <button type="button" class="control" data-lang="kn" aria-pressed="false">ಕನ್ನಡ</button>
+                      <button type="button" class="control" data-lang="ta" aria-pressed="false">தமிழ் (Beta)</button>
+                      <button type="button" class="control" data-lang="te" aria-pressed="false">తెలుగు (Beta)</button>
+                      <button type="button" class="control" data-lang="mr" aria-pressed="false">मराठी (Beta)</button>
+                      <button type="button" class="control" data-lang="gu" aria-pressed="false">ગુજરાતી (Beta)</button>
                     </div>
                   </fieldset>
                 </div>
@@ -202,18 +206,29 @@
           <section id="languages" class="slab langs" aria-labelledby="languages-h">
             <p class="langs-type" aria-hidden="true">
               <span>हिंदी</span>
-              <span>Hinglish</span>
               <span>English</span>
               <span>ಕನ್ನಡ</span>
+              <span>தமிழ்</span>
+              <span>తెలుగు</span>
+              <span>मराठी</span>
+              <span>ગુજરાતી</span>
             </p>
             <div class="pane langs-pane">
               <h2 id="languages-h">Spoken the way people talk</h2>
               <p>
-                Hindi, Hinglish, English and Kannada work at full quality. Speech is code-mixed by nature:
-                “Ramesh ka 340 credit” is a perfectly normal sentence, and Vidur reads amounts in spoken Indian
-                forms like “dedh sau” and “dhai hazaar”. Seven more languages (Tamil, Telugu, Malayalam,
-                Marathi, Bengali, Gujarati, Punjabi) are planned, not shipped.
+                Seven languages work end to end: Hindi, Hinglish, English, and Kannada, plus four Beta languages (Tamil, Telugu, Marathi, and Gujarati).
+                Speech is code-mixed by nature: “Ramesh ka 340 credit” or “సునీతా 500 జమ” is a perfectly normal sentence, and Vidur parses amounts in spoken Indian
+                forms, Dravidian and Devanagari numerals, and regional counting idioms.
               </p>
+              <ul class="langs-list">
+                <li><strong>हिंदी (Hindi &amp; Hinglish)</strong> — code-mixing, “dedh sau”, “dhai hazaar”, Devanagari numerals</li>
+                <li><strong>English</strong> — Indian numbering system (lakh, crore), cardinal and colloquial</li>
+                <li><strong>ಕನ್ನಡ (Kannada)</strong> — Kannada numerals, Dravidian counting, native script and Latin transliteration</li>
+                <li><strong>தமிழ் (Tamil — Beta)</strong> — Tamil numerals, colloquial roots, phonetic transliteration</li>
+                <li><strong>తెలుగు (Telugu — Beta)</strong> — Telugu numerals, compound hundred forms, phonetic transliteration</li>
+                <li><strong>मराठी (Marathi — Beta)</strong> — Devanagari Marathi counting, regional numerals and idioms</li>
+                <li><strong>ગુજરાતી (Gujarati — Beta)</strong> — Gujarati numerals and vocabulary, colloquial phonetic forms</li>
+              </ul>
             </div>
           </section>
 
@@ -257,7 +272,7 @@
             <div class="pane limits-pane">
               <ul>
                 <li>Speech recognition is not perfect. Vidur is built to <em>ask</em> when unsure rather than record a wrong amount, but mistakes still happen, so check the entry.</li>
-                <li>Hindi, Hinglish, English and Kannada only. Other languages are on the roadmap.</li>
+                <li>Seven languages supported: Hindi, Hinglish, English, and Kannada at full quality; Tamil, Telugu, Marathi, and Gujarati in Beta.</li>
                 <li>Reminders work only for customers who opted in, and nothing is sent automatically. You tap to share.</li>
                 <li>The browser build cannot hide its key from code running on the same page; entries never leave the device, but treat the demo as a demo.</li>
                 <li>Latency depends on the network. On a bad connection, add the entry by hand.</li>
