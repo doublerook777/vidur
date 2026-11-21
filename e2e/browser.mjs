@@ -459,6 +459,7 @@ try {
   await page.evaluate(() => window.__vidur.onTranscript({ text: 'Ramesh ka 340 udhaar', lang: 'hi', sttMs: 0, audioMs: 0 }));
   await sleep(250);
   check('a follow-up question offers a cancel button', (await page.locator('.btn-cancel-input').count()) === 1);
+  check('the reply card is big enough for its content and nothing paints over its buttons', await page.evaluate(() => { const c = document.querySelector('.entry-card'); const b = c.querySelector('.btn-cancel-input').getBoundingClientRect(); const hit = document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2); return c.scrollHeight <= c.clientHeight + 1 && !!hit && c.contains(hit); }));
   check('the Hindi question names the two Rameshes in Devanagari, not Latin', /दूध वाले/.test(await page.locator('.entry-agent-line').innerText()));
   await page.locator('.btn-cancel-input').click();
   await sleep(250);
