@@ -5,6 +5,7 @@ import { formatRupees, fromLocalInput, toLocalInput } from './format.js';
 import { LABELS } from './labels.js';
 import { IconArrowDown, IconArrowUp, IconBack, IconBackspace } from './icons.js';
 import type { ScreenProps } from './types.js';
+import { nameKey } from '@vidur/core';
 import { AiBadge } from './AiBadge.js';
 
 export interface KeypadVM {
@@ -26,10 +27,13 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
   const [kind, setKind] = useState<'credit' | 'payment'>(vm.preset?.kind ?? 'credit');
   const [customerId, setCustomerId] = useState<string | null>(vm.preset?.customerId ?? null);
   const [newName, setNewName] = useState('');
+  const [newNickname, setNewNickname] = useState('');
   const [when, setWhen] = useState<When>('now');
   const [picked, setPicked] = useState(toLocalInput(now));
 
   const newFirst = vm.preset?.newCustomer === true;
+  const typed = newName.trim();
+  const nameTaken = typed !== '' && vm.customers.some((c) => nameKey(c.name) === nameKey(typed));
   const nameBox = (
         <label class="keypad-new-name-label">
           <span class="keypad-new-name-title">{t.newName}</span>
@@ -45,6 +49,21 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
             autoFocus={newFirst}
           />
         </label>
+  );
+  const nicknameBox = (newFirst || typed !== '') && (
+    <>
+      <label class="keypad-new-name-label">
+        <span class="keypad-new-name-title">{t.newNickname}</span>
+        <input
+          type="text"
+          class="keypad-new-name keypad-new-nickname"
+          value={newNickname}
+          onInput={(e) => setNewNickname((e.target as HTMLInputElement).value)}
+          autocomplete="off"
+        />
+      </label>
+      {nameTaken && <p class="keypad-hint" role="note">{t.nicknameHint}</p>}
+    </>
   );
   const rupees = digits === '' ? 0 : Number(digits);
   const paise = rupees * 100;
@@ -84,6 +103,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
 
       <section class="keypad-customer" aria-label={t.chooseCustomer}>
         {newFirst && nameBox}
+        {newFirst && nicknameBox}
         <ul class="keypad-customer-list">
           {vm.customers.map((c) => (
             <li key={c.id}>
@@ -94,14 +114,16 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
                 onClick={() => {
                   setCustomerId(customerId === c.id ? null : c.id);
                   setNewName('');
+                  setNewNickname('');
                 }}
               >
-                {c.name}
+                {c.nickname ? `${c.name} (${c.nickname})` : c.name}
               </button>
             </li>
           ))}
         </ul>
         {!newFirst && nameBox}
+        {!newFirst && nicknameBox}
       </section>
 
       <section class="keypad-when" aria-label={t.whenTitle}>
@@ -139,7 +161,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
         type="button"
         class="btn btn-save"
         disabled={!canSave}
-        onClick={() => actions.saveKeypadEntry({ customerId, newName: newName.trim() === '' ? null : newName.trim(), kind, paise, ...(at !== undefined ? { at } : {}) })}
+        onClick={() => actions.saveKeypadEntry({ customerId, newName: newName.trim() === '' ? null : newName.trim(), ...(newNickname.trim() !== '' && newName.trim() !== '' ? { newNickname: newNickname.trim() } : {}), kind, paise, ...(at !== undefined ? { at } : {}) })}
       >
         {t.save}
       </button>

@@ -550,10 +550,14 @@ export class PhoneSession {
     this.refresh();
   }
 
-  private async saveKeypad(i: { customerId: string | null; newName: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): Promise<void> {
+  private async saveKeypad(i: { customerId: string | null; newName: string | null; newNickname?: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): Promise<void> {
     let id = i.customerId;
     // The shopkeeper typed the name themselves, so that is the "yes" a spoken new name has to ask for.
-    if (!id && i.newName?.trim()) id = (await this.ledger.createCustomer(i.newName.trim())).id;
+    if (!id && i.newName?.trim()) {
+      // A nickname typed here is stored the same way the spoken one is: on the customer, and as an alias the voice can match.
+      const nick = i.newNickname?.trim();
+      id = (await this.ledger.createCustomer(i.newName.trim(), nick ? [nick] : [], nick ? { nickname: nick } : undefined)).id;
+    }
     if (!id || !Number.isInteger(i.paise) || i.paise <= 0) return;
     const now = this.now();
     const at = i.at !== undefined && Number.isFinite(i.at) ? Math.min(i.at, now) : now;

@@ -43,6 +43,7 @@ const renderedScreens: Record<string, string> = {
   settings: renderToString(h(Settings, {vm: mockSettingsVM, actions: mockActions, lang: 'hi', })),
   onboarding: renderToString(h(Onboarding, {vm: mockOnboardingVM, actions: mockActions, lang: 'hi', })),
   keypad: renderToString(h(Keypad, {vm: mockKeypadVM, actions: mockActions, lang: 'hi', })),
+  keypadNewCustomer: renderToString(h(Keypad, { vm: { ...mockKeypadVM, preset: { newCustomer: true } }, actions: mockActions, lang: 'en' })),
 };
 
 const allRendered = Object.values(renderedScreens).join('\n');
@@ -50,6 +51,15 @@ const allRendered = Object.values(renderedScreens).join('\n');
 describe('FEATURE_IDS coverage', () => {
   it.each(FEATURE_IDS.map((id) => [id] as const))('data-feature="%s" appears in some screen', (id) => {
     expect(allRendered).toContain(`data-feature="${id}"`);
+  });
+});
+
+describe('manual new customer', () => {
+  it('offers an optional nickname field in every language', () => {
+    for (const lang of ['en', 'hi', 'kn'] as const) {
+      const html = renderToString(h(Keypad, { vm: { ...mockKeypadVM, preset: { newCustomer: true } }, actions: mockActions, lang }));
+      expect(html).toContain(LABELS[lang].newNickname);
+    }
   });
 });
 

@@ -283,6 +283,20 @@ describe('adding and removing entries by hand, and tapping answers', () => {
     expect(session!.state.history[0]).toMatchObject({ customerName: 'Laxmi', paise: 50_00 });
   });
 
+  it('a nickname typed with a new name is stored on the customer and matched by the voice', async () => {
+    const { speaker } = await boot();
+    await onboard(speaker, false);
+    session!.actions.saveKeypadEntry({ customerId: null, newName: 'Ramesh', newNickname: ' doodh wala ', kind: 'credit', paise: 80_00 });
+    await until(() => session!.state.customers.some((c) => c.name === 'Ramesh'));
+    const row = session!.state.customers.find((c) => c.name === 'Ramesh')!;
+    expect(row.nickname).toBe('doodh wala');
+    expect(row.aliases).toContain('doodh wala');
+    // a blank nickname is no nickname
+    session!.actions.saveKeypadEntry({ customerId: null, newName: 'Sohan', newNickname: '   ', kind: 'credit', paise: 10_00 });
+    await until(() => session!.state.customers.some((c) => c.name === 'Sohan'));
+    expect(session!.state.customers.find((c) => c.name === 'Sohan')!.nickname).toBeUndefined();
+  });
+
   it('a new spoken name offers Yes and No, and tapping Yes answers like saying it', async () => {
     const { speaker } = await boot();
     await onboard(speaker, false);

@@ -138,7 +138,7 @@ export interface Actions {
   setConsent(customerId: string, optIn: boolean): void;
   prepareReminder(customerId: string): void;
   deleteAll(): void;
-  saveKeypadEntry(input: { customerId: string | null; newName: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): void;
+  saveKeypadEntry(input: { customerId: string | null; newName: string | null; newNickname?: string | null; kind: 'credit' | 'payment'; paise: number; at?: number }): void;
   /** Opens the Add entry screen. */
   openAddEntry(preset?: AddPreset): void;
   /** Removes one entry by hand. It is reversed, not erased, so `restoreEntry` can bring it back. */
