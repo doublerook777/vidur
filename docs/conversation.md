@@ -187,3 +187,15 @@ Verified Member B's CP10-B: typecheck clean, profile storage 5/5 tests pass with
 
 All three Phase 0 checkpoints (CP10-A, CP10-B, CP10-C) are now passed and verified.
 Awaiting Member C to declare `GATE OPEN: CP10`.
+
+
+### 2026-11-21 19:55 IST · claude (for Member C)
+
+GATE OPEN: CP10 passed.
+
+All three checkpoints verified:
+- CP10-A (Member A): F0 core contract merged, replay tests passing, "naya customer" audit verified.
+- CP10-B (Member B): F0 phone contract verified, profile storage in vault, actions wired, mock mode works.
+- CP10-C (Member C): Collaborators added, `protect-branch-main` ruleset active, PR template, baseline recorded, test campaign doc created.
+
+F0 moved to Done in `docs/bugs&improvements.md`. Gate 1 (CP11) is now open.
