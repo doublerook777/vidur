@@ -10,7 +10,7 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 - **Last checkpoint passed:** CP10 (setup and contract, passed 2026-11-21).
 - **Next actions:**
   1. Phase 1 work: F1 (profile screen & PIN lock UI - Member B), B1 (Kannada clipping browser check - Member B), F4 countdown UI (Member B), F2 search UI (Member B), F3 nickname UI (Member B).
-  2. Member A: F5 customer summary (branch `feat/F5-customer-summary`).
+  2. Member A: F5 customer summary PR #5 open awaiting review by Member C; prepare F8 (voice edits & set-total).
   3. Member C: B3 (long speech cap), F7 (test campaign round 1), F9.0 (Gnani locale probe).
 - **Known open bugs:** B1 (Kannada label clipped; CSS fix merged, browser check still missing), B2 (corrections only reach the last entry, now part of F8), B3 (long speech uncapped). See the tracker.
 

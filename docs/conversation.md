@@ -199,3 +199,28 @@ All three checkpoints verified:
 - CP10-C (Member C): Collaborators added, `protect-branch-main` ruleset active, PR template, baseline recorded, test campaign doc created.
 
 F0 moved to Done in `docs/bugs&improvements.md`. Gate 1 (CP11) is now open.
+
+### 2026-11-21 20:00 IST · Antigravity (for Member A)
+
+PR OPEN: F5 (Voiced Customer Summary) -> PR #5 (`feat/F5-customer-summary`).
+Reviewer: Member C.
+
+What was built & verified:
+1. **Templates (`packages/core/src/i18n/templates.ts`)**:
+   - Registered `summary_customer`, `summary_advance`, `summary_settled`, `summary_none` (plus `customer_summary` and `customer_summary_none` aliases), `days_ago`, `entry_kind_credit`, `entry_kind_payment`.
+   - Pure facts only in `en`, `hi`, `kn`: balance in words, last entry kind/amount/how long ago, 30-day count. Zero judgment/shaming words, no lending/interest words.
+2. **Intent Detection (`packages/core/src/intent/`)**:
+   - Added `customer_summary` to canonical `INTENTS` in `packages/core/src/intent/types.ts` and `eval/golden/schema.ts`.
+   - Distinct cue parsing in `intent.ts`: cues like `summary`, `details`, `about`, `hisaab batao`, `bagge heli`, etc. Existing balance queries remain 100% unaffected.
+3. **Dialogue Engine (`packages/core/src/dialogue/engine.ts`)**:
+   - Added mode `'summary'` in `Work`.
+   - Relative time resolution (`howLongAgo`): today, yesterday, the day before yesterday, X days ago.
+   - Public method `dialogue.summaryFor(customerId): Reply[]` for Member B's "Hear summary" button.
+4. **Golden Utterances (`eval/golden/utterances.jsonl`)**:
+   - Appended 20 golden utterances (`G-EN-101..105`, `G-HI-101..105`, `G-KN-101..105`, `G-HL-101..105`) with expected intent `customer_summary`.
+5. **Testing & Invariants**:
+   - Full suite passes: `typecheck`, `lint`, and `scan:secrets` clean.
+   - Golden schema validation (`validate.test.ts`), dialogue tests (`dialogue.test.ts` for all 4 cases across all 3 languages + programmatic API), purity test (`purity.test.ts`), and red-team guardrails (`redteam.test.ts` 84/84) pass 100%.
+
+Member B note: `dialogue.summaryFor(customerId)` is ready for the "Hear summary" button on the customer screen.
+Member C: PR #5 is ready for your review and merge.
