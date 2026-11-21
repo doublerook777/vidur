@@ -470,6 +470,18 @@
 .totals-value-credit { color: var(--color-card-text); }
 .totals-payment .totals-value { font-size: 28px; color: var(--color-card-text); }
 .totals-payment .totals-label { order: 1; }
+
+/* On narrow phones (360/390px) the notch button overlaps the paid row’s right
+   side: in Kannada and Hindi the label/value run under it. Wrap the row and
+   cap its width so every line clears the button (English fits on one line). */
+@media (max-width: 390px) {
+  :lang(kn) .totals-payment,
+  :lang(hi) .totals-payment {
+    flex-wrap: wrap;
+    max-width: 130px;
+  }
+}
+
 .totals-people-value { font-family: var(--font-display); font-size: 30px; line-height: 1; font-weight: 800; }
 
 /* the notch: a pill in the ground colour whose halo cuts the corner out of the card */
