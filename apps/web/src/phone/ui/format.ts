@@ -1,3 +1,5 @@
+import { aliasesFor, nameKey } from '@vidur/core';
+
 /** Indian digit grouping: 12000000 paise (₹1,20,000) -> '₹1,20,000'; 34000 -> '₹340'. */
 export function formatRupees(paise: number): string {
   const sign = paise < 0 ? '-' : '';
@@ -56,4 +58,20 @@ export function fromLocalInput(v: string): number | null {
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return null;
   const ms = Date.parse(`${v}:00+05:30`);
   return Number.isFinite(ms) ? ms : null;
+}
+
+/**
+ * How a customer is written everywhere: "Ramesh (doodh wale)". Anything that tells namesakes apart, a nickname typed in
+ * by hand or an alias picked up by voice, goes inside the brackets, so both look the same.
+ */
+export function customerLabel(c: { name: string; nickname?: string | undefined; aliases?: string[] | undefined }, lang: string): string {
+  const seen = new Set<string>([nameKey(c.name)]);
+  const extra: string[] = [];
+  for (const w of [c.nickname ?? '', ...aliasesFor(c.aliases ?? [], lang)]) {
+    const k = nameKey(w);
+    if (!w.trim() || !k || seen.has(k)) continue;
+    seen.add(k);
+    extra.push(w.trim());
+  }
+  return extra.length ? `${c.name} (${extra.join(', ')})` : c.name;
 }

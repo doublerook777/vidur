@@ -82,6 +82,8 @@ interface Pending {
   work: Work;
 }
 
+/** An entry saved this recently is still "the one just made": fixing it needs no read-back. */
+const JUST_SAVED_MS = 2 * 60 * 1000;
 const DAY = 24 * 60 * 60 * 1000;
 const ORDINAL_FIRST = /^(pehla|pehle|pahla|pahle|first|1|one|पहला|पहले|ಮೊದಲ|ಮೊದಲನೆ)/i;
 const ORDINAL_THIRD = /^(teesra|tisra|teesre|third|3|three|तीसरा|तीसरे|ಮೂರನೆ|ಮೂರನೇ)/i;
@@ -336,7 +338,7 @@ export class Dialogue {
     }
 
     // Everything below needs a customer, except a day-total query.
-    if (w.mode === 'query' && !ev.customerSpoken && !w.customerId) return this.dayTotals(ev);
+    if (w.mode === 'query' && !ev.customerSpoken && !w.customerId) return ev.overall ? this.overallSummary(ev) : this.dayTotals(ev);
 
     const resolved = this.resolveCustomer(w);
     if (resolved) return resolved;
@@ -348,6 +350,17 @@ export class Dialogue {
     if (w.mode === 'entry' && w.customerId && !w.replaceEntryId && ev.selfCorrected && ev.priorAmountPaise !== undefined && ev.needs.includes('direction')) {
       const prior = ev.priorAmountPaise;
       if (L.activeEntries(w.customerId).some((e) => e.paise === prior)) {
+        w.mode = 'edit';
+        w.ev = { ...ev, intent: 'edit_entry', needs: [], edit: { op: 'set_amount', oldPaise: prior, implicit: true } };
+        return this.editEntry(w);
+      }
+    }
+    // "Kiran ji ne 200 nahi 100 liye" or "... 200 nahi 100 udhaar", said right after Kiran's 200 was saved: the direction is
+    // stated, but the shopkeeper is fixing the entry just made, not adding a second one. Anything older is still a new entry.
+    if (w.mode === 'entry' && w.customerId && !w.replaceEntryId && ev.selfCorrected && ev.priorAmountPaise !== undefined && !ev.needs.includes('direction')) {
+      const prior = ev.priorAmountPaise;
+      const newest = L.lastEntry();
+      if (newest && newest.customerId === w.customerId && newest.paise === prior && newest.kind === (ev.intent === 'payment' ? 'payment' : 'credit') && this.o.clock() - newest.recordedAt < JUST_SAVED_MS) {
         w.mode = 'edit';
         w.ev = { ...ev, intent: 'edit_entry', needs: [], edit: { op: 'set_amount', oldPaise: prior, implicit: true } };
         return this.editEntry(w);
@@ -565,6 +578,28 @@ export class Dialogue {
     return [bal > 0 ? this.r('balance_customer', { name, balance: this.money(bal) }) : bal < 0 ? this.r('balance_advance', { name, advance: this.money(-bal) }) : this.r('balance_zero', { name })];
   }
 
+  /** "Pura hisab": the day's credit, paid and net, then the all-time credit and paid. Numbers come from the ledger, words from a fixed template. */
+  private overallSummary(ev: ParsedEvent): Reply[] {
+    const now = this.o.clock();
+    const token = ev.dateToken ?? 'today';
+    const from = this.dayStart(token, now) ?? startOfDayIst(now);
+    const day = this.o.ledger.totalsBetween(from, from + DAY - 1);
+    const all = this.o.ledger.totalsBetween(0, Number.MAX_SAFE_INTEGER);
+    const when = this.when(token) ?? say(this.o.lang, 'when_today');
+    if (all.creditPaise <= 0 && all.paymentPaise <= 0) return [this.r('balance_day_none', { when })];
+    const net = day.creditPaise - day.paymentPaise;
+    const m = (p: number): string => (p === 0 ? '₹0' : this.money(p)); // amountToSpoken has no zero form
+    return [this.r('summary_all', {
+      when,
+      credit: m(day.creditPaise),
+      paid: m(day.paymentPaise),
+      netKind: say(this.o.lang, net >= 0 ? 'entry_kind_credit' : 'entry_kind_payment'),
+      net: m(Math.abs(net)),
+      totalCredit: m(all.creditPaise),
+      totalPaid: m(all.paymentPaise),
+    })];
+  }
+
   private dayTotals(ev: ParsedEvent): Reply[] {
     const now = this.o.clock();
     const token = ev.dateToken ?? 'today';
@@ -663,7 +698,10 @@ export class Dialogue {
     } else {
       // set_amount
       if (ev.amountPaise === undefined) return this.ask(w, 'amount', this.r('ask_amount'));
-      const readBack = edit.implicit || ev.amountPaise >= LARGE_PAISE || (ev.amountConfidence ?? 1) < CONFIRM_BELOW;
+      // A correction of the entry that was saved a moment ago, with both amounts said, is applied at once: the reply says what changed
+      // and Undo is there. An older entry, or one found only by its old amount, is read back first.
+      const justSaved = L.lastEntry()?.id === target.id && now - target.recordedAt < JUST_SAVED_MS;
+      const readBack = (edit.implicit && !justSaved) || ev.amountPaise >= LARGE_PAISE || (ev.amountConfidence ?? 1) < CONFIRM_BELOW;
       if (!w.confirmed && readBack) {
         return this.ask(w, 'confirm_edit', this.r('confirm_edit', { name, old: this.money(target.paise), amount: this.money(ev.amountPaise) }));
       }

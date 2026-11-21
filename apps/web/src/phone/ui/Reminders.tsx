@@ -1,5 +1,5 @@
 import type { CustomerRow } from '../contract.js';
-import { formatRupees } from './format.js';
+import { customerLabel, formatRupees } from './format.js';
 import { LABELS } from './labels.js';
 import { IconReminders } from './icons.js';
 import type { ScreenProps } from './types.js';
@@ -29,7 +29,7 @@ export function Reminders({ vm, actions, lang }: ScreenProps<RemindersVM>) {
             {dueNowCustomers.map((c) => (
               <li key={c.id} class="due-now-item">
                 <span class="due-now-info">
-                  <span class="due-now-name">{c.name}</span>
+                  <span class="due-now-name">{customerLabel(c, lang)}</span>
                   <span class="due-now-balance">{formatRupees(c.balancePaise)}</span>
                 </span>
                 <button
@@ -52,7 +52,7 @@ export function Reminders({ vm, actions, lang }: ScreenProps<RemindersVM>) {
         {vm.customers.map((c) => (
           <li key={c.id} class="reminder-row" data-feature="reminder-gate">
             <span class="reminder-info">
-              <span class="reminder-name">{c.name}</span>
+              <span class="reminder-name">{customerLabel(c, lang)}</span>
               <span class="reminder-balance">{formatRupees(Math.abs(c.balancePaise))}</span>
               {reminderHint(c.lastReminderAt, c.nextReminderAt, Date.now(), lang) && (
                 <span class="reminder-sent-hint" data-feature="reminder-sent-hint">{reminderHint(c.lastReminderAt, c.nextReminderAt, Date.now(), lang)}</span>

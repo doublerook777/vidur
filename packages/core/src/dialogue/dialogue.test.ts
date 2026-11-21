@@ -1038,3 +1038,46 @@ describe('a spoken correction never becomes a customer (the first usability test
     });
   });
 });
+
+describe('"pura hisab": the whole ledger, not a customer called Pura', () => {
+  async function ledgerWithEntries(lang: SpeechLang) {
+    const s = await setup(lang);
+    const a = await s.ledger.createCustomer('Mohan');
+    const b = await s.ledger.createCustomer('Sunita');
+    await s.ledger.postEntry({ customerId: a.id, kind: 'credit', paise: paise(500), at: T0 - 2 * 24 * 3600_000 }); // earlier
+    await s.ledger.postEntry({ customerId: a.id, kind: 'credit', paise: paise(300), at: T0 - 3600_000 }); // today
+    await s.ledger.postEntry({ customerId: b.id, kind: 'payment', paise: paise(100), at: T0 - 1800_000 }); // today
+    s.d.start();
+    return s;
+  }
+  it.each(['aaj ka pura hisab batao', 'pura hisab batao', 'poora hisab dikhao', 'पूरा हिसाब बताओ'])('%s gives today and all-time totals and creates nobody', async (text) => {
+    const { ledger, say1 } = await ledgerWithEntries('hi');
+    const rs = await say1(text);
+    expect(keys(rs)).toEqual(['summary_all']);
+    expect(rs[0]!.text).toContain('₹300'); // credit today
+    expect(rs[0]!.text).toContain('₹100'); // paid today
+    expect(rs[0]!.text).toContain('₹200'); // net of the day, credit 300 minus paid 100
+    expect(rs[0]!.text).toContain('₹800'); // all-time credit
+    expect(ledger.customers().map((c) => c.name).sort()).toEqual(['Mohan', 'Sunita']);
+  });
+  it('says net paid when the day had more payments than credit', async () => {
+    const s = await setup('en');
+    const a = await s.ledger.createCustomer('Mohan');
+    await s.ledger.postEntry({ customerId: a.id, kind: 'credit', paise: paise(500), at: T0 - 2 * 24 * 3600_000 });
+    await s.ledger.postEntry({ customerId: a.id, kind: 'payment', paise: paise(400), at: T0 - 3600_000 });
+    s.d.start();
+    const rs = await s.say1('show full summary');
+    expect(rs[0]!.text).toBe('today: credit ₹0, paid ₹400, net payment ₹400. Overall: credit ₹500, paid ₹400.');
+  });
+  it('an empty ledger says there is nothing, in every language', async () => {
+    for (const lang of ['en', 'hi', 'kn', 'ta', 'te', 'mr', 'gu'] as const) {
+      const { say1, d } = await setup(lang);
+      d.start();
+      expect(keys(await say1(lang === 'en' ? 'show full summary' : 'pura hisab batao'))).toEqual(['balance_day_none']);
+    }
+  });
+  it('a named customer still gets that customer\'s own summary', async () => {
+    const { say1 } = await ledgerWithEntries('hi');
+    expect(keys(await say1('Mohan ka hisab batao'))).toEqual(['summary_customer']);
+  });
+});

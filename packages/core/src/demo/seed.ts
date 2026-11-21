@@ -145,8 +145,11 @@ const SPECS: SeedSpec[] = [
   },
 ];
 
-/** Exactly two customers opt in to reminders. */
-const CONSENT_TRUE = new Set(['ramesh_milk', 'sunita']);
+/**
+ * Demo customers are opted in to reminders, except these three (so both states can be shown). Customers added by the
+ * shopkeeper are never opted in: that stays a deliberate choice per customer.
+ */
+const CONSENT_FALSE = new Set(['mohan', 'geeta', 'neha']);
 
 /**
  * Create the 12 synthetic customers and their history through the Ledger API
@@ -177,7 +180,7 @@ export async function seedDemoLedger(
       });
     }
 
-    await ledger.setConsent(customer.id, CONSENT_TRUE.has(spec.key));
+    await ledger.setConsent(customer.id, !CONSENT_FALSE.has(spec.key));
   }
 
   // Future-promise note for Mohan (never posted as a payment).

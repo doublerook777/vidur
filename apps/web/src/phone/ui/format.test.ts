@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { dayKey, formatDay, formatDayLong, formatTime, formatWhen, fromLocalInput, isBackdated, toLocalInput } from './format.js';
+import { customerLabel, dayKey, formatDay, formatDayLong, formatTime, formatWhen, fromLocalInput, isBackdated, toLocalInput } from './format.js';
 
 // Wed 11 Nov 2026, 14:30 in India (09:00 UTC)
 const NOW = Date.UTC(2026, 10, 11, 9, 0);
@@ -34,5 +34,19 @@ describe('dates are shown in India time', () => {
     expect(fromLocalInput('2026-11-11T14:30')).toBe(NOW);
     expect(fromLocalInput('not a date')).toBeNull();
     expect(fromLocalInput('')).toBeNull();
+  });
+});
+
+describe('customerLabel: every nickname and alias goes inside brackets', () => {
+  it('writes a typed nickname and the voice aliases the same way', () => {
+    expect(customerLabel({ name: 'Ramesh' }, 'en')).toBe('Ramesh');
+    expect(customerLabel({ name: 'Ramesh', nickname: 'dairy' }, 'en')).toBe('Ramesh (dairy)');
+    expect(customerLabel({ name: 'Ramesh', aliases: ['doodh wale', 'दूध वाले', 'ಹಾಲಿನವರು'] }, 'en')).toBe('Ramesh (doodh wale)');
+    expect(customerLabel({ name: 'Ramesh', aliases: ['doodh wale', 'दूध वाले', 'ಹಾಲಿನವರು'] }, 'hi')).toBe('Ramesh (दूध वाले)');
+    expect(customerLabel({ name: 'Ramesh', nickname: 'dairy', aliases: ['doodh wale'] }, 'en')).toBe('Ramesh (dairy, doodh wale)');
+  });
+  it('does not repeat the name or a nickname that is also an alias', () => {
+    expect(customerLabel({ name: 'Ramesh', nickname: 'Ramesh' }, 'en')).toBe('Ramesh');
+    expect(customerLabel({ name: 'Ramesh', nickname: 'dairy', aliases: ['Dairy'] }, 'en')).toBe('Ramesh (dairy)');
   });
 });

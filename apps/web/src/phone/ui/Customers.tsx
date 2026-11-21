@@ -1,8 +1,8 @@
 import { useState } from 'preact/hooks';
 import type { CustomerRow } from '../contract.js';
-import { formatRupees } from './format.js';
+import { customerLabel, formatRupees } from './format.js';
 import { LABELS } from './labels.js';
-import { aliasesFor, searchCustomers } from '@vidur/core';
+import { searchCustomers } from '@vidur/core';
 
 import { IconArrowDown, IconArrowUp, IconCustomers, IconPlus } from './icons.js';
 import type { ScreenProps } from './types.js';
@@ -86,8 +86,7 @@ export function Customers({ vm, actions, lang }: ScreenProps<CustomersVM>) {
                     <IconCustomers size={26} />
                   </span>
                   <span class="customer-info">
-                    <span class="customer-name">{c.nickname ? `${c.name} (${c.nickname})` : c.name}</span>
-                    {c.aliases.length > 0 && <span class="customer-aliases">{aliasesFor(c.aliases, lang).join(', ')}</span>}
+                    <span class="customer-name">{customerLabel(c, lang)}</span>
                   </span>
                   <span class="customer-balance">
                     <span class="customer-balance-direction">
