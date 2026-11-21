@@ -548,3 +548,12 @@ CHECKPOINT: CP14-A and CP14-C done by Member C. **CP14 is not passed: CP14-B is 
 - For A, two decisions with a native speaker, both in the tracker: **F7-3** (under noise Kannada speech was heard as ₹110 instead of ₹410 and saved without a question; the parser cannot know) and **F7-4** (`ಸಾಲ` makes the guardrail refuse "ಸುನೀತಾ 300 ಸಾಲ" as lending, though it is also on the credit list).
 - Bundle budget: the Phase 0 budget of 83,000 B was already exceeded (about 107 KB now). CI now enforces 112,000 B (`npm run check:size`). If a PR needs more, say what grew in `progress.md` first.
 - Reminder (again): code goes in by PR; no direct pushes to `main`, and a checkpoint is set by the member who runs it.
+
+### 2026-11-22 03:20 IST · claude (for Member A and Member B)
+
+DECISION (owner): the reminder gap is **2 days instead of 7**, and the lock now starts when a reminder was **really sent**, not when the button is pressed (a cancelled share used to lock the customer for a week).
+- `REMINDER_MIN_GAP_MS` is 2 days (`gate.ts`); compliance test, dialogue test, README, CLAUDE.md, about.md, release notes, showcase text updated. The gate is still the single decision point and still needs opt-in and a balance due.
+- The dialogue engine no longer records a reminder when it prepares the text. The phone records it: when the share sheet reports success, or when the shopkeeper taps "Yes, I sent it" after WhatsApp was opened or the text was copied (WhatsApp cannot tell us whether the message was sent). "No, not sent" records nothing.
+- New: `confirmReminderSent`, `askReminderSent`, `dismissReminderConfirm` in `contract.ts`; `ReminderConfirm` card; `lastReminderAt` and `nextReminderAt` on `CustomerRow`; a "Sent 22 Nov · next 24 Nov" line on each Reminders row and on the customer screen.
+- B: please look at the confirm card on a real phone (it sits above the nav). A: the new strings in hi and kn need a native-speaker look (keys are in `KN_REVIEW`); ta, te, mr and gu are not reviewed.
+- Checks: typecheck, lint, 1,773 tests, red-team, e2e 126/126 (new checks for the question, the no and yes paths, and the hint).

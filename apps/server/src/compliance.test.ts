@@ -90,7 +90,7 @@ describe('rule: reminders are shopkeeper-triggered, opt-in and never sent by the
   it('the reminder gate is the only place that decides, and it needs consent', () => {
     const gate = read('packages/core/src/reminders/gate.ts');
     expect(gate).toMatch(/no_consent/);
-    expect(gate).toMatch(/REMINDER_MIN_GAP_MS = 7 \* 24/);
+    expect(gate).toMatch(/REMINDER_MIN_GAP_MS = 2 \* 24/);
   });
 });
 

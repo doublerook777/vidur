@@ -60,7 +60,7 @@ export const FEATURES: Record<FeatureId, FeatureExplanation> = {
   },
   'reminder-gate': {
     title: 'Reminder gate',
-    what: 'Blocks any reminder unless the customer has opted in, and allows at most one per customer per 7 days.',
+    what: 'Blocks any reminder unless the customer has opted in, and allows at most one per customer per 2 days.',
     why: 'It keeps your reminders polite and legal to send — no chasing, no embarrassment for regulars.',
   },
   'consent-toggle': {

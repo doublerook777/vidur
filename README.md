@@ -48,7 +48,7 @@ Vidur takes the other path. It is fast, because speaking is faster than typing. 
 - **Barge-in:** talk over the app while it is speaking and it stops at once.
 - **Asks when unsure:** *which* Ramesh? credit or payment? is this ₹1,20,000 right? A question stays open for 60 seconds with a visual countdown and nothing awaiting an answer is saved.
 - **Customer search & nicknames:** instant search by name, nickname or phone, and automatic nickname prompting for same-named customers.
-- **WhatsApp reminders, opt-in:** polite reminder links generated for WhatsApp (`wa.me`) with a 7-day rate limit and consent tracking.
+- **WhatsApp reminders, opt-in:** polite reminder links generated for WhatsApp (`wa.me`) with a 2-day rate limit and consent tracking.
 - **Local profile & PIN lock:** shop name and owner name customization, with an optional local 4-6 digit screen lock.
 - **Notes, not payments:** "Mohan kal paanch sau dega" (Mohan will pay 500 tomorrow) is saved as a note and never counts toward the balance.
 - **Refuses what it should:** threats, shaming, interest and lending are declined politely.
@@ -266,7 +266,7 @@ Each rule below is enforced in code and proved by a test. `apps/server/src/compl
 
 - **The agent says it is an AI in its first turn,** in the user's language. Every reply leaves through one function that puts the disclosure first until it has been said.
 - **No voice cloning.** Only stock Timbre voices are requested.
-- **Reminders are opt-in,** at most one per 7 days, in fixed polite wording, and the app only prepares the text for the shopkeeper to share.
+- **Reminders are opt-in,** at most one per 2 days, in fixed polite wording, and the app only prepares the text for the shopkeeper to share.
 - **No lending, interest, credit judgments or threats,** checked before anything else runs. 83 red-team utterances leave the ledger byte-identical.
 - **Prompt injection cannot change the ledger,** because the parser decides and the LLM only proposes.
 - **On-device, encrypted data:** AES-GCM with a non-extractable WebCrypto key. Transcripts are purged after 24 hours. "Delete all data" in Settings removes everything.

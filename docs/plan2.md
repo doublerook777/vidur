@@ -15,7 +15,7 @@ Companion files, all in `docs/`:
 | Topic | Decision |
 |---|---|
 | Sign-up and profiles | **Local profile only.** Stored encrypted on the phone. No accounts, no login server, no sync. The "server stores nothing" promise stays. |
-| Reminders and WhatsApp | **The app prepares the message and opens WhatsApp; the shopkeeper taps send.** Opt-in per customer, balance due, at most one per 7 days: all unchanged. No WhatsApp Business API, no scheduled server sends. |
+| Reminders and WhatsApp | **The app prepares the message and opens WhatsApp; the shopkeeper taps send.** Opt-in per customer, balance due, at most one per 2 days (changed from 7 on 2026-11-22 at the owner's request). No WhatsApp Business API, no scheduled server sends. |
 | "More training samples" | **Manual testing.** Nothing is trained. We test by hand, find where it fails, fix it, and add the failed line to the golden, held-out or red-team set so it stays fixed. |
 | Deployment | **Stay on Render's free plan.** Revisit hosting once everything else is done. |
 | Yes/no window | Raise from 30 s to **60 s**, counted from when the question has finished being spoken. |
@@ -137,9 +137,9 @@ Acceptance: golden utterances for the new intent in all three languages plus Hin
 
 - **Phone number:** optional field on the customer (add and edit), stored in the encrypted ledger. Validate 10 digits (India) or an international number with a country code; store normalised digits only.
 - **Send flow:** on the Reminders screen and the customer screen, **Remind on WhatsApp** opens `https://wa.me/<digits>?text=<encoded reminder text>`. The text is the existing fixed `reminder_text` template. If the customer has no phone number, fall back to today's share sheet.
-- The gate does not change: `canRemind()` in `packages/core/src/reminders/gate.ts` stays the single decision point. The button is disabled with a reason shown when consent is missing, nothing is due or a reminder went out in the last 7 days.
+- The gate does not change: `canRemind()` in `packages/core/src/reminders/gate.ts` stays the single decision point. The button is disabled with a reason shown when consent is missing, nothing is due or a reminder went out in the last 2 days.
 - The reminder is recorded when the shopkeeper taps the button (existing `recordReminder` behaviour). The app cannot know if the message was actually sent in WhatsApp; say so in the tracker so nobody builds on that assumption.
-- **"Automated" here means less work, not automatic sending.** Add a **Due now** list at the top of Reminders: customers who are opted in, owe money and are past the 7-day gap, each with a one-tap button. No timers, no background sends, no push.
+- **"Automated" here means less work, not automatic sending.** Add a **Due now** list at the top of Reminders: customers who are opted in, owe money and are past the 2-day gap, each with a one-tap button. No timers, no background sends, no push.
 - Privacy: the phone number never reaches our server (the gateway sees no new fields, add that to the privacy log test). The text goes to WhatsApp only when the shopkeeper taps.
 - Never add any threat, deadline pressure or shaming wording to the template. Keep it polite and short.
 

@@ -213,6 +213,7 @@ try {
   const customersBefore = await state(page, 's.customers.length');
   await page.evaluate(() => window.__vidur.onTranscript({ text: 'Kiran ka 100 udhaar', lang: 'hi', sttMs: 0, audioMs: 0 }));
   await waitState(page, "s.card?.state === 'needs_answer'", 4000);
+  await page.waitForSelector('.answer-progress-bar', { timeout: 3000 }).catch(() => undefined); // the bar mounts a tick after the buttons
   check('a new name shows Yes and No buttons with countdown (F4)', (await page.locator('.answer-btn').count()) === 2 && (await page.locator('.answer-progress-bar').count()) === 1);
   await page.locator('.answer-no').click();
   await waitState(page, "s.card?.state === 'needs_answer' && !s.card.answers", 4000);
@@ -391,6 +392,31 @@ try {
   await sleep(250);
   check('customer phone is saved and shown (F6)', /9876543210/.test(await page.locator('.detail-nickname').nth(2).innerText()));
   check('customer screen has Remind on WhatsApp button (F6)', (await page.locator('[data-feature="remind-whatsapp"]').count()) === 1);
+
+  // The 2-day reminder lock starts when the shopkeeper says it was sent, not when the button is pressed.
+  await page.evaluate(async () => {
+    window.open = () => null;
+    window.__vidur.actions.saveKeypadEntry({ customerId: null, newName: 'Zed Reminder', kind: 'credit', paise: 5000 });
+  });
+  await sleep(400);
+  const zedId = await state(page, "s.customers.find((c) => c.name === 'Zed Reminder')?.id");
+  await page.evaluate((id) => { window.__vidur.actions.setConsent(id, true); window.__vidur.actions.updateCustomer(id, { phone: '9876543210' }); }, zedId);
+  await sleep(300);
+  await page.evaluate((id) => window.__vidur.actions.remindOnWhatsApp(id), zedId);
+  await sleep(300);
+  check('after WhatsApp is opened the app asks whether the reminder was sent, and nothing is locked yet', (await page.locator('[data-feature="reminder-confirm"]').count()) === 1 && (await state(page, `s.customers.find((c) => c.id === '${zedId}').lastReminderAt`)) === null);
+  await page.locator('[data-feature="reminder-confirm-no"]').click();
+  await sleep(200);
+  check('"No, not sent" closes the question and the customer can still be reminded', (await page.locator('[data-feature="reminder-confirm"]').count()) === 0 && (await state(page, `s.customers.find((c) => c.id === '${zedId}').canRemind`)) === true);
+  await page.evaluate((id) => window.__vidur.actions.remindOnWhatsApp(id), zedId);
+  await sleep(300);
+  await page.locator('[data-feature="reminder-confirm-yes"]').click();
+  await sleep(300);
+  check('"Yes, I sent it" starts the lock: reminding is blocked and the next date is two days out', (await state(page, `s.customers.find((c) => c.id === '${zedId}').canRemind`)) === false && (await state(page, `(() => { const c = s.customers.find((c) => c.id === '${zedId}'); return c.nextReminderAt - c.lastReminderAt; })()`)) === 2 * 24 * 3600 * 1000);
+  await page.evaluate(() => window.__vidur.actions.navigate('reminders'));
+  await sleep(250);
+  const zedHint = await page.locator('.reminder-row', { hasText: 'Zed Reminder' }).locator('[data-feature="reminder-sent-hint"]').innerText().catch(() => '');
+  check('the Reminders list shows the sent date and the next date for that customer', /\d.* · .*\d/.test(zedHint), zedHint);
 
   // An entry can be changed by hand from its menu, and the change can be taken back.
   await page.evaluate(() => window.__vidur.actions.navigate('history'));

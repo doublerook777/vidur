@@ -38,7 +38,7 @@ Vidur v0.2.0 delivers the full implementation of Post-Hackathon Plan 2, expandin
 ### 7. WhatsApp Reminders (F6)
 - Optional 10-digit customer phone number stored encrypted on the phone.
 - "Remind on WhatsApp" generates a `https://wa.me/<digits>?text=...` link with polite reminder text and share-sheet fallback.
-- Strictly rate-limited (at most once every 7 days per customer) and gated on explicit customer consent.
+- Strictly rate-limited (at most once every 2 days per customer) and gated on explicit customer consent.
 - "Due now" list on the Reminders screen for quick access.
 
 ### 8. Voice & Manual Entry Editing (F8)

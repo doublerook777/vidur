@@ -13,6 +13,7 @@ import { CustomerDetail } from './phone/ui/CustomerDetail.js';
 import { Customers } from './phone/ui/Customers.js';
 import { History } from './phone/ui/History.js';
 import { Toast } from './phone/ui/Toast.js';
+import { ReminderConfirm } from './phone/ui/ReminderConfirm.js';
 import { Home } from './phone/ui/Home.js';
 import { Keypad } from './phone/ui/Keypad.js';
 import { Onboarding } from './phone/ui/Onboarding.js';
@@ -62,8 +63,9 @@ function App({ session }: { session: PhoneSession }) {
     const r = s.shareReminder;
     if (!r) return;
     session.store.update({ shareReminder: null });
-    if (navigator.share) void navigator.share({ text: r.text }).catch(() => undefined);
-    else void navigator.clipboard?.writeText(r.text).catch(() => undefined);
+    // Sent means the share sheet reported success. A cancelled share (it rejects) records nothing, so the customer is not locked.
+    if (navigator.share) void navigator.share({ text: r.text }).then(() => a.confirmReminderSent(r.customerId)).catch(() => undefined);
+    else void navigator.clipboard?.writeText(r.text).then(() => a.askReminderSent(r.customerId)).catch(() => undefined);
   }, [s.shareReminder, session]);
 
   const settings: SettingsVM = {
@@ -110,6 +112,7 @@ function App({ session }: { session: PhoneSession }) {
     <>
       {screen}
       {s.toast && <Toast vm={s.toast} actions={a} lang={s.lang} />}
+      {s.reminderConfirm && <ReminderConfirm vm={s.reminderConfirm} actions={a} lang={s.lang} />}
     </>
   );
 }

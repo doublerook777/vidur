@@ -588,7 +588,8 @@ export class Dialogue {
       return [this.r('unknown_customer', { name })];
     }
     const text = say(this.o.lang, 'reminder_text', { name, amount: this.money(L.balance(id)) });
-    await L.recordReminder(id);
+    // Not recorded here: the 2-day lock starts when the shopkeeper has really sent it (the phone calls recordReminder after the
+    // share sheet reports success, or after they say "yes, I sent it"). A cancelled share must not lock the customer.
     return [this.r('reminder_ready', { name }, { type: 'share_reminder', customerId: id, text })];
   }
 

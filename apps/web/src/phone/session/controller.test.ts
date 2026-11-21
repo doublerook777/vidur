@@ -564,10 +564,38 @@ describe('adding and removing entries by hand, and tapping answers', () => {
         await until(() => openedUrls.length > 0);
         expect(openedUrls[0]).toContain('https://wa.me/919876543210?text=');
         expect(openedUrls[0]).toContain(encodeURIComponent('Suresh'));
-        expect(session!.debug.ledger.lastReminderAt(c.id)).not.toBeNull();
+        // handing the text to WhatsApp is not a send: nothing is locked until the shopkeeper says yes
+        expect(session!.debug.ledger.lastReminderAt(c.id)).toBeNull();
+        expect(session!.state.reminderConfirm?.customerId).toBe(c.id);
+
+        session!.actions.dismissReminderConfirm();
+        expect(session!.state.reminderConfirm).toBeNull();
+        expect(session!.debug.ledger.lastReminderAt(c.id)).toBeNull(); // "no, not sent": still free to remind
+
+        session!.actions.remindOnWhatsApp(c.id);
+        await until(() => session!.state.reminderConfirm !== null);
+        session!.actions.confirmReminderSent(c.id);
+        await until(() => session!.debug.ledger.lastReminderAt(c.id) !== null);
+        expect(session!.state.reminderConfirm).toBeNull();
+        const row = session!.state.customers.find((x) => x.id === c.id)!;
+        expect(row.canRemind).toBe(false); // locked now
+        expect(row.nextReminderAt! - row.lastReminderAt!).toBe(2 * 24 * 60 * 60 * 1000);
       } finally {
         globalThis.window = origWindow;
       }
+    });
+
+    it('F6 preparing a share (no phone) does not lock the customer until it is confirmed', async () => {
+      const { speaker } = await boot();
+      await onboard(speaker, false);
+      const c = await session!.debug.ledger.createCustomer('Mala');
+      await session!.debug.ledger.setConsent(c.id, true);
+      await session!.debug.ledger.postEntry({ customerId: c.id, kind: 'credit', paise: 9000, at: Date.now() });
+      session!.actions.prepareReminder(c.id);
+      await until(() => session!.state.shareReminder !== null);
+      expect(session!.debug.ledger.lastReminderAt(c.id)).toBeNull();
+      session!.actions.confirmReminderSent(c.id);
+      await until(() => session!.debug.ledger.lastReminderAt(c.id) !== null);
     });
 
     it('F6 remindOnWhatsApp does not send if reminder gate blocks', async () => {

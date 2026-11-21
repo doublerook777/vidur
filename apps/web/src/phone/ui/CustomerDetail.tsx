@@ -9,6 +9,7 @@ import { EntryRow } from './Feed.js';
 import type { ScreenProps } from './types.js';
 import { AiBadge } from './AiBadge.js';
 import { BottomNav } from './BottomNav.js';
+import { reminderHint } from './reminderHint.js';
 
 export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenProps<CustomerDetailVM> & { now?: number }) {
   const t = LABELS[lang];
@@ -317,6 +318,9 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
           </button>
         </div>
         {blockedReason && <p class="detail-reminder-blocked">{blockedReason}</p>}
+        {reminderHint(vm.customer.lastReminderAt, vm.customer.nextReminderAt, Date.now(), lang) && (
+          <p class="reminder-sent-hint" data-feature="reminder-sent-hint">{reminderHint(vm.customer.lastReminderAt, vm.customer.nextReminderAt, Date.now(), lang)}</p>
+        )}
         <label class="consent-row">
           <span class="consent-label">{t.reminderOptIn}</span>
           <button
