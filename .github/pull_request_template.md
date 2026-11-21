@@ -1,6 +1,6 @@
 ## What and why
 
-<!-- One or two sentences. Work package id from docs/plan2.md (F0 to F7, B1 to B3). -->
+<!-- One or two sentences. Work package id, if there is one. -->
 
 Refs:
 
@@ -25,6 +25,4 @@ Refs:
 
 ## Bookkeeping
 
-- [ ] Tracker row updated in `docs/bugs&improvements.md`
-- [ ] Log line in `docs/progress.md`, `DONE:` message in `docs/conversation.md` after merge
 - [ ] Compliance-sensitive code changed? yes / no
