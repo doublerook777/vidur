@@ -23,13 +23,15 @@ const DAY = 24 * 3600 * 1000;
 export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
   const t = LABELS[lang];
   const now = vm.now ?? Date.now();
-  const [digits, setDigits] = useState('');
-  const [kind, setKind] = useState<'credit' | 'payment'>(vm.preset?.kind ?? 'credit');
+  const editing = vm.preset?.editEntry ?? null;
+  const [digits, setDigits] = useState(editing ? String(Math.round(editing.paise / 100)) : '');
+  const [kind, setKind] = useState<'credit' | 'payment'>(editing?.kind ?? vm.preset?.kind ?? 'credit');
   const [customerId, setCustomerId] = useState<string | null>(vm.preset?.customerId ?? null);
   const [newName, setNewName] = useState('');
   const [newNickname, setNewNickname] = useState('');
-  const [when, setWhen] = useState<When>('now');
-  const [picked, setPicked] = useState(toLocalInput(now));
+  // Changing an entry starts from the time it already has.
+  const [when, setWhen] = useState<When>(editing ? 'pick' : 'now');
+  const [picked, setPicked] = useState(toLocalInput(editing ? editing.at : now));
 
   const newFirst = vm.preset?.newCustomer === true;
   const typed = newName.trim();
@@ -70,11 +72,12 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
   const pickedMs = when === 'pick' ? fromLocalInput(picked) : null;
   const at = when === 'now' ? undefined : when === 'yesterday' ? now - DAY : (pickedMs ?? undefined);
   const timeOk = when !== 'pick' || (pickedMs !== null && pickedMs <= now + 60_000);
-  const canSave = rupees > 0 && (customerId !== null || newName.trim().length > 0) && timeOk;
+  const canSave = rupees > 0 && (editing !== null || customerId !== null || newName.trim().length > 0) && timeOk;
 
   const backspace = () => setDigits((d) => d.slice(0, -1));
   const press = (k: string) => setDigits((prev) => (prev.length + k.length > 7 || (prev === '' && k.startsWith('0')) ? prev : prev + k));
-  const back = () => actions.navigate(vm.preset?.customerId ? 'customer' : 'home');
+  const back = () => actions.navigate(editing ? (vm.preset?.returnTo ?? 'home') : vm.preset?.customerId ? 'customer' : 'home');
+  const customerName = editing ? (vm.customers.find((c) => c.id === vm.preset?.customerId)?.name ?? '') : '';
 
   return (
     <main class="screen screen-keypad" data-feature="keypad">
@@ -82,7 +85,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
         <button type="button" class="icon-btn" aria-label={t.back} onClick={back}>
           <IconBack size={24} />
         </button>
-        <h1 class="screen-title">{t.addEntry}</h1>
+        <h1 class="screen-title">{editing ? t.editEntry : t.addEntry}</h1>
         <AiBadge vm={{}} actions={actions} lang={lang} />
       </header>
 
@@ -101,7 +104,10 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
         {formatRupees(paise)}
       </output>
 
-      <section class="keypad-customer" aria-label={t.chooseCustomer}>
+      {editing ? (
+        <p class="keypad-editing-customer">{customerName}</p>
+      ) : null}
+      <section class="keypad-customer" aria-label={t.chooseCustomer} hidden={editing !== null}>
         {newFirst && nameBox}
         {newFirst && nicknameBox}
         <ul class="keypad-customer-list">
@@ -127,7 +133,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
       </section>
 
       <section class="keypad-when" aria-label={t.whenTitle}>
-        <div class="when-row" role="group" aria-label={t.whenTitle}>
+        <div class="when-row" role="group" aria-label={t.whenTitle} hidden={editing !== null}>
           {(['now', 'yesterday', 'pick'] as const).map((w) => (
             <button key={w} type="button" class={`btn when-btn${when === w ? ' when-btn-active' : ''}`} aria-pressed={when === w} onClick={() => setWhen(w)}>
               {w === 'now' ? t.whenNow : w === 'yesterday' ? t.whenYesterday : t.whenPick}
@@ -161,7 +167,10 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
         type="button"
         class="btn btn-save"
         disabled={!canSave}
-        onClick={() => actions.saveKeypadEntry({ customerId, newName: newName.trim() === '' ? null : newName.trim(), ...(newNickname.trim() !== '' && newName.trim() !== '' ? { newNickname: newNickname.trim() } : {}), kind, paise, ...(at !== undefined ? { at } : {}) })}
+        onClick={() =>
+          editing
+            ? actions.saveEntryEdit({ entryId: editing.id, kind, paise, ...(pickedMs !== null ? { at: pickedMs } : {}) })
+            : actions.saveKeypadEntry({ customerId, newName: newName.trim() === '' ? null : newName.trim(), ...(newNickname.trim() !== '' && newName.trim() !== '' ? { newNickname: newNickname.trim() } : {}), kind, paise, ...(at !== undefined ? { at } : {}) })}
       >
         {t.save}
       </button>

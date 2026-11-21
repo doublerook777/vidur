@@ -139,6 +139,14 @@ export function IconTrash({ size = 20 }: IconProps) {
   );
 }
 
+export function IconEdit({ size = 20 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4" />
+    </svg>
+  );
+}
+
 export function IconX({ size = 20 }: IconProps) {
   return (
     <svg {...base(size)}>

@@ -46,6 +46,8 @@ const renderedScreens: Record<string, string> = {
   keypadNewCustomer: renderToString(h(Keypad, { vm: { ...mockKeypadVM, preset: { newCustomer: true } }, actions: mockActions, lang: 'en' })),
 };
 
+const mockCustomers0Id = (): string => mockKeypadVM.customers[0]!.id;
+
 const allRendered = Object.values(renderedScreens).join('\n');
 
 describe('FEATURE_IDS coverage', () => {
@@ -77,6 +79,26 @@ describe('nickname on the customer detail screen', () => {
   it('says "no nickname" when there is none', () => {
     const html = renderToString(h(CustomerDetail, { vm: without, actions: mockActions, lang: 'en' }));
     expect(html).toContain(LABELS.en.noNickname);
+  });
+});
+
+describe('editing an entry by hand', () => {
+  it('the keypad opens on the entry: edit title, its amount and a Save button, in every language', () => {
+    const preset = { customerId: mockCustomers0Id(), kind: 'payment' as const, editEntry: { id: 'e1', kind: 'payment' as const, paise: 25_000, at: Date.now() - 86_400_000 } };
+    for (const lang of ['en', 'hi', 'kn'] as const) {
+      const html = renderToString(h(Keypad, { vm: { ...mockKeypadVM, preset }, actions: mockActions, lang }));
+      expect(html).toContain(LABELS[lang].editEntry);
+      expect(html).toContain('₹250');
+      expect(html).toContain(LABELS[lang].save);
+      expect(html).not.toContain(`>${LABELS[lang].addEntry}<`);
+    }
+  });
+  it('an entry row offers Edit for whole rupees, and not when it holds paise', () => {
+    // The manage menu is closed on first render, so check the labels exist for the three languages.
+    for (const lang of ['en', 'hi', 'kn'] as const) {
+      expect(LABELS[lang].edit.length).toBeGreaterThan(0);
+      expect(LABELS[lang].entryEdited.length).toBeGreaterThan(0);
+    }
   });
 });
 

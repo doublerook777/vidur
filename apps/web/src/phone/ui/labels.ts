@@ -17,6 +17,9 @@ export const KN_REVIEW: readonly string[] = [
   'editNickname',
   'nicknameTaken',
   'cancelEdit',
+  'editEntry',
+  'edit',
+  'entryEdited',
   'nicknameHint',
   'phaseThinking',
   'phaseNeedsAnswer',
@@ -98,6 +101,9 @@ export type LabelKey =
   | 'editNickname'
   | 'nicknameTaken'
   | 'cancelEdit'
+  | 'editEntry'
+  | 'edit'
+  | 'entryEdited'
   | 'nicknameHint'
   | 'chooseCustomer'
   | 'amount'
@@ -204,6 +210,9 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     editNickname: 'Edit nickname',
     nicknameTaken: 'Another customer with this name already has this nickname.',
     cancelEdit: 'Cancel',
+    editEntry: 'Edit entry',
+    edit: 'Edit',
+    entryEdited: 'Entry changed',
     nicknameHint: 'A customer with this name exists. Add a nickname, like dairy or school, to tell them apart.',
     chooseCustomer: 'Choose customer',
     amount: 'Amount',
@@ -309,6 +318,9 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     editNickname: 'निकनेम बदलें',
     nicknameTaken: 'इसी नाम के दूसरे ग्राहक का निकनेम यही है।',
     cancelEdit: 'रद्द करें',
+    editEntry: 'एंट्री बदलें',
+    edit: 'बदलें',
+    entryEdited: 'एंट्री बदल दी',
     nicknameHint: 'इस नाम का ग्राहक पहले से है। फ़र्क़ करने के लिए निकनेम जोड़ें, जैसे डेयरी या स्कूल।',
     chooseCustomer: 'ग्राहक चुनें',
     amount: 'रकम',
@@ -414,6 +426,9 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     editNickname: 'ಉಪನಾಮ ಬದಲಿಸಿ',
     nicknameTaken: 'ಇದೇ ಹೆಸರಿನ ಇನ್ನೊಬ್ಬ ಗ್ರಾಹಕರಿಗೆ ಈ ಉಪನಾಮ ಈಗಾಗಲೇ ಇದೆ.',
     cancelEdit: 'ರದ್ದು ಮಾಡಿ',
+    editEntry: 'ದಾಖಲೆ ಬದಲಿಸಿ',
+    edit: 'ಬದಲಿಸಿ',
+    entryEdited: 'ದಾಖಲೆ ಬದಲಾಯಿತು',
     nicknameHint: 'ಈ ಹೆಸರಿನ ಗ್ರಾಹಕರು ಈಗಾಗಲೇ ಇದ್ದಾರೆ. ಬೇರೆ ಮಾಡಲು ಉಪನಾಮ ಸೇರಿಸಿ, ಉದಾಹರಣೆ ಡೇರಿ ಅಥವಾ ಸ್ಕೂಲ್.',
     chooseCustomer: 'ಗ್ರಾಹಕರನ್ನು ಆರಿಸಿ',
     amount: 'ಮೊತ್ತ',

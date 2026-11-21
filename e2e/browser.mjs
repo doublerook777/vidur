@@ -325,6 +325,27 @@ try {
   await page.locator('.detail-nickname-actions .btn-small').first().click();
   await sleep(300);
   check('an empty nickname clears it', await state(page, "!s.customers.some((c) => c.nickname)"));
+  // An entry can be changed by hand from its menu, and the change can be taken back.
+  await page.evaluate(() => window.__vidur.actions.navigate('history'));
+  await sleep(250);
+  const editFrom = await page.evaluate(() => { const e = window.__vidur.state.history.find((h) => h.kind !== 'note' && h.paise !== null && h.paise % 100 === 0); return e ? { id: e.id, kind: e.kind, paise: e.paise, name: e.customerName } : null; });
+  await page.locator('.feed-item-more').first().click();
+  await sleep(150);
+  const editBtn = page.locator('.feed-edit').first();
+  check('an entry menu offers Edit next to Remove', (await editBtn.count()) === 1 && (await page.locator('.feed-remove').count()) >= 1);
+  await editBtn.click();
+  await sleep(250);
+  check('Edit opens the keypad on that entry, with the customer named and no customer list', (await page.locator('.keypad-editing-customer').count()) === 1 && (await page.locator('.keypad-customer').evaluate((el) => el.hidden)));
+  const rowBefore = await state(page, 's.history.length');
+  const wasCredit = await page.locator('.kind-credit').getAttribute('aria-pressed');
+  await page.locator(wasCredit === 'true' ? '.kind-payment' : '.kind-credit').click();
+  await page.locator('.keypad-key', { hasText: /^7$/ }).click();
+  await page.locator('.btn-save').click();
+  await sleep(400);
+  check('saving an edit keeps one entry per row and shows the Entry changed toast with Undo', (await state(page, 's.history.length')) === rowBefore && (await page.locator('.toast-action').count()) === 1);
+  await page.locator('.toast-action').click();
+  await sleep(300);
+  check('Undo on the toast brings the original entry back', await page.evaluate((f) => window.__vidur.state.history.some((h) => h.id === f.id && h.paise === f.paise && h.kind === f.kind), editFrom));
   await page.evaluate(() => window.__vidur.actions.navigate('customers'));
   await sleep(250);
   const sum = await page.evaluate(() => { const st = window.__vidur.state; const c = document.querySelector('.customers-summary'); return { text: c ? c.innerText.replace(/\s+/g, ' ') : '', credit: st.allCredit, payment: st.allPayment, rows: st.customers.reduce((n, x) => n + x.balancePaise, 0) }; });
