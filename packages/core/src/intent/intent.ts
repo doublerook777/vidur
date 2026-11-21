@@ -12,7 +12,7 @@ const W = (xs: string): Set<string> => new Set(xs.split(/\s+/).filter(Boolean).m
 const CREDIT = W(
   'udhaar udhar udhari uddhar baki baaki credit credited khata owes owe owed borrowed took taken balance_due ' +
     'उधार उधारी बाकी बक़ाया उद्धार उद्धरण कर्ज देणे ઉધાર ઉધારી બાકી દેવું கடன் பாக்கி అప్పు బాకీ ' +
-    'ಉಧಾರ ಉದಾರ ಉಧಾರ್ ಉದಾರ್ ಉದಾಹರ್ ಉದಾಹರ ಉದ್ದಾರ್ ಉದ್ದಾರ ಉಧಾರಿ ಉದಾರಿ ಸಾಲ ಬಾಕಿ',
+    'ಉಧಾರ ಉದಾರ ಉಧಾರ್ ಉದಾರ್ ಉದಾಹರ್ ಉದಾಹರ ಉದ್ದಾರ್ ಉದ್ದಾರ ಉದ್ಧಾರ ಉದ್ಧಾರ್ ಉಧಾರಿ ಉದಾರಿ ಸಾಲ ಬಾಕಿ',
 );
 const PAYMENT = W(
   'jama jamaa wapas vapas wapis chukaya chukaye chukai chuka chukaayi paid repaid returned refund refunded settled deposit deposited lautaya lauta ' +

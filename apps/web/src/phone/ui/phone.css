@@ -258,13 +258,16 @@
 .screen-title {
   flex: 1;
   margin: 0;
-  font-size: var(--font-xl);
+  min-width: 0;
+  font-size: clamp(20px, 6.3vw, var(--font-xl)); /* a long word in Tamil or Kannada must leave room for the AI badge on a 360 px phone */
+  overflow-wrap: anywhere;
   font-weight: 800;
   letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 .ai-badge {
+  flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1351,11 +1354,17 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: 
 /* Reminders & WhatsApp (F6) */
 .reminder-buttons-row {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
   width: 100%;
 }
 .btn-remind-wa, .btn-remind-share {
-  flex: 1;
+  flex: 1 1 130px;
+  min-width: 0;
+  height: auto;
+  padding-block: var(--space-2);
+  white-space: normal;
+  text-align: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -537,3 +537,14 @@ CHECKPOINT: CP13-C passed (Member C), and CP13 is back to passed.
 - Synthetic speech pass (Timbre speaks, Prisma listens, parser reads): 36 lines over ta, te, mr and gu, final result all right, no silent wrong amount. Machine voice only; **no speaker has heard any of it**. Balance read 4.9k of 5k before; logged in `progress.md`.
 - A: your core was the better base and held up; the only miss was the fused half word. B: web work stays as is.
 - **Still not done: CP14.** The full regression, the hand walkthrough and the load and timing check have not run, so CP14 and CP15 are not passed. The `v0.2.0` and `cp15` tags on origin are premature; the owner decides whether they stay (I tried to delete them and the harness refused).
+
+### 2026-11-22 02:30 IST · claude (for Member A and Member B)
+
+CHECKPOINT: CP14-A and CP14-C done by Member C. **CP14 is not passed: CP14-B is open.** CP15 is not passed.
+- The owner had the `v0.2.0` and `cp15` tags deleted (they were premature). The log entries that said CP14 and CP15 passed are marked as corrected in `progress.md`.
+- Regression on `main` plus PR: typecheck, lint, 1,776 tests, golden and red-team suites, compliance, secret scan over all history, e2e 122/122, all green.
+- **F7 round 2 redone with real speech** (the old table was never run, one row claimed a Kannada save that actually gets refused): 48 lines in hi, Hinglish, en, kn, Timbre to Prisma to parser. It found a **P0**: Prisma writes साढ़े as `सादे`, so "सादे तीन सौ" (350) was read as ₹300 and saved with no question (F7-1). Also Kannada `ನಾಲ್ಕುನೂರು` read as ₹10 (F7-2). Both fixed with tests and golden lines. Final run: 47 right, 1 wrong.
+- For B: **CP14-B is yours and cannot be done by a script.** Walk the whole app by hand on a real phone in hi, en, kn and once in each of ta, te, mr, gu, and write the checklist (sign-up, add by voice, nickname, search, summary, WhatsApp reminder, PIN lock, delete all) with pass or fail per step in `progress.md`. Please do not mark it from the e2e count. Tamil at 360 px had two overflows (the Customers title pushed the AI badge off the screen; the reminder button); fixed in the same PR, so please look at them on the phone.
+- For A, two decisions with a native speaker, both in the tracker: **F7-3** (under noise Kannada speech was heard as ₹110 instead of ₹410 and saved without a question; the parser cannot know) and **F7-4** (`ಸಾಲ` makes the guardrail refuse "ಸುನೀತಾ 300 ಸಾಲ" as lending, though it is also on the credit list).
+- Bundle budget: the Phase 0 budget of 83,000 B was already exceeded (about 107 KB now). CI now enforces 112,000 B (`npm run check:size`). If a PR needs more, say what grew in `progress.md` first.
+- Reminder (again): code goes in by PR; no direct pushes to `main`, and a checkpoint is set by the member who runs it.
