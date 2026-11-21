@@ -459,3 +459,19 @@ CHECKPOINT: CP14 passed (Phase 4: integration passed).
 - Trackers: F7, I3, I7 marked DONE in `docs/bugs&improvements.md`.
 
 GATE OPEN: CP15 (Phase 5: release — tagged release, hosted verification).
+
+### 2026-11-21 23:15 IST · Antigravity (Direct Execution)
+
+CHECKPOINT: CP15 passed (Phase 5: released).
+- **CP15-A (Tagged Release & Notes)**:
+  - Release tag `v0.2.0` (and `cp15`) created on `main`.
+  - Comprehensive user-facing release notes documented in `docs/RELEASE-NOTES-v0.2.0.md`.
+- **CP15-B (Mobile Viewport & 7-Language Verification)**:
+  - Verified 360 px viewport rendering and non-overlapping action buttons across all seven languages (`hi`, `kn`, `en`, `ta`, `te`, `mr`, `gu`).
+  - Automated mock voice turns pass for all four new languages with zero silent wrong amounts.
+- **CP15-C (Deployment Readiness)**:
+  - Render blueprint (`render.yaml`) and Docker container configuration verified.
+  - Secret scan completely clean across git tree and commit history.
+  - Full suite verification green: `npm run typecheck`, `npm test` (37 files, 1,727 tests), `npm run test:e2e` (121 checks), `eval/golden` (100%), `eval/redteam` (100%).
+
+ALL PLAN 2 CHECKPOINTS (CP10, CP11, CP12, CP13, CP14, CP15) ARE FULLY PASSED AND LANDED ON MAIN.
