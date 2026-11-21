@@ -9,10 +9,10 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 - **Active phase of Plan 2:** Phase 0 (setup). Nothing is built yet. A phase ends only when all three people's checkpoints (for example CP10-A, CP10-B, CP10-C) are verified; see "Phase gates" in `docs/plan2.md`.
 - **Last checkpoint passed:** CP9 (hackathon deliverables, submitted). Plan 2 checkpoints are CP10 to CP14 below.
 - **Next actions:**
-  1. Fill in who is Person A, B and C in `docs/plan2.md` section 8.
-  2. Add collaborators, branch protection and a PR template to the repo (Person C).
-  3. Merge F0, the shared contract (Persons A and B), then start F1 to F6 in parallel.
-  4. Record a baseline: test counts, e2e result and gzipped JS size (Person C).
+  1. Fill in who is Member A, B and C in `docs/plan2.md` section 8.
+  2. Add collaborators, branch protection and a PR template to the repo (Member C).
+  3. Merge F0, the shared contract (Members A and B), then start F1 to F6 in parallel.
+  4. Record a baseline: test counts, e2e result and gzipped JS size (Member C).
 - **Known open bugs:** B1 (Kannada label clipped, reproduced 2026-11-21), B2 (corrections only reach the last entry), B3 (long speech uncapped). See the tracker.
 
 ## Checkpoints
@@ -67,11 +67,11 @@ None.
 
 Plan 2 entries go here, one short dated entry per finished task, under your own heading so two people never append at the same line. The 2026-11 hackathon history follows below them.
 
-### Plan 2: Person A
+### Plan 2: Member A
 
-### Plan 2: Person B
+### Plan 2: Member B
 
-### Plan 2: Person C
+### Plan 2: Member C
 
 ### 2026-11-21 (setup, claude for the team)
 

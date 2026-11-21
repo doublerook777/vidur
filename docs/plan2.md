@@ -22,7 +22,7 @@ Companion files, all in `docs/`:
 | Same name already exists | **Ask for a nickname** (for example "Ramesh (dairy)"). The shopkeeper may skip it. |
 | Voiced customer summary | **Fixed-template** line built from facts in the ledger. Never model-generated. |
 
-Assumption to confirm: "include 1 2 3 all" was read as "accept the defaults proposed for all three of the yes/no window, nickname and summary". If the summary should say more than the facts in section 3.5, say so in `conversation.md` before Person A starts F5.
+Assumption to confirm: "include 1 2 3 all" was read as "accept the defaults proposed for all three of the yes/no window, nickname and summary". If the summary should say more than the facts in section 3.5, say so in `conversation.md` before Member A starts F5.
 
 Parked, not in this plan: accounts and server-side sync, WhatsApp Business API, encrypted export and import (tracker I1), installable app (PWA), paid hosting.
 
@@ -48,7 +48,7 @@ Reviewers rotate so nobody reviews their own work: A is reviewed by C, B by C an
 
 Keep to these to avoid merge conflicts. If you need to change a file outside your area, post a `CLAIM:` in `conversation.md` first, or ask the owner to make the change.
 
-| Person | Area | Files |
+| Member | Area | Files |
 |---|---|---|
 | **A: core and dialogue** | The brain | `packages/core/**` (engine, intent, names, ledger, i18n templates, reminders gate), `eval/golden/**`, `eval/redteam/**` |
 | **B: phone app** | Screens, storage, session | `apps/web/src/phone/**` (ui, session, storage, contract), `apps/web/src/showcase/**` |
@@ -194,12 +194,12 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 
 1. Each person ticks their own checkpoint: they add a line under their own heading in `progress.md` Log with the evidence (commands run and results, PR numbers, screenshot paths), and post `CHECKPOINT: CP11-B passed` in `conversation.md`.
 2. A person other than the owner checks the evidence is real (runs the command, opens the PR). The reviewer in the table below is the one who verifies.
-3. When all three are verified, Person C sets the project checkpoint (CP10 to CP14) in the `progress.md` table to Passed with the date, and posts `GATE OPEN: CP11` in `conversation.md`. Only then does the next phase start.
+3. When all three are verified, Member C sets the project checkpoint (CP10 to CP14) in the `progress.md` table to Passed with the date, and posts `GATE OPEN: CP11` in `conversation.md`. Only then does the next phase start.
 4. A checkpoint that fails is not skipped. Add a tracker row, fix it, and verify again. A waiver is allowed only with a `DECISION:` message from all three people, and it goes in the `Waivers` section of `progress.md`.
 
 **Phase 0 gate: CP10 (setup done, contract merged)**
 
-| CP | Person | Must be true | Evidence | Verified by |
+| CP | Member | Must be true | Evidence | Verified by |
 |---|---|---|---|---|
 | CP10-A | A | F0 core part merged: optional `nickname` and `phone` on customers, `customer_updated` event, `nickname` pending kind. The "naya customer" check for F3 is written up in `conversation.md`. | PR number; the ledger replay test over old events passes; `npm test` green on `main` | C |
 | CP10-B | B | F0 phone part merged: `profile` meta type, the new actions and view-model fields compile, nothing visible changes yet. Fresh `main` runs in mock mode. | PR number; `npm run typecheck` and `npm run demo:mock` work; old-install settings still load | A |
@@ -207,7 +207,7 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 
 **Phase 1 gate: CP11 (engine and first screens)**
 
-| CP | Person | Must be true | Evidence | Verified by |
+| CP | Member | Must be true | Evidence | Verified by |
 |---|---|---|---|---|
 | CP11-A | A | F4 engine (`PENDING_TTL_MS`, `questionSpoken()`), F3 nickname flow, and the pure `searchCustomers` function merged, with scripted dialogue tests in hi, en and kn. | PR numbers; the new test names; compliance and red-team tests green | C |
 | CP11-B | B | F1 sign-up and profile (including the PIN lock and the old-install card) and B1 merged; B1 has a browser check for hi, en and kn that fails without the fix. | PR numbers; browser e2e green; screenshots at 360 px in three languages; raw IndexedDB check still shows nothing readable | C |
@@ -215,7 +215,7 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 
 **Phase 2 gate: CP12 (all features visible)**
 
-| CP | Person | Must be true | Evidence | Verified by |
+| CP | Member | Must be true | Evidence | Verified by |
 |---|---|---|---|---|
 | CP12-A | A | F5 intent and template and B2 older-entry corrections merged; golden set grew with the new intents; Kannada text reviewed by the native speaker. | PR numbers; golden, held-out and red-team suites green; reviewer's sign-off in `conversation.md` | C |
 | CP12-B | B | F2 search screen, F3 and F4 screens (nickname prompt, countdown), F5 button and F6 WhatsApp reminders merged. | PR numbers; screenshots in three languages, light and dark; the browser check on the `wa.me` link digits and text; reminder buttons disabled in every blocked state | A |
@@ -223,7 +223,7 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 
 **Phase 3 gate: CP13 (integration passed)**
 
-| CP | Person | Must be true | Evidence | Verified by |
+| CP | Member | Must be true | Evidence | Verified by |
 |---|---|---|---|---|
 | CP13-A | A | Full regression: `npm test`, golden, held-out and red-team, compliance all green on `main`; no open P0 or P1 bug in A's area. | Command output pasted or linked in `progress.md` | C |
 | CP13-B | B | Whole app walked through by hand in hi, en, kn on a real phone: sign-up, add by voice, nickname, search, summary, WhatsApp reminder, PIN lock, delete all. No open P0 or P1 bug in B's area. | A checklist in `progress.md` with pass or fail per step | A |
@@ -231,7 +231,7 @@ Each checkpoint has the same id as the project checkpoint plus the person's lett
 
 **Phase 4 gate: CP14 (released)**
 
-| CP | Person | Must be true | Evidence | Verified by |
+| CP | Member | Must be true | Evidence | Verified by |
 |---|---|---|---|---|
 | CP14-A | A | A tagged release on `main` with release notes of what changed for users. | Tag name and notes link | B |
 | CP14-B | B | Hosted copy used on a phone over mobile data: a real turn works in each language, and the new screens render at 360 px. | Short note in `progress.md` | C |
@@ -295,7 +295,7 @@ npx vitest run --config eval/golden/vitest.config.ts
 
 **Release to Render**
 
-Only Person C deploys, from a clean `main`: all checks above green, then trigger the deploy in Render's dashboard (the blueprint has `autoDeploy: false` on purpose). Afterwards check `/healthz`, open the hosted copy on a phone and complete one real turn. Record it in `progress.md`.
+Only Member C deploys, from a clean `main`: all checks above green, then trigger the deploy in Render's dashboard (the blueprint has `autoDeploy: false` on purpose). Afterwards check `/healthz`, open the hosted copy on a phone and complete one real turn. Record it in `progress.md`.
 
 ## 6. Using the three shared files
 
@@ -309,8 +309,8 @@ Only Person C deploys, from a clean `main`: all checks above green, then trigger
 ### `docs/progress.md` (what is done)
 
 - Update it after every finished task and whenever something blocks you.
-- The **Log** section gets one short dated entry per task, written under your own heading (`### Person A`, `### Person B`, `### Person C`) so two people do not append at the same line and conflict. Say what changed, how it was checked and what is left. No access codes, no names of testers, no real data.
-- **Current state** and the checkpoint table are changed by Person C when a gate closes (see "Phase gates" in section 4). Each person records their own checkpoint (`CP11-B` and so on) under their own Log heading with evidence: commands run and numbers, not just "done".
+- The **Log** section gets one short dated entry per task, written under your own heading (`### Member A`, `### Member B`, `### Member C`) so two people do not append at the same line and conflict. Say what changed, how it was checked and what is left. No access codes, no names of testers, no real data.
+- **Current state** and the checkpoint table are changed by Member C when a gate closes (see "Phase gates" in section 4). Each person records their own checkpoint (`CP11-B` and so on) under their own Log heading with evidence: commands run and numbers, not just "done".
 - The **credit log** is updated by whoever spends Gnani credits, in the same commit window as the run.
 - Replace the old hackathon "Current state" block with a Plan 2 one in Phase 0. The 2026-11 history below it stays as history.
 
@@ -328,7 +328,7 @@ Only Person C deploys, from a clean `main`: all checks above green, then trigger
 - Before starting work that overlaps a file in someone else's area, post a `CLAIM:` and wait for a reply or one working day.
 - Never edit or delete someone else's message. If something turns out wrong, add a correction below it.
 - Do not put secrets, access codes, real names of customers or transcripts in it. It is public.
-- When it passes about 300 lines, Person C moves the oldest part into `docs/conversation-archive/<month>.md` and leaves a one-line pointer.
+- When it passes about 300 lines, Member C moves the oldest part into `docs/conversation-archive/<month>.md` and leaves a one-line pointer.
 
 ### A working day, in order
 
@@ -361,10 +361,10 @@ Only Person C deploys, from a clean `main`: all checks above green, then trigger
 | Yes/no window of 60 s feels too long or too short | Constants live in one place; tune after the F7 rounds. |
 | Kannada strings for new templates | A drafts them with the existing glossary; the native speaker reviews before F5 and F3 merge. |
 | Credit burn from F7 | Floor of 1,500 credits, logged runs, mock mode for everything that does not need real speech. |
-| The three people's names and who is A, B and C | Fill in the table below in Phase 0. |
+| The three members and who is A, B and C | Fill in the table below in Phase 0. |
 
-| Letter | Person | Agents they run |
+| Letter | Member | Agents they run |
 |---|---|---|
 | A | Member A | Supervisor (Antigravity), pi (NVIDIA free), qwen |
 | B | _fill in_ | |
-| C | _fill in_ | |
+| C | you (repo owner) | |
