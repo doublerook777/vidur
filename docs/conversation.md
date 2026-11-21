@@ -308,3 +308,24 @@ GATE OPEN: CP12 (Phase 2: all features visible).
 ### 2026-11-21 22:10 IST · claude (for Member A and Member B)
 
 DECISION: the owner confirmed there are no native speakers for Tamil, Telugu, Marathi or Gujarati, so F9 ships with **little or no human testing**. Nothing changes for your parts: write the strings and tables as planned, keep every language marked **Beta**, and say in your PR that no speaker has heard them. The manual round of 20 lines per language is dropped for now (see `plan2.md` F9.3). Automated checks stay: the template-key test, parser tests on the Prisma transcripts in `progress.md`, golden, held-out and red-team lines, and one mock e2e turn per language. Keep the red-team and compliance lines (AI disclosure first, refusals, no shaming) in all four languages; those are rules, not testing.
+
+### 2026-11-21 22:30 IST · claude (for Member A)
+
+TASKS for Member A, in order. Everything here is on `main` at `2b9c4dc` or later; rebase before you start, because `numbers/parse.ts` and `intent/intent.ts` changed today (the `2.5k` shorthand, multi-word names, F8 edit cues).
+
+**1. Branch `feat/F9-languages-core` now (F9.1).** The F9.0 probe is done and all four languages go ahead (the DECISION above, numbers in `progress.md`). One PR if it stays reviewable, otherwise split it: (a) types and templates, (b) number tables and cue words, (c) eval lines. Member C reviews.
+
+- **Types.** `SpeechLang` in `packages/core/src/i18n/templates.ts` and `Lang` in `numbers/parse.ts` grow to `ta`, `te`, `mr`, `gu`. `AI_MARKER` gets a marker for each. The eval schema `LANGS` in `eval/golden/schema.ts` grows too. Keep `npm run typecheck` green for `apps/web` and `apps/server` (Member B owns the web `labels.ts` `Lang`; if widening yours forces a change there, say so on the PR and agree it with B first).
+- **Templates.** Move your 76-key drafts from `references/` (git-ignored, so nobody else can see them) into `templates.ts`. The key test in `i18n/templates.test.ts` must fail on a missing key, and `SAMPLE` must cover the keys with parameters. Keep digits and the rupee sign in the text; the probe showed Timbre reads them correctly in all four languages. Mark every language Beta in a comment.
+- **Number tables, the risky part.** Use the real Prisma transcripts quoted in `progress.md` (F9.0 entry) as test lines: 340 as முன்னூற்று நாற்பது, మూడు వందల నలభై, तीनशे चाळीस, ત્રણસો ચાલીસ, and 2,500 as words. Today Tamil, Telugu and Gujarati give no amount, and Marathi "दोन हजार पाचशे" gives ₹1,000, which is wrong. The Tamil table needs the spelling variants (இரண்டாயிரத்து, இரண்டாயிரத்தி, இரண்டு ஆயிரத்தி). Cover digits, hundreds, thousand, lakh and the "one and a half" forms. **Marathi must not reuse the Hindi lists** (it says तीनशे, पाचशे as one word). Pass line: no silent wrong amounts; if a word form is not understood, give no amount (the app asks) rather than a wrong one.
+- **Cue words.** Credit and payment, yes and no, today and yesterday, reminder and refusal words, per language. The F8 edit cues (set-total, remove, flip) are optional in this PR, but a line in these languages must never be read as an edit by accident.
+- **Eval lines.** At least 40 golden, 10 held-out and 8 red-team lines per language, with a comment marking them unreviewed. Add the red-team lines for the AI disclosure, refusals and no-shaming in all four.
+- **Testing.** No native speaker is available, so the automated checks above are all there is (decision at 22:10). Say in the PR that no speaker has heard any of the four languages.
+
+**2. Review C's PR #13** (https://github.com/doublerook777/vidur/pull/13, F9.3 gateway). It adds `ta`, `te`, `mr`, `gu` to `SPEECH_LANG` and `TTS_LANG` in `apps/server/src/gnani.ts`, derives `LANGS` from it, and adds one mock turn per language. CI is green. You are the reviewer for C's parts; comment on the PR.
+
+**3. CP12-A items still open** (see `plan2.md`): the golden set grew with the F5 and F8 intents (I added the F8 lines and red-team RT-084 to 091; check that F5's are there too), and the Kannada sign-off by the native speaker needs a line in this file from whoever reviewed it. Post `CHECKPOINT: CP12-A passed` when both hold.
+
+**4. After F9.1 merges,** post `DONE:` here so C can run the synthetic speech pass and Member B can drop the Beta tag logic onto real keys. When you log your work, use your own `### Member A` heading in `progress.md`.
+
+No `CLAIM:` needed for `numbers/parse.ts`; I am not touching it for F9.
