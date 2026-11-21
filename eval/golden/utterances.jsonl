@@ -197,3 +197,9 @@
 {"id": "G-HL-103", "lang": "hinglish", "text": "Kavya ki summary dikhao", "expected": {"intent": "customer_summary", "customer": "Kavya"}}
 {"id": "G-HL-104", "lang": "hinglish", "text": "Mohan ka account summary batao", "expected": {"intent": "customer_summary", "customer": "Mohan"}}
 {"id": "G-HL-105", "lang": "hinglish", "text": "Ajay ka hisaab dikhao", "expected": {"intent": "customer_summary", "customer": "Ajay"}}
+{"id": "G-EN-047", "lang": "en", "text": "Rajesh deposited 2.5k", "expected": {"intent": "payment", "amount": 2500, "customer": "Rajesh"}}
+{"id": "G-EN-048", "lang": "en", "text": "Sunita owes 2k", "expected": {"intent": "credit_entry", "amount": 2000, "customer": "Sunita"}}
+{"id": "G-HL-050", "lang": "hinglish", "text": "Rajesh ne 2.5k jama kiye", "expected": {"intent": "payment", "amount": 2500, "customer": "Rajesh"}}
+{"id": "G-HL-051", "lang": "hinglish", "text": "Mohan ka 1.5k udhaar", "expected": {"intent": "credit_entry", "amount": 1500, "customer": "Mohan"}}
+{"id": "G-HI-044", "lang": "hi", "text": "रमेश का 3k उधार", "expected": {"intent": "credit_entry", "amount": 3000, "customer": "Ramesh"}}
+{"id": "G-KN-044", "lang": "kn", "text": "ರಮೇಶ್ ಅವರ 2.5k ಉಧಾರ", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Ramesh"}}

@@ -164,3 +164,45 @@ describe('after a customer is renamed', () => {
   });
 });
 
+describe('amounts written as 2.5k', () => {
+  it('"Rajest deposited 2.5k" saves a payment of 2,500 for the confirmed new customer', async () => {
+    const { ledger, say1 } = await setup();
+    let rs = await say1('Rajest deposited 2.5k');
+    expect(keys(rs)).toEqual(['confirm_new_customer']);
+    rs = await say1('yes');
+    const c = ledger.customers()[0]!;
+    expect(c.name).toBe('Rajest');
+    expect(ledger.activeEntries(c.id).map((e) => [e.kind, e.paise])).toEqual([['payment', paise(2500)]]);
+    expect(rs.map((r) => r.text).join(' ')).toContain('₹2,500');
+  });
+
+  it('for an existing customer it saves straight away, with no question about the amount', async () => {
+    const { ledger, say1 } = await setup();
+    const c = await ledger.createCustomer('Rajesh');
+    await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(4000) });
+    const rs = await say1('Rajesh deposited 2.5k');
+    expect(keys(rs)).toEqual(['payment_saved']);
+    expect(ledger.balance(c.id)).toBe(paise(1500));
+  });
+
+  it('"Rajesh ka 2k udhaar" in Hinglish, and 10k is still read back because it is large', async () => {
+    const { ledger, say1 } = await setup('hi');
+    const c = await ledger.createCustomer('Rajesh');
+    let rs = await say1('Rajesh ka 2k udhaar');
+    expect(keys(rs)).toEqual(['credit_saved']);
+    expect(ledger.balance(c.id)).toBe(paise(2000));
+    rs = await say1('Rajesh ka 10k udhaar');
+    expect(keys(rs)).toEqual(['confirm_amount']);
+    expect(ledger.balance(c.id)).toBe(paise(2000));
+  });
+
+  it('a spoken answer to "how much?" can be 2.5k too', async () => {
+    const { ledger, say1 } = await setup();
+    const c = await ledger.createCustomer('Rajesh');
+    await say1('Rajesh deposited');
+    const rs = await say1('2.5k');
+    expect(keys(rs)[0]).toMatch(/payment/);
+    expect(ledger.balance(c.id)).toBe(-paise(2500));
+  });
+});
+

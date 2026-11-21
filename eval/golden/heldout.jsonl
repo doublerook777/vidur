@@ -146,3 +146,6 @@
 {"id": "H-HI-036", "lang": "hi", "text": "सुनीता का कल का उधार हटा दो", "expected": {"intent": "edit_entry", "customer": "Sunita", "date": "yesterday"}}
 {"id": "H-HI-037", "lang": "hi", "text": "रमेश का टोटल शून्य कर दो", "expected": {"intent": "edit_entry", "amount": 0, "customer": "Ramesh"}}
 {"id": "H-KN-036", "lang": "kn", "text": "ರಮೇಶ್ ಒಟ್ಟು ಬಾಕಿ ಐದು ನೂರು ಮಾಡಿ", "expected": {"intent": "edit_entry", "amount": 500, "customer": "Ramesh"}}
+{"id": "H-EN-039", "lang": "en", "text": "Geeta paid 4.5K today", "expected": {"intent": "payment", "amount": 4500, "customer": "Geeta", "date": "today"}}
+{"id": "H-HL-038", "lang": "hinglish", "text": "Pooja ko 2.5 k udhaar diya", "expected": {"intent": "credit_entry", "amount": 2500, "customer": "Pooja"}}
+{"id": "H-HI-038", "lang": "hi", "text": "सुनीता ने 5k वापस दिए", "expected": {"intent": "payment", "amount": 5000, "customer": "Sunita"}}

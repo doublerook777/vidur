@@ -24,9 +24,28 @@ interface Tok {
 }
 
 type El =
-  | { t: 'dig'; value: number; conf: number; src: AmountMatch['source']; i: number }
+  | { t: 'dig'; value: number; conf: number; src: AmountMatch['source']; i: number; iEnd?: number }
   | { t: 'word'; e: Entry; i: number; w: string }
   | { t: 'groupFrac'; value: number; scale: 100 | 1000 | 100000 | 10000000; i0: number; i1: number };
+
+/**
+ * A letter written straight after a number is a shorthand for thousands or lakhs: "2.5k" is 2,500, "2K" is 2,000, "1.5L" is
+ * 1,50,000. Only a capital L counts, because a small "l" is litres. A space is allowed before the letter ("2.5 k") but nothing else.
+ */
+const SHORTHAND: Record<string, { scale: number; conf: number }> = {
+  k: { scale: 1000, conf: 0.95 },
+  L: { scale: 100000, conf: 0.7 }, // always read back: "1.5L oil" could be litres
+};
+
+/** The shorthand token that follows digit token `i`, when it is one. */
+function shorthandAfter(toks: Tok[], i: number, text: string): { scale: number; conf: number } | null {
+  const nx = toks[i + 1];
+  if (!nx) return null;
+  const gap = text.slice(toks[i]!.end, nx.start);
+  if (gap !== '' && gap !== ' ') return null;
+  const hit = nx.text === 'K' ? SHORTHAND.k : SHORTHAND[nx.text];
+  return hit ?? null;
+}
 
 const TOKEN_RE = /₹|\p{N}+(?:[.,:]\p{N}+)*|[\p{L}\p{M}]+/gu;
 
@@ -86,7 +105,7 @@ const fresh = (): State => ({
 });
 
 function span(el: El): [number, number] {
-  return el.t === 'groupFrac' ? [el.i0, el.i1] : [el.i, el.i];
+  return el.t === 'groupFrac' ? [el.i0, el.i1] : el.t === 'dig' ? [el.i, el.iEnd ?? el.i] : [el.i, el.i];
 }
 
 /** Tries to continue the amount with `el`. Returns false when `el` must start a new amount. */
@@ -228,11 +247,31 @@ export function parseAmount(input: string, lang: Lang = 'hi'): AmountMatch[] {
   // Build runs of numeric elements. A run is broken by any other token.
   const runs: El[][] = [];
   let run: El[] = [];
-  const endRun = (): void => { if (run.length) runs.push(run); run = []; };
+  // "2.5 hazaar", "2.5 lakh": a decimal in front of a thousand or lakh is a normal way to say 2,500 or 2,50,000, not a doubtful decimal.
+  const settleDecimals = (r: El[]): void => {
+    r.forEach((el, k) => {
+      const nx = r[k + 1];
+      if (el.t !== 'dig' || el.src !== 'decimal' || !nx || nx.t !== 'word' || nx.e.kind !== 'mult' || nx.e.value < 1000) return;
+      const v = Math.round(el.value * nx.e.value * 100) / 100;
+      if (Number.isInteger(v)) { el.conf = 0.95; el.src = 'digits'; }
+    });
+  };
+  const endRun = (): void => { if (run.length) { settleDecimals(run); runs.push(run); } run = []; };
   for (let i = 0; i < toks.length; i++) {
     const tk = toks[i]!;
     if (/^\p{N}/u.test(tk.text)) {
       const els = digitElements(tk, i);
+      const d = els.length === 1 ? els[0] : undefined;
+      const sh = d && d.t === 'dig' ? shorthandAfter(toks, i, text) : null;
+      if (d && d.t === 'dig' && sh) {
+        // "2.5k": the number and its letter are one element worth 2,500. A fraction of a rupee left over is read back.
+        const plain = asciiDigits(tk.text);
+        const base = /^\d+(?:\.\d+)?$/.test(plain) ? Number(plain) : d.value;
+        const value = Math.round(base * sh.scale * 100) / 100;
+        run.push({ t: 'dig', value, conf: Number.isInteger(value) ? sh.conf : 0.5, src: 'digits', i, iEnd: i + 1 });
+        i += 1; // the letter is used up
+        continue;
+      }
       if (els.length) run.push(...els); else endRun();
       continue;
     }
