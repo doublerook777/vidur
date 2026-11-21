@@ -143,4 +143,14 @@ export const FEATURES: Record<FeatureId, FeatureExplanation> = {
     what: 'Opens every entry, grouped by day, newest first, with the same remove option.',
     why: 'You can look back at last week without opening each customer.',
   },
+  'lock-screen': {
+    title: 'PIN screen lock',
+    what: 'Locks the screen with an optional 4 to 6 digit PIN on opening and after 5 minutes in background.',
+    why: 'Keeps casual passersby from peeking at your khata without storing anything on a server.',
+  },
+  'complete-profile': {
+    title: 'Complete your profile',
+    what: 'A card offering existing installs a quick way to add their shop name and owner name.',
+    why: 'Lets you complete your profile when you have time, without blocking your daily bookkeeping.',
+  },
 };

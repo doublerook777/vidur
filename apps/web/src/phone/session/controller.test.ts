@@ -380,4 +380,97 @@ describe('adding and removing entries by hand, and tapping answers', () => {
     session!.actions.updateCustomer(id, { nickname: '' });
     await until(() => session!.state.customers.find((c) => c.id === id)?.nickname === undefined);
   });
+
+  describe('F1: profile management and PIN screen lock', () => {
+    it('saveProfile updates shop name and owner name in state and vault', async () => {
+      const { speaker } = await boot();
+      await onboard(speaker, false);
+      session!.actions.saveProfile({ shopName: 'Om Kirana Store', ownerName: 'Ramesh Kumar' });
+      await until(() => session!.state.shopName === 'Om Kirana Store');
+      expect(session!.state.profile?.ownerName).toBe('Ramesh Kumar');
+      expect(session!.state.profile?.shopName).toBe('Om Kirana Store');
+    });
+
+    it('finishOnboarding with profile stores profile and PIN', async () => {
+      const { speaker } = await boot();
+      session!.actions.finishOnboarding({
+        lang: 'hi',
+        demoData: false,
+        profile: { shopName: 'Sharma Dairy', ownerName: 'Sunil Sharma', pin: '1234' },
+      });
+      await until(() => speaker.bytes > 0);
+      await until(() => session!.state.phase === 'idle');
+      expect(session!.state.shopName).toBe('Sharma Dairy');
+      expect(session!.state.profile?.ownerName).toBe('Sunil Sharma');
+      expect(session!.state.profile?.pin?.iterations).toBeGreaterThanOrEqual(200_000);
+    });
+
+    it('setting a PIN, locking, wrong PIN attempts, lockout and unlock', async () => {
+      const { speaker } = await boot();
+      await onboard(speaker, false);
+
+      // Set PIN
+      session!.actions.setPin('4321');
+      await until(() => Boolean(session!.state.profile?.pin));
+
+      // Lock the session
+      session!.lock();
+      expect(session!.state.locked).toBe(true);
+
+      // Try wrong PIN
+      session!.actions.unlock('9999');
+      await until(() => session!.state.wrongAttempts === 1);
+      expect(session!.state.locked).toBe(true);
+      expect(session!.state.lockError).toBe('incorrect_pin');
+
+      // Enter 4 more wrong attempts to reach 5 (triggering lockout)
+      session!.actions.unlock('1111');
+      session!.actions.unlock('2222');
+      session!.actions.unlock('3333');
+      session!.actions.unlock('4444');
+      await until(() => session!.state.wrongAttempts === 5);
+      expect(session!.state.lockUntil).not.toBeNull();
+      expect(session!.state.lockUntil!).toBeGreaterThan(Date.now());
+
+      // Attempt while locked out should be ignored
+      session!.actions.unlock('4321');
+      expect(session!.state.locked).toBe(true);
+
+      // Unlock after clearing lockout
+      session!.store.update({ lockUntil: null });
+      session!.actions.unlock('4321');
+      await until(() => session!.state.locked === false);
+      expect(session!.state.wrongAttempts).toBe(0);
+
+      // clearPin removes the PIN
+      session!.actions.clearPin();
+      await until(() => session!.state.profile?.pin === undefined);
+    });
+
+    it('existing install without profile shows showCompleteProfile card', async () => {
+      mock = await startMockGnani({ ttfbMs: 5, chunkIntervalMs: 15 });
+      const config = { ...loadConfig({ MODE: 'local', GNANI_API_KEY: 'good', PORT: '0' }), gnaniBaseUrl: mock.url.replace('http', 'ws') };
+      gw = await createGateway({ config, log: createLogger(() => undefined, { strict: true }) });
+      const idb = new IDBFactory();
+      const vault = await Vault.open('old-install', idb);
+      // Simulate old install: settings has onboarded: true, but no profile in vault
+      await vault.putMeta('settings', { lang: 'hi', theme: 'light', shopName: 'Old Kirana', onboarded: true });
+
+      session = await PhoneSession.create({
+        gatewayUrl: gw.url.replace('http', 'ws') + '/ws',
+        WebSocketImpl: NodeWebSocket as unknown as typeof WebSocket,
+        vault,
+        capture: new FakeMic(),
+        playback: new FakeSpeaker(),
+      });
+
+      await until(() => session!.state.loaded);
+      expect(session!.state.onboarded).toBe(true);
+      expect(session!.state.showCompleteProfile).toBe(true);
+
+      // Dismissing complete profile card
+      session!.actions.dismissCompleteProfile?.();
+      expect(session!.state.showCompleteProfile).toBe(false);
+    });
+  });
 });

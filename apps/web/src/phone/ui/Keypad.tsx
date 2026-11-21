@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import type { AddPreset, CustomerRow } from '../contract.js';
 import { formatRupees, fromLocalInput, toLocalInput } from './format.js';
@@ -36,10 +36,15 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
   const newFirst = vm.preset?.newCustomer === true;
   const typed = newName.trim();
   const nameTaken = typed !== '' && vm.customers.some((c) => nameKey(c.name) === nameKey(typed));
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (newFirst) nameInputRef.current?.focus();
+  }, [newFirst]);
   const nameBox = (
         <label class="keypad-new-name-label">
           <span class="keypad-new-name-title">{t.newName}</span>
           <input
+            ref={nameInputRef}
             type="text"
             class="keypad-new-name"
             value={newName}

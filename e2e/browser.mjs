@@ -6,7 +6,8 @@ import { chromium } from 'playwright-core';
 
 const PORT = 8101;
 const BASE = `http://127.0.0.1:${PORT}`;
-const EXE = process.env.CHROME ?? `${homedir()}/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell`;
+const MAC_CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const EXE = process.env.CHROME ?? (existsSync(MAC_CHROME) ? MAC_CHROME : `${homedir()}/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell`);
 if (!existsSync(EXE)) { console.error('No Chromium found. Set CHROME=/path/to/chrome'); process.exit(2); }
 
 const results = [];
@@ -41,12 +42,18 @@ try {
   const disclosure = await page.locator('[data-feature="onboarding-disclosure"]').innerText();
   check('onboarding shows the AI disclosure in Hindi', /AI|एआई/.test(disclosure), disclosure.slice(0, 40));
   check('an AI badge is visible', await page.locator('[data-feature="ai-badge"]').count() > 0);
+  check('onboarding has profile fields for shop and owner name (F1)', (await page.locator('#onboarding-shop').count()) > 0 && (await page.locator('#onboarding-owner').count()) > 0);
+  await page.locator('#onboarding-shop').fill('Sharma Kirana');
+  await page.locator('#onboarding-owner').fill('Sharma Ji');
   await page.locator('button.btn-primary').click(); // start with demo data
   await page.waitForSelector('[data-feature="mic-button"]');
   check('onboarding completes and Home shows', true);
+  check('Home shows custom shop name from profile (F1)', (await page.locator('.greeting-title').innerText()).includes('Sharma Kirana'));
   check('first screen JS finished with no console errors', errors.length === 0, errors.join(' | ').slice(0, 120));
   await waitState(page, "s.online && s.phase === 'idle'");
-  await sleep(2500); // the spoken disclosure
+  await waitState(page, "s.phase === 'speaking'", 4000).catch(() => undefined);
+  await waitState(page, "s.phase === 'idle'", 10000);
+  await sleep(600);
 
   // turn 1
   await page.evaluate(() => document.addEventListener('pointerdown', () => (window.__t0 = performance.now()), true));
@@ -81,6 +88,22 @@ try {
   await page.mouse.up();
   await waitState(page, "s.phase === 'idle' || s.phase === 'needs_answer'", 10000);
 
+  // F1: PIN screen lock and unlock
+  await page.evaluate(() => window.__vidur.actions.setPin('1234'));
+  await sleep(150);
+  await page.evaluate(() => window.__vidur.lock());
+  await page.waitForSelector('[data-feature="lock-screen"]');
+  check('setting PIN and locking shows the lock screen (F1)', (await page.locator('[data-feature="lock-screen"]').count()) === 1);
+  check('while locked, the feed and mic button are hidden (F1)', (await page.locator('[data-feature="mic-button"]').count()) === 0);
+  await page.locator('.lock-input').fill('9999');
+  await page.locator('.btn-unlock').click();
+  await sleep(150);
+  check('entering incorrect PIN keeps lock screen and shows error (F1)', (await page.locator('[data-feature="lock-screen"]').count()) === 1 && (await page.locator('.lock-error').count()) === 1);
+  await page.locator('.lock-input').fill('1234');
+  await page.locator('.btn-unlock').click();
+  await waitState(page, "!s.locked");
+  check('entering correct PIN unlocks phone and restores Home (F1)', (await page.locator('[data-feature="mic-button"]').count()) > 0);
+
   // privacy: nothing readable in IndexedDB
   const dump = await page.evaluate(async () => {
     const db = await new Promise((res) => { const r = indexedDB.open('vidur'); r.onsuccess = () => res(r.result); });
@@ -93,7 +116,7 @@ try {
     db.close();
     return { text, extractable };
   });
-  check('raw IndexedDB contains no customer name', !/Mohan|Ramesh|Sunita|doodh|udhaar/.test(dump.text) && dump.text.length > 500);
+  check('raw IndexedDB contains no customer name or plaintext PIN', !/Mohan|Ramesh|Sunita|doodh|udhaar|Sharma|1234/.test(dump.text) && dump.text.length > 500);
   check('the encryption key is non-extractable', dump.extractable?.length === 1 && dump.extractable[0] === false);
 
   // delete-all in the real browser: every store is empty and the old key is gone
@@ -128,6 +151,23 @@ try {
   // touch targets
   const small = await page.evaluate(() => [...document.querySelectorAll('button, [role=button]')].map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0 && (r.height < 44 || r.width < 44)).length);
   check('every visible button is at least 44 px in both directions', small === 0, `${small} too small`);
+
+  // B1: Kannada, Hindi and English "paid today" label does not intersect Add entry button
+  for (const width of [390, 360]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const l of ['hi', 'kn', 'en']) {
+      await page.evaluate((lang) => window.__vidur.actions.setLang(lang), l);
+      await sleep(150);
+      const overlap = await page.evaluate(() => {
+        const p = document.querySelector('.totals-payment')?.getBoundingClientRect();
+        const n = document.querySelector('.notch-btn')?.getBoundingClientRect();
+        if (!p || !n) return true;
+        return !(p.right <= n.left || p.left >= n.right || p.bottom <= n.top || p.top >= n.bottom);
+      });
+      check(`B1: paid-today does not intersect Add entry button in ${l} at ${width}px`, !overlap);
+    }
+  }
+  await page.evaluate(() => window.__vidur.actions.setLang('hi'));
 
 
   // ---------------------------------------------------------------- timestamps, add and remove by hand, tap answers, the voice circle

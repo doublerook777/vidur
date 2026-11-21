@@ -49,6 +49,22 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
           {t.offlineBanner}
         </div>
       )}
+      {vm.showCompleteProfile && (
+        <section class="complete-profile-card" data-feature="complete-profile" role="region" aria-label={t.completeProfileTitle}>
+          <div class="complete-profile-content">
+            <h2 class="complete-profile-title">{t.completeProfileTitle}</h2>
+            <p class="complete-profile-sub">{t.completeProfileSub}</p>
+          </div>
+          <div class="complete-profile-actions">
+            <button type="button" class="btn btn-primary btn-sm" onClick={() => actions.navigate('settings')}>
+              {t.completeProfileBtn}
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onClick={() => actions.dismissCompleteProfile?.()}>
+              {t.dismiss}
+            </button>
+          </div>
+        </section>
+      )}
       {vm.error && (
         <div class="error-banner" role="alert">
           <span class="error-text">{vm.error.text}</span>

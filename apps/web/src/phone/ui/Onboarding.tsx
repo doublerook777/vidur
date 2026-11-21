@@ -1,3 +1,5 @@
+import { useState } from 'preact/hooks';
+
 import type { Lang } from '../contract.js';
 import { LABELS } from './labels.js';
 import { IconLock } from './icons.js';
@@ -12,6 +14,25 @@ const LANG_LABEL: Record<Lang, string> = { hi: 'हिंदी', en: 'English',
 
 export function Onboarding({ vm, actions, lang }: ScreenProps<OnboardingVM>) {
   const t = LABELS[lang];
+  const [shopName, setShopName] = useState('');
+  const [ownerName, setOwnerName] = useState('');
+  const [pin, setPin] = useState('');
+
+  const handleFinish = (demoData: boolean) => {
+    const sName = shopName.trim() || (lang === 'hi' ? 'किराना स्टोर' : lang === 'kn' ? 'ಕಿರಾಣಿ ಅಂಗಡಿ' : 'Kirana Store');
+    const oName = ownerName.trim() || (lang === 'hi' ? 'दुकानदार' : lang === 'kn' ? 'ಅಂಗಡಿಯವರು' : 'Owner');
+    const validPin = /^\d{4,6}$/.test(pin.trim()) ? pin.trim() : undefined;
+    actions.finishOnboarding({
+      lang: vm.lang,
+      demoData,
+      profile: {
+        shopName: sName,
+        ownerName: oName,
+        ...(validPin ? { pin: validPin } : {}),
+      },
+    });
+  };
+
   return (
     <main class="screen screen-onboarding">
       <header class="screen-header">
@@ -43,11 +64,53 @@ export function Onboarding({ vm, actions, lang }: ScreenProps<OnboardingVM>) {
         </div>
       </section>
 
+      <section class="onboarding-profile" aria-label={t.profileTitle} data-feature="onboarding-profile">
+        <div class="onboarding-field">
+          <label class="field-label" htmlFor="onboarding-shop">{t.shopName}</label>
+          <input
+            id="onboarding-shop"
+            class="input-text onboarding-input"
+            type="text"
+            placeholder={t.enterShopName}
+            value={shopName}
+            onInput={(e) => setShopName((e.target as HTMLInputElement).value)}
+          />
+        </div>
+
+        <div class="onboarding-field">
+          <label class="field-label" htmlFor="onboarding-owner">{t.ownerName}</label>
+          <input
+            id="onboarding-owner"
+            class="input-text onboarding-input"
+            type="text"
+            placeholder={t.enterOwnerName}
+            value={ownerName}
+            onInput={(e) => setOwnerName((e.target as HTMLInputElement).value)}
+          />
+        </div>
+
+        <div class="onboarding-field">
+          <label class="field-label" htmlFor="onboarding-pin">{t.pinOptional}</label>
+          <input
+            id="onboarding-pin"
+            class="input-text onboarding-input"
+            type="password"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={6}
+            placeholder="••••"
+            value={pin}
+            onInput={(e) => setPin((e.target as HTMLInputElement).value.replace(/\D/g, '').slice(0, 6))}
+          />
+          <p class="field-hint">{t.pinScreenLockNotice}</p>
+        </div>
+      </section>
+
       <div class="onboarding-actions">
-        <button type="button" class="btn btn-primary" onClick={() => actions.finishOnboarding({ lang: vm.lang, demoData: true })}>
+        <button type="button" class="btn btn-primary" onClick={() => handleFinish(true)}>
           {t.startWithDemo}
         </button>
-        <button type="button" class="btn btn-secondary" onClick={() => actions.finishOnboarding({ lang: vm.lang, demoData: false })}>
+        <button type="button" class="btn btn-secondary" onClick={() => handleFinish(false)}>
           {t.startClean}
         </button>
       </div>

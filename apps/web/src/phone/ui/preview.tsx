@@ -45,6 +45,7 @@ export const mockActions: Actions = {
   clearPin: noop,
   unlock: noop,
   updateCustomer: noop,
+  dismissCompleteProfile: noop,
   remindOnWhatsApp: noop,
   speakSummary: noop,
 };

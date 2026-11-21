@@ -4,6 +4,8 @@ import { bytesToPcm16 } from '../audio/pcm.js';
 import type { Actions, AddPreset, CustomerDetailVM, CustomerRow, EntryCardVM, ErrorVM, FeedItem, Lang, Phase, Screen, Theme, ToastVM } from '../contract.js';
 import { GatewayClient, type GatewayError, type Transcript } from '../net/gateway.js';
 import { Vault } from '../storage/vault.js';
+import { hashPin, verifyPin, loadProfile, saveProfile, type Profile } from '../storage/profile.js';
+import { BACKGROUND_LOCK_MS, lockoutDurationMs } from './constants.js';
 import { LABELS } from '../ui/labels.js';
 import { errorMessage } from './messages.js';
 import { Store } from './store.js';
@@ -61,6 +63,13 @@ export interface SessionState {
   shareReminder: { customerId: string; text: string } | null;
   /** Milliseconds from releasing the button to the first audio of the reply, for the last turn. */
   lastEndToAudioMs: number | null;
+  // F1 profile and PIN lock
+  profile: Profile | null;
+  locked: boolean;
+  lockUntil: number | null;
+  wrongAttempts: number;
+  lockError: string | null;
+  showCompleteProfile: boolean;
 }
 
 export interface SessionOptions {
@@ -86,6 +95,7 @@ function deviceLang(): Lang {
 const initial = (): SessionState => ({
   loaded: false, onboarded: false, screen: 'onboarding', openCustomerId: null, lang: 'hi', theme: 'light', shopName: '', phase: 'idle', online: false, mockMode: false,
   card: null, error: null, credit: 0, payment: 0, people: 0, allCredit: 0, allPayment: 0, feed: [], history: [], addPreset: null, toast: null, customers: [], detail: null, shareReminder: null, lastEndToAudioMs: null,
+  profile: null, locked: false, lockUntil: null, wrongAttempts: 0, lockError: null, showCompleteProfile: false,
 });
 
 /** A recording whose loudest sample stays under this (of 32767) is silence: nothing was said. Speech peaks well above 1,000. */
@@ -107,6 +117,8 @@ export class PhoneSession {
   private llmAvailable = false;
   private undoTimer: ReturnType<typeof setTimeout> | null = null;
   private purgeTimer: ReturnType<typeof setInterval> | null = null;
+  private profile: Profile | null = null;
+  private visibilityListener: (() => void) | null = null;
 
   private constructor(private o: SessionOptions) {
     this.now = o.clock ?? Date.now;
@@ -127,7 +139,23 @@ export class PhoneSession {
   private async init(): Promise<void> {
     this.ledger = await Ledger.load(this.o.vault.ledgerStore, this.now, this.newId);
     const meta = (await this.o.vault.getMeta<{ lang: Lang; theme: Theme; shopName: string; onboarded: boolean }>('settings')) ?? { lang: deviceLang(), theme: 'light' as Theme, shopName: '', onboarded: false };
-    this.store.update({ lang: meta.lang, theme: meta.theme, shopName: meta.shopName, onboarded: meta.onboarded, screen: meta.onboarded ? 'home' : 'onboarding', loaded: true });
+    const profile = await loadProfile(this.o.vault);
+    this.profile = profile;
+    const shouldLock = Boolean(meta.onboarded && profile?.pin);
+    const showCompleteProfile = Boolean(meta.onboarded && !profile);
+    const shopName = profile?.shopName || meta.shopName;
+    this.store.update({
+      lang: meta.lang,
+      theme: meta.theme,
+      shopName,
+      onboarded: meta.onboarded,
+      screen: meta.onboarded ? 'home' : 'onboarding',
+      profile,
+      locked: shouldLock,
+      showCompleteProfile,
+      loaded: true,
+    });
+    this.setupBackgroundLock();
     this.buildDialogue();
     this.connect();
     // The server streams a reply much faster than it plays, so audio keeps playing from the buffer after the
@@ -344,11 +372,12 @@ export class PhoneSession {
     answer: (a) => void this.answer(a),
     cancelAnswer: () => this.cancelAnswer(),
     updateCustomer: (id, changes) => void this.ledger.updateCustomer(id, changes).then(() => this.refresh()),
-    // Not built yet. Each stays a no-op until its work package lands (see docs/plan2.md): F1 profile and PIN, F5 summary, F6 WhatsApp.
-    saveProfile: () => undefined,
-    setPin: () => undefined,
-    clearPin: () => undefined,
-    unlock: () => undefined,
+    saveProfile: (input) => void this.doSaveProfile(input),
+    setPin: (pin) => void this.doSetPin(pin),
+    clearPin: () => void this.doClearPin(),
+    unlock: (pin) => void this.doUnlock(pin),
+    dismissCompleteProfile: () => this.store.update({ showCompleteProfile: false }),
+    // Not built yet: F5 summary, F6 WhatsApp.
     remindOnWhatsApp: () => undefined,
     speakSummary: () => undefined,
     retry: () => {
@@ -608,8 +637,104 @@ export class PhoneSession {
     this.refresh();
   }
 
-  private async finishOnboarding(o: { lang: Lang; demoData: boolean }): Promise<void> {
-    this.store.update({ lang: o.lang, onboarded: true, screen: 'home' });
+  private setupBackgroundLock(): void {
+    if (typeof document === 'undefined') return;
+    let hiddenAt = 0;
+    this.visibilityListener = () => {
+      if (document.visibilityState === 'hidden') {
+        hiddenAt = this.now();
+      } else if (document.visibilityState === 'visible') {
+        if (this.profile?.pin && hiddenAt > 0 && this.now() - hiddenAt >= BACKGROUND_LOCK_MS) {
+          this.lock();
+        }
+        hiddenAt = 0;
+      }
+    };
+    document.addEventListener('visibilitychange', this.visibilityListener);
+  }
+
+  lock(): void {
+    if (this.profile?.pin) {
+      this.store.update({ locked: true, lockError: null });
+    }
+  }
+
+  private async doSaveProfile(input: { shopName: string; ownerName: string }): Promise<void> {
+    const sName = input.shopName.trim();
+    const oName = input.ownerName.trim();
+    if (!sName || !oName) return;
+    const nextProfile: Profile = this.profile
+      ? { ...this.profile, shopName: sName, ownerName: oName }
+      : { version: 1, shopName: sName, ownerName: oName, createdAt: this.now() };
+    this.profile = nextProfile;
+    await saveProfile(this.o.vault, nextProfile);
+    this.store.update({ profile: nextProfile, shopName: sName, showCompleteProfile: false });
+    await this.saveSettings();
+    this.refresh();
+  }
+
+  private async doSetPin(pin: string): Promise<void> {
+    if (!/^\d{4,6}$/.test(pin)) return;
+    const hashed = await hashPin(pin);
+    const sName = this.state.shopName || 'Kirana Store';
+    const oName = this.profile?.ownerName || 'Owner';
+    const nextProfile: Profile = this.profile
+      ? { ...this.profile, pin: hashed }
+      : { version: 1, shopName: sName, ownerName: oName, createdAt: this.now(), pin: hashed };
+    this.profile = nextProfile;
+    await saveProfile(this.o.vault, nextProfile);
+    this.store.update({ profile: nextProfile });
+    this.refresh();
+  }
+
+  private async doClearPin(): Promise<void> {
+    if (!this.profile) return;
+    const next = { ...this.profile };
+    delete next.pin;
+    this.profile = next;
+    await saveProfile(this.o.vault, this.profile);
+    this.store.update({ profile: this.profile, locked: false, lockUntil: null, wrongAttempts: 0, lockError: null });
+    this.refresh();
+  }
+
+  private async doUnlock(pin: string): Promise<void> {
+    const now = this.now();
+    if (this.state.lockUntil && now < this.state.lockUntil) return;
+    if (!this.profile?.pin) {
+      this.store.update({ locked: false, lockUntil: null, wrongAttempts: 0, lockError: null });
+      return;
+    }
+    const ok = await verifyPin(pin, this.profile.pin);
+    if (ok) {
+      this.store.update({ locked: false, lockUntil: null, wrongAttempts: 0, lockError: null });
+      this.refresh();
+    } else {
+      const attempts = this.state.wrongAttempts + 1;
+      const waitMs = lockoutDurationMs(attempts);
+      const lockUntil = waitMs > 0 ? now + waitMs : null;
+      this.store.update({ wrongAttempts: attempts, lockUntil, lockError: 'incorrect_pin' });
+    }
+  }
+
+  private async finishOnboarding(o: { lang: Lang; demoData: boolean; profile?: { shopName: string; ownerName: string; pin?: string } }): Promise<void> {
+    let sName = this.state.shopName;
+    if (o.profile) {
+      sName = o.profile.shopName.trim();
+      const oName = o.profile.ownerName.trim();
+      let pinData: { salt: string; hash: string; iterations: number } | undefined;
+      if (o.profile.pin && /^\d{4,6}$/.test(o.profile.pin)) {
+        pinData = await hashPin(o.profile.pin);
+      }
+      this.profile = {
+        version: 1,
+        shopName: sName,
+        ownerName: oName,
+        createdAt: this.now(),
+        ...(pinData ? { pin: pinData } : {}),
+      };
+      await saveProfile(this.o.vault, this.profile);
+    }
+    this.store.update({ lang: o.lang, shopName: sName, profile: this.profile, showCompleteProfile: false, onboarded: true, screen: 'home' });
     if (o.demoData && this.ledger.customers().length === 0) await seedDemoLedger(this.ledger, this.now());
     await this.saveSettings();
     this.gateway.setLang(o.lang);
@@ -638,6 +763,7 @@ export class PhoneSession {
     await this.o.vault.deleteAll();
     this.o.vault = await Vault.open(undefined, undefined, undefined);
     this.ledger = await Ledger.load(this.o.vault.ledgerStore, this.now, this.newId);
+    this.profile = null;
     this.store.set({ ...initial(), loaded: true, lang: this.state.lang, theme: this.state.theme });
     this.buildDialogue();
     this.connect();
@@ -650,6 +776,9 @@ export class PhoneSession {
   }
 
   dispose(): void {
+    if (this.visibilityListener && typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', this.visibilityListener);
+    }
     if (this.purgeTimer) clearInterval(this.purgeTimer);
     if (this.undoTimer) clearTimeout(this.undoTimer);
     this.gateway.close();

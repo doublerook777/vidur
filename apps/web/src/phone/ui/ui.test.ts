@@ -15,6 +15,7 @@ import { CustomerDetail } from './CustomerDetail.js';
 import { Reminders } from './Reminders.js';
 import { Settings } from './Settings.js';
 import { Onboarding } from './Onboarding.js';
+import { LockScreen } from './LockScreen.js';
 import { Keypad } from './Keypad.js';
 import { StateIndicator } from './StateIndicator.js';
 import {
@@ -44,6 +45,8 @@ const renderedScreens: Record<string, string> = {
   onboarding: renderToString(h(Onboarding, {vm: mockOnboardingVM, actions: mockActions, lang: 'hi', })),
   keypad: renderToString(h(Keypad, {vm: mockKeypadVM, actions: mockActions, lang: 'hi', })),
   keypadNewCustomer: renderToString(h(Keypad, { vm: { ...mockKeypadVM, preset: { newCustomer: true } }, actions: mockActions, lang: 'en' })),
+  lockScreen: renderToString(h(LockScreen, { vm: { shopName: 'Test', lockUntil: null, wrongAttempts: 0, error: null }, actions: mockActions, lang: 'hi' })),
+  homeCompleteProfile: renderToString(h(Home, { vm: { ...mockHomeVM, showCompleteProfile: true }, actions: mockActions, lang: 'hi' })),
 };
 
 const mockCustomers0Id = (): string => mockKeypadVM.customers[0]!.id;
