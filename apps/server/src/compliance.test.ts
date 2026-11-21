@@ -1,15 +1,18 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 /**
  * Repo-level proofs for the project's responsible-AI rules (each `describe` block below is one rule).
  * These search the shipped source, not the tests or docs.
  */
-const root = new URL('../../../', import.meta.url).pathname;
-const tracked = execFileSync('git', ['ls-files', 'apps', 'packages', 'scripts', 'e2e'], { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
+const root = fileURLToPath(new URL('../../../', import.meta.url));
+const gitCmd = process.platform === 'win32' ? 'git.exe' : 'git';
+const tracked = execFileSync(gitCmd, ['ls-files', 'apps', 'packages', 'scripts', 'e2e'], { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
 const source = tracked.filter((f) => /\.(ts|tsx|mjs|js|html|css)$/.test(f) && !/\.test\.|\/mock-gnani\/|tables\/|^e2e\//.test(f));
-const read = (f: string): string => readFileSync(root + f, 'utf8');
+const read = (f: string): string => readFileSync(join(root, f), 'utf8');
 const hits = (re: RegExp, files = source): string[] => files.flatMap((f) => read(f).split('\n').map((l, i) => ({ l, i })).filter(({ l }) => re.test(l) && !l.trim().startsWith('//') && !l.trim().startsWith('*')).map(({ i }) => `${f}:${i + 1}`));
 
 describe('rule: no voice cloning', () => {
