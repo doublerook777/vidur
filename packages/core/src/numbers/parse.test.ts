@@ -166,3 +166,49 @@ describe('lexicon sanity', () => {
     }
   });
 });
+
+describe('k and L written after a number (2.5k, 2K, 1.5L)', () => {
+  it.each([
+    ['Rajesh deposited 2.5k', 2500], ['Rajesh deposited 2.5K', 2500], ['Rajesh deposited 2k', 2000], ['Rajesh deposited 2.5 k', 2500],
+    ['2.5k rupees', 2500], ['₹2.5k', 2500], ['Rs 2.5k', 2500], ['3.25k', 3250], ['10k udhaar', 10000], ['2.5k/-', 2500], ['२.५k', 2500],
+    ['Rajesh 2.5 k.', 2500], ['1k', 1000], ['0.5k', 500],
+  ])('%s is %d rupees, read in whole rupees and not asked about', (text, want) => {
+    const a = parseAmount(text);
+    expect(a.map((x) => x.paise / 100)).toEqual([want]);
+    expect(a[0]!.confidence).toBeGreaterThanOrEqual(CONFIRM_BELOW);
+    expect(a[0]!.paise % 100).toBe(0);
+  });
+  it('the letter is part of the amount, so it is not a leftover word', () => {
+    expect(parseAmount('Rajesh deposited 2.5k')[0]!.text).toBe('2.5k');
+    expect(parseAmount('Rajesh deposited 2.5 k')[0]!.text).toBe('2.5 k');
+  });
+  it('two shorthand amounts in one sentence stay two amounts', () => {
+    expect(rupees('Rajesh 2.5k aur Sunita 3k')).toEqual([2500, 3000]);
+  });
+  it('a capital L means lakh but is always read back, because it could be litres', () => {
+    const a = parseAmount('Rajesh 1.5L udhaar');
+    expect(a.map((x) => x.paise / 100)).toEqual([150000]);
+    expect(a[0]!.confidence).toBeLessThan(CONFIRM_BELOW);
+  });
+  it('a small "l", a letter before the number, and units like kg are not shorthand', () => {
+    expect(rupees('Rajesh 2.5l milk')).toEqual([2.5]);
+    expect(rupees('k 5')).toEqual([5]);
+    expect(rupees('2 kg atta')).toEqual([]);
+    expect(rupees('Rajesh ok 500')).toEqual([500]);
+  });
+  it('a fraction of a rupee left over is read back, never rounded silently', () => {
+    const a = parseAmount('2.5555k');
+    expect(a[0]!.confidence).toBeLessThan(CONFIRM_BELOW);
+  });
+  it('a decimal before hazaar, thousand or lakh is a normal amount', () => {
+    for (const [t, v] of [['2.5 hazaar', 2500], ['2.5 thousand', 2500], ['2.5 lakh', 250000], ['1.5 हज़ार', 1500]] as const) {
+      const a = parseAmount(t);
+      expect(a.map((x) => x.paise / 100)).toEqual([v]);
+      expect(a[0]!.confidence).toBeGreaterThanOrEqual(CONFIRM_BELOW);
+    }
+  });
+  it('a plain decimal is still doubtful', () => {
+    expect(parseAmount('2.5')[0]!.confidence).toBeLessThan(CONFIRM_BELOW);
+  });
+});
+

@@ -366,6 +366,13 @@ try {
   const fmtIN = (p) => { const r = String(Math.round(p / 100)); return '₹' + (r.length <= 3 ? r : r.slice(0, -3).replace(/\B(?=(\d{2})+$)/g, ',') + ',' + r.slice(-3)); };
   check('the customers screen shows total credit and total paid, and what is still due', sum.credit > 0 && sum.text.includes(fmtIN(sum.credit)) && sum.text.includes(fmtIN(sum.payment)) && sum.text.includes(fmtIN(Math.max(0, sum.credit - sum.payment))), sum.text);
   check('still due equals the sum of every customer balance', sum.credit - sum.payment === sum.rows);
+  // Amounts written as 2.5k are 2,500 rupees, saved without a question about the amount.
+  await page.evaluate(() => window.__vidur.actions.navigate('home'));
+  await sleep(150);
+  const kBefore = await state(page, 's.history.length');
+  await page.evaluate(() => window.__vidur.onTranscript({ text: 'Mohan ne 2.5k jama kiye', lang: 'hi', sttMs: 0, audioMs: 0 }));
+  await sleep(300);
+  check('"2.5k" is read as 2,500 rupees and saved with no question', (await state(page, 's.history.length')) === kBefore + 1 && (await state(page, "s.history[0].paise === 250000 && s.history[0].kind === 'payment'")));
   await page.evaluate(() => window.__vidur.actions.navigate('home'));
   await sleep(150);
   const entriesBefore = await state(page, 's.history.length');
