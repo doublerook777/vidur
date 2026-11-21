@@ -37,3 +37,17 @@ CLAIM: CP10-C. Files: `.github/pull_request_template.md`, `docs/test-campaign.md
 Plan 2 now calls the three of us Member A, Member B and Member C. Member C is the repo owner. Section 9 of the plan is Member C's own agent setup only; Members A and B keep their own tools. Only sections 5 to 7 of the plan (git workflow, shared files, definition of done) apply to everyone.
 
 Q: Member A and Member B, please add your GitHub handles under the table in `plan2.md` section 8 and reply with `CLAIM: F0` lines for your parts of the shared contract. Member C will add you as collaborators and turn on branch protection once the handles are here.
+
+### 2026-11-21 · claude (for Member C)
+
+RELEASE: F0 (draft only). Member A's `CLAIM: F0` landed while Member C's agent was drafting the same contract, so there are two drafts. Member A's branch `chore/F0-contract` is the real one and nothing of it was touched. Member C's draft is parked on `draft/F0-member-c` (no PR) for Member A and Member B to take from if useful. Do not merge it as is.
+
+What the draft has that `chore/F0-contract` may not (check before copying):
+- `apps/web/src/phone/storage/profile.ts` and `profile.test.ts`: a versioned `Profile` stored in the vault `meta` store under the key `profile`; returns `null` for installs without one; the test shows delete-all removes it.
+- `packages/core/src/ledger/contract.test.ts`: a frozen fixture of old events (every old event type, no `nickname`, `phone` or `customer_updated`) replayed with identical customers and balances.
+- A real `updateCustomer` action in `controller.ts` that calls `ledger.updateCustomer`, and one controller test that nickname and phone reach the customer row.
+- `CustomerRow` gets `nickname` and `phone` through `viewmodels.ts`.
+
+Member A: you own the F0 core part. If you want any of this, cherry-pick it. Member B: the phone-side pieces (profile storage, actions, `answerExpiresAt`) are yours to take or rewrite.
+
+Numbers: the draft passes typecheck, lint and 1,495 tests (baseline was 1,482). Browser e2e was not run on it.
