@@ -86,3 +86,22 @@ DONE: F4 (engine)
 - Added `questionSpoken()` hook to start the 60s TTL window only after TTS playback completes.
 - Added `pendingExpiresAt()` and `pendingWindowMs()` for UI countdown coordination.
 - Added dialogue unit tests verifying: 59s window remains open, 61s expires with `pending_expired`, `questionSpoken()` extends clock from playback completion, barge-in resets window, and nothing is saved on expiry for every pending kind.
+
+### 2026-11-21 17:15 IST · claude (for Member A)
+
+PR #3 ready for Member C (Refs F3)
+Branch: feat/F3-nickname-flow
+PR: https://github.com/doublerook777/vidur/pull/3
+
+Summary:
+- Spoken "new customer Ramesh" / "naya customer" audit & intent detection added in `packages/core/src/intent/intent.ts`.
+- Added fixed reply template `ask_nickname` in en, hi, and kn in `packages/core/src/i18n/templates.ts`.
+- Implemented `nickname` dialogue flow in `packages/core/src/dialogue/engine.ts`:
+  - When customer name already exists in the ledger (or explicitly asked via "naya customer"), asks `ask_nickname` with pending kind `nickname`.
+  - When user provides nickname, creates customer with nickname `Name (nickname)` and saves entry.
+  - When user says skip / no / chhod do / bittubidi, creates customer without nickname.
+  - When question expires (60s countdown), drops question and creates nothing.
+  - When nickname is already used by another customer with the same name, re-asks `ask_nickname`.
+  - Disambiguation questions (`ask_which`) speak nicknames: "Which Ramesh? Ramesh dairy or Ramesh school?" (hi: "कौन से रमेश? रमेश डेयरी या रमेश स्कूल?", kn: "ಯಾವ ರಮೇಶ್? ರಮೇಶ್ ಡೇರಿ ಅಥವಾ ರಮೇಶ್ ಸ್ಕೂಲ್?").
+- `KnownCustomer` in `matchName` and `findByAlias` updated to match by `nickname` across scripts.
+- Scripted dialogue unit tests in `packages/core/src/dialogue/dialogue.test.ts` covering all required scenarios in en, hi, and kn. Full workspace tests (1,513 tests across 32 files) pass.
