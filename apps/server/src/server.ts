@@ -354,7 +354,10 @@ class ClientSession {
       return;
     }
     if (!this.stt?.isOpen) await this.ensureStt();
-    const t = await this.stt!.commit();
+    const waitBase = this.deps.config.transcriptWaitBaseMs;
+    const waitMax = this.deps.config.transcriptWaitMaxMs;
+    const scaledWaitMs = Math.min(waitMax, waitBase + Math.round((this.inboundBytes / 32_000) * 500));
+    const t = await this.stt!.commit(scaledWaitMs);
     if (!this.budget(t.audioMs / 1000)) return;
     this.json({ type: 'transcript', text: t.text, lang: t.lang, sttMs: t.sttMs, audioMs: t.audioMs, v3: t.v3 });
     this.json({ type: 'metric', name: 'release_to_transcript_ms', ms: Date.now() - this.pttUpAt });

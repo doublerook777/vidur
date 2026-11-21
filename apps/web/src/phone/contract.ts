@@ -66,6 +66,8 @@ export interface EntryCardVM {
   answerExpiresAt?: number;
   /** Length of the whole window in ms, so the countdown can show how much is left. F4. */
   answerWindowMs?: number;
+  /** Remaining seconds during the last 5s of a 30s press cap (B3). */
+  countdownSec?: number;
 }
 
 export interface ErrorVM {

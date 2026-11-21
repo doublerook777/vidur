@@ -703,6 +703,23 @@
 .orb-listening .orb-ring-1 { opacity: 0.7; transform: scale(calc(1.12 + var(--lvl) * 0.3)); }
 .orb-listening .orb-ring-2 { opacity: 0.45; transform: scale(calc(1.24 + var(--lvl) * 0.5)); }
 .orb-listening .orb-ring-3 { opacity: 0.25; transform: scale(calc(1.36 + var(--lvl) * 0.7)); }
+.orb-countdown-num { font-size: 24px; font-weight: 800; color: #ffffff; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+
+.entry-listening { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.entry-listening-text { margin: 0; font-size: 14px; color: var(--text-muted); }
+.entry-countdown .countdown-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 14px;
+  background: var(--phase-listening-bg);
+  color: var(--phase-listening-text);
+  font-weight: 700;
+  font-size: 13px;
+}
 
 /* thinking: a bright arc circles the core */
 .orb-thinking { --orb-hi: #ffe9a3; --orb-mid: #e2a91c; --orb-lo: #7a5600; --orb-ring: #f4c542; }

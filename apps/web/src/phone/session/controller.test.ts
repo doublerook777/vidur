@@ -473,4 +473,61 @@ describe('adding and removing entries by hand, and tapping answers', () => {
       expect(session!.state.showCompleteProfile).toBe(false);
     });
   });
+
+  describe('B3: phone press cap and countdown', () => {
+    it('shows countdown in the last window and releases automatically at the cap', async () => {
+      mock = await startMockGnani({ ttfbMs: 5, chunkIntervalMs: 15 });
+      mock.scriptTranscripts(['लम्बा भाषण']);
+      const config = { ...loadConfig({ MODE: 'local', GNANI_API_KEY: 'good', PORT: '0' }), gnaniBaseUrl: mock.url.replace('http', 'ws') };
+      gw = await createGateway({ config, log: createLogger(() => undefined, { strict: true }) });
+      const mic = new FakeMic();
+      const speaker = new FakeSpeaker();
+      const vault = await Vault.open('b3-test', new IDBFactory());
+
+      // Configure cap at 500ms, countdown window at 200ms (starts at 300ms)
+      session = await PhoneSession.create({
+        gatewayUrl: gw.url.replace('http', 'ws') + '/ws',
+        WebSocketImpl: NodeWebSocket as unknown as typeof WebSocket,
+        vault,
+        capture: mic,
+        playback: speaker,
+        pressCapMs: 500,
+        countdownWindowMs: 200,
+      });
+
+      await until(() => session!.state.online);
+      await onboard(speaker, false);
+
+      // Hold mic down beyond the cap
+      session!.actions.micDown();
+      await until(() => session!.state.phase === 'listening');
+      expect(session!.state.card?.state).toBe('listening');
+
+      // Wait until countdown window begins (at ~350ms)
+      await until(() => session!.state.card?.countdownSec !== undefined, 2000);
+      expect(typeof session!.state.card?.countdownSec).toBe('number');
+      expect(session!.state.card?.countdownSec).toBeGreaterThanOrEqual(1);
+
+      // Auto-releases at cap (500ms) -> transitions to thinking
+      await until(() => session!.state.phase === 'thinking' || session!.state.phase === 'speaking', 2000);
+      await until(() => session!.state.phase === 'idle', 4000);
+    });
+
+    it('releases manually before countdown window without showing countdown', async () => {
+      const { speaker } = await boot();
+      await onboard(speaker, false);
+      mock!.scriptTranscripts(['साधारण वाक्य']);
+
+      session!.actions.micDown();
+      await until(() => session!.state.phase === 'listening');
+      expect(session!.state.card?.countdownSec).toBeUndefined();
+
+      // Hold for 80ms so FakeMic sends an audio frame above silent peak
+      await new Promise((r) => setTimeout(r, 80));
+      session!.actions.micUp();
+      await until(() => session!.state.phase === 'thinking' || session!.state.phase === 'speaking');
+      expect(session!.state.card?.countdownSec).toBeUndefined();
+      await until(() => session!.state.phase === 'idle');
+    });
+  });
 });

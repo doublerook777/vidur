@@ -10,6 +10,9 @@ export interface Config {
   accessCode: string | null;
   /** Where the Gnani sockets go. Overridden only by tests and mock mode. */
   gnaniBaseUrl: string;
+  /** Final transcript wait base ms (scales with audio length up to max). B3. */
+  transcriptWaitBaseMs: number;
+  transcriptWaitMaxMs: number;
   limits: {
     /** Browser origins allowed to open a WebSocket. Empty in local mode means "this machine only". */
     allowedOrigins: string[];
@@ -73,10 +76,21 @@ export function loadConfig(env: Record<string, string | undefined>): Config {
   };
   const hosted = mode === 'hosted';
 
+  const transcriptWaitBaseMs = int('TRANSCRIPT_WAIT_BASE_MS', 6_000);
+  if (transcriptWaitBaseMs < 1_000 || transcriptWaitBaseMs > 30_000) {
+    throw new ConfigError('TRANSCRIPT_WAIT_BASE_MS must be between 1000 and 30000');
+  }
+  const transcriptWaitMaxMs = int('TRANSCRIPT_WAIT_MAX_MS', 20_000);
+  if (transcriptWaitMaxMs < transcriptWaitBaseMs || transcriptWaitMaxMs > 60_000) {
+    throw new ConfigError('TRANSCRIPT_WAIT_MAX_MS must be between TRANSCRIPT_WAIT_BASE_MS and 60000');
+  }
+
   return {
     mode,
     port,
     gnaniBaseUrl: get('GNANI_BASE_URL') ?? 'wss://api.vachana.ai',
+    transcriptWaitBaseMs,
+    transcriptWaitMaxMs,
     limits: {
       allowedOrigins: (get('ALLOWED_ORIGINS') ?? '').split(',').map((o) => o.trim()).filter(Boolean),
       maxSessions: int('MAX_SESSIONS', hosted ? 10 : 50),

@@ -8,6 +8,7 @@ import type { ScreenProps } from './types.js';
 
 export interface VoiceOrbVM {
   phase: Phase;
+  countdownSec?: number;
 }
 
 const BARS = 28;
@@ -87,7 +88,11 @@ export function VoiceOrb({ vm, actions, lang }: ScreenProps<VoiceOrbVM>) {
         <circle class="orb-think" r="43" pathLength="100" />
       </svg>
       <span class="orb-glyph">
-        <IconMic size={30} />
+        {vm.countdownSec !== undefined ? (
+          <span class="orb-countdown-num" data-feature="orb-countdown">{vm.countdownSec}</span>
+        ) : (
+          <IconMic size={30} />
+        )}
       </span>
     </button>
   );

@@ -8,6 +8,16 @@ export function EntryCard({ vm, actions, lang }: ScreenProps<EntryCardVM>) {
   const t = LABELS[lang];
   return (
     <section class={`entry-card entry-card-${vm.state}`} data-feature="entry-card" aria-live="polite">
+      {vm.state === 'listening' && (
+        <div class="entry-listening" data-feature="listening-card">
+          <p class="entry-listening-text">{t.listeningHint}</p>
+          {vm.countdownSec !== undefined && (
+            <p class="entry-countdown" data-feature="press-countdown">
+              <span class="countdown-badge">{vm.countdownSec}s</span>
+            </p>
+          )}
+        </div>
+      )}
       {vm.heard && (
         <p class="entry-heard">
           <span class="entry-heard-label">{t.aiHeard}</span>

@@ -115,7 +115,7 @@ export function Home({ vm, actions, lang }: ScreenProps<HomeVM>) {
         </button>
       )}
 
-      <BottomNav vm={{ current: 'home' }} actions={actions} lang={lang} orb={<VoiceOrb vm={{ phase: vm.phase }} actions={actions} lang={lang} />} />
+      <BottomNav vm={{ current: 'home' }} actions={actions} lang={lang} orb={<VoiceOrb vm={{ phase: vm.phase, countdownSec: vm.card?.state === 'listening' ? vm.card.countdownSec : undefined }} actions={actions} lang={lang} />} />
     </main>
   );
 }

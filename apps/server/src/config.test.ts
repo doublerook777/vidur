@@ -37,4 +37,19 @@ describe('loadConfig', () => {
   it('rejects an unknown MODE', () => {
     expect(() => loadConfig({ MODE: 'prod' })).toThrow(/MODE/);
   });
+
+  it('validates transcript wait base and max parameters (B3)', () => {
+    const c = loadConfig({ MODE: 'mock' });
+    expect(c.transcriptWaitBaseMs).toBe(6000);
+    expect(c.transcriptWaitMaxMs).toBe(20000);
+
+    const custom = loadConfig({ MODE: 'mock', TRANSCRIPT_WAIT_BASE_MS: '4000', TRANSCRIPT_WAIT_MAX_MS: '25000' });
+    expect(custom.transcriptWaitBaseMs).toBe(4000);
+    expect(custom.transcriptWaitMaxMs).toBe(25000);
+
+    expect(() => loadConfig({ MODE: 'mock', TRANSCRIPT_WAIT_BASE_MS: '500' })).toThrow(/TRANSCRIPT_WAIT_BASE_MS/);
+    expect(() => loadConfig({ MODE: 'mock', TRANSCRIPT_WAIT_BASE_MS: '35000' })).toThrow(/TRANSCRIPT_WAIT_BASE_MS/);
+    expect(() => loadConfig({ MODE: 'mock', TRANSCRIPT_WAIT_BASE_MS: '8000', TRANSCRIPT_WAIT_MAX_MS: '7000' })).toThrow(/TRANSCRIPT_WAIT_MAX_MS/);
+    expect(() => loadConfig({ MODE: 'mock', TRANSCRIPT_WAIT_MAX_MS: '70000' })).toThrow(/TRANSCRIPT_WAIT_MAX_MS/);
+  });
 });

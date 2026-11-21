@@ -72,6 +72,9 @@ export interface SessionState {
   showCompleteProfile: boolean;
 }
 
+export const PRESS_CAP_MS = 30_000;
+export const COUNTDOWN_WINDOW_MS = 5_000;
+
 export interface SessionOptions {
   gatewayUrl: string;
   accessCode?: string;
@@ -82,6 +85,8 @@ export interface SessionOptions {
   clock?: () => number;
   onTelemetry?: (t: Telemetry) => void;
   backoffMs?: number[];
+  pressCapMs?: number;
+  countdownWindowMs?: number;
 }
 
 /** A fresh install starts in the phone's own language (English, Kannada), and in Hindi for anything else. */
@@ -416,6 +421,38 @@ export class PhoneSession {
     this.setPhase('listening');
     this.gateway.pttDown();
     this.peak = 0;
+    this.pressStartedAt = Date.now();
+    this.clearPressTimers();
+    const capMs = this.o.pressCapMs ?? PRESS_CAP_MS;
+    const countdownWin = this.o.countdownWindowMs ?? COUNTDOWN_WINDOW_MS;
+    const countdownStart = capMs - countdownWin;
+
+    this.pressCapTimer = setTimeout(() => {
+      if (this.pressing) {
+        this.micUp();
+      }
+    }, capMs);
+
+    this.countdownTimer = setInterval(() => {
+      if (!this.pressing) {
+        this.clearPressTimers();
+        return;
+      }
+      const elapsed = Date.now() - this.pressStartedAt;
+      if (elapsed >= countdownStart && elapsed < capMs) {
+        const remainingSec = Math.max(1, Math.ceil((capMs - elapsed) / 1000));
+        if (this.state.card?.countdownSec !== remainingSec) {
+          this.store.update({
+            card: {
+              ...(this.state.card ?? { state: 'listening' }),
+              state: 'listening',
+              countdownSec: remainingSec,
+            },
+          });
+        }
+      }
+    }, 100);
+
     this.o.capture.begin((f) => {
       this.trackPeak(f);
       this.gateway.sendAudio(f);
@@ -442,6 +479,20 @@ export class PhoneSession {
 
   private peak = 0;
   private silentUntil = 0;
+  private pressCapTimer: ReturnType<typeof setTimeout> | null = null;
+  private countdownTimer: ReturnType<typeof setInterval> | null = null;
+  private pressStartedAt = 0;
+
+  private clearPressTimers(): void {
+    if (this.pressCapTimer) {
+      clearTimeout(this.pressCapTimer);
+      this.pressCapTimer = null;
+    }
+    if (this.countdownTimer) {
+      clearInterval(this.countdownTimer);
+      this.countdownTimer = null;
+    }
+  }
 
   private trackPeak(frame: ArrayBuffer): void {
     const v = new Int16Array(frame);
@@ -462,6 +513,7 @@ export class PhoneSession {
   }
 
   micUp(): void {
+    this.clearPressTimers();
     if (!this.pressing) return;
     this.pressing = false;
     this.pttUpAt = performance.now();
@@ -776,6 +828,7 @@ export class PhoneSession {
   }
 
   dispose(): void {
+    this.clearPressTimers();
     if (this.visibilityListener && typeof document !== 'undefined') {
       document.removeEventListener('visibilitychange', this.visibilityListener);
     }

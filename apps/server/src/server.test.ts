@@ -355,3 +355,51 @@ describe('static files and health', () => {
     expect(cfg['needsAccessCode']).toBe(false);
   });
 });
+
+describe('B3: scaled transcript wait and audio caps on long speech', () => {
+  it('short press (1s audio) completes with scaled timeout', async () => {
+    const { mock } = await boot();
+    mock.scriptTranscripts(['छोटा वाक्य']);
+    const c = await connect();
+    c.send({ type: 'hello', lang: 'hi' });
+    await c.waitFor((m) => m.type === 'ready');
+    const tr = await speakAUtterance(c, 1000);
+    expect(tr['text']).toBe('छोटा वाक्य');
+  });
+
+  it('20s audio scales wait time and receives transcript', async () => {
+    const { mock } = await boot();
+    mock.scriptTranscripts(['बीस सेकंड का भाषण']);
+    const c = await connect();
+    c.send({ type: 'hello', lang: 'hi' });
+    await c.waitFor((m) => m.type === 'ready');
+    c.send({ type: 'ptt_down' });
+    await c.waitFor((m) => m.type === 'speech_start');
+    for (let i = 0; i < 20; i++) c.ws.send(pcm(1000));
+    c.send({ type: 'ptt_up' });
+    const tr = await c.waitFor((m) => m.type === 'transcript');
+    expect(tr['text']).toBe('बीस सेकंड का भाषण');
+    expect(tr['audioMs']).toBe(20000);
+  });
+
+  it('45s audio caps scaled wait at transcriptWaitMaxMs and enforces session audio cap', async () => {
+    const { mock } = await boot({
+      MODE: 'hosted',
+      ACCESS_CODE: 'open-sesame-1',
+      ALLOWED_ORIGINS: 'https://vidur.example',
+      SESSION_AUDIO_CAP_MIN: '0.5', // 30s session cap
+    });
+    mock.scriptTranscripts(['पैंतालीस सेकंड']);
+    const c = new Client(gw!.url, 'https://vidur.example');
+    clients.push(c);
+    await c.open();
+    c.send({ type: 'hello', lang: 'hi', accessCode: 'open-sesame-1' });
+    await c.waitFor((m) => m.type === 'ready');
+    c.send({ type: 'ptt_down' });
+    await c.waitFor((m) => m.type === 'speech_start');
+    for (let i = 0; i < 45; i++) c.ws.send(pcm(1000));
+    c.send({ type: 'ptt_up' });
+    const err = await c.waitFor((m) => m.type === 'error');
+    expect(err['code']).toBe('session_cap');
+  });
+});
