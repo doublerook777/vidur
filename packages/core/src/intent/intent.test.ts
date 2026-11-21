@@ -194,3 +194,12 @@ describe('Telugu credit word (F9)', () => {
     expect(mixed).toEqual([]);
   });
 });
+
+describe('Kannada credit word spelled ಉದ್ಧಾರ (F7 round 2)', () => {
+  it('is a credit with no direction question and the right amount', () => {
+    const e = interpret('ಮೋಹನ್ ನಾಲ್ಕುನೂರು ಹತ್ತು ರೂಪಾಯಿ ಉದ್ಧಾರ.', { lang: 'kn' }).events[0];
+    expect(e?.intent).toBe('credit_entry');
+    expect(e?.amountPaise).toBe(41000);
+    expect(e?.needs ?? []).not.toContain('direction');
+  });
+});

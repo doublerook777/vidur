@@ -17,6 +17,7 @@
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,html,css}\"",
     "scan:secrets": "node scripts/scan-secrets.mjs",
+    "check:size": "node scripts/check-bundle-size.mjs",
     "typecheck": "npm run build -w @vidur/core --silent && tsc -p packages/core/tsconfig.json --noEmit && tsc -p apps/server/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit",
     "test:e2e": "npm run build && node e2e/browser.mjs",
     "test:live": "node e2e/live.mjs",

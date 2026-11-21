@@ -37,6 +37,10 @@ const TA_THOUSANDS: [RegExp, string][] = [
 const MR_HALF_NUM = 'तीन|चार|पाच|सहा|सात|आठ|नऊ|दहा|अकरा|बारा';
 const GU_HALF_NUM = 'ત્રણ|ચાર|પાંચ|છ|સાત|આઠ|નવ|દસ|અગિયાર|બાર';
 
+// Kannada: Prisma may write a unit and its multiplier as one word (ನಾಲ್ಕುನೂರು, 410 read as 10 before this).
+const KN_NUM = 'ಒಂದು|ಎರಡು|ಮೂರು|ನಾಲ್ಕು|ಐದು|ಆರು|ಏಳು|ಎಂಟು|ಒಂಬತ್ತು|ಹತ್ತು|ಹನ್ನೊಂದು|ಹನ್ನೆರಡು|ಹದಿಮೂರು|ಹದಿನಾಲ್ಕು|ಹದಿನೈದು|ಹದಿನಾರು|ಹದಿನೇಳು|ಹದಿನೆಂಟು|ಹತ್ತೊಂಬತ್ತು|ಇಪ್ಪತ್ತು|ಮೂವತ್ತು|ನಲವತ್ತು|ಐವತ್ತು|ಅರವತ್ತು|ಎಪ್ಪತ್ತು|ಎಂಬತ್ತು|ತೊಂಬತ್ತು';
+const KN_MULT = 'ನೂರು|ಸಾವಿರ|ಲಕ್ಷ';
+
 const RULES: [RegExp, string][] = [
   ...TA_THOUSANDS,
   // "saudhar" is "sau udhar" said fast: the two u sounds become one.
@@ -45,6 +49,7 @@ const RULES: [RegExp, string][] = [
   [new RegExp(`${L}(${NUM})(${MULT})${R}`, 'giu'), '$1 $2'],
   [new RegExp(`${L}(${HI_NUM})?(${HI_MULT})(${HI_DIR})${R}`, 'gu'), '$1 $2 $3'],
   [new RegExp(`${L}(${HI_NUM})(${HI_MULT})${R}`, 'gu'), '$1 $2'],
+  [new RegExp(`${L}(${KN_NUM})(${KN_MULT})${R}`, 'gu'), '$1 $2'],
   // Marathi and Gujarati say "three and a half" as one word: Prisma writes साडेतीन, સાડાત્રણ. Put the space back.
   [new RegExp(`${L}साडे(${MR_HALF_NUM})${R}`, 'gu'), 'साडे $1'],
   [new RegExp(`${L}સાડા(${GU_HALF_NUM})${R}`, 'gu'), 'સાડા $1'],

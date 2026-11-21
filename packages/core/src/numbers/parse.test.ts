@@ -269,3 +269,16 @@ describe('three and a half written as one word (real Prisma output, F9)', () => 
     expect(parseAmount(text, lang)[0]?.paise).toBe(paise);
   });
 });
+
+describe('Hindi and Kannada spellings found by the F7 round 2 speech pass', () => {
+  const cases: [Lang, string, number][] = [
+    ['hi', 'कविता का सादे तीन सौ रुपये उधार।', 35000], // Prisma's spelling of साढ़े: read as 300 before
+    ['hi', 'कविता का साढ़े तीन सौ रुपये उधार।', 35000],
+    ['kn', 'ಮೋಹನ್ ನಾಲ್ಕುನೂರು ಹತ್ತು ರೂಪಾಯಿ ಉದ್ಧಾರ.', 41000], // one word, read as 10 before
+    ['kn', 'ಮೋಹನ್ ನಾಲ್ಕು ನೂರು ಹತ್ತು ರೂಪಾಯಿ ಉಧಾರ', 41000],
+    ['kn', 'ರಮೇಶ್ ಎರಡುಸಾವಿರ ಐದು ನೂರು ರೂಪಾಯಿ', 250000],
+  ];
+  it.each(cases)('%s: %s', (lang, text, paise) => {
+    expect(parseAmount(text, lang)[0]?.paise).toBe(paise);
+  });
+});
