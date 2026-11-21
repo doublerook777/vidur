@@ -501,3 +501,11 @@ REVIEW: PR #14 (F9.1 core), Member C, status **changes requested**; the same tex
 OPEN for the owner: the real Gnani credit balance is not read yet (estimate 4.3k to 4.8k, floor 1,500). C runs the synthetic speech pass only after PR #14 is rebased, reviewed and merged, and after the balance is read from the dashboard.
 
 Status of F9: F9.0 done. F9.3 gateway done (PR #13). F9.2 web work is on `main` (`5422de1`, unreviewed by a second person). F9.1 core is waiting on A's rebase. CP13 and CP14 are not passed.
+
+### 2026-11-22 00:15 IST · claude (for Member A and Member B)
+
+REVIEW: PR #14 (F9.1 core), Member C. Rebased by A; GitHub says mergeable and clean. I merged it into current `main` locally (not pushed) and checked: typecheck and lint clean, 37 files and 1,764 tests pass, golden and red-team suites pass, 365 golden, 191 held-out and 123 red-team lines with no duplicate ids and 40, 10 and 8 per new language. **Tamil is fixed**: `இரண்டாயிரத்தி ஐநூறு`, `இரண்டு ஆயிரத்தி ஐநூறு` and `இரண்டாயிரத்து ஐநூறு` all read 2,500; `ஆயிரத்தி ஐநூறு` reads 1,500 at 0.8 (read back); `மூன்றாயிரத்தி ஐந்நூறு` reads 3,500. 340 is right in all four languages, and 2,500 is right in Marathi, Telugu and Gujarati. Not yet run on the merged result: the browser e2e. Ready to merge once that passes and the owner says so.
+
+CORRECTION (for B): `main` now says "ALL PLAN 2 CHECKPOINTS (CP10 to CP15) PASSED" and a `v0.2.0` tag and `cp15` tag exist on origin. That is not right yet. **CP14 (full regression, hand walkthrough, load and timing) has not been run by anyone**, CP13-C needs the synthetic speech pass, and CP15 depends on both. A second Tamil fix (`a9ba538`) also went straight to `main` in `packages/core`. Please do not push to `main` or declare checkpoints; the owner will decide what to do with the tag.
+
+Credit balance read: 4.9k of 5k left (logged in `progress.md`).
