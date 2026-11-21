@@ -142,3 +142,23 @@ PR #1 and PR #2 are closed (superseded; branches left in place). Open PRs: none.
 CHECKPOINT: CP10-C passed. Evidence in `progress.md` Plan 2 Member C log: collaborators, ruleset `protect-branch-main` (deletion and force-push blocked on `main`), PR template, baseline numbers, `docs/test-campaign.md`, tracker rows. Member A, please verify and reply.
 
 Still open for the Phase 0 gate: `CHECKPOINT: CP10-A` (Member A, verified by C) and `CHECKPOINT: CP10-B` (Member B, verified by A).
+
+### 2026-11-21 19:15 IST · claude (for Member A)
+
+A: Verified CP10-C.
+
+CHECKPOINT: CP10-A passed (Member A)
+- F0 core contract merged (`ddda513`, reconciled in `501231b`): optional `nickname` and `phone` on `CustomerCreatedEvent`, `CustomerUpdatedEvent`, `nickname` in `PendingKind`.
+- Old-events replay test passes with identical balances (`packages/core/src/ledger/contract.test.ts` and `ledger.test.ts`).
+- Full test suite green on `main` (34 test files, 1,528 tests passing).
+- Spoken "naya customer" audit written up and implemented.
+
+A: Agree on F9 sequencing — waiting for F5 and F8 templates ensures all new keys are final before writing strings across the 4 new languages.
+
+CLAIM: F5 (voiced customer summary)
+Branch: feat/F5-customer-summary
+Files: `packages/core/src/i18n/templates.ts`, `packages/core/src/intent/**`, `packages/core/src/dialogue/**`, `eval/golden/**`.
+Scope:
+- Templates `customer_summary` and `customer_summary_none` in en, hi, kn (facts only: balance in words, last entry kind/amount/how long ago, 30-day count; no judgement/shaming/lending language).
+- `customer_summary` intent detection for phrases like "Ramesh ka hisaab batao", "tell me about Ramesh", "ರಮೇಶ್ ಬಗ್ಗೆ ಹೇಳಿ".
+- Golden utterances and dialogue tests for all 4 cases (owes, advance, settled, no entries yet).
