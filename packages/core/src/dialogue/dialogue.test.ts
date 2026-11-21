@@ -626,6 +626,212 @@ describe('a spoken correction never becomes a customer (the first usability test
       tick(61_000);
       expect(keys(await say1('hisaab'))).toContain('pending_expired');
       expect(ledger.activeEntries().filter((e) => e.paise === paise(100))).toHaveLength(0);
+
+      // 7. nickname
+      await say1('naya customer Mohan 100 udhaar');
+      expect(d.pendingKind()).toBe('nickname');
+      tick(61_000);
+      expect(keys(await say1('hisaab'))).toContain('pending_expired');
+    });
+  });
+
+  describe('F3: nickname flow for duplicate customer accounts', () => {
+    it('nickname given in en: creates customer with nickname and posts credit', async () => {
+      const { ledger, d, say1 } = await setup('en');
+      const r1 = await ledger.createCustomer('Ramesh');
+      d.start();
+
+      const rs1 = await say1('new customer Ramesh 500 credit');
+      expect(keys(rs1)).toEqual(['ask_nickname']);
+      expect(rs1[0]!.text).toBe(
+        'A khata for Ramesh already exists. What nickname for the new one, for example dairy or school? Say skip to continue.',
+      );
+      expect(d.pendingKind()).toBe('nickname');
+
+      const rs2 = await say1('dairy');
+      expect(keys(rs2)).toEqual(['new_customer', 'credit_saved']);
+      expect(rs2[0]!.text).toBe('New name Ramesh dairy.');
+      expect(ledger.customers()).toHaveLength(2);
+
+      const r2 = ledger.customers().find((c) => c.id !== r1.id)!;
+      expect(r2.name).toBe('Ramesh');
+      expect(r2.nickname).toBe('dairy');
+      expect(ledger.balance(r2.id)).toBe(paise(500));
+      expect(ledger.balance(r1.id)).toBe(0);
+    });
+
+    it('nickname given in hi: creates customer with nickname and posts credit', async () => {
+      const { ledger, d, say1 } = await setup('hi');
+      const r1 = await ledger.createCustomer('रमेश');
+      d.start();
+
+      const rs1 = await say1('naya customer रमेश 500 udhaar');
+      expect(keys(rs1)).toEqual(['ask_nickname']);
+      expect(rs1[0]!.text).toBe(
+        'रमेश नाम का खाता पहले से है। नए खाते का निकनेम क्या रखें, जैसे डेयरी या स्कूल? जारी रखने के लिए छोड़ बोलिए।',
+      );
+      expect(d.pendingKind()).toBe('nickname');
+
+      const rs2 = await say1('डेयरी');
+      expect(keys(rs2)).toEqual(['new_customer', 'credit_saved']);
+      expect(rs2[0]!.text).toBe('नया नाम रमेश डेयरी।');
+      expect(ledger.customers()).toHaveLength(2);
+
+      const r2 = ledger.customers().find((c) => c.id !== r1.id)!;
+      expect(r2.nickname).toBe('डेयरी');
+      expect(ledger.balance(r2.id)).toBe(paise(500));
+      expect(ledger.balance(r1.id)).toBe(0);
+    });
+
+    it('nickname given in kn: creates customer with nickname and posts credit', async () => {
+      const { ledger, d, say1 } = await setup('kn');
+      const r1 = await ledger.createCustomer('ರಮೇಶ್');
+      d.start();
+
+      const rs1 = await say1('ಹೊಸ ಗ್ರಾಹಕ ರಮೇಶ್ 500 ಉಧಾರ');
+      expect(keys(rs1)).toEqual(['ask_nickname']);
+      expect(rs1[0]!.text).toBe(
+        'ರಮೇಶ್ ಹೆಸರಿನ ಖಾತೆ ಈಗಾಗಲೇ ಇದೆ. ಹೊಸ ಖಾತೆಗೆ ಉಪನಾಮ ಏನು, ಉದಾಹರಣೆ ಡೇರಿ ಅಥವಾ ಸ್ಕೂಲ್? ಮುಂದುವರಿಸಲು ಬಿಟ್ಟುಬಿಡಿ ಎಂದು ಹೇಳಿ.',
+      );
+      expect(d.pendingKind()).toBe('nickname');
+
+      const rs2 = await say1('ಡೇರಿ');
+      expect(keys(rs2)).toEqual(['new_customer', 'credit_saved']);
+      expect(rs2[0]!.text).toBe('ಹೊಸ ಹೆಸರು ರಮೇಶ್ ಡೇರಿ.');
+      expect(ledger.customers()).toHaveLength(2);
+
+      const r2 = ledger.customers().find((c) => c.id !== r1.id)!;
+      expect(r2.nickname).toBe('ಡೇರಿ');
+      expect(ledger.balance(r2.id)).toBe(paise(500));
+      expect(ledger.balance(r1.id)).toBe(0);
+    });
+
+    it.each([
+      ['en', 'new customer Ramesh 200 credit', 'skip'],
+      ['en', 'new customer Ramesh 200 credit', 'no'],
+      ['hi', 'naya customer Ramesh 200 udhaar', 'छोड़ दो'],
+      ['hi', 'naya customer Ramesh 200 udhaar', 'चोड़ दो'],
+      ['hi', 'naya customer Ramesh 200 udhaar', 'नहीं'],
+      ['kn', 'ಹೊಸ ಗ್ರಾಹಕ ರಮೇಶ್ 200 ಉಧಾರ', 'ಬಿಟ್ಟುಬಿಡಿ'],
+      ['kn', 'ಹೊಸ ಗ್ರಾಹಕ ರಮೇಶ್ 200 ಉಧಾರ', 'ಇಲ್ಲ'],
+    ])('nickname skipped in %s via "%s": creates customer without nickname', async (lang, phrase, skipWord) => {
+      const { ledger, d, say1 } = await setup(lang as SpeechLang);
+      const r1 = await ledger.createCustomer('Ramesh');
+      d.start();
+
+      const rs1 = await say1(phrase);
+      expect(keys(rs1)).toEqual(['ask_nickname']);
+
+      const rs2 = await say1(skipWord);
+      expect(keys(rs2)).toEqual(['new_customer', 'credit_saved']);
+      expect(ledger.customers()).toHaveLength(2);
+
+      const r2 = ledger.customers().find((c) => c.id !== r1.id)!;
+      expect(r2.nickname).toBeUndefined();
+      expect(ledger.balance(r2.id)).toBe(paise(200));
+    });
+
+    it('nickname question expired: drops question and creates no customer', async () => {
+      const { ledger, d, say1, tick } = await setup('en');
+      await ledger.createCustomer('Ramesh');
+      d.start();
+
+      const rs1 = await say1('new customer Ramesh 100 credit');
+      expect(keys(rs1)).toEqual(['ask_nickname']);
+      expect(d.pendingKind()).toBe('nickname');
+
+      tick(61_000);
+      const rs2 = await say1('total hisab');
+      expect(keys(rs2)).toContain('pending_expired');
+      expect(ledger.customers()).toHaveLength(1);
+    });
+
+    it('nickname already used by another Ramesh: re-asks and then accepts a different nickname', async () => {
+      const { ledger, d, say1 } = await setup('en');
+      await ledger.createCustomer('Ramesh', ['dairy'], { nickname: 'dairy' });
+      d.start();
+
+      const rs1 = await say1('new customer Ramesh 300 credit');
+      expect(keys(rs1)).toEqual(['ask_nickname']);
+
+      // Attempt duplicate nickname "dairy"
+      const rs2 = await say1('dairy');
+      expect(keys(rs2)).toEqual(['ask_nickname']);
+      expect(d.pendingKind()).toBe('nickname');
+
+      // Now provide a unique nickname "school"
+      const rs3 = await say1('school');
+      expect(keys(rs3)).toEqual(['new_customer', 'credit_saved']);
+      expect(ledger.customers()).toHaveLength(2);
+      expect(ledger.customers().map((c) => c.nickname)).toEqual(['dairy', 'school']);
+    });
+
+    it('disambiguation question speaks nicknames in en, hi, and kn', async () => {
+      // 1. English
+      {
+        const { ledger, d, say1 } = await setup('en');
+        const c1 = await ledger.createCustomer('Ramesh', ['dairy'], { nickname: 'dairy' });
+        const c2 = await ledger.createCustomer('Ramesh', ['school'], { nickname: 'school' });
+        d.start();
+
+        const rs = await say1('Ramesh 300 credit');
+        expect(keys(rs)).toEqual(['ask_which']);
+        expect(rs[0]!.text).toBe('Which Ramesh? Ramesh dairy or Ramesh school?');
+
+        const resolved = await say1('Ramesh dairy');
+        expect(keys(resolved)).toEqual(['credit_saved']);
+        expect(ledger.balance(c1.id)).toBe(paise(300));
+        expect(ledger.balance(c2.id)).toBe(0);
+      }
+
+      // 2. Hindi
+      {
+        const { ledger, d, say1 } = await setup('hi');
+        const c1 = await ledger.createCustomer('रमेश', ['डेयरी'], { nickname: 'डेयरी' });
+        const c2 = await ledger.createCustomer('रमेश', ['स्कूल'], { nickname: 'स्कूल' });
+        d.start();
+
+        const rs = await say1('रमेश का 300 उधार');
+        expect(keys(rs)).toEqual(['ask_which']);
+        expect(rs[0]!.text).toBe('कौन से रमेश? रमेश डेयरी या रमेश स्कूल?');
+
+        const resolved = await say1('रमेश स्कूल');
+        expect(keys(resolved)).toEqual(['credit_saved']);
+        expect(ledger.balance(c2.id)).toBe(paise(300));
+        expect(ledger.balance(c1.id)).toBe(0);
+      }
+
+      // 3. Kannada
+      {
+        const { ledger, d, say1 } = await setup('kn');
+        const c1 = await ledger.createCustomer('ರಮೇಶ್', ['ಡೇರಿ'], { nickname: 'ಡೇರಿ' });
+        const c2 = await ledger.createCustomer('ರಮೇಶ್', ['ಸ್ಕೂಲ್'], { nickname: 'ಸ್ಕೂಲ್' });
+        d.start();
+
+        const rs = await say1('ರಮೇಶ್ 300 ಉಧಾರ');
+        expect(keys(rs)).toEqual(['ask_which']);
+        expect(rs[0]!.text).toBe('ಯಾವ ರಮೇಶ್? ರಮೇಶ್ ಡೇರಿ ಅಥವಾ ರಮೇಶ್ ಸ್ಕೂಲ್?');
+
+        const resolved = await say1('ರಮೇಶ್ ಡೇರಿ');
+        expect(keys(resolved)).toEqual(['credit_saved']);
+        expect(ledger.balance(c1.id)).toBe(paise(300));
+        expect(ledger.balance(c2.id)).toBe(0);
+      }
+    });
+
+    it('new customer for an unused name asks confirm_new_customer first, no nickname asked', async () => {
+      const { ledger, d, say1 } = await setup('en');
+      d.start();
+
+      const rs1 = await say1('new customer Suresh 400 credit');
+      expect(keys(rs1)).toEqual(['confirm_new_customer']);
+      expect(d.pendingKind()).toBe('new_customer');
+
+      const rs2 = await say1('yes');
+      expect(keys(rs2)).toEqual(['new_customer', 'credit_saved']);
+      expect(ledger.customers()).toHaveLength(1);
+      expect(ledger.customers()[0]!.name).toBe('Suresh');
+      expect(ledger.customers()[0]!.nickname).toBeUndefined();
     });
   });
 });

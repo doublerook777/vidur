@@ -8,7 +8,7 @@ export type P = Record<string, string>;
 
 export const KEYS = [
   'disclosure', 'credit_saved', 'credit_saved_dated', 'credit_saved_even', 'credit_saved_advance', 'payment_saved', 'payment_saved_dated', 'payment_cleared', 'payment_advance', 'new_customer',
-  'note_saved', 'note_saved_plain', 'ask_direction', 'ask_amount', 'ask_customer', 'ask_which', 'ask_which_ordinal', 'confirm_amount', 'confirm_near', 'confirm_new_customer',
+  'note_saved', 'note_saved_plain', 'ask_direction', 'ask_amount', 'ask_customer', 'ask_which', 'ask_which_ordinal', 'confirm_amount', 'confirm_near', 'confirm_new_customer', 'ask_nickname',
   'undone', 'nothing_to_undo', 'undo_too_old', 'replaced', 'moved', 'balance_customer', 'balance_zero', 'balance_advance', 'balance_day', 'balance_day_none', 'unknown_customer',
   'refuse_threat', 'refuse_loan', 'refuse_judgment', 'out_of_scope', 'didnt_catch', 'dropped_pending', 'consent_ask', 'consent_saved', 'consent_declined',
   'reminder_ready', 'reminder_too_soon', 'reminder_text', 'when_today', 'when_yesterday', 'when_tomorrow', 'when_day_before', 'when_day_after', 'when_last_week', 'or', 'pending_expired',
@@ -29,6 +29,8 @@ const en: Table = {
   payment_advance: (p) => `${p.name}, ${p.amount} received. ${p.advance} in advance.`,
   new_customer: (p) => `New name ${p.name}.`,
   confirm_new_customer: (p) => `I don't have ${p.name} in the khata. Create a new khata for ${p.name}? Say yes or no.`,
+  ask_nickname: (p) =>
+    `A khata for ${p.name} already exists. What nickname for the new one, for example dairy or school? Say skip to continue.`,
   note_saved: (p) => `Noted, ${p.when}, ${p.amount}.`,
   note_saved_plain: () => 'Noted.',
   ask_direction: () => 'Credit or payment?',
@@ -83,6 +85,8 @@ const hi: Table = {
   payment_advance: (p) => `${p.name}, ${p.amount} जमा। ${p.advance} एडवांस है।`,
   new_customer: (p) => `नया नाम ${p.name}।`,
   confirm_new_customer: (p) => `${p.name} खाते में नहीं है। क्या ${p.name} का नया खाता बनाऊँ? हाँ या ना बोलिए।`,
+  ask_nickname: (p) =>
+    `${p.name} नाम का खाता पहले से है। नए खाते का निकनेम क्या रखें, जैसे डेयरी या स्कूल? जारी रखने के लिए छोड़ बोलिए।`,
   note_saved: (p) => `नोट किया, ${p.when} ${p.amount}।`,
   note_saved_plain: () => 'नोट किया।',
   ask_direction: () => 'उधार या जमा?',
@@ -137,6 +141,8 @@ const kn: Table = {
   payment_advance: (p) => `${p.name}, ${p.amount} ಜಮಾ. ${p.advance} ಮುಂಗಡ ಇದೆ.`,
   new_customer: (p) => `ಹೊಸ ಹೆಸರು ${p.name}.`,
   confirm_new_customer: (p) => `${p.name} ಖಾತೆಯಲ್ಲಿ ಇಲ್ಲ. ${p.name} ಅವರ ಹೊಸ ಖಾತೆ ತೆರೆಯಲೇ? ಹೌದು ಅಥವಾ ಇಲ್ಲ ಎಂದು ಹೇಳಿ.`,
+  ask_nickname: (p) =>
+    `${p.name} ಹೆಸರಿನ ಖಾತೆ ಈಗಾಗಲೇ ಇದೆ. ಹೊಸ ಖಾತೆಗೆ ಉಪನಾಮ ಏನು, ಉದಾಹರಣೆ ಡೇರಿ ಅಥವಾ ಸ್ಕೂಲ್? ಮುಂದುವರಿಸಲು ಬಿಟ್ಟುಬಿಡಿ ಎಂದು ಹೇಳಿ.`,
   note_saved: (p) => `ಗುರುತು ಮಾಡಿದೆ, ${p.when} ${p.amount}.`,
   note_saved_plain: () => 'ಗುರುತು ಮಾಡಿದೆ.',
   ask_direction: () => 'ಉಧಾರ ಅಥವಾ ಜಮಾ?',

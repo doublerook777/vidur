@@ -27,6 +27,8 @@ export interface ParsedEvent {
   directionHint?: 'credit' | 'payment';
   /** True when the customer is a person already named earlier in this utterance. */
   customerInherited?: boolean;
+  /** True when the utterance explicitly requests creating a new customer/khata. */
+  isNewCustomer?: boolean;
   text: string;
 }
 
