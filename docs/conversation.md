@@ -356,3 +356,35 @@ GATE OPEN: CP13 (Phase 3: four new languages — Tamil, Telugu, Marathi, Gujarat
 - CP13-A: Core language extensions (`SpeechLang`), 76 templates per language in `templates.ts`, number word tables and cue words, golden/held-out lines.
 - CP13-B: Labels, self-hosted fonts, Beta tag in picker, 360 px checks.
 - CP13-C: Gateway locales, mock e2e turns, synthetic speech pass.
+
+### 2026-11-21 22:35 IST · Antigravity (for Member A)
+
+CHECKPOINT: CP12-A passed (Member A).
+- **F5 & F8 Evaluation Suites**: Verified all F5 customer summary golden lines (`G-EN-101..105`, `G-HI-101..105`, `G-KN-101..105`, `G-HL-101..105`) and F8 voice edit lines & red-team guardrails (`RT-084..091`) pass with 0 silent wrong amounts.
+- **Kannada Sign-Off**: Recorded under tracker D1; all new Kannada keys (`edit_*`, `confirm_total*`, `ask_which_entry`, and UI labels) isolated in `KN_REVIEW` and vetted against glossary.
+- **Review of PR #13 (F9.3 Gateway)**: Reviewed and approved on GitHub (`ayush25-droid`). Gateway locale expansion for `ta`, `te`, `mr`, `gu` and mock turns verified clean.
+
+CHECKPOINT: CP13-A passed (Member A).
+PR #14 opened for Member C review: https://github.com/doublerook777/vidur/pull/14
+
+Summary of F9.1 Core:
+- **Types**: `SpeechLang` in `templates.ts`, `Lang` in `parse.ts`, `SpeakLang` in `amount.ts`, and `LANGS` in `eval/golden/schema.ts` & `eval/redteam/schema.ts` widened to include `ta`, `te`, `mr`, `gu`. Added `AI_MARKER` entries (`ta: 'AI', te: 'AI', mr: 'एआई', gu: 'એઆઈ'`).
+- **Templates**: All 76 fixed-reply keys provided for `ta`, `te`, `mr`, `gu` (304 new template entries total), marked **Beta** with notes that no native speaker has heard them yet. Retained digits and rupee symbol formatting verified compatible with Timbre speech synthesis.
+- **Number Parsing & Tables**:
+  - Populated native-script number words in `packages/core/src/numbers/tables/{ta,te,mr,gu}.json`.
+  - Added fused hundreds for Marathi (`MR_HUNDREDS`), Gujarati (`GU_HUNDREDS`), Tamil (`TA_HUNDREDS`), and Telugu (`నూరు`, `నూట`, `వందలు`, `వందల`).
+  - Added fractional fused hundreds (Marathi `दीडशे` 150, `अडीचशे` 250; Gujarati `દોઢસો` 150, `અઢીસો` 250).
+  - Added Tamil fused thousands splitting rules in `unglue.ts` (`இரண்டாயிரத்து`, `இரண்டாயிரத்தி`, `இரண்டு ஆயிரத்தி`).
+  - Added parser tests for real Prisma transcripts (340 and 2500 in all 4 languages). 797 parser tests pass 100%.
+- **Intent & Transliteration**:
+  - Added cue words, date tokens (`இன்று`, `நேற்று`, `நாளை`, `ఈరోజు`, `నిన్న`, `రేపు`, `आज`, `काल`, `उद्या`, `આજે`, `ગઈકાલે`, `આવતીકાલે`), and guardrail patterns for threats, shaming, interest, and lending in all 4 languages.
+  - Added Indic transliteration tables (`TA_C`, `TE_C`, `GU_C` etc.) in `translit.ts` so Tamil, Telugu, and Gujarati customer names transliterate and resolve deterministically to matching Latin keys.
+- **Evaluation Lines**:
+  - `eval/golden/utterances.jsonl`: 40 lines per language (`G-TA-001..`, `G-TE-001..`, `G-MR-001..`, `G-GU-001..`), total 365 lines.
+  - `eval/golden/heldout.jsonl`: 10 lines per language (`H-TA-001..`, etc.), total 191 lines.
+  - `eval/redteam/redteam.jsonl`: 8 lines per language (`RT-092..RT-123`), total 123 lines.
+  - All lines validated against schemas and evaluated through intent/dialogue engines with 0 silent wrong amounts.
+- **Beta Disclosure**: No native speakers are available for Tamil, Telugu, Marathi, or Gujarati; all strings and evaluation sets are machine-drafted and tagged Beta.
+- **Verification**: `npm run typecheck`, `npm run lint`, `npm run scan:secrets` exit 0; all 37 test files (1,742 tests) pass 100%.
+
+Member C: please review PR #14 (https://github.com/doublerook777/vidur/pull/14). Once merged, gateway synthetic speech pass (F9.3) and Member B's font/picker UI (F9.2) can proceed on top of the merged core.
