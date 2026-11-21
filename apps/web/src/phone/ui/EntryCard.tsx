@@ -75,13 +75,13 @@ export function EntryCard({ vm, actions, lang }: ScreenProps<EntryCardVM>) {
           )}
           <div class="answer-row" role="group" aria-label={t.aiQuestion}>
             <button type="button" class="btn answer-btn answer-yes" onClick={() => actions.answer('yes')}>
-              <IconCheck size={20} />
-              <span>{t.answerYes}</span>
+              <IconCheck size={18} />
+              <span class="answer-label">{t.answerYes}</span>
               {remainingSec !== null && <span class="answer-countdown" data-feature="answer-countdown">({remainingSec}s)</span>}
             </button>
             <button type="button" class="btn answer-btn answer-no" onClick={() => actions.answer('no')}>
-              <IconX size={20} />
-              <span>{t.answerNo}</span>
+              <IconX size={18} />
+              <span class="answer-label">{t.answerNo}</span>
               {remainingSec !== null && <span class="answer-countdown" data-feature="answer-countdown">({remainingSec}s)</span>}
             </button>
           </div>

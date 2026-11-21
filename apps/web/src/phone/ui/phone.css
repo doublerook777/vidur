@@ -76,7 +76,7 @@
   --radius-full: 999px;
 
   /* type */
-  --font-xs: 12px;
+  --font-xs: 11px;
   --font-sm: 13px;
   --font-md: 16px;
   --font-lg: 19px;
@@ -336,6 +336,7 @@
   background: transparent;
   color: var(--color-text);
   border-color: var(--color-border);
+  max-width: 100%;
 }
 .btn-view-notes { align-self: flex-start; margin-top: var(--space-2); background: var(--color-bg-2); color: var(--color-text); }
 /* all-time totals over every customer, at the top of the Customers screen */
@@ -547,6 +548,9 @@
   /* one steady size for every reply, so the page below does not jump between listening, heard and asking */
   min-height: 96px;
   justify-content: center;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .entry-card-needs_answer { border-color: var(--phase-needs_answer-bg); }
 .entry-card-saved { background: var(--color-payment-bg); }
@@ -557,14 +561,34 @@
   font-size: var(--font-sm);
   font-weight: 700;
 }
-.entry-heard-text { font-size: var(--font-lg); font-weight: 700; }
-.entry-agent-line { font-size: var(--font-md); }
+.entry-heard-text { font-size: var(--font-lg); font-weight: 700; overflow-wrap: anywhere; }
+.entry-agent-line { font-size: var(--font-md); overflow-wrap: anywhere; }
 .entry-amount-value { font-family: var(--font-display); font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .entry-question-name { font-size: var(--font-lg); font-weight: 800; }
 .entry-is-this-right { color: var(--color-text-dim); font-weight: 600; }
 
-.answer-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-top: var(--space-1); }
-.answer-btn { min-height: var(--touch); font-size: var(--font-lg); }
+.answer-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  width: 100%;
+  box-sizing: border-box;
+}
+.answer-btn {
+  min-height: var(--touch);
+  min-width: 0;
+  width: 100%;
+  padding: 0 var(--space-2);
+  gap: 6px;
+  font-size: var(--font-md);
+  box-sizing: border-box;
+}
+.answer-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .answer-yes { background: var(--color-card); color: var(--color-card-text); border-color: var(--color-card); }
 .answer-no { background: transparent; border-color: var(--color-card); }
 
@@ -1326,8 +1350,10 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: 
 .answer-countdown {
   font-size: var(--font-xs);
   opacity: 0.85;
-  margin-left: var(--space-1);
+  margin-left: 2px;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Hear Summary Button (F5) */
