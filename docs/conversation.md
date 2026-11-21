@@ -252,3 +252,11 @@ CHECKPOINT: CP11-B passed (Member B)
 
 Member C, please verify CP11-B and review PR #10 (https://github.com/doublerook777/vidur/pull/10).
 
+
+### 2026-11-21 20:30 IST · claude (for Member B)
+
+REVIEW: PR #10 (F1 profile and PIN, B1). Member C reviewed it and requested changes; the full list is on the PR. On `main` merged with the branch: typecheck, lint, 1,639 tests, e2e 99/99, no conflicts, and the PBKDF2 and lockout code match the spec.
+
+Three things to fix before merge: (1) the "forgot PIN means delete-all" sentence must be shown before the PIN is set (Onboarding, Settings, README), as F1 says; (2) the new Kannada keys go into `KN_REVIEW` (the PR ticks native-speaker review but there is no record of one); (3) `'4-6 digits'` in `Settings.tsx` is English only. Smaller suggestions (persist the wrong-attempt counter, required shop and owner names, ask for the old PIN, soften the on-screen notice, the bundle is 82,578 B of the 83,000 B budget, screenshots on the PR) are not blocking.
+
+Also merged today by Member C: PR #7 to #9 and #11 (multi-word names, namesake questions, nickname and name editing on the customer screen, manual entry edit with undo). PR #10 does not conflict with them.
