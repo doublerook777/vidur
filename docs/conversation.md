@@ -170,3 +170,67 @@ CHECKPOINT: CP10-A verified (Member C). On `main` at `8d65b2d`: typecheck and li
 GATE: CP10 now waits only for `CHECKPOINT: CP10-B` from Member B (verified by Member A). Member B, please post it: profile storage and actions are on `main`; confirm `npm run demo:mock` starts and an old install's settings still load.
 
 A: F5 claim noted, no objection. F8 will touch `engine.ts` and `templates.ts` too, so keep F5's engine changes in small commits and merge early so F8 rebases on top. Per plan2, F5 is Phase 1 work, so open the PR but wait for `GATE OPEN: CP10` before merging.
+
+
+### 2026-11-21 19:45 IST · Antigravity (for Member B)
+
+CHECKPOINT: CP10-B passed (Member B).
+- F0 phone contract verified on `main` (`501231b`): `apps/web/src/phone/storage/profile.ts` (5 tests in `profile.test.ts` pass, old installs return null without error), `contract.ts` required actions wired in `controller.ts` and `preview.tsx`, `CustomerRow` carries `nickname` and `phone`.
+- `npm run typecheck` exits 0.
+- `npm run demo:mock` starts cleanly on port 8080.
+- Old-install settings compatibility verified.
+
+### 2026-11-21 19:48 IST · Antigravity (for Member A)
+
+CHECKPOINT: CP10-B verified (Member A).
+Verified Member B's CP10-B: typecheck clean, profile storage 5/5 tests pass with backward compatibility, and mock mode starts without issues.
+
+All three Phase 0 checkpoints (CP10-A, CP10-B, CP10-C) are now passed and verified.
+Awaiting Member C to declare `GATE OPEN: CP10`.
+
+
+### 2026-11-21 19:55 IST · claude (for Member C)
+
+GATE OPEN: CP10 passed.
+
+All three checkpoints verified:
+- CP10-A (Member A): F0 core contract merged, replay tests passing, "naya customer" audit verified.
+- CP10-B (Member B): F0 phone contract verified, profile storage in vault, actions wired, mock mode works.
+- CP10-C (Member C): Collaborators added, `protect-branch-main` ruleset active, PR template, baseline recorded, test campaign doc created.
+
+F0 moved to Done in `docs/bugs&improvements.md`. Gate 1 (CP11) is now open.
+
+### 2026-11-21 20:00 IST · Antigravity (for Member A)
+
+PR OPEN: F5 (Voiced Customer Summary) -> PR #5 (`feat/F5-customer-summary`).
+Reviewer: Member C.
+
+What was built & verified:
+1. **Templates (`packages/core/src/i18n/templates.ts`)**:
+   - Registered `summary_customer`, `summary_advance`, `summary_settled`, `summary_none` (plus `customer_summary` and `customer_summary_none` aliases), `days_ago`, `entry_kind_credit`, `entry_kind_payment`.
+   - Pure facts only in `en`, `hi`, `kn`: balance in words, last entry kind/amount/how long ago, 30-day count. Zero judgment/shaming words, no lending/interest words.
+2. **Intent Detection (`packages/core/src/intent/`)**:
+   - Added `customer_summary` to canonical `INTENTS` in `packages/core/src/intent/types.ts` and `eval/golden/schema.ts`.
+   - Distinct cue parsing in `intent.ts`: cues like `summary`, `details`, `about`, `hisaab batao`, `bagge heli`, etc. Existing balance queries remain 100% unaffected.
+3. **Dialogue Engine (`packages/core/src/dialogue/engine.ts`)**:
+   - Added mode `'summary'` in `Work`.
+   - Relative time resolution (`howLongAgo`): today, yesterday, the day before yesterday, X days ago.
+   - Public method `dialogue.summaryFor(customerId): Reply[]` for Member B's "Hear summary" button.
+4. **Golden Utterances (`eval/golden/utterances.jsonl`)**:
+   - Appended 20 golden utterances (`G-EN-101..105`, `G-HI-101..105`, `G-KN-101..105`, `G-HL-101..105`) with expected intent `customer_summary`.
+5. **Testing & Invariants**:
+   - Full suite passes: `typecheck`, `lint`, and `scan:secrets` clean.
+   - Golden schema validation (`validate.test.ts`), dialogue tests (`dialogue.test.ts` for all 4 cases across all 3 languages + programmatic API), purity test (`purity.test.ts`), and red-team guardrails (`redteam.test.ts` 84/84) pass 100%.
+
+Member B note: `dialogue.summaryFor(customerId)` is ready for the "Hear summary" button on the customer screen.
+Member C: PR #5 is ready for your review and merge.
+
+### 2026-11-21 20:10 IST · claude (for Member C)
+
+DECISION: Member C took the **core part of F8** (voice edits) now instead of waiting for Phase 2, and opened **PR #6** (`feat/F8-voice-edits`). Please do not merge it before `GATE OPEN: CP10`.
+
+A: please review PR #6. It touches `engine.ts`, `templates.ts` and `intent.ts`, the same files as your F5, so whoever merges second rebases; keep your F5 changes in small commits. What it does: edit by day, edit by old amount, set the total (one adjustment entry with `reason: 'balance_set'`, mandatory read-back), remove or flip an older entry; "galat" right after an edit puts the earlier entry back. One named customer per sentence; "everyone to zero" and similar get a fixed `edit_refuse` line. 16 new template keys in en, hi, kn (hi and kn are machine-drafted). Please check the dialogue wording, and the new cue words in `intent.ts` (`EDIT`, `TOTAL`, `REMOVE`, `FLIP`, `SHOULD`, `WALA`).
+
+B: your part of F8 is how an adjustment looks. `ActiveEntry.reason === 'balance_set'` marks it; the feed and customer page should say "balance set" instead of showing a plain credit or payment. Also the new pending kinds `confirm_edit` and `confirm_total` show Yes and No buttons (already wired in `controller.ts`); `which_entry` is answered by voice (an amount or "first", "second", "last").
+
+Everyone: the Kannada and Hindi lines in PR #6 need the native speakers (keys `edit_*`, `confirm_edit`, `confirm_total`, `confirm_total_adv`, `total_set`, `total_unchanged`, `ask_which_entry`, `kind_*`).

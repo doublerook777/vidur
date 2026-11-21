@@ -31,6 +31,11 @@ const QUERY = W(
     'कितना कितनी कितने कुल हिसाब टोटल ಎಷ್ಟು ಎಷ್ಟಿದೆ ಎಷ್ಟಾಗಿದೆ ಎಷ್ಟಾಯ್ತು ಒಟ್ಟು ಲೆಕ್ಕ',
 );
 const QUERY_EN = W('how what which show tell list who');
+const SUMMARY_WORD = W(
+  'summary samari समरी ಸಾರಾಂಶ saaramsha saaransh सारांश details detail vivaran विवरण ವಿವರ about baare bare बारे ಬಗ್ಗೆ',
+);
+const TELL_VERB = W('batao bataiye dikhao dikhaiye बताओ बताइए दिखाओ दिखाइए tell show ಹೇಳಿ ಹೇಳು ತಿಳಿಸಿ ಕೊಡಿ kodi kheli');
+const HISAB_WORD = W('hisab hisaab hisaabh हिसाब ಲೆಕ್ಕ account');
 const REMINDER = W('reminder reminders remind yaad yaaddilao optin opt consent रिमाइंडर याद ರಿಮೈಂಡರ್ ನೆನಪಿಸಿ ನೆನಪಿನ ನೆನಪು ಜ್ಞಾಪನೆ');
 const UNDO = W(
   'cancel undo delete hata hatao hataiye remove rad radd galat wrong mistake ruko ' +
@@ -81,7 +86,7 @@ const STOP = W(
     'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपए रुपया पैसे पैसा ' +
     'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು',
 );
-const ALL_CUES = [EDIT, SET_VERB, TOTAL, REMOVE, FLIP, EVERYONE, ENTRY_WORD, WALA, SHOULD, ZERO, NEGATIVE, CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST];
+const ALL_CUES = [EDIT, SET_VERB, TOTAL, REMOVE, FLIP, EVERYONE, ENTRY_WORD, WALA, SHOULD, ZERO, NEGATIVE, CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, SUMMARY_WORD, TELL_VERB, HISAB_WORD, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST];
 
 const DATE_WORDS: Record<string, string> = {
   aaj: 'aaj', आज: 'aaj', today: 'today', ಇಂದು: 'ಇಂದು', kal: 'kal', कल: 'kal', yesterday: 'yesterday', ನಿನ್ನೆ: 'ನಿನ್ನೆ', tomorrow: 'tomorrow', ನಾಳೆ: 'ನಾಳೆ',
@@ -353,6 +358,12 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
 
   // 1. reminders
   if (has(REMINDER)) return withAmount({ ...base, intent: 'reminder_opt_in', needs: who ? [] : ['customer'] });
+  // 1.5 customer summary
+  const hasSummaryWord = has(SUMMARY_WORD);
+  const hasTellVerb = has(TELL_VERB);
+  const hasHisab = has(HISAB_WORD);
+  const isSummary = !amount && (hasSummaryWord || (hasHisab && hasTellVerb));
+  if (isSummary) return { ...base, intent: 'customer_summary', needs: who ? [] : ['customer'] };
   // 2. queries
   const ledgerTerm = hasCredit || hasPayment || ns.includes('balance') || ns.includes('hisab');
   const queryish = has(QUERY) || (q && ledgerTerm && !amount) || (has(QUERY_EN) && ledgerTerm && !amount);

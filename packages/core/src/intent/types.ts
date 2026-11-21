@@ -1,6 +1,6 @@
 import type { KnownCustomer } from '../names/index.js';
 
-export const INTENTS = ['credit_entry', 'payment', 'balance_query', 'correction', 'reminder_opt_in', 'note', 'refusal', 'out_of_scope'] as const;
+export const INTENTS = ['credit_entry', 'payment', 'balance_query', 'customer_summary', 'correction', 'reminder_opt_in', 'note', 'refusal', 'out_of_scope'] as const;
 /**
  * `INTENTS` is the list a language model may answer with. `edit_entry` is only ever produced by the deterministic
  * parser: an edit needs a named customer and a ledger lookup, so a model result is never allowed to start one.

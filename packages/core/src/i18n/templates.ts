@@ -10,6 +10,7 @@ export const KEYS = [
   'disclosure', 'credit_saved', 'credit_saved_dated', 'credit_saved_even', 'credit_saved_advance', 'payment_saved', 'payment_saved_dated', 'payment_cleared', 'payment_advance', 'new_customer',
   'note_saved', 'note_saved_plain', 'ask_direction', 'ask_amount', 'ask_customer', 'ask_which', 'ask_which_ordinal', 'confirm_amount', 'confirm_near', 'confirm_new_customer', 'ask_nickname',
   'undone', 'nothing_to_undo', 'undo_too_old', 'replaced', 'moved', 'balance_customer', 'balance_zero', 'balance_advance', 'balance_day', 'balance_day_none', 'unknown_customer',
+  'summary_customer', 'summary_advance', 'summary_settled', 'summary_none', 'customer_summary', 'customer_summary_none', 'days_ago', 'entry_kind_credit', 'entry_kind_payment',
   'refuse_threat', 'refuse_loan', 'refuse_judgment', 'out_of_scope', 'didnt_catch', 'dropped_pending', 'consent_ask', 'consent_saved', 'consent_declined',
   'reminder_ready', 'reminder_too_soon', 'reminder_text', 'when_today', 'when_yesterday', 'when_tomorrow', 'when_day_before', 'when_day_after', 'when_last_week', 'or', 'pending_expired',
   'edit_refuse', 'edit_no_advance', 'edit_not_found', 'edit_too_many', 'ask_which_entry', 'confirm_edit', 'edit_changed', 'edit_removed', 'edit_flipped', 'edit_undone',
@@ -53,6 +54,20 @@ const en: Table = {
   balance_day: (p) => `${p.when}, ${p.credit} credit, ${p.count} people.`,
   balance_day_none: (p) => `No credit ${p.when}.`,
   unknown_customer: (p) => `I don't have ${p.name} in the khata.`,
+  summary_customer: (p) => `${p.name} owes ${p.balance}. Last entry: ${p.kind ? p.kind + ' of ' : ''}${p.amount}, ${p.when}. ${p.count} entries in the last 30 days.`,
+  summary_advance: (p) => `${p.name} is ${p.advance} in advance. Last entry: ${p.kind ? p.kind + ' of ' : ''}${p.amount}, ${p.when}. ${p.count} entries in the last 30 days.`,
+  summary_settled: (p) => `${p.name} has nothing due. Last entry: ${p.kind ? p.kind + ' of ' : ''}${p.amount}, ${p.when}. ${p.count} entries in the last 30 days.`,
+  summary_none: (p) => `No entries for ${p.name} yet.`,
+  customer_summary: (p) =>
+    p.advance
+      ? `${p.name} is ${p.advance} in advance. Last entry: ${p.kind ? p.kind + ' of ' : ''}${p.amount}, ${p.when}. ${p.count} entries in the last 30 days.`
+      : p.balance
+        ? `${p.name} owes ${p.balance}. Last entry: ${p.kind ? p.kind + ' of ' : ''}${p.amount}, ${p.when}. ${p.count} entries in the last 30 days.`
+        : `${p.name} has nothing due. Last entry: ${p.kind ? p.kind + ' of ' : ''}${p.amount}, ${p.when}. ${p.count} entries in the last 30 days.`,
+  customer_summary_none: (p) => `No entries for ${p.name} yet.`,
+  days_ago: (p) => `${p.count} days ago`,
+  entry_kind_credit: () => 'credit',
+  entry_kind_payment: () => 'payment',
   refuse_threat: () => "I can't do that. I can prepare a polite reminder.",
   refuse_loan: () => "I don't handle interest or loans.",
   refuse_judgment: () => "I can't judge who should get credit. I can tell you their balance.",
@@ -125,6 +140,20 @@ const hi: Table = {
   balance_day: (p) => `${p.when} ${p.credit} उधार, ${p.count} लोगों को।`,
   balance_day_none: (p) => `${p.when} कोई उधार नहीं।`,
   unknown_customer: (p) => `${p.name} खाते में नहीं है।`,
+  summary_customer: (p) => `${p.name} का बाकी ${p.balance} है। पिछली एंट्री: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}। पिछले 30 दिनों में ${p.count} एंट्री।`,
+  summary_advance: (p) => `${p.name} का ${p.advance} एडवांस है। पिछली एंट्री: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}। पिछले 30 दिनों में ${p.count} एंट्री।`,
+  summary_settled: (p) => `${p.name} का कुछ बाकी नहीं। पिछली एंट्री: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}। पिछले 30 दिनों में ${p.count} एंट्री।`,
+  summary_none: (p) => `${p.name} के लिए अभी कोई एंट्री नहीं है।`,
+  customer_summary: (p) =>
+    p.advance
+      ? `${p.name} का ${p.advance} एडवांस है। पिछली एंट्री: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}। पिछले 30 दिनों में ${p.count} एंट्री।`
+      : p.balance
+        ? `${p.name} का बाकी ${p.balance} है। पिछली एंट्री: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}। पिछले 30 दिनों में ${p.count} एंट्री।`
+        : `${p.name} का कुछ बाकी नहीं। पिछली एंट्री: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}। पिछले 30 दिनों में ${p.count} एंट्री।`,
+  customer_summary_none: (p) => `${p.name} के लिए अभी कोई एंट्री नहीं है।`,
+  days_ago: (p) => `${p.count} दिन पहले`,
+  entry_kind_credit: () => 'उधार',
+  entry_kind_payment: () => 'जमा',
   refuse_threat: () => 'यह मैं नहीं कर सकता। विनम्र रिमाइंडर तैयार कर सकता हूँ।',
   refuse_loan: () => 'ब्याज या लोन का काम मैं नहीं करता।',
   refuse_judgment: () => 'किसे उधार देना चाहिए, यह मैं तय नहीं करता। उनका बाकी बता सकता हूँ।',
@@ -197,6 +226,20 @@ const kn: Table = {
   balance_day: (p) => `${p.when} ${p.credit} ಉಧಾರ, ${p.count} ಜನರಿಗೆ.`,
   balance_day_none: (p) => `${p.when} ಉಧಾರ ಇಲ್ಲ.`,
   unknown_customer: (p) => `${p.name} ಖಾತೆಯಲ್ಲಿ ಇಲ್ಲ.`,
+  summary_customer: (p) => `${p.name} ಬಾಕಿ ${p.balance}. ಕೊನೆಯ ದಾಖಲೆ: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ ${p.count} ದಾಖಲೆಗಳು.`,
+  summary_advance: (p) => `${p.name} ಅವರ ${p.advance} ಮುಂಗಡ ಇದೆ. ಕೊನೆಯ ದಾಖಲೆ: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ ${p.count} ದಾಖಲೆಗಳು.`,
+  summary_settled: (p) => `${p.name} ಬಾಕಿ ಇಲ್ಲ. ಕೊನೆಯ ದಾಖಲೆ: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ ${p.count} ದಾಖಲೆಗಳು.`,
+  summary_none: (p) => `${p.name} ಅವರಿಗೆ ಇನ್ನೂ ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ.`,
+  customer_summary: (p) =>
+    p.advance
+      ? `${p.name} ಅವರ ${p.advance} ಮುಂಗಡ ಇದೆ. ಕೊನೆಯ ದಾಖಲೆ: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ ${p.count} ದಾಖಲೆಗಳು.`
+      : p.balance
+        ? `${p.name} ಬಾಕಿ ${p.balance}. ಕೊನೆಯ ದಾಖಲೆ: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ ${p.count} ದಾಖಲೆಗಳು.`
+        : `${p.name} ಬಾಕಿ ಇಲ್ಲ. ಕೊನೆಯ ದಾಖಲೆ: ${p.kind ? p.kind + ' ' : ''}${p.amount}, ${p.when}. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ ${p.count} ದಾಖಲೆಗಳು.`,
+  customer_summary_none: (p) => `${p.name} ಅವರಿಗೆ ಇನ್ನೂ ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ.`,
+  days_ago: (p) => `${p.count} ದಿನಗಳ ಹಿಂದೆ`,
+  entry_kind_credit: () => 'ಉಧಾರ',
+  entry_kind_payment: () => 'ಜಮಾ',
   refuse_threat: () => 'ಅದನ್ನು ನಾನು ಮಾಡಲಾರೆ. ವಿನಯದ ಜ್ಞಾಪನೆ ಸಿದ್ಧಪಡಿಸಬಹುದು.',
   refuse_loan: () => 'ಬಡ್ಡಿ ಅಥವಾ ಸಾಲದ ಕೆಲಸ ನಾನು ಮಾಡುವುದಿಲ್ಲ.',
   refuse_judgment: () => 'ಯಾರಿಗೆ ಸಾಲ ಕೊಡಬೇಕು ಎಂದು ನಾನು ನಿರ್ಧರಿಸುವುದಿಲ್ಲ. ಅವರ ಬಾಕಿ ಹೇಳಬಲ್ಲೆ.',

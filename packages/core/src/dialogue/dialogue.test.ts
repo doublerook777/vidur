@@ -854,4 +854,183 @@ describe('a spoken correction never becomes a customer (the first usability test
       expect(ledger.customers()[0]!.nickname).toBeUndefined();
     });
   });
+
+  describe('F5 customer summary', () => {
+    it('case 1: owes (balance > 0) in en, hi, kn', async () => {
+      // 1. English
+      {
+        const { ledger, d, say1 } = await setup('en');
+        const c = await ledger.createCustomer('Ramesh');
+        await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(340), at: T0 - 3 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('Tell me about Ramesh');
+        expect(keys(rs)).toEqual(['summary_customer']);
+        expect(rs[0]!.text).toBe('Ramesh owes ₹340. Last entry: credit of ₹340, 3 days ago. 1 entries in the last 30 days.');
+      }
+
+      // 2. Hindi
+      {
+        const { ledger, d, say1 } = await setup('hi');
+        const c = await ledger.createCustomer('रमेश');
+        await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(340), at: T0 - 3 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('रमेश का हिसाब बताओ');
+        expect(keys(rs)).toEqual(['summary_customer']);
+        expect(rs[0]!.text).toBe('रमेश का बाकी ₹340 है। पिछली एंट्री: उधार ₹340, 3 दिन पहले। पिछले 30 दिनों में 1 एंट्री।');
+      }
+
+      // 3. Kannada
+      {
+        const { ledger, d, say1 } = await setup('kn');
+        const c = await ledger.createCustomer('ರಮೇಶ್');
+        await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(340), at: T0 - 3 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('ರಮೇಶ್ ಬಗ್ಗೆ ಹೇಳಿ');
+        expect(keys(rs)).toEqual(['summary_customer']);
+        expect(rs[0]!.text).toBe('ರಮೇಶ್ ಬಾಕಿ ₹340. ಕೊನೆಯ ದಾಖಲೆ: ಉಧಾರ ₹340, 3 ದಿನಗಳ ಹಿಂದೆ. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ 1 ದಾಖಲೆಗಳು.');
+      }
+    });
+
+    it('case 2: advance (balance < 0) in en, hi, kn', async () => {
+      // 1. English
+      {
+        const { ledger, d, say1 } = await setup('en');
+        const c = await ledger.createCustomer('Ramesh');
+        await ledger.postEntry({ customerId: c.id, kind: 'payment', paise: paise(200), at: T0 - 1 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('Ramesh summary please');
+        expect(keys(rs)).toEqual(['summary_advance']);
+        expect(rs[0]!.text).toBe('Ramesh is ₹200 in advance. Last entry: payment of ₹200, yesterday. 1 entries in the last 30 days.');
+      }
+
+      // 2. Hindi
+      {
+        const { ledger, d, say1 } = await setup('hi');
+        const c = await ledger.createCustomer('रमेश');
+        await ledger.postEntry({ customerId: c.id, kind: 'payment', paise: paise(200), at: T0 - 1 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('रमेश का हिसाब बताओ');
+        expect(keys(rs)).toEqual(['summary_advance']);
+        expect(rs[0]!.text).toBe('रमेश का ₹200 एडवांस है। पिछली एंट्री: जमा ₹200, कल। पिछले 30 दिनों में 1 एंट्री।');
+      }
+
+      // 3. Kannada
+      {
+        const { ledger, d, say1 } = await setup('kn');
+        const c = await ledger.createCustomer('ರಮೇಶ್');
+        await ledger.postEntry({ customerId: c.id, kind: 'payment', paise: paise(200), at: T0 - 1 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('ರಮೇಶ್ ಬಗ್ಗೆ ಹೇಳಿ');
+        expect(keys(rs)).toEqual(['summary_advance']);
+        expect(rs[0]!.text).toBe('ರಮೇಶ್ ಅವರ ₹200 ಮುಂಗಡ ಇದೆ. ಕೊನೆಯ ದಾಖಲೆ: ಜಮಾ ₹200, ನಿನ್ನೆ. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ 1 ದಾಖಲೆಗಳು.');
+      }
+    });
+
+    it('case 3: settled (balance === 0 with entries) in en, hi, kn', async () => {
+      // 1. English
+      {
+        const { ledger, d, say1 } = await setup('en');
+        const c = await ledger.createCustomer('Ramesh');
+        await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(200), at: T0 - 4 * 24 * 60 * 60 * 1000 });
+        await ledger.postEntry({ customerId: c.id, kind: 'payment', paise: paise(200), at: T0 - 2 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('Tell me about Ramesh');
+        expect(keys(rs)).toEqual(['summary_settled']);
+        expect(rs[0]!.text).toBe('Ramesh has nothing due. Last entry: payment of ₹200, the day before yesterday. 2 entries in the last 30 days.');
+      }
+
+      // 2. Hindi
+      {
+        const { ledger, d, say1 } = await setup('hi');
+        const c = await ledger.createCustomer('रमेश');
+        await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(200), at: T0 - 4 * 24 * 60 * 60 * 1000 });
+        await ledger.postEntry({ customerId: c.id, kind: 'payment', paise: paise(200), at: T0 - 2 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('रमेश का हिसाब बताओ');
+        expect(keys(rs)).toEqual(['summary_settled']);
+        expect(rs[0]!.text).toBe('रमेश का कुछ बाकी नहीं। पिछली एंट्री: जमा ₹200, परसों। पिछले 30 दिनों में 2 एंट्री।');
+      }
+
+      // 3. Kannada
+      {
+        const { ledger, d, say1 } = await setup('kn');
+        const c = await ledger.createCustomer('ರಮೇಶ್');
+        await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(200), at: T0 - 4 * 24 * 60 * 60 * 1000 });
+        await ledger.postEntry({ customerId: c.id, kind: 'payment', paise: paise(200), at: T0 - 2 * 24 * 60 * 60 * 1000 });
+        d.start();
+
+        const rs = await say1('ರಮೇಶ್ ಬಗ್ಗೆ ಹೇಳಿ');
+        expect(keys(rs)).toEqual(['summary_settled']);
+        expect(rs[0]!.text).toBe('ರಮೇಶ್ ಬಾಕಿ ಇಲ್ಲ. ಕೊನೆಯ ದಾಖಲೆ: ಜಮಾ ₹200, ಮೊನ್ನೆ. ಕಳೆದ 30 ದಿನಗಳಲ್ಲಿ 2 ದಾಖಲೆಗಳು.');
+      }
+    });
+
+    it('case 4: no entries yet in en, hi, kn', async () => {
+      // 1. English
+      {
+        const { ledger, d, say1 } = await setup('en');
+        await ledger.createCustomer('Ramesh');
+        d.start();
+
+        const rs = await say1('Tell me about Ramesh');
+        expect(keys(rs)).toEqual(['customer_summary_none']);
+        expect(rs[0]!.text).toBe('No entries for Ramesh yet.');
+      }
+
+      // 2. Hindi
+      {
+        const { ledger, d, say1 } = await setup('hi');
+        await ledger.createCustomer('रमेश');
+        d.start();
+
+        const rs = await say1('रमेश का हिसाब बताओ');
+        expect(keys(rs)).toEqual(['customer_summary_none']);
+        expect(rs[0]!.text).toBe('रमेश के लिए अभी कोई एंट्री नहीं है।');
+      }
+
+      // 3. Kannada
+      {
+        const { ledger, d, say1 } = await setup('kn');
+        await ledger.createCustomer('ರಮೇಶ್');
+        d.start();
+
+        const rs = await say1('ರಮೇಶ್ ಬಗ್ಗೆ ಹೇಳಿ');
+        expect(keys(rs)).toEqual(['customer_summary_none']);
+        expect(rs[0]!.text).toBe('ರಮೇಶ್ ಅವರಿಗೆ ಇನ್ನೂ ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ.');
+      }
+    });
+
+    it('programmatic summaryFor(id) matches voiced summary', async () => {
+      const { ledger, d } = await setup('en');
+      const c = await ledger.createCustomer('Ramesh');
+      await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(500), at: T0 });
+      d.start();
+
+      const rs = d.summaryFor(c.id);
+      expect(keys(rs)).toEqual(['summary_customer']);
+      expect(rs[0]!.text).toBe('Ramesh owes ₹500. Last entry: credit of ₹500, today. 1 entries in the last 30 days.');
+    });
+
+    it('customer summary asks for customer name if missing', async () => {
+      const { ledger, d, say1 } = await setup('hi');
+      const c = await ledger.createCustomer('रमेश');
+      await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(500), at: T0 });
+      d.start();
+
+      const rs1 = await say1('हिसाब बताओ');
+      expect(keys(rs1)).toEqual(['ask_customer']);
+
+      const rs2 = await say1('रमेश');
+      expect(keys(rs2)).toEqual(['summary_customer']);
+      expect(rs2[0]!.text).toContain('रमेश का बाकी ₹500 है');
+    });
+  });
 });

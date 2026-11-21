@@ -6,13 +6,12 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 
 - **Phase:** Plan 2 (improvements after submission). The hackathon submission went in before the deadline; its history is kept below. Work is described in `docs/plan2.md` and tracked in `docs/bugs&improvements.md`. Messages between us and our agents go in `docs/conversation.md`.
 - **Live copy:** https://vidur-xu96.onrender.com (Render free plan, deploys by hand; the access code is in Render's dashboard, never in the repo).
-- **Active phase of Plan 2:** Phase 0 (setup). Nothing is built yet. A phase ends only when all three people's checkpoints (for example CP10-A, CP10-B, CP10-C) are verified; see "Phase gates" in `docs/plan2.md`.
-- **Last checkpoint passed:** CP9 (hackathon deliverables, submitted). Plan 2 checkpoints are CP10 to CP15 below.
+- **Active phase of Plan 2:** Phase 1 (engine and first screens). Gate is CP11.
+- **Last checkpoint passed:** CP10 (setup and contract, passed 2026-11-21).
 - **Next actions:**
-  1. Done: Member A is Ayush, Member B is Lokesh (plan2 section 8).
-  2. Member C: confirm the GitHub ruleset on `main` (deletion and force-push blocked). Collaborators, PR template and baseline are done.
-  3. Merge ONE F0, the shared contract: it exists twice (on `main` and in PR #1) and the two conflict. See `conversation.md`.
-  4. Then F1 to F6, F8 and F9 follow the phases in `docs/plan2.md`.
+  1. Phase 1 work: F1 (profile screen & PIN lock UI - Member B), B1 (Kannada clipping browser check - Member B), F4 countdown UI (Member B), F2 search UI (Member B), F3 nickname UI (Member B).
+  2. Member A: F5 customer summary PR #5 open awaiting review by Member C; prepare F8 (voice edits & set-total).
+  3. Member C: B3 (long speech cap), F7 (test campaign round 1), F9.0 (Gnani locale probe).
 - **Known open bugs:** B1 (Kannada label clipped; CSS fix merged, browser check still missing), B2 (corrections only reach the last entry, now part of F8), B3 (long speech uncapped). See the tracker.
 
 ## Checkpoints
@@ -29,7 +28,7 @@ Agents: read this first, then `bugs&improvements.md` and the end of `conversatio
 | CP7 | Compliance | Passed | 2026-11-11 | `docs/COMPLIANCE.md` maps every rule to a proof; 15 repo-level compliance tests; red-team 83/83; secret scan clean over 41 commits of history; live AI disclosure first turn in Hindi, Kannada, English (`e2e/disclosure.mjs`) |
 | CP8 | Deployment | Passed except the phone on mobile data and a cold-start measurement | 2026-11-12 | Hosted on Render's free plan at https://vidur-xu96.onrender.com (blueprint `render.yaml`, Docker image test-built locally first; keys and the access code typed into Render's dashboard by the user, never in the repo). Checked from here: `/healthz` 200 in 80 ms (warm); hosted mode needs the code; no code and a wrong code get `bad_access_code`, the right one `ready` with `degraded:false` and the LLM on; a foreign origin gets 403; showcase loads in 0.3 to 0.5 s with no console errors and no horizontal scroll at 1366 and 390; real speech turn through the hosted copy with a fake mic: AI disclosure spoken first, "Ramesh ka teen sau chalis rupaye udhaar" heard correctly, which-Ramesh question asked, release to first audio 751 ms; a silent press says it heard nothing. Not done: the user's phone over mobile data, and the cold-start time after sleeping (the free plan sleeps after about 15 minutes idle; `npm run keepwarm -- <url>` or opening it early). |
 | CP9 | Deliverables | In progress | | Done: README, architecture and system-flow diagrams, deck (7 slides) and `references/slides.md`, framed and unframed screenshots in en and kn, demo video script. Not done: the video itself, team details on slide 1, public repo, submission form. |
-| CP10 | Plan 2 gate 0: setup and contract | In progress: A and C verified, waiting for B | | CP10-A, CP10-B, CP10-C all verified (see `plan2.md` Phase gates): F0 merged, repo ready for three people, baseline recorded |
+| CP10 | Plan 2 gate 0: setup and contract | Passed | 2026-11-21 | CP10-A, CP10-B, CP10-C all verified: F0 merged, repo ready for three people, baseline recorded |
 | CP11 | Plan 2 gate 1: engine and first screens | Not started | | CP11-A (F4, F3, search function), CP11-B (F1, B1), CP11-C (B3, F7 round 1, F9.0 locale probe) |
 | CP12 | Plan 2 gate 2: all features visible | Not started | | CP12-A (F5, F8), CP12-B (F2, F3, F4 screens, F5 button, F6), CP12-C (browser checks, round 1 fixes) |
 | CP13 | Plan 2 gate 3: four new languages | Not started | | CP13-A (ta, te, mr, gu core and templates), CP13-B (labels, fonts, Beta tag, 360 px checks), CP13-C (gateway locales, mock e2e per language, synthetic speech pass) |
@@ -79,6 +78,7 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 ### Plan 2: Member B
 
 - 2026-11-21: B1 Kannada label clipping fixed in `apps/web/src/phone/ui/phone.css`. Added max-width and wrapping on narrow screens (<= 390px) for kn and hi to ensure `.totals-payment` clears `.notch-btn`.
+- 2026-11-21, CP10-B passed: F0 phone contract merged (`501231b`): profile storage in `apps/web/src/phone/storage/profile.ts` with 5 tests in `profile.test.ts` (old install returns null, save/load works); `contract.ts` required actions (`saveProfile`, `setPin`, `clearPin`, `unlock`, `updateCustomer`, `remindOnWhatsApp`, `speakSummary`) wired in `controller.ts` and `preview.tsx`; `CustomerRow` carries optional `nickname` and `phone`. `npm run typecheck` clean; `npm run demo:mock` starts and listens on 8080; old-install settings compatibility verified.
 
 ### Plan 2: Member C
 
@@ -88,6 +88,7 @@ Plan 2 entries go here, one short dated entry per finished task, under your own 
 - 2026-11-21: reviewed and merged PR #3 (F3 nickname flow: typecheck, lint, 1,513 tests, golden and red-team green). F0 existed twice (`main` and PR #1), so PR #4 (`501231b`) took PR #1's missing pieces onto `main` and fixed two F3 nits. Check on merged `main`: typecheck, lint clean; `npm test` 34 files / 1,528 tests; `npm run test:e2e` 77/77 (run on the PR branch before merge; tests re-run on `main` after). PR #1 and PR #2 are superseded and still open, waiting for Member C's go-ahead to close them. CP10 still needs: GitHub ruleset confirmed, handles of A and B in plan2 section 8, Member B's phone-part checkpoint.
 - 2026-11-21, CP10-C evidence: collaborators added (three, `gh api repos/doublerook777/vidur/collaborators`); ruleset `protect-branch-main` active on `main` with 2 rules, `deletion` and `non_fast_forward` (`gh api repos/doublerook777/vidur/rules/branches/main`); PR template `.github/pull_request_template.md`; baseline above (1,482 tests, e2e 77/77, 69,455 B gzipped JS); `docs/test-campaign.md` created; tracker rows F0 to F9 and B1 to B3 match plan2 section 2. Waiting for Member A to verify.
 - 2026-11-21, CP10-A verified by Member C on `main` at `8d65b2d`: `typecheck` and `lint` exit 0; `npm test` 34 files / 1,528 tests pass; `contract.test.ts` (7 tests, including the frozen old-events replay) passes; the "naya customer" audit is in `conversation.md` (finding: no voice way yet to create a second same-named customer on purpose; F3 added it). Member A verified CP10-C. CP10 now waits only for CP10-B (Member B, verified by Member A).
+- 2026-11-21: F8 core written ahead of Phase 2 and opened as PR #6 (branch `feat/F8-voice-edits`, not merged: the CP10 gate is still closed). Four cases (by day, by old amount, set the total with mandatory read-back, remove or flip), en/hi/kn. Check on the branch: `typecheck`, `lint` exit 0; `npm test` 35 files / 1,594 tests (58 new); `npm run test:e2e` 77/77; golden intent 179/179, silent wrong amounts 0; held-out 148/148; red-team 91 lines pass. Left: B's screens, A's review, native-speaker check of the 16 new hi and kn lines.
 
 ### 2026-11-21 (setup, claude for the team)
 

@@ -40,7 +40,7 @@ export interface DialogueOptions {
   undoWindowMs?: number;
 }
 
-type Mode = 'entry' | 'note' | 'query' | 'reminder' | 'consent' | 'move' | 'replace_amount' | 'edit';
+type Mode = 'entry' | 'note' | 'query' | 'summary' | 'reminder' | 'consent' | 'move' | 'replace_amount' | 'edit';
 
 interface Work {
   mode: Mode;
@@ -170,6 +170,23 @@ export class Dialogue {
     return this.emit([]);
   }
 
+  /**
+   * Speaks and returns the customer summary for a given customer id.
+   * Programmatic invocation for Member B's "Hear summary" button.
+   */
+  summaryFor(customerId: string): Reply[] {
+    const customer = this.o.ledger.customer(customerId);
+    if (!customer) return this.emit([this.r('unknown_customer', { name: customerId })]);
+    const w: Work = {
+      mode: 'summary',
+      customerId,
+      ev: { intent: 'customer_summary', text: '', tense: 'unknown', needs: [] },
+      rest: [],
+      asked: 0,
+    };
+    return this.emit(this.summaryReply(w));
+  }
+
   /** The shopkeeper talked over the agent. Whatever was being asked stays open until it expires. */
   interrupt(): void {
     // Playback is stopped by the caller. The question, if any, remains pending.
@@ -277,7 +294,21 @@ export class Dialogue {
 
   private workFor(ev: ParsedEvent, rest: ParsedEvent[]): Work {
     const mode: Mode =
-      ev.intent === 'edit_entry' ? 'edit' : ev.intent === 'credit_entry' || ev.intent === 'payment' ? 'entry' : ev.intent === 'note' ? 'note' : ev.intent === 'balance_query' ? 'query' : ev.intent === 'reminder_opt_in' ? (isOptInStatement(ev.text) ? 'consent' : 'reminder') : 'entry';
+      ev.intent === 'edit_entry'
+        ? 'edit'
+        : ev.intent === 'credit_entry' || ev.intent === 'payment'
+        ? 'entry'
+        : ev.intent === 'note'
+          ? 'note'
+          : ev.intent === 'balance_query'
+            ? 'query'
+            : ev.intent === 'customer_summary'
+              ? 'summary'
+              : ev.intent === 'reminder_opt_in'
+                ? isOptInStatement(ev.text)
+                  ? 'consent'
+                  : 'reminder'
+                : 'entry';
     return { mode, ev, rest, asked: 0 };
   }
 
@@ -324,6 +355,7 @@ export class Dialogue {
     }
 
     if (w.mode === 'query') return this.balanceReply(w);
+    if (w.mode === 'summary') return this.summaryReply(w);
     if (w.mode === 'consent') {
       await L.setConsent(w.customerId!, true);
       return [this.r('consent_saved', { name: this.nameOf(w) })];
@@ -366,7 +398,7 @@ export class Dialogue {
     if (w.customerId || w.createName) return undefined;
     const spoken = w.ev.customerSpoken;
     if (!spoken) {
-      if (w.mode === 'query' || w.mode === 'reminder' || w.mode === 'consent' || w.mode === 'note' || w.mode === 'entry' || w.mode === 'move') return this.ask(w, 'customer', this.r('ask_customer'));
+      if (w.mode === 'query' || w.mode === 'summary' || w.mode === 'reminder' || w.mode === 'consent' || w.mode === 'note' || w.mode === 'entry' || w.mode === 'move') return this.ask(w, 'customer', this.r('ask_customer'));
       return undefined;
     }
     const customers = this.o.ledger.customers();
@@ -397,7 +429,7 @@ export class Dialogue {
       return this.ask(w, 'near', this.r('confirm_near', { name }));
     }
     // A new name. Nothing is ever created without the shopkeeper saying yes: a misheard word must not become a khata.
-    if (w.mode === 'query' || w.mode === 'reminder' || w.mode === 'consent' || w.mode === 'edit') return [this.r('unknown_customer', { name: spoken })];
+    if (w.mode === 'query' || w.mode === 'summary' || w.mode === 'reminder' || w.mode === 'consent' || w.mode === 'edit') return [this.r('unknown_customer', { name: spoken })];
     return this.ask(w, 'new_customer', this.r('confirm_new_customer', { name: spoken }));
   }
 
@@ -481,6 +513,45 @@ export class Dialogue {
     if (ev.amountPaise !== undefined && when) out.push(this.r('note_saved', { when, amount: this.money(ev.amountPaise) }));
     else out.push(this.r('note_saved_plain'));
     return out;
+  }
+
+  private howLongAgo(entryTime: number, now: number): string {
+    const today = startOfDayIst(now);
+    const entryDay = startOfDayIst(entryTime);
+    const diffDays = Math.max(0, Math.round((today - entryDay) / 86_400_000));
+    if (diffDays === 0) return say(this.o.lang, 'when_today');
+    if (diffDays === 1) return say(this.o.lang, 'when_yesterday');
+    if (diffDays === 2) return say(this.o.lang, 'when_day_before');
+    return say(this.o.lang, 'days_ago', { count: String(diffDays) });
+  }
+
+  private summaryReply(w: Work): Reply[] {
+    const L = this.o.ledger;
+    const id = w.customerId!;
+    const name = L.customer(id)?.name ?? '';
+    const entries = L.activeEntries(id);
+    if (!entries.length) {
+      return [this.r('customer_summary_none', { name })];
+    }
+    let last: ActiveEntry | null = null;
+    for (const e of entries) {
+      if (!last || e.recordedAt >= last.recordedAt) last = e;
+    }
+    const now = this.o.clock();
+    const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+    const count30 = String(entries.filter((e) => e.at >= thirtyDaysAgo).length);
+    const kind = say(this.o.lang, last!.kind === 'credit' ? 'entry_kind_credit' : 'entry_kind_payment');
+    const amount = this.money(last!.paise);
+    const when = this.howLongAgo(last!.at, now);
+    const bal = L.balance(id);
+
+    if (bal > 0) {
+      return [this.r('summary_customer', { name, balance: this.money(bal), kind, amount, when, count: count30 })];
+    }
+    if (bal < 0) {
+      return [this.r('summary_advance', { name, advance: this.money(-bal), kind, amount, when, count: count30 })];
+    }
+    return [this.r('summary_settled', { name, kind, amount, when, count: count30 })];
   }
 
   private balanceReply(w: Work): Reply[] {
