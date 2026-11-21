@@ -1,6 +1,6 @@
 // F7 round 2: Timbre speaks a test line, Prisma transcribes it (every third line with 10 dB white noise), the core parser reads it.
 // Machine voice only: no real accent, no speaker has heard any of it. Synthetic names and amounts.
-// Result codes (docs/test-campaign.md): R right, A asked correctly (read-back or question, never a wrong amount), W wrong.
+// Result codes (references/test-campaign.md, local notes): R right, A asked correctly (read-back or question, never a wrong amount), W wrong.
 // A silent wrong amount (wrong amount or direction saved without a question) is a P0.
 // Usage: node spikes/f7-round2.mjs [hi hinglish en kn]   (spends roughly 20 to 60 credits)
 import { writeFileSync } from 'node:fs';

@@ -1,7 +1,7 @@
 // I7: fail when the gzipped JS of the phone app grows past the budget. Run after `npm run build`.
 // Budget history: 83,000 B was set from the Phase 0 baseline (69,455 B plus 20%). F1 to F9 (profile, PIN, search,
 // summaries, edits, WhatsApp reminders, four more languages) took it to about 106 KB, so on 2026-11-22 the budget was
-// reset to 112,000 B (about 5% headroom). Raise it again only with a note in docs/progress.md saying what grew.
+// reset to 112,000 B (about 5% headroom). Raise it again only with a note in references/progress.md (local notes) saying what grew.
 import { readdirSync, readFileSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 
