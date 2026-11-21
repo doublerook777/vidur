@@ -315,16 +315,30 @@ try {
   const nickId = await state(page, 's.customers[0].id');
   await page.evaluate((id) => window.__vidur.actions.openCustomer(id), nickId);
   await sleep(250);
-  await page.locator('.detail-nickname .btn-small').click();
+  await page.locator('.detail-nickname-edit').click();
   await page.locator('.detail-nickname-input').fill('e2e nick');
-  await page.locator('.detail-nickname-actions .btn-small').first().click();
+  await page.locator('.detail-nickname-save').click();
   await sleep(300);
-  check('a nickname typed on the customer screen is saved and shown', (await state(page, "s.customers.some((c) => c.nickname === 'e2e nick')")) && /e2e nick/.test(await page.locator('.detail-nickname').innerText()));
-  await page.locator('.detail-nickname .btn-small').click();
+  check('a nickname typed on the customer screen is saved and shown', (await state(page, "s.customers.some((c) => c.nickname === 'e2e nick')")) && /e2e nick/.test(await page.locator('.detail-nickname').nth(1).innerText()));
+  await page.locator('.detail-nickname-edit').click();
   await page.locator('.detail-nickname-input').fill('');
-  await page.locator('.detail-nickname-actions .btn-small').first().click();
+  await page.locator('.detail-nickname-save').click();
   await sleep(300);
   check('an empty nickname clears it', await state(page, "!s.customers.some((c) => c.nickname)"));
+  // The name can be changed from the customer screen, and a blank name is not allowed.
+  const oldName = await state(page, `s.customers.find((c) => c.id === ${JSON.stringify(nickId)}).name`);
+  await page.locator('.detail-name-edit').click();
+  await page.locator('.detail-name-input').fill('   ');
+  check('a blank name cannot be saved', await page.locator('.detail-name-save').isDisabled());
+  await page.locator('.detail-name-input').fill('Renamed E2E');
+  await page.locator('.detail-name-save').click();
+  await sleep(300);
+  check('a name typed on the customer screen is saved and shown in the title', (await state(page, `s.customers.find((c) => c.id === ${JSON.stringify(nickId)}).name === 'Renamed E2E'`)) && /Renamed E2E/.test(await page.locator('.screen-title').innerText()));
+  await page.locator('.detail-name-edit').click();
+  await page.locator('.detail-name-input').fill(oldName);
+  await page.locator('.detail-name-save').click();
+  await sleep(300);
+  check('the original name can be put back', await state(page, `s.customers.find((c) => c.id === ${JSON.stringify(nickId)}).name === ${JSON.stringify(oldName)}`));
   // An entry can be changed by hand from its menu, and the change can be taken back.
   await page.evaluate(() => window.__vidur.actions.navigate('history'));
   await sleep(250);

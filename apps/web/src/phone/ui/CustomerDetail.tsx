@@ -36,6 +36,20 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
     setEditing(false);
   };
 
+  const [renaming, setRenaming] = useState(false);
+  const [nameDraft, setNameDraft] = useState(vm.customer.name);
+  const newName = nameDraft.trim();
+  const namesakes = newName === '' ? [] : (vm.otherCustomers ?? []).filter((o) => nameKey(o.name) === nameKey(newName));
+  // Two customers may share a name, but never the same name and the same nickname: the voice could not tell them apart.
+  const myNick = vm.customer.nickname ?? '';
+  const sameBoth = namesakes.some((o) => nameKey(o.nickname ?? '') === nameKey(myNick) && (myNick !== '' || (o.nickname ?? '') !== ''));
+  const canRename = newName !== '' && !sameBoth;
+  const saveName = (): void => {
+    if (!canRename) return;
+    if (newName !== vm.customer.name) actions.updateCustomer(vm.customer.id, { name: newName });
+    setRenaming(false);
+  };
+
   return (
     <main class="screen screen-customer-detail" data-feature="customer-detail">
       <header class="screen-header">
@@ -45,6 +59,55 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
         <h1 class="screen-title">{vm.customer.nickname ? `${vm.customer.name} (${vm.customer.nickname})` : vm.customer.name}</h1>
         <AiBadge vm={{}} actions={actions} lang={lang} />
       </header>
+
+      <section class="detail-nickname" aria-label={t.nameLabel}>
+        {renaming ? (
+          <>
+            <label class="keypad-new-name-label">
+              <span class="keypad-new-name-title">{t.nameLabel}</span>
+              <input
+                type="text"
+                class="keypad-new-name detail-name-input"
+                value={nameDraft}
+                onInput={(e) => setNameDraft((e.target as HTMLInputElement).value)}
+                autocomplete="off"
+                autoFocus
+              />
+            </label>
+            {namesakes.length > 0 && !sameBoth && myNick === '' && <p class="keypad-hint" role="note">{t.nicknameHint}</p>}
+            {sameBoth && <p class="keypad-hint" role="alert">{t.nicknameTaken}</p>}
+            <div class="detail-nickname-actions">
+              <button type="button" class="btn btn-small detail-name-save" disabled={!canRename} onClick={saveName}>
+                {t.save}
+              </button>
+              <button
+                type="button"
+                class="btn btn-small"
+                onClick={() => {
+                  setNameDraft(vm.customer.name);
+                  setRenaming(false);
+                }}
+              >
+                {t.cancelEdit}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div class="detail-nickname-row">
+            <span class="detail-nickname-value">{`${t.nameLabel}: ${vm.customer.name}`}</span>
+            <button
+              type="button"
+              class="btn btn-small detail-name-edit"
+              onClick={() => {
+                setNameDraft(vm.customer.name);
+                setRenaming(true);
+              }}
+            >
+              {t.editName}
+            </button>
+          </div>
+        )}
+      </section>
 
       <section class="detail-nickname" aria-label={t.nickname}>
         {editing ? (
@@ -62,7 +125,7 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
             </label>
             {taken && <p class="keypad-hint" role="alert">{t.nicknameTaken}</p>}
             <div class="detail-nickname-actions">
-              <button type="button" class="btn btn-small" disabled={taken} onClick={saveNickname}>
+              <button type="button" class="btn btn-small detail-nickname-save" disabled={taken} onClick={saveNickname}>
                 {t.save}
               </button>
               <button
@@ -82,7 +145,7 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
             <span class="detail-nickname-value">{vm.customer.nickname ? `${t.nickname}: ${vm.customer.nickname}` : t.noNickname}</span>
             <button
               type="button"
-              class="btn btn-small"
+              class="btn btn-small detail-nickname-edit"
               onClick={() => {
                 setDraft(vm.customer.nickname ?? '');
                 setEditing(true);

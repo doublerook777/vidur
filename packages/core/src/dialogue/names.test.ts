@@ -143,3 +143,24 @@ describe('names of more than one word', () => {
     expect(ledger.activeEntries(c.id)[1]!.kind).toBe('credit');
   });
 });
+
+describe('after a customer is renamed', () => {
+  it('the voice finds the new name, and the old spelling no longer matches', async () => {
+    const { ledger, say1 } = await setup();
+    const c = await ledger.createCustomer('Ramseh');
+    await ledger.updateCustomer(c.id, { name: 'Ramesh' });
+    await say1('Ramesh ka 200 udhaar');
+    expect(ledger.balance(c.id)).toBe(paise(200));
+    expect(ledger.customers()).toHaveLength(1);
+  });
+
+  it('a multi-word new name is found by its full name', async () => {
+    const { ledger, say1 } = await setup();
+    const c = await ledger.createCustomer('Ayush');
+    await ledger.updateCustomer(c.id, { name: 'Ayush Aditya' });
+    const rs = await say1('ayush aditya deposited 1000/-');
+    expect(keys(rs)).toEqual(['payment_advance']);
+    expect(ledger.customers()).toHaveLength(1);
+  });
+});
+

@@ -12,6 +12,8 @@ export const KN_REVIEW: readonly string[] = [
   'viewNotes',
   'newCustomer',
   'newNickname',
+  'nameLabel',
+  'editName',
   'nickname',
   'noNickname',
   'editNickname',
@@ -96,6 +98,8 @@ export type LabelKey =
   | 'backspace'
   | 'newName'
   | 'newNickname'
+  | 'nameLabel'
+  | 'editName'
   | 'nickname'
   | 'noNickname'
   | 'editNickname'
@@ -205,6 +209,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     backspace: 'Delete digit',
     newName: 'New name',
     newNickname: 'Nickname (optional)',
+    nameLabel: 'Name',
+    editName: 'Edit name',
     nickname: 'Nickname',
     noNickname: 'No nickname',
     editNickname: 'Edit nickname',
@@ -313,6 +319,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     backspace: 'अंक हटाएँ',
     newName: 'नया नाम',
     newNickname: 'निकनेम (वैकल्पिक)',
+    nameLabel: 'नाम',
+    editName: 'नाम बदलें',
     nickname: 'निकनेम',
     noNickname: 'कोई निकनेम नहीं',
     editNickname: 'निकनेम बदलें',
@@ -421,6 +429,8 @@ export const LABELS: Record<Lang, Record<LabelKey, string>> = {
     backspace: 'ಅಂಕಿ ಅಳಿಸಿ',
     newName: 'ಹೊಸ ಹೆಸರು',
     newNickname: 'ಉಪನಾಮ (ಐಚ್ಛಿಕ)',
+    nameLabel: 'ಹೆಸರು',
+    editName: 'ಹೆಸರು ಬದಲಿಸಿ',
     nickname: 'ಉಪನಾಮ',
     noNickname: 'ಉಪನಾಮ ಇಲ್ಲ',
     editNickname: 'ಉಪನಾಮ ಬದಲಿಸಿ',

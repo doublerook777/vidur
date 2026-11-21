@@ -825,7 +825,7 @@
 .detail-nickname-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
 .detail-nickname-value { color: var(--color-text-dim); font-size: var(--font-sm); font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
 .detail-nickname-actions { display: flex; gap: var(--space-2); }
-.detail-nickname-input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.detail-nickname-input:focus-visible, .detail-name-input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
 .detail-section-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
 .detail-empty { margin: 0; color: var(--color-text-dim); }
 .detail-entry-list, .detail-note-list, .reminder-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
