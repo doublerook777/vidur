@@ -13,7 +13,7 @@ import te from './tables/te.json' with { type: 'json' };
 /** What a single word means inside a number. */
 export type Entry =
   | { kind: 'unit'; value: number } // 0..99
-  | { kind: 'fusedHundred'; value: number } // Kannada ಮುನ್ನೂರು = 300
+  | { kind: 'fusedHundred'; value: number } // Kannada ಮುನ್ನೂರು = 300, Tamil ஐநூறு = 500
   | { kind: 'fusedThousand'; value: number } // Tamil இரண்டாயிரம் = 2000
   | { kind: 'mult'; value: 100 | 1000 | 100000 | 10000000 }
   | { kind: 'frac'; word: 'dedh' | 'dhai' | 'sawa' | 'paune' | 'saade' }
@@ -87,7 +87,7 @@ load(mr as Table);
 load(gu as Table);
 
 for (const t of [pa, bn, ml]) {
-  // Draft languages (F13, P1): digits only for now, so their numerals at least convert.
+  // Remaining draft languages (F13, P1): digits only for now, so their numerals at least convert.
   for (const [d, v] of Object.entries((t as Table).digits)) digitMap.set(d, v);
 }
 
@@ -144,22 +144,24 @@ add('साडे', { kind: 'frac', word: 'saade' });
 add('डेड', { kind: 'frac', word: 'dedh' });
 
 // ---- Tamil extras ----
+// Standard and variant forms of fused hundreds (including both ஐநூறு and ஐந்நூறு)
 const TA_HUNDREDS: [string, number][] = [
-  ['நூறு', 1], ['நூற்று', 1], ['நூற்றி', 1],
-  ['இருநூறு', 2], ['இருநூற்று', 2], ['இருநூற்றி', 2],
-  ['முன்னூறு', 3], ['முன்னூற்று', 3], ['முன்னூற்றி', 3], ['முந்நூறு', 3], ['முந்நூற்று', 3], ['முந்நூற்றி', 3],
-  ['நானூறு', 4], ['நானூற்று', 4], ['நானூற்றி', 4],
-  ['ஐநூறு', 5], ['ஐந்நூறு', 5], ['ஐநூற்று', 5], ['ஐநூற்றி', 5], ['ஐந்நூற்று', 5], ['ஐந்நூற்றி', 5],
-  ['அறுநூறு', 6], ['அறுநூற்று', 6], ['அறுநூற்றி', 6],
-  ['எழுநூறு', 7], ['எழுநூற்று', 7], ['எழுநூற்றி', 7],
-  ['எண்நூறு', 8], ['எண்ணூறு', 8], ['எண்நூற்று', 8], ['எண்நூற்றி', 8], ['எண்ணூற்று', 8], ['எண்ணூற்றி', 8],
-  ['தொள்ளாயிரம்', 9], ['தொள்ளாயிரத்து', 9], ['தொள்ளாயிரத்தி', 9],
+  ['நூறு', 100], ['நூற்று', 100], ['நூற்றி', 100],
+  ['இருநூறு', 200], ['இருநூற்று', 200], ['இருநூற்றி', 200],
+  ['முன்னூறு', 300], ['முன்னூற்று', 300], ['முன்னூற்றி', 300], ['முந்நூறு', 300], ['முந்நூற்று', 300], ['முந்நூற்றி', 300],
+  ['நானூறு', 400], ['நானூற்று', 400], ['நானூற்றி', 400],
+  ['ஐநூறு', 500], ['ஐந்நூறு', 500], ['ஐநூற்று', 500], ['ஐநூற்றி', 500], ['ஐந்நூற்று', 500], ['ஐந்நூற்றி', 500],
+  ['அறுநூறு', 600], ['அறுநூற்று', 600], ['அறுநூற்றி', 600],
+  ['எழுநூறு', 700], ['எழுநூற்று', 700], ['எழுநூற்றி', 700],
+  ['எண்நூறு', 800], ['எண்ணூறு', 800], ['எண்நூற்று', 800], ['எண்நூற்றி', 800], ['எண்ணூற்று', 800], ['எண்ணூற்றி', 800],
+  ['தொள்ளாயிரம்', 900], ['தொள்ளாயிரத்து', 900], ['தொள்ளாயிரத்தி', 900],
 ];
-for (const [w, n] of TA_HUNDREDS) add(w, { kind: 'fusedHundred', value: n * 100 });
+for (const [w, n] of TA_HUNDREDS) add(w, { kind: 'fusedHundred', value: n });
 
 const TA_THOUSANDS: [string, number][] = [
   ['இரண்டாயிரம்', 2], ['இரண்டாயிரத்து', 2], ['இரண்டாயிரத்தி', 2],
   ['மூவாயிரம்', 3], ['மூவாயிரத்து', 3], ['மூவாயிரத்தி', 3],
+  ['மூன்றாயிரம்', 3], ['மூன்றாயிரத்து', 3], ['மூன்றாயிரத்தி', 3],
   ['நாலாயிரம்', 4], ['நாலாயிரத்து', 4], ['நாலாயிரத்தி', 4],
   ['நான்காயிரம்', 4], ['நான்காயிரத்து', 4], ['நான்காயிரத்தி', 4],
   ['ஐயாயிரம்', 5], ['ஐயாயிரத்து', 5], ['ஐயாயிரத்தி', 5],
@@ -173,11 +175,13 @@ for (const [w, n] of TA_THOUSANDS) add(w, { kind: 'fusedThousand', value: n * 10
 add('ஆயிரம்', { kind: 'mult', value: 1000 });
 add('ஆயிரத்து', { kind: 'mult', value: 1000 });
 add('ஆயிரத்தி', { kind: 'mult', value: 1000 });
+add('லட்சம்', { kind: 'mult', value: 100000 });
 add('லட்சத்து', { kind: 'mult', value: 100000 });
 add('லட்சத்தி', { kind: 'mult', value: 100000 });
 add('இலட்சம்', { kind: 'mult', value: 100000 });
 add('இலட்சத்து', { kind: 'mult', value: 100000 });
 add('இலட்சத்தி', { kind: 'mult', value: 100000 });
+add('கோடி', { kind: 'mult', value: 10000000 });
 
 const TA_TENS: [string, number][] = [
   ['இருபத்தி', 20], ['இருபத்து', 20],
@@ -192,29 +196,33 @@ const TA_TENS: [string, number][] = [
 for (const [w, n] of TA_TENS) add(w, { kind: 'unit', value: n });
 
 // ---- Telugu extras ----
+add('వంద', { kind: 'mult', value: 100 });
 add('వందల', { kind: 'mult', value: 100 });
 add('వందలు', { kind: 'mult', value: 100 });
+add('నూరు', { kind: 'fusedHundred', value: 100 });
 add('నూట', { kind: 'fusedHundred', value: 100 });
-add('వేల', { kind: 'mult', value: 1000 });
-add('లక్షల', { kind: 'mult', value: 100000 });
 add('ఇన్నూరు', { kind: 'fusedHundred', value: 200 });
 add('మున్నూరు', { kind: 'fusedHundred', value: 300 });
+add('వేల', { kind: 'mult', value: 1000 });
+add('వేలు', { kind: 'mult', value: 1000 });
+add('లక్షల', { kind: 'mult', value: 100000 });
+add('కోట్ల', { kind: 'mult', value: 10000000 });
 
 // ---- Marathi extras ----
 const MR_HUNDREDS: [string, number][] = [
-  ['एकशे', 1], ['दोनशे', 2], ['तीनशे', 3], ['चारशे', 4], ['पाचशे', 5],
-  ['सहाशे', 6], ['सातशे', 7], ['आठशे', 8], ['नऊशे', 9],
+  ['शंभर', 100], ['एकशे', 100], ['दोनशे', 200], ['तीनशे', 300], ['चारशे', 400], ['पाचशे', 500],
+  ['सहाशे', 600], ['सातशे', 700], ['आठशे', 800], ['नऊशे', 900],
 ];
-for (const [w, n] of MR_HUNDREDS) add(w, { kind: 'fusedHundred', value: n * 100 });
+for (const [w, n] of MR_HUNDREDS) add(w, { kind: 'fusedHundred', value: n });
 add('दीडशे', { kind: 'fusedHundred', value: 150 });
 add('अडीचशे', { kind: 'fusedHundred', value: 250 });
 
 // ---- Gujarati extras ----
 const GU_HUNDREDS: [string, number][] = [
-  ['એકસો', 1], ['બસો', 2], ['ત્રણસો', 3], ['ચારસો', 4], ['પાંચસો', 5], ['પાચસો', 5],
-  ['છસો', 6], ['સાતસો', 7], ['આઠસો', 8], ['નવસો', 9],
+  ['સો', 100], ['એકસો', 100], ['બસો', 200], ['ત્રણસો', 300], ['ચારસો', 400], ['પાંચસો', 500], ['પાચસો', 500],
+  ['છસો', 600], ['સાતસો', 700], ['આઠસો', 800], ['નવસો', 900],
 ];
-for (const [w, n] of GU_HUNDREDS) add(w, { kind: 'fusedHundred', value: n * 100 });
+for (const [w, n] of GU_HUNDREDS) add(w, { kind: 'fusedHundred', value: n });
 add('દોઢસો', { kind: 'fusedHundred', value: 150 });
 add('અઢીસો', { kind: 'fusedHundred', value: 250 });
 // Prisma spellings of 40-48 with "લ" instead of "ળ"
@@ -241,7 +249,7 @@ export function lexiconSize(): number {
 }
 
 /** Words that look like numbers but must not count on their own. */
-export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath', 'दो', 'एक', 'ಒಂದು', 'वन', 'टू', 'एट', 'ఒకటి', 'ఒక', 'ஒன்று', 'ஒரு', 'બે'].map(norm));
+export const NEEDS_CONTEXT = new Set(['do', 'ek', 'one', 'sat', 'sath', 'दो', 'एक', 'ಒಂದು', 'वन', 'टू', 'एट', 'ఒకటి', 'ఒక', 'ஒன்று', 'ஒரு', 'બે', 'એક'].map(norm));
 
 export const CURRENCY = new Set(
   [

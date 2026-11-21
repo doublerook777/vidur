@@ -1,12 +1,19 @@
-/** Rough phonetic Latin spelling of Devanagari and Kannada names, so रमेश, ರಮೇಶ್ and Ramesh meet. */
+/**
+ * Cross-script name normalization for Indic scripts.
+ *
+ * A shopkeeper says "Ramesh" in Hindi ("रमेश"), Kannada ("ರಮೇಶ್"), Tamil ("ரமேஷ்"),
+ * Telugu ("రమేష్"), or Gujarati ("રમેશ") and expects the same khata to open.
+ *
+ * Rule: pure functions only. No network, no DOM, deterministic.
+ */
 
 const DEV_C: Record<string, string> = {
   क: 'k', ख: 'kh', ग: 'g', घ: 'gh', ङ: 'n', च: 'ch', छ: 'ch', ज: 'j', झ: 'jh', ञ: 'n', ट: 't', ठ: 'th', ड: 'd', ढ: 'dh', ण: 'n',
   त: 't', थ: 'th', द: 'd', ध: 'dh', न: 'n', प: 'p', फ: 'f', ब: 'b', भ: 'bh', म: 'm', य: 'y', र: 'r', ल: 'l', व: 'v', श: 'sh', ष: 'sh',
-  स: 's', ह: 'h', ळ: 'l', ड़: 'r', ढ़: 'rh', फ़: 'f', ज़: 'j', क़: 'k', ख़: 'kh', ग़: 'g',
+  स: 's', ह: 'h', ड़: 'r', ढ़: 'rh', क़: 'k', ख़: 'kh', ग़: 'g', ज़: 'j', फ़: 'f',
 };
-const DEV_V: Record<string, string> = { अ: 'a', आ: 'a', इ: 'i', ई: 'i', उ: 'u', ऊ: 'u', ए: 'e', ऐ: 'ai', ओ: 'o', औ: 'au', ऋ: 'ri', ऑ: 'o' };
-const DEV_M: Record<string, string> = { 'ा': 'a', 'ि': 'i', 'ी': 'i', 'ु': 'u', 'ू': 'u', 'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au', 'ृ': 'ri', 'ॉ': 'o' };
+const DEV_V: Record<string, string> = { अ: 'a', आ: 'a', इ: 'i', ई: 'i', उ: 'u', ऊ: 'u', ऋ: 'ri', ए: 'e', ऐ: 'ai', ओ: 'o', औ: 'au' };
+const DEV_M: Record<string, string> = { 'ा': 'a', 'ि': 'i', 'ी': 'i', 'ु': 'u', 'ू': 'u', 'ृ': 'ri', 'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au' };
 
 const KN_C: Record<string, string> = {
   ಕ: 'k', ಖ: 'kh', ಗ: 'g', ಘ: 'gh', ಙ: 'n', ಚ: 'ch', ಛ: 'ch', ಜ: 'j', ಝ: 'jh', ಞ: 'n', ಟ: 't', ಠ: 'th', ಡ: 'd', ಢ: 'dh', ಣ: 'n',
@@ -89,8 +96,18 @@ export function nameKey(name: string): string {
 
 /** Looser key: the one used to decide "near" matches. */
 export function looseKey(name: string): string {
-  return nameKey(name).replace(/sh/g, 's').replace(/ch/g, 'c').replace(/th/g, 't').replace(/dh/g, 'd').replace(/bh/g, 'b').replace(/kh/g, 'k').replace(/gh/g, 'g').replace(/jh/g, 'j')
-    .replace(/[ei]/g, 'i').replace(/[ou]/g, 'u').replace(/(.)\1+/g, '$1');
+  return nameKey(name)
+    .replace(/sh/g, 's')
+    .replace(/ch/g, 'c')
+    .replace(/th/g, 't')
+    .replace(/dh/g, 'd')
+    .replace(/bh/g, 'b')
+    .replace(/kh/g, 'k')
+    .replace(/gh/g, 'g')
+    .replace(/jh/g, 'j')
+    .replace(/[ei]/g, 'i')
+    .replace(/[ou]/g, 'u')
+    .replace(/(.)\1+/g, '$1');
 }
 
 export function editDistance(a: string, b: string): number {

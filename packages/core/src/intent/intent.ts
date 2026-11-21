@@ -11,75 +11,92 @@ const W = (xs: string): Set<string> => new Set(xs.split(/\s+/).filter(Boolean).m
 // ---- cue words (normalised by norm(), so spelling variants meet) ----
 const CREDIT = W(
   'udhaar udhar udhari uddhar baki baaki credit credited khata owes owe owed borrowed took taken balance_due ' +
-    'उधार उधारी बाकी बक़ाया उद्धार उद्धरण ಉಧಾರ ಉದಾರ ಉಧಾರ್ ಉದಾರ್ ಉದಾಹರ್ ಉದಾಹರ ಉದ್ದಾರ್ ಉದ್ದಾರ ಉಧಾರಿ ಉದಾರಿ ಸಾಲ ಬಾಕಿ ' +
-    'கடன் கடன கடனாக பாக்கி உத்தரி అప్పు అప్పో బాకీ ఉధార్ క్రెడిట్ उसने ઉધાર ઉધારી બાકી',
+    'उधार उधारी बाकी बक़ाया उद्धार उद्धरण कर्ज देणे ઉધાર ઉધારી બાકી દેવું கடன் பாக்கி అప్పు బాకీ ' +
+    'ಉಧಾರ ಉದಾರ ಉಧಾರ್ ಉದಾರ್ ಉದಾಹರ್ ಉದಾಹರ ಉದ್ದಾರ್ ಉದ್ದಾರ ಉಧಾರಿ ಉದಾರಿ ಸಾಲ ಬಾಕಿ',
 );
 const PAYMENT = W(
   'jama jamaa wapas vapas wapis chukaya chukaye chukai chuka chukaayi paid repaid returned refund refunded settled deposit deposited lautaya lauta ' +
-    'वापसी जमा वापस वापिस चुकाया चुकाए चुकाई चुकता लौटाया लौटाए ಜಮಾ ಜಮ ಜಮೆ ವಾಪಸ್ ವಾಪಸಿ ಹಿಂತಿರುಗಿಸಿದರು ಕಟ್ಟಿದರು ಕಟ್ಟಿದ ಕಟ್ಟಿದಳು ಕಟ್ಟಿದನು ' +
-    'வரவு செலுத்தியது செலுத்தினார் கொடுத்தார் பெற்றேன் வசூல் జమ జమా చెల్లించాడు చెల్లించింది చెల్లించారు ఇచ్చాడు కట్టాడు भरले दिले परत फेडले જમા આપ્યા ચૂકવ્યા ભર્યા પતાવ્યા',
+    'वापसी जमा वापस वापिस चुकाया चुकाए चुकाई चुकता लौटाया लौटाए परत भरले चुकवले જમા પાછા ચૂકવ્યા આપ્યા ભર્યા வரவு செலுத்தியது திரும்ப చెల్లింపు జమ చెల్లించారు వాపస్ ' +
+    'ಜಮಾ ಜಮ ಜಮೆ ವಾಪಸ್ ವಾಪಸಿ ಹಿಂತಿರುಗಿಸಿದರು ಕಟ್ಟಿದರು ಕಟ್ಟಿದ ಕಟ್ಟಿದಳು ಕಟ್ಟಿದನು',
 );
-const GIVE = W('diya diye di dia dee gave give given gives दिया दिए दी दिये கொடுத்தார் கொடுத்தான் கொடுத்தாள் ఇచ్చాడు ఇచ్చింది ఇచ్చారు दिला दिले दिली આપ્યા આપ્યો આપી');
+const GIVE = W(
+  'diya diye di dia dee gave give given gives दिया दिए दी दिये दिले दिला दिली दिलेत दिलं આપ્યા આપ્યું આપી આપ્યો கொடுத்தார் கொடுத்தான் கொடுத்தாள் கொடுத்தது தந்தார் ఇచ్చాడు ఇచ్చారు ఇచ్చింది ఇచ్చాను',
+);
 const GIVE_KN_CUSTOMER = W('ಕೊಟ್ಲು ಕೊಟ್ರು ಕೊಟ್ಟಳು ಕೊಟ್ಟನು ಕೊಟ್ಟರು ಕೊಟ್ಟಿದ್ದಾಳೆ ಕೊಟ್ಟಿದ್ದಾರೆ ಕೊಟ್ಟಿದ್ದಾನೆ ಕೊಟ್ಟಳೆ');
 const GIVE_KN_SHOP = W('ಕೊಟ್ಟೆ ಕೊಟ್ಟಿದ್ದೇನೆ ಕೊಟ್ಟೆನು');
-const TOOK = W('liya lie le_gaya legaya liye ले गया लिया लिए ಪಡೆದ ಪಡೆದರು ತೆಗೆದುಕೊಂಡ ತೆಗೆದುಕೊಂಡರು ತೆಗೆದುಕೊಂಡಳು வாங்கினார் எடுத்தார் తీసుకున్నాడు తీసుకుంది తీసుకున్నారు घेतला घेतले લીધા લીધો');
+const TOOK = W(
+  'liya lie le_gaya legaya liye ले गया लिया लिए घेतले घेतला घेतली घेतलं લીધા લીધું લીધી લીધો வாங்கினார் வாங்கியது எடுத்தார் எடுத்தது తీసుకున్నాడు తీసుకున్నారు తీసుకుంది ' +
+    'ಪಡೆದ ಪಡೆದರು ತೆಗೆದುಕೊಂಡ ತೆಗೆದುಕೊಂಡರು ತೆಗೆದುಕೊಂಡಳು',
+);
 const FUTURE = W(
   'dega degi denge dunga dungi dunge dene_wala dene_wali will shall tomorrow_pay karega karegi karenge promised promise promises वादा ' +
-    'देगा देगी देंगे दूँगा दूंगा दूँगी दूंगी करेगा करेगी करेंगे ಕೊಡ್ತಾರೆ ಕೊಡ್ತಾನೆ ಕೊಡ್ತಾಳೆ ಕೊಡುತ್ತಾರೆ ಕೊಡುತ್ತಾನೆ ಕೊಡುತ್ತಾಳೆ ಕೊಡ್ತೀನಿ ಕೊಡುತ್ತೇನೆ ಕೊಡ್ತಾರೆ ಕಟ್ಟುತ್ತಾರೆ ಕಟ್ಟುತ್ತಾನೆ ಕಟ್ಟುತ್ತಾಳೆ ' +
-    'தருவார் கொடுப்பார் தருவான் கொடுப்பான் தருவேன் ఇస్తాడు ఇస్తుంది ఇస్తారు కడతాడు देईल देतील देणार આપશે ચૂકવશે',
+    'देगा देगी देंगे दूँगा दूंगा दूँगी दूंगी करेगा करेगी करेंगे देईल देतील देणार કરશો આપશે ચૂકવશે கொடுப்பார் தருவார் செய்வார் ఇస్తాడు ఇస్తారు ఇస్తుంది ' +
+    'ಕೊಡ್ತಾರೆ ಕೊಡ್ತಾನೆ ಕೊಡ್ತಾಳೆ ಕೊಡುತ್ತಾರೆ ಕೊಡುತ್ತಾನೆ ಕೊಡುತ್ತಾಳೆ ಕೊಡ್ತೀನಿ ಕೊಡುತ್ತೇನೆ ಕೊಡ್ತಾರೆ ಕಟ್ಟುತ್ತಾರೆ ಕಟ್ಟುತ್ತಾನೆ ಕಟ್ಟುತ್ತಾಳೆ',
 );
-const PAST = W('tha thi the gaya gayi gaye diya liya kiya paid gave took was had था थी थे गया गयी लिया दिया किया ಆಯ್ತು ಆಗಿತ್ತು முடிந்தது అయింది జరిగింది झाले झालं થયું થઈ_ગયું');
+const PAST = W(
+  'tha thi the gaya gayi gaye diya liya kiya paid gave took was had था थी थे गया गयी लिया दिया किया होते होता होती झालं હતું હતો હતી થયું இருந்தது ஆனது கொடுத்தது வாங்கியது ఇచ్చారు తీసుకున్నారు ಆಯ್ತು ಆಗಿತ್ತು',
+);
 const QUERY = W(
   'kitna kitni kitne kitna_hai total hisab hisaab hisaabh much many ' +
-    'कितना कितनी कितने कुल हिसाब टोटल ಎಷ್ಟು ಎಷ್ಟಿದೆ ಎಷ್ಟಾಗಿದೆ ಎಷ್ಟಾಯ್ತು ಒಟ್ಟು ಲೆಕ್ಕ ' +
-    'எவ்வளவு எவ்ளோ மொத்தம் கணக்கு ఎంత ఎంతైంది మొత్తం లెక్క किती किती_झाले एकूण हिशोब કેટલા કેટલી કેટલું હિસાબ કુલ',
+    'कितना कितनी कितने कुल हिसाब टोटल किती हिशोब एकूण કેટલા કેટલું કેટલી હિસાબ எவ்வளவு எத்தனை மொத்தம் நிலுவை ఎంత ఎంతో మొత్తం ' +
+    'ಎಷ್ಟು ಎಷ್ಟಿದೆ ಎಷ್ಟಾಗಿದೆ ಎಷ್ಟಾಯ್ತು ಒಟ್ಟು ಲೆಕ್ಕ',
 );
 const QUERY_EN = W('how what which show tell list who');
 const SUMMARY_WORD = W(
   'summary samari समरी ಸಾರಾಂಶ saaramsha saaransh सारांश details detail vivaran विवरण ವಿವರ about baare bare बारे ಬಗ್ಗೆ ' +
-    'சுருக்கம் விவரம் சாராంశம் వివరాలు సారాంశం सारांश तपशील સારાંશ વિગત',
+    'तपशील माहिती बद्दल ' +
+    'વિગત વિશે માહિતી સારાંશ તપશીલ ' +
+    'விவரம் பற்றி விவரங்கள் சுருக்கம் ' +
+    'సారాంశం వివరాలు గురించి',
 );
-const TELL_VERB = W('batao bataiye dikhao dikhaiye बताओ बताइए दिखाओ दिखाइए tell show ಹೇಳಿ ಹೇಳು ತಿಳಿಸಿ ಕೊಡಿ kodi kheli சொல் சொல்லு சொல்லுங்கள் காட்டு காட்டுங்கள் చెప్పు చెప్పండి చూడు చూపించు सांगा दाखवा કહો જણાવો બતાવો');
-const HISAB_WORD = W('hisab hisaab hisaabh हिसाब ಲೆಕ್ಕ account கணக்கு లెక్క ఖాతా हिशोब खाते હિસાબ ખાતું');
-const REMINDER = W('reminder reminders remind yaad yaaddilao optin opt consent रिमाइंडर याद ರಿಮೈಂಡರ್ ನೆನಪಿಸಿ ನೆನಪಿನ ನೆನಪು ಜ್ಞಾಪನೆ நினைவூட்டல் நினைவு நினைவூட்டு ரிமைண்டர் రిమైండర్ గుర్తుచేయి జ్ఞాపకం आठवण રીમાઇન્ડર રિમાઇન્ડર');
+const TELL_VERB = W(
+  'batao bataiye dikhao dikhaiye बताओ बताइए दिखाओ दिखाइए tell show सांगा दाखवा કહો બતાવો જણાવો சொல்லுங்க சொல்லுங்கள் காட்டுங்கள் చెప్పండి చూపించండి ಹೇಳಿ ಹೇಳು ತಿಳಿಸಿ ಕೊಡಿ kodi kheli',
+);
+const HISAB_WORD = W('hisab hisaab hisaabh हिसाब ಲೆಕ್ಕ account हिशोब खाते હિસાબ ખાતું கணக்கு ఖాతా లెక్క');
+const REMINDER = W(
+  'reminder reminders remind yaad yaaddilao optin opt consent रिमाइंडर याद आठवण स्मरण रिमाइंडर યાદ રીમાઇન્ડર நினைவூட்டல் நினைவூட்டு ஞாபகப்படுத்து ரிமைண்டர் రిమైండర్ గుర్తు ರಿಮೈಂಡರ್ ನೆನಪಿಸಿ ನೆನಪಿನ ನೆನಪು ಜ್ಞಾಪನೆ',
+);
 const UNDO = W(
   'cancel undo delete hata hatao hataiye remove rad radd galat wrong mistake ruko ' +
-    'रद्द हटा हटाओ हटाइए गलत ग़लत रुको ಗಲತ್ ತಪ್ಪು ತಪ್ಪಾಯ್ತು ರದ್ದು ತೆಗೆ ಅಳಿಸಿ ' +
-    'ரத்து தவறு நீக்கு வேண்டாம் రద్దు తప్పు తీసివేయి వద్దు रद्द चूक काढ રદ ખોટું કાઢી_નાખો',
+    'रद्द हटा हटाओ हटाइए गलत ग़लत रुको हटवा चूक રદ રદ્દ કાઢી_નાખો ભૂલ ரத்து நீக்கு தவறு வேண்டாம் రద్దు తొలగించు ತಪ್ಪು ತಪ್ಪಾಯ್ತು ರದ್ದು ತೆಗೆ ಅಳಿಸಿ',
 );
-const CORR_CUE = W('nahi nahin nhi nhin nai no nope sorry matlab i_mean actually नहीं नही नाही मतलब ಇಲ್ಲ ಅಲ್ಲ இல்லை இல்ல அல்ல కాదు లేదు వద్దు नाही નહિ ના નથી');
+const CORR_CUE = W(
+  'nahi nahin nhi nhin nai no nope sorry matlab i_mean actually नहीं नही नाही मतलब चूक ના નહીં એટલે இல்லை தப்பு தவறு மன்னிக்கவும் కాదు లేదు క్షమించండి ಇಲ್ಲ ಅಲ್ಲ',
+);
 /** Words that open a correction when they start the sentence: the cues above, plus "galat" and friends. */
-const LEAD_CUE = W('nahi nahin nhi nhin nai no nope sorry matlab i_mean actually galat wrong mistake नहीं नही नाही मतलब गलत ग़लत ಇಲ್ಲ ಅಲ್ಲ ತಪ್ಪು ಗಲತ್ இல்லை இல்ல அல்ல தவறு కాదు లేదు వద్దు తప్పు नाही चूक નહિ ખોટું');
-const MARK_KO = W('ko को ಗೆ க்கு கு కు కి ला ना ને');
-const MARK_NE = W('ne ने గారు వారు ने नी એ');
-const MARK_POSS = W('s ka ki ke का की के ಅವರ ಅವರಿಗೆ ಅವರು உடைய இன் యొక్క గారి चे च्या ची चा નો ની નું ના');
-const SEP = W('aur and phir then aur_phir tatha और फिर ಮತ್ತು ನಂತರ மற்றும் அப்புறம் మరియు ఇంకా आणि मग અને પછી');
-const NEW_CUST = W('naya naye nayi new hosa नया नए नये नयी नई ಹೊಸ புதிய புது కొత్త नवीन नवा નવું નવો નવી');
-const KHATA_CUST = W('customer khata grahak grahaka account ग्राहक खाता ಗ್ರಾಹಕ ಖಾತೆ வாடிக்கையாளர் கணக்கு కస్టమర్ ఖాతాదారుడు ग्राहक खाते ગ્રાહક ખાતું');
+const LEAD_CUE = W(
+  'nahi nahin nhi nhin nai no nope sorry matlab i_mean actually galat wrong mistake नहीं नही नाही मतलब गलत ग़लत चूक ના નહીં ભૂલ இல்லை தப்பு தவறு కాదు లేదు ಇಲ್ಲ ಅಲ್ಲ ತಪ್ಪು ಗಲತ್',
+);
+const MARK_KO = W('ko को ला ना ને க்கு கு కి కు గే');
+const MARK_NE = W('ne ने ए గారు');
+const MARK_POSS = W('s ka ki ke का की के चे च्या ची चा નો ની નું ના નાં இன் உடைய యొక్క గారి ಅವರ ಅವರಿಗೆ ಅವರು');
+const SEP = W('aur and phir then aur_phir tatha और फिर आणि व नंतर અને પછી તેમજ மற்றும் பிறகு மற்றும் பிறகு మరియు తర్వాత మరియును మరియు తర్వాత ಮತ್ತು ನಂತರ');
+const NEW_CUST = W('naya naye nayi new hosa नया नए नये नयी नई नवीन नवा નવું નવો નવી కొత్త புதிய புது ಹೊಸ');
+const KHATA_CUST = W('customer khata grahak grahaka account ग्राहक खाता खातेदार ગ્રાહક ખાતું வாடிக்கையாளர் கணக்கு కస్టమర్ ఖాతా ಗ್ರಾಹಕ ಖಾತೆ');
 
 // ---- F8: editing older entries and setting a total ----
 /** "change", "badlo": the shopkeeper is asking to alter something that already exists. */
 const EDIT = W(
   'change changed edit update modify amend badlo badal badalna badalo badaliye badal_do बदलो बदल बदलना बदलिए बदलें ' +
-    'ಬದಲಿಸಿ ಬದಲಾಯಿಸಿ ಬದಲಿಸು ಬದಲಾಯಿಸು ಸರಿಪಡಿಸಿ ತಿದ್ದಿ மாற்று திருத்து మార్చు సరిచేయి बदला બદલો',
+    'ಬದಲಿಸಿ ಬದಲಾಯಿಸಿ ಬದಲಿಸು ಬದಲಾಯಿಸು ಸರಿಪಡಿಸಿ ತಿದ್ದಿ',
 );
 /** Words that finish "set it to X": "karo", "kar do", "set", "make". */
-const SET_VERB = W('set make karo kar kardo kar_do करो कर कर_दो ಮಾಡಿ ಮಾಡು செய் பண்ணு அமை చేయి ఉంచు करा ठेवा કરો રાખો');
+const SET_VERB = W('set make karo kar kardo kar_do करो कर कर_दो ಮಾಡಿ ಮಾಡು');
 /** "Total" means what the customer owes now. */
-const TOTAL = W('total kul tot balance outstanding hisab hisaab baaki baki कुल टोटल बैलेंस हिसाब बाकी बकाया ಒಟ್ಟು ಬಾಕಿ ಲೆಕ್ಕ ಬ್ಯಾಲೆನ್ಸ್ மொத்தம் பாக்கி మొత్తం బాకీ एकूण बाकी કુલ બાકી');
+const TOTAL = W('total kul tot balance outstanding hisab hisaab baaki baki कुल टोटल बैलेंस हिसाब बाकी बकाया ಒಟ್ಟು ಬಾಕಿ ಲೆಕ್ಕ ಬ್ಯಾಲೆನ್ಸ್');
 /** Removing a specific entry. ("galat" alone is still the old "undo the last one".) */
-const REMOVE = W('cancel undo delete hata hatao hataiye hatado remove rad radd रद्द हटा हटाओ हटाइए हटादो ಅಳಿಸಿ ತೆಗೆ ತೆಗೆಯಿರಿ ರದ್ದು நீக்கு அழி ரத்து తొలగించు తీసివేయి हटवा કાઢી_નાખો');
-const FLIP = W('flip palat palto ulta ulti पलट पलटो उल्टा उल्टी மாற்று తిప్పు उलट ઊલટું');
-const EVERYONE = W('everyone everybody all sab sabhi saare saari sabka sabke सब सभी सारे सारी सबका सबके ಎಲ್ಲರ ಎಲ್ಲರಿಗೂ ಎಲ್ಲ ಎಲ್ಲಾ எல்லோரும் அனைவருக்கும் అందరి అందరికీ అందరూ सर्वांचे सगळे બધા સૌ');
-const ENTRY_WORD = W('entry entries record एंट्री एन्ट्री ಎಂಟ್ರಿ பதிவு నమోదు नोंद નોંધ');
+const REMOVE = W('cancel undo delete hata hatao hataiye hatado remove rad radd रद्द हटा हटाओ हटाइए हटादो ಅಳಿಸಿ ತೆಗೆ ತೆಗೆಯಿರಿ ರದ್ದು');
+const FLIP = W('flip palat palto ulta ulti पलट पलटो उल्टा उल्टी');
+const EVERYONE = W('everyone everybody all sab sabhi saare saari sabka sabke सब सभी सारे सारी सबका सबके ಎಲ್ಲರ ಎಲ್ಲರಿಗೂ ಎಲ್ಲ ಎಲ್ಲಾ');
+const ENTRY_WORD = W('entry entries record एंट्री एन्ट्री ಎಂಟ್ರಿ');
 const WALA = W('wala wali wale vala vali वाला वाली वाले');
 const SHOULD = W('should chahiye chahie hona honi hone चाहिए चाहिये होना होनी होने ಬೇಕು ಆಗಬೇಕು ಇರಬೇಕು');
-const ZERO = W('zero nil शून्य ज़ीरो जीरो ಸೊನ್ನೆ ಶೂನ್ಯ ಜೀರೋ பூஜ்ஜியம் பூஜ்யம் సున్నా సూన్యం શૂન્ય');
+const ZERO = W('zero nil शून्य ज़ीरो जीरो ಸೊನ್ನೆ ಶೂನ್ಯ ಜೀರೋ');
 /** Speech that tries to change the rules is never an edit, even when it contains "set ... to zero". */
 const INJECTION = /ignore|forget|disregard|developer mode|jailbreak|previous (rules|instructions)|system prompt|भूल\s*जाओ|भूल\s*जा|नियम|ಮರೆತು|ನಿಯಮ|ಸಿಸ್ಟಮ್/i;
 /** Words for the kind of an entry that an edit may name; "payment" and "received" are not parsed as direction cues elsewhere. */
 const PAYMENT_EDIT = W('payment payments received receipt');
-const NEGATIVE = W('minus negative advance एडवांस माइनस ಮುಂಗಡ ಮೈನಸ್ முன்பணம் கழித்தல் ముందస్తు అడ్వాన్స్ अ‍ॅडव्हान्स વજા માઇનસ એડવાન્સ');
+const NEGATIVE = W('minus negative advance एडवांस माइनस ಮುಂಗಡ ಮೈನಸ್');
 
 const STOP = W(
   'ji sahab saab sahib जी साहब साहिब ಜೀ ka ki ke ko ne se me mein pe par ko hai hain ho tha thi the to ye wo woh yeh vo bhi hi bas mera meri mere mujhe hum aap please pls kya kab kaun kuch sab aaj kal parso ' +
@@ -90,11 +107,7 @@ const STOP = W(
     'ko_diya ne_diya pay back give ' +
     'did does has have had should how much many what whats who whose when where why which ' +
     'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपए रुपया पैसे पैसा ' +
-    'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು ' +
-    'இன்று நேற்று நாளை இந்த அந்த இந்தா இந்தாங்க எனக்கு எனக்குக் என் ' +
-    'ఈరోజు నిన్న రేపు ఆ ఈ నాకు నా ఇచ్చాడు ఇస్తుంది ' +
-    'आज काल उद्या मला माझे दिले देईल ' +
-    'આ આજે કાલે મને મારું આપ્યા આપશે',
+    'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು',
 );
 const ALL_CUES = [EDIT, SET_VERB, TOTAL, REMOVE, FLIP, EVERYONE, ENTRY_WORD, WALA, SHOULD, ZERO, NEGATIVE, CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, SUMMARY_WORD, TELL_VERB, HISAB_WORD, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST];
 
@@ -104,10 +117,10 @@ const DATE_WORDS: Record<string, string> = {
   somvar: 'somvar', mangalvar: 'mangalvar', budhvar: 'budhvar', guruvar: 'guruvar', shukravar: 'shukravar', shanivar: 'shanivar', ravivar: 'ravivar',
   ಇವತ್ತು: 'aaj', ಇಂದಿನ: 'ಇಂದು', ನಿನ್ನೆಯ: 'ನಿನ್ನೆ', ಪರಸೋ: 'parso', ನಾಡಿದ್ದು: 'parso', ಸೋಮವಾರ: 'somvar', ಮಂಗಳವಾರ: 'mangalvar', ಬುಧವಾರ: 'budhvar', ಗುರುವಾರ: 'guruvar', ಶುಕ್ರವಾರ: 'shukravar', ಶನಿವಾರ: 'shanivar', ಭಾನುವಾರ: 'ravivar',
   सोमवार: 'somvar', मंगलवार: 'mangalvar', बुधवार: 'budhvar', गुरुवार: 'guruvar', शुक्रवार: 'shukravar', शनिवार: 'shanivar', रविवार: 'ravivar',
-  இன்று: 'aaj', நேற்று: 'yesterday', நாளை: 'tomorrow', முந்தாநாள்: 'parso',
-  ఈరోజు: 'aaj', ఇవాళ: 'aaj', నిన్న: 'yesterday', రేపు: 'tomorrow', మొన్న: 'parso',
-  काल: 'yesterday', उद्या: 'tomorrow', परवा: 'parso',
-  આજે: 'aaj', ગઈકાલે: 'yesterday', કાલે: 'kal', આવતીકાલે: 'tomorrow', પરમદિવસે: 'parso',
+  இன்று: 'today', இன்னைக்கு: 'today', நேற்று: 'yesterday', நேத்து: 'yesterday', நாளை: 'tomorrow', நாளைக்கு: 'tomorrow',
+  ఈరోజు: 'today', నేడు: 'today', నిన్న: 'yesterday', రేపు: 'tomorrow',
+  काल: 'yesterday', उद्या: 'tomorrow',
+  આજે: 'today', ગઈકાલે: 'yesterday', ગઇકાલે: 'yesterday', આવતીકાલે: 'tomorrow',
 };
 
 const tokensWithSpans = (s: string): { w: string; n: string; a: number; b: number }[] =>
@@ -422,7 +435,7 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
   if (isSummary) return { ...base, intent: 'customer_summary', needs: who ? [] : ['customer'] };
   // 2. queries
   const ledgerTerm = hasCredit || hasPayment || ns.includes('balance') || ns.includes('hisab');
-  const queryish = has(QUERY) || ((q || hasTellVerb) && ledgerTerm && !amount) || (has(QUERY_EN) && ledgerTerm && !amount);
+  const queryish = has(QUERY) || (q && ledgerTerm && !amount) || (has(QUERY_EN) && ledgerTerm && !amount);
   if (queryish && !(amount && direction)) return { ...base, intent: 'balance_query', needs: [] };
   // 3. future promises are notes
   if (future) return withAmount({ ...base, intent: 'note', needs: [] });

@@ -845,10 +845,14 @@
     },
     "thousand": {
       "native": [
-        "ஆயிரம்"
+        "ஆயிரம்",
+        "ஆயிரத்து",
+        "ஆயிரத்தி"
       ],
       "roman": [
-        "aayiram"
+        "aayiram",
+        "aayirathu",
+        "aayirathi"
       ]
     },
     "lakh": {

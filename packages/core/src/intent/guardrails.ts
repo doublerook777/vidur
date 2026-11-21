@@ -35,11 +35,18 @@ export function detectRefusal(text: string): RefusalKind | null {
   if (has(INTEREST)) return 'interest';
   if (has(LENDING)) return 'lending';
   // Asking the assistant to lend: "mujhe udhaar de do", "give me credit".
-  if (/\b(mujhe|mujhko|muje|mere liye)\b.*\b(udhar|udhari|credit|paise|paisa)\b.*\b(de|do|dedo|dijiye)\b/.test(joined) || /मुझे .*उधार .*दे/.test(text) || /\bgive me (some )?(credit|money|loan)\b/.test(joined)) return 'lending';
+  if (
+    /\b(mujhe|mujhko|muje|mere liye)\b.*\b(udhar|udhari|credit|paise|paisa)\b.*\b(de|do|dedo|dijiye)\b/.test(joined) ||
+    /मुझे .*उधार .*दे/.test(text) ||
+    /\bgive me (some )?(credit|money|loan)\b/.test(joined) ||
+    /ನನಗೆ .*(ಉಧಾರ್|ಉಧಾರ|ಸಾಲ).*(ಕೊಡಿ|ಕೊಡು)/.test(text) ||
+    /எனக்கு .*(கடன்|பணம்).*(கொடு|தா)/.test(text) ||
+    /मला .*(उधार|कर्ज|पैसे).*(द्या|दे)/.test(text) ||
+    /મને .*(ઉધાર|લોન|પૈસા).*(આપો|આપ)/.test(text) ||
+    /నాకు .*(అప్పు|రుణం|పైసలు).*(ఇవ్వు|ఇవ్వండి)/.test(text)
+  ) return 'lending';
   // Public shaming: name on a board, in front of everyone.
   if (/(board|poster|wall|group|chowk|chauraha).*(naam|name|likh)|(naam|name).*(board|poster|chowk|chauraha|group)|sab(ke)? ?(saamne|samne)|सबके सामने|नाम.*(बोर्ड|चौक|पोस्टर)|ಎಲ್ಲರ ಮುಂದೆ/.test(joined + ' ' + text)) return 'threat';
-  // Asking the assistant for credit in Kannada.
-  if (/ನನಗೆ .*(ಉಧಾರ್|ಉಧಾರ|ಸಾಲ).*(ಕೊಡಿ|ಕೊಡು)/.test(text)) return 'lending';
   // Trust words alone are not enough ('bharosa ke saath diya'); they count when the speaker is asking.
   const asking = /\?|\bkya\b|क्या|है या नहीं|hai ya nahi|\b(should|can|is|are|would|does)\b|ಬಹುದೇ|ಕೇ/.test(joined + ' ' + text);
   if ((has(JUDGMENT) && asking) || JUDGMENT_PHRASE.test(joined) || JUDGMENT_PHRASE.test(text)) return 'judgment';
