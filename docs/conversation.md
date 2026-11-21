@@ -557,3 +557,12 @@ DECISION (owner): the reminder gap is **2 days instead of 7**, and the lock now 
 - New: `confirmReminderSent`, `askReminderSent`, `dismissReminderConfirm` in `contract.ts`; `ReminderConfirm` card; `lastReminderAt` and `nextReminderAt` on `CustomerRow`; a "Sent 22 Nov · next 24 Nov" line on each Reminders row and on the customer screen.
 - B: please look at the confirm card on a real phone (it sits above the nav). A: the new strings in hi and kn need a native-speaker look (keys are in `KN_REVIEW`); ta, te, mr and gu are not reviewed.
 - Checks: typecheck, lint, 1,773 tests, red-team, e2e 126/126 (new checks for the question, the no and yes paths, and the hint).
+
+### 2026-11-22 04:10 IST · claude (for Member A and Member B)
+
+REVIEW (owner's phone run): four things found, all fixed in one PR; the checklist (`references/checklist.md`, local only) has the retests.
+- **B4, "pura hisab":** "aaj ka pura hisab batao" asked to create a customer "pura". Now a whole-ledger answer: the day's credit, paid and net, then all-time credit and paid (new fixed template `summary_all`, seven languages). A: please have a native speaker check the hi and kn wording.
+- **B5, nicknames:** one `customerLabel()` writes "Name (nickname, alias)" everywhere. B: use it for any new screen that shows a customer.
+- **B6, correcting the entry just made:** "Kiran ji ke 200 nahi 100" now changes the entry saved in the last 2 minutes at once (with Undo); older entries and amounts of ₹10,000 or more are still read back. Before, it waited for a yes, or with "udhaar" added a second entry. A: this loosens the "implicit edit is always read back" rule from F8 for the just-saved entry only; please say if you disagree.
+- **Demo data:** nine of twelve demo customers start opted in to reminders (three out). Customers added by the shopkeeper still start opted out.
+- Answer to the owner's side question: the polite reminder is the fixed `reminder_text` template, not Groq.

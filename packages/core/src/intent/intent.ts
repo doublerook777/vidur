@@ -52,6 +52,15 @@ const SUMMARY_WORD = W(
 const TELL_VERB = W(
   'batao bataiye dikhao dikhaiye बताओ बताइए दिखाओ दिखाइए tell show सांगा दाखवा કહો બતાવો જણાવો சொல்லுங்க சொல்லுங்கள் காட்டுங்கள் చెప్పండి చూపించండి ಹೇಳಿ ಹೇಳು ತಿಳಿಸಿ ಕೊಡಿ kodi kheli',
 );
+// "pura hisab", "full summary": the whole ledger, not a customer called Pura.
+const OVERALL = W(
+  'pura poora puri poori pure saara sara sabka sabhi overall full complete entire whole ' +
+    'पूरा पूरी पुरा पूरे सारा सारी सबका सभी संपूर्ण सम्पूर्ण पूर्ण सगळा सगळं ' +
+    'આખો આખું પૂરો પૂરું બધો ' +
+    'முழு முழுமையான எல்லா ' +
+    'పూర్తి అంతా ' +
+    'ಪೂರ್ತಿ ಪೂರ್ಣ ಎಲ್ಲಾ',
+);
 const HISAB_WORD = W('hisab hisaab hisaabh हिसाब ಲೆಕ್ಕ account हिशोब खाते હિસાબ ખાતું கணக்கு ఖాతా లెక్క');
 const REMINDER = W(
   'reminder reminders remind yaad yaaddilao optin opt consent रिमाइंडर याद आठवण स्मरण रिमाइंडर યાદ રીમાઇન્ડર நினைவூட்டல் நினைவூட்டு ஞாபகப்படுத்து ரிமைண்டர் రిమైండర్ గుర్తు ರಿಮೈಂಡರ್ ನೆನಪಿಸಿ ನೆನಪಿನ ನೆನಪು ಜ್ಞಾಪನೆ',
@@ -109,7 +118,7 @@ const STOP = W(
     'का की के को ने से में पर है हैं था थी थे तो ये वो भी बस मेरा मेरी मुझे क्या आज कल परसों लिख लिखो कर करो दो दे देना दिया दिए भेजो भेज रुपये रुपए रुपया पैसे पैसा ' +
     'ಅವರ ಅವರು ಅವರಿಗೆ ಗೆ ಇಂದು ನಿನ್ನೆ ನಾಳೆ ಮಾಡಿ ಹಣ ರೂಪಾಯಿ ಇದು ಅದು ನನ್ನ ನನಗೆ ಏನು',
 );
-const ALL_CUES = [EDIT, SET_VERB, TOTAL, REMOVE, FLIP, EVERYONE, ENTRY_WORD, WALA, SHOULD, ZERO, NEGATIVE, CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, SUMMARY_WORD, TELL_VERB, HISAB_WORD, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST];
+const ALL_CUES = [EDIT, SET_VERB, TOTAL, REMOVE, FLIP, EVERYONE, ENTRY_WORD, WALA, SHOULD, ZERO, NEGATIVE, CREDIT, PAYMENT, GIVE, GIVE_KN_CUSTOMER, GIVE_KN_SHOP, TOOK, FUTURE, PAST, QUERY, QUERY_EN, SUMMARY_WORD, TELL_VERB, HISAB_WORD, REMINDER, UNDO, CORR_CUE, MARK_KO, MARK_NE, MARK_POSS, SEP, NEW_CUST, KHATA_CUST, OVERALL];
 
 const DATE_WORDS: Record<string, string> = {
   aaj: 'aaj', आज: 'aaj', today: 'today', ಇಂದು: 'ಇಂದು', kal: 'kal', कल: 'kal', yesterday: 'yesterday', ನಿನ್ನೆ: 'ನಿನ್ನೆ', tomorrow: 'tomorrow', ನಾಳೆ: 'ನಾಳೆ',
@@ -432,6 +441,8 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
   const hasTellVerb = has(TELL_VERB);
   const hasHisab = has(HISAB_WORD);
   const isSummary = !amount && (hasSummaryWord || (hasHisab && hasTellVerb));
+  // With no customer, a summary of the day or of everything is the whole ledger: today's totals and the all-time totals.
+  if (isSummary && !who && (has(OVERALL) || dateToken !== undefined)) return { ...base, intent: 'balance_query', overall: true, needs: [] };
   if (isSummary) return { ...base, intent: 'customer_summary', needs: who ? [] : ['customer'] };
   // 2. queries
   const ledgerTerm = hasCredit || hasPayment || ns.includes('balance') || ns.includes('hisab');
@@ -485,8 +496,11 @@ function interpretClause(clause: Clause, amounts: AmountMatch[], ctx: InterpretC
 /** From this amount up, the amount is always read back before saving. */
 export const LARGE_PAISE = 10_000 * 100;
 
+/** "200 ki jagah 100" (100 in place of 200) says the same as "200 nahi 100". */
+const IN_PLACE_OF = /(\d[\d,]*(?:\.\d+)?(?:\s*\/-)?)\s*(?:rupye|rupaye|rupees|rs\.?)?\s+(?:ki\s+jagah|ki\s+jagha|ki\s+bajay|ki\s+bajaye|ke\s+badle|ki\s+badle)\s+/giu;
+
 export function interpret(rawText: string, ctx: InterpretContext = {}): Interpretation {
-  const text = unglue(rawText);
+  const text = unglue(rawText).replace(IN_PLACE_OF, '$1 nahi ');
   const nowMs = ctx.nowMs ?? Date.now();
   const refusal = detectRefusal(text);
   if (refusal) {

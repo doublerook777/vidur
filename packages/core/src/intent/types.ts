@@ -53,6 +53,8 @@ export interface ParsedEvent {
   directionHint?: 'credit' | 'payment';
   /** True when the customer is a person already named earlier in this utterance. */
   customerInherited?: boolean;
+  /** A balance question about the whole ledger ("pura hisab batao"): the day's credit, paid and net, and the all-time credit and paid. */
+  overall?: boolean;
   /** True when the utterance explicitly requests creating a new customer/khata. */
   isNewCustomer?: boolean;
   text: string;

@@ -89,7 +89,7 @@ describe('nickname on the customer detail screen', () => {
       const html = renderToString(h(CustomerDetail, { vm: withNick, actions: mockActions, lang }));
       expect(html).toContain(`${LABELS[lang].nickname}: dairy`);
       expect(html).toContain(LABELS[lang].editNickname);
-      expect(html).toContain(`${withNick.customer.name} (dairy)`);
+      expect(html).toContain(`${withNick.customer.name} (dairy`);
     }
   });
   it('says "no nickname" when there is none', () => {

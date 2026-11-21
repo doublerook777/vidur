@@ -365,3 +365,6 @@
 {"id":"G-GU-040","lang":"gu","text":"સુનીતા 1000 ઉધાર","expected":{"intent":"credit_entry","amount":1000,"customer":"Sunita"}}
 {"id":"G-HI-901","lang":"hi","text":"कविता का सादे तीन सौ रुपये उधार।","expected":{"intent":"credit_entry","amount":350,"customer":"Kavita"}}
 {"id":"G-KN-901","lang":"kn","text":"ಮೋಹನ್ ನಾಲ್ಕುನೂರು ಹತ್ತು ರೂಪಾಯಿ ಉದ್ಧಾರ.","expected":{"intent":"credit_entry","amount":410,"customer":"Mohan"}}
+{"id":"G-HI-902","lang":"hi","text":"aaj ka pura hisab batao","expected":{"intent":"balance_query"}}
+{"id":"G-HI-903","lang":"hi","text":"पूरा हिसाब बताओ","expected":{"intent":"balance_query"}}
+{"id":"G-EN-902","lang":"en","text":"show full summary","expected":{"intent":"balance_query"}}

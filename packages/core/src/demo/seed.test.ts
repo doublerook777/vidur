@@ -84,14 +84,21 @@ describe('seedDemoLedger', () => {
     }
   });
 
-  it('sets reminder consent true for exactly two customers', async () => {
+  it('opts every demo customer in to reminders except three', async () => {
     const { ledger } = await freshLedger();
     const { customerIds } = await seedDemoLedger(ledger, NOW);
-    const optedIn = Object.entries(customerIds)
-      .filter(([, id]) => ledger.consent(id))
+    const optedOut = Object.entries(customerIds)
+      .filter(([, id]) => !ledger.consent(id))
       .map(([key]) => key)
       .sort();
-    expect(optedIn).toEqual(['ramesh_milk', 'sunita']);
+    expect(optedOut).toEqual(['geeta', 'mohan', 'neha']);
+    expect(Object.keys(customerIds)).toHaveLength(12);
+  });
+  it('a customer the shopkeeper adds is not opted in', async () => {
+    const { ledger } = await freshLedger();
+    await seedDemoLedger(ledger, NOW);
+    const c = await ledger.createCustomer('Kiran');
+    expect(ledger.consent(c.id)).toBe(false);
   });
 
   it('has at least one fully-paid customer, one overpayment, and one future-promise note', async () => {

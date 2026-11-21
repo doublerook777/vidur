@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks';
 import { nameKey } from '@vidur/core';
 
 import type { CustomerDetailVM } from '../contract.js';
-import { formatRupees } from './format.js';
+import { customerLabel, formatRupees } from './format.js';
 import { LABELS } from './labels.js';
 import { IconArrowDown, IconArrowUp, IconBack, IconPlus, IconReminders } from './icons.js';
 import { EntryRow } from './Feed.js';
@@ -79,7 +79,7 @@ export function CustomerDetail({ vm, actions, lang, now = Date.now() }: ScreenPr
         <button type="button" class="icon-btn" aria-label="Back" onClick={() => actions.navigate('customers')}>
           <IconBack size={24} />
         </button>
-        <h1 class="screen-title">{vm.customer.nickname ? `${vm.customer.name} (${vm.customer.nickname})` : vm.customer.name}</h1>
+        <h1 class="screen-title">{customerLabel(vm.customer, lang)}</h1>
         <AiBadge vm={{}} actions={actions} lang={lang} />
       </header>
 

@@ -12,7 +12,7 @@ const BANNED: Record<string, string[]> = {
   mr: ['पोलीस', 'कोर्ट', 'वकील', 'ताबडतोब', 'लगेच', 'तात्काळ', 'इशारा', 'शेवटची संधी', 'लाज', 'फसवणूक', 'दंड', 'अपमान'],
   gu: ['પોલીસ', 'કોર્ટ', 'વકીલ', 'તરત', 'તરત જ', 'ચેતવણી', 'છેલ્લી તક', 'શરમ', 'છેતરપિંડી', 'દંડ', 'અપમાન'],
 };
-const SAMPLE = { name: 'Sunita', amount: '₹500', balance: '₹500', advance: '₹100', when: 'today', options: 'a or b', credit: '₹1,240', count: '5', old: '₹200', current: '₹300', target: '₹1,000', diff: '₹700', kind: 'credit' };
+const SAMPLE = { name: 'Sunita', amount: '₹500', balance: '₹500', advance: '₹100', when: 'today', options: 'a or b', credit: '₹1,240', paid: '₹800', netKind: 'credit', net: '₹440', totalCredit: '₹9,000', totalPaid: '₹4,000', count: '5', old: '₹200', current: '₹300', target: '₹1,000', diff: '₹700', kind: 'credit' };
 const ALL_LANGS = ['en', 'hi', 'kn', 'ta', 'te', 'mr', 'gu'] as const;
 
 describe('no pressure or threat language in any template', () => {

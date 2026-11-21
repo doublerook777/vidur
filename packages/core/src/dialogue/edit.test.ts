@@ -182,9 +182,10 @@ describe('case 2: edit by old amount ("Mohan ka 500 nahi 300")', () => {
   });
 
   it('implicit "Mohan ka 500 nahi 300" with a live 500 entry is read back, then changed on yes', async () => {
-    const { ledger, say1 } = await setup();
+    const { ledger, say1, tick } = await setup();
     const m = await ledger.createCustomer('Mohan');
     await ledger.postEntry({ customerId: m.id, kind: 'credit', paise: paise(500), at: T0 - 3 * DAY });
+    tick(10 * 60 * 1000); // an older entry, not the one just made
     let rs = await say1('Mohan ka 500 nahi 300');
     expect(keys(rs)).toEqual(['confirm_edit']);
     expect(rs[0]!.text).toContain('₹500');
@@ -217,9 +218,10 @@ describe('case 2: edit by old amount ("Mohan ka 500 nahi 300")', () => {
   });
 
   it('a fresh entry that corrects itself, with a direction word, is unchanged: one credit of 430', async () => {
-    const { ledger, say1 } = await setup('hi');
+    const { ledger, say1, tick } = await setup('hi');
     const c = await ledger.createCustomer('Ramesh');
     await ledger.postEntry({ customerId: c.id, kind: 'credit', paise: paise(340), at: T0 - DAY });
+    tick(10 * 60 * 1000); // yesterday's entry, long since saved
     const rs = await say1('Ramesh ka 340, nahi nahi 430 udhaar');
     expect(keys(rs)).toEqual(['credit_saved']);
     expect(ledger.balance(c.id)).toBe(paise(340 + 430));
@@ -523,5 +525,45 @@ describe('parser: the amount in an edit is whatever parseAmount found', () => {
   it('a sentence with no number sets no amount', () => {
     const r = interpret("change Anil's total", { customers: [{ id: 'c1', name: 'Anil', aliases: [] }] });
     expect(r.events[0]!.amountPaise).toBeUndefined();
+  });
+});
+
+describe('fixing the entry that was just saved (the Kiran case)', () => {
+  const phrases = ['kiran jee ke 200 nhi 100', 'Kiran ji ka 200 nahi 100 hain', 'किरण जी के 200 नहीं 100', 'Kiran ji ke 200 nahi 100 udhaar', 'kiran ji ne 200 nahi 100 liye', 'kiran ji ke 200/- nahi 100/-', 'kiran ji ke 200 ki jagah 100'];
+  it.each(phrases)('"%s" right after Kiran\'s 200 changes that entry to 100, with no question and no second entry', async (phrase) => {
+    const { ledger, say1, tick } = await setup('hi');
+    const k = await ledger.createCustomer('Kiran');
+    await ledger.postEntry({ customerId: k.id, kind: 'credit', paise: paise(50) });
+    tick(3000);
+    expect(keys(await say1('Kiran ji ne 200/- udhaar liye'))).toEqual(['credit_saved']);
+    tick(3000);
+    expect(keys(await say1(phrase))).toEqual(['edit_changed', 'balance_customer']);
+    expect(ledger.activeEntries(k.id).map((e) => e.paise)).toEqual([paise(50), paise(100)]);
+  });
+  it('after two minutes the same words are read back first (it may be an older entry)', async () => {
+    const { ledger, say1, tick } = await setup('hi');
+    const k = await ledger.createCustomer('Kiran');
+    await say1('Kiran ji ne 200 udhaar liye');
+    tick(3 * 60 * 1000);
+    expect(keys(await say1('Kiran ji ke 200 nahi 100'))).toEqual(['confirm_edit']);
+    expect(ledger.balance(k.id)).toBe(paise(200));
+  });
+  it('a correction that would be large is still read back', async () => {
+    const { ledger, say1, tick } = await setup('hi');
+    const k = await ledger.createCustomer('Kiran');
+    await say1('Kiran ji ne 200 udhaar liye');
+    tick(3000);
+    expect(keys(await say1('Kiran ji ke 200 nahi 15000'))).toEqual(['confirm_edit']);
+    expect(ledger.balance(k.id)).toBe(paise(200));
+  });
+  it('a new customer with the same amount is not mistaken for a correction', async () => {
+    const { ledger, say1, tick } = await setup('hi');
+    const k = await ledger.createCustomer('Kiran');
+    const m = await ledger.createCustomer('Mohan');
+    await say1('Kiran ji ne 200 udhaar liye');
+    tick(3000);
+    await say1('Mohan ji ne 200 nahi 100 liye');
+    expect(ledger.balance(k.id)).toBe(paise(200));
+    expect(ledger.balance(m.id)).toBe(paise(100));
   });
 });

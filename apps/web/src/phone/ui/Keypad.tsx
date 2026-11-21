@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 
 import type { AddPreset, CustomerRow } from '../contract.js';
-import { formatRupees, fromLocalInput, toLocalInput } from './format.js';
+import { customerLabel, formatRupees, fromLocalInput, toLocalInput } from './format.js';
 import { LABELS } from './labels.js';
 import { IconArrowDown, IconArrowUp, IconBack, IconBackspace } from './icons.js';
 import type { ScreenProps } from './types.js';
@@ -148,7 +148,7 @@ export function Keypad({ vm, actions, lang }: ScreenProps<KeypadVM>) {
                       setNewNickname('');
                     }}
                   >
-                    {c.nickname ? `${c.name} (${c.nickname})` : c.name}
+                    {customerLabel(c, lang)}
                   </button>
                 </li>
               ))}
